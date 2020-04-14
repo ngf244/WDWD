@@ -20,23 +20,14 @@ public class CBoardServiceImpl implements CBoardService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public int getListCount(int boGroup1) {
-		return cBoardDAO.getListCount(sqlSession, boGroup1);
+	public int getListCount(Integer boGroup) {
+		return cBoardDAO.getListCount(sqlSession, boGroup);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectList(int boGroup1) {
-		return cBoardDAO.getBoardList(sqlSession, boGroup1);
+	public ArrayList<CBoard> selectList(Integer boGroup, PageInfo pi) {
+		return cBoardDAO.getBoardList(sqlSession, boGroup, pi);
 	}
-
-	@Override
-	public int getMyReqOneStepListCount(String userId) {
-		return cBoardDAO.getMyReqOneStepListCount(sqlSession, userId);
-	}
-
-	@Override
-	public ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId) {
-		return cBoardDAO.selectMyReqOneStepList(sqlSession, pi, userId);
-	}
+	
 	
 }

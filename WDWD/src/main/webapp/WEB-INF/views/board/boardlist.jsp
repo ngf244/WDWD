@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +18,7 @@
    .freeHeaderBar {
       display: inline-table;
       margin-top: 50px;
-      margin-left: 100px;
+      margin-left: 100px;	
       text-align: left;
       font-size: 33px;
       font-weight: bolder;
@@ -34,32 +36,31 @@
       position: relative;
    }
    
+   
    #freeDropCategory {
-      width: 180px;
-      position: relative;
-      text-align: center;
-      margin-left: 10px;
-      display: inline-block;
-      background-color: rgba(161, 206, 244, 0.55);
-      z-index: 10;
-   }
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	
+}
    
    #freebuttonselect {
+      width: 134px;
       line-height: 34px;
       height: 34px;
       background-color: rgba(161, 206, 244, 0.55);
       padding: 8px;
-      padding-right:0px;
       font-size: 15px;
       border: none;
       font-weight: bolder;
    }
    
    .freedropdown-category {
-      position: absolute;
       display: none;
+      position: absolute;
       background-color: rgba(161, 206, 244, 0.55);
       min-width: 75px;
+      padding: 8px;
       text-align: center;
    }
    
@@ -82,25 +83,29 @@
       background-color: rgb(52, 152, 219);
    }
    .freedropdown-category > a {   
-      width: 180px;
+      width: 134px;
       height: 40px;
       line-height: 38px;   
       float: center;
       font-size: 15px;
       text-decoration: none;
       text-align: center;
-      background-color: rgba(161, 206, 244, 0.7);
+      background-color: rgba(161, 206, 244, 1);
       color: black;
       font-weight: bold;
    }
+   
+   
    #searchArea{
       width: 430px;
       position: absolute;
       right: 0%;
       top: 0%;
       vertical-align: top;
+      display: inline-block;
    }
    select[name="searchOption"]{
+        display: inline-block;
       height: 48px;
       width: 120px;
       background-color: rgba(161, 206, 244, 0.55);
@@ -134,8 +139,6 @@
       border: 3px solid rgba(204,204,204, 0.55);
       margin: auto;
       margin-top: 10px;
-      position: relative;
-      z-index: 1;
    }
    .input{
       /* position: absolute; */
@@ -171,6 +174,7 @@
       margin: auto;
       margin-top: 3px;
       border-top: 1px solid rgba(204,204,204, 0.55);
+      cursor: pointer;
    }
    .freeBoardList div[class~=box1]{
       color: orange;
@@ -179,6 +183,7 @@
       font-weight: normal;
    }
    #freeBoardEnd{
+      display: inline-block;
       width: 98.5%;
       margin: auto;
       height: 0;
@@ -189,10 +194,12 @@
    }
    
    .pagination{
-      display: inline-block;
-      margin-left: 33%;
+   	  margin-left:33%;
+      /* display: inline-block; */
+       
    }
    .pagination a {
+     display: inline-block;
      color: black;
      float: left;
      padding: 8px 16px;
@@ -201,20 +208,25 @@
      border: 1px solid #ddd;
    }
    
-   .pagination a.active {
-     background-color: rgb(52, 152, 219);
-     color: white;
-     border: 1px solid rgb(52, 152, 219);
-   }
    
-   .pagination a:hover:not(.active) {background-color: #ddd;}
+
+   
+   .pagination a:hover:not(.currentP) {background-color: #ddd;}
    .writingBtnArea{
       display: inline-block;
       width: 10%;
       height: 40px;
-      margin-left: 18%;
+      margin-left: 5%;
    }
+   
+     .pagination .currentP{
+  	 background-color: red;
+  	 color:white;
+   	 
+   }
+
    .writingBtn{
+      display: inline-block;
       width: 100%;
       height: 100%;
    }
@@ -336,8 +348,37 @@
                </div>
             </form>
          </div>
-         
+
          <div id="freeBoardTitle">
+            <div class="input box1">카테고리</div><!-- 카테고리 -->
+            <div class="input box2">제목</div><!-- 제목 -->
+            <div class="input box3">작성자</span></div><!-- 작성자 -->
+            <div class="input box4">파일</div>  <!-- 파일 -->
+            <div class="input box5">조회수</div> <!-- 조회수 -->
+            <div class="input box6">추천수</div> <!-- 추천수 -->
+         </div>
+
+
+         
+   		<c:forEach var="b" items="${ list }">
+ 			<c:url var="bdetail" value="bdetail.bo">
+				<c:param name="bId" value="${ b.boNum }"/>
+				<c:param name="page" value="${ pi.currentPage }"/>
+			</c:url>
+         <div class="freeBoardList">
+         	<input type="hidden" value="${ b.boNum }">
+         
+            <div class="input box1">${ b.boCategory }</div><!-- 카테고리 -->
+            <div class="input box2">${ b.boTitle }</div><!-- 제목 -->
+            <div class="input box3"><span class="smallOption"> ${ b.boWriter } </span></div><!-- 작성자 -->
+            <div class="input box4"> ${ b.boReNum } </div>  <!-- 파일 -->
+            <div class="input box5"> ${ b.boView  }</div> <!-- 조회수 -->
+            <div class="input box6"> ${ b.boGood }</div> <!-- 추천수 -->
+         </div>
+        </c:forEach>
+
+
+ <!--         <div class="freeBoardList">
             <div class="input box1">카테고리</div>
             <div class="input box2">제목</div>
             <div class="input box3">작성자</div>
@@ -408,29 +449,53 @@
             <div class="input box4">파일</div>
             <div class="input box5">조회수</div>
             <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
+         </div> -->
+         
          <div id="freeBoardEnd"></div>
          <br>
          <div class="pagingCenter">
             <div class="pagination">
-               <a href=""> &laquo; </a>
-               <a href="" class="active"> 1 </a>
-               <a href=""> 2 </a>
-               <a href=""> 3 </a>
-               <a href=""> 4 </a>
-               <a href=""> 5 </a>
-               <a href=""> 6 </a>
-               <a href=""> 7 </a>
-               <a href=""> 8 </a>
-               <a href=""> &raquo; </a>
+               		<!-- 페이징 처리 -->
+					
+						<!-- [이전] -->
+						<c:if test="${ pi.currentPage <= 1 }">
+							<a>[이전]</a>
+						</c:if>
+						<c:if test="${ pi.currentPage > 1 }">
+							<c:url var="before" value="actionList.ch">
+								<c:param name="page" value="${ pi.currentPage - 1 }"/>
+							</c:url>
+							<a href="${ before }">[이전]</a> &nbsp;
+						</c:if>
+						
+						<!-- 페이지 -->
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+							<c:if test="${ p eq pi.currentPage }">
+								<a class="currentP">${ p }</a>
+							</c:if>	
+							
+							<c:if test="${ p ne pi.currentPage }">
+								<c:url var="pagination" value="actionList.ch">
+									<c:param name="boGroup" value="${ pi.boGroup }"/>
+									<c:param name="page" value="${ p }"/>
+								</c:url>
+								<a href="${ pagination }">${ p }</a> &nbsp;
+							</c:if>
+						</c:forEach>
+						
+						<!-- [다음] -->
+						<c:if test="${ pi.currentPage >= pi.maxPage }">
+							<a>[다음]</a>
+						</c:if>
+						<c:if test="${ pi.currentPage < pi.maxPage }">
+							<c:url var="after" value="actionList.ch">
+								<c:param name="page" value="${ pi.currentPage + 1 }"/>
+							</c:url> 
+							<a href="${ after }">[다음]</a>
+						</c:if>
+               
+               
+               
                <div class="sectionafter" style="display: inline-block"></div>
             </div>
             <div class="writingBtnArea" style="background-color: red;">
@@ -449,9 +514,9 @@
          </div>
          <hr>
 
-         <div class="onBoarListView"><jsp:include page="../cashboard/oneBoard/oneBoardList.jsp"/></div>
-         <div class="auctionListView" style="display: none;"><jsp:include page="../cashboard/auctionBoard/auctionBoardList.jsp"/></div>
-         <div class="contestListView" style="display: none;"><jsp:include page="../cashboard/contestBoard/contestBoardList.jsp"/></div>
+         <div class="onBoarListView"><jsp:include page="../cashboard/oneBoardList.jsp"/></div>
+         <div class="auctionListView" style="display: none;"><jsp:include page="../cashboard/auctionBoardList.jsp"/></div>
+         <div class="contestListView" style="display: none;"><jsp:include page="../cashboard/contestBoardList.jsp"/></div>
       </div>
       <div id="right-side">
       </div>
@@ -519,6 +584,11 @@
    		} */
    		
 	   
+   		
    </script>
+   
+   
+  
+   
 </body>
 </html>

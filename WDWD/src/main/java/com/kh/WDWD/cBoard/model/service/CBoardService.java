@@ -7,15 +7,13 @@ import com.kh.WDWD.cBoard.model.vo.CBoard;
 
 public interface CBoardService {
 
-	int getListCount(int boGroup1);
+	int getListCount(Integer boGroup1);
 
-	ArrayList<CBoard> selectList(int boGroup1);
-
-	int getMyReqOneStepListCount(String userId);
-
-	ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId);
+	ArrayList<CBoard> selectList(Integer boGroup, PageInfo pi);
 
 
 
+
+	
 
 }
