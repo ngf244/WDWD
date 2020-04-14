@@ -29,11 +29,12 @@ public class CBoardController {
 	
 	@RequestMapping("reqOneList.my")
 	public ModelAndView reqOneStepListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="boGroup", required=false) Integer boGroup, ModelAndView mv) {
-
+		int dong = 99;
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
+		
 		
 		int listCount = cBoardService.getMyReqOneStepListCount(userId);
 		PageInfo pi = Pagination.getReqOneStepListPageInfo(currentPage, listCount);		
