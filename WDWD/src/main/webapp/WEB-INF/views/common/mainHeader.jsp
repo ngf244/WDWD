@@ -24,6 +24,7 @@
 		display: inline-block;
 		margin: 25px;
 		vertical-align: middle;
+		cursor: pointer;
 	}
 	#mainLetter{
 		width: 400px;
@@ -240,7 +241,7 @@
 	<c:set var="contextPath" value="${ pageContext.servletContext.contextPath }" scope="application"/>
 	<header>
 		<div id="titleHeader">
-			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png">
+			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.me'">
 			<%-- <div id="mainLetter"><img src="${ contextPath }/views/images/왓두글자.PNG"></div> --%>
 			<div id="mainSearch">
 				<input type="text">
@@ -384,7 +385,7 @@
 				
 				<script>
 					function goMyPage(){
-						var userId = "admin";
+						var userId = "${loginUser.userId}";
 						location.href="main.my?userId=" + userId;
 					}
 				</script>

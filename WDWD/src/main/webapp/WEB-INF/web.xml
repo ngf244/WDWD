@@ -97,19 +97,5 @@
     <url-pattern>*.me</url-pattern>
   </servlet-mapping>
   
-   <!-- 회원가입, 로그인 관련 -->
-  <servlet>
-    <servlet-name>PhotoServlet</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/spring/appServlet/photo-context.xml</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PhotoServlet</servlet-name>
-    <url-pattern>*.photo</url-pattern>
-  </servlet-mapping>
-  
 </web-app>
 

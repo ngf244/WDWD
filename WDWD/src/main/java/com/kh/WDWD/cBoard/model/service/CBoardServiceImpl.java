@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 
@@ -29,13 +30,13 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public int cBoardInsert(CBoard b) {
-		return cBoardDAO.cBoardInsert(sqlSession, b);
+	public int getMyReqOneStepListCount(String userId) {
+		return cBoardDAO.getMyReqOneStepListCount(sqlSession, userId);
 	}
 
 	@Override
-	public CBoard cBoardDetailView(int boNum) {
-		return cBoardDAO.cBoardDetailView(sqlSession, boNum);
+	public ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId) {
+		return cBoardDAO.selectMyReqOneStepList(sqlSession, pi, userId);
 	}
 	
 }

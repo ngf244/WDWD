@@ -23,10 +23,7 @@
 			<div id="main">
 			<button onclick="goToBoardList();">자유게시판&1:1</button>
 			
-			
-			<button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
-			<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
-			<button onclick="javascript:location.href='writeView.ch?boardType=4';">콘테스트 글쓰기</button>
+			<button onclick="javascript:location.href='writeView.ch';">캐시게시판 글쓰기</button>
 			<button onclick="javascript:location.href='stage1.ch';">stage1</button>
 			<button onclick="javascript:location.href='stage2.ch';">stage2</button>
 			<button onclick="javascript:location.href='stage3.ch';">stage3</button>
