@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cashMapper">
+	<select id="getCashChangeCount" parameterType="string" resultType="_int">
+		select count(*)
+		from point_cash
+		where PC_ID = #{userId} and PC_DIV = 'C'
+	</select>
+	
+	<resultMap type="PointNCash" id="pointNCashResultSet">
+		<id property="pcNum" column="PC_NUM"/>
+		<result property="pcContent" column="PC_CON"/>
+		<result property="pcAmount" column="PC_USE"/>
+		<result property="pcDate" column="PC_DATE"/>
+		<result property="pcDiv" column="PC_DIV"/>
+		<result property="pcId" column="PC_ID"/>
+	</resultMap>
+	
+	<select id="selectMyCashChangeList" parameterType="string" resultMap="pointNCashResultSet">
+		select * 
+		from point_cash 
+		where PC_ID = #{userId} and PC_DIV = 'C'
+		order by PC_DATE DESC
+	</select>
+</mapper>

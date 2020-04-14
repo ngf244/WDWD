@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+	<select id="selectMember" parameterType="string" resultMap="memberResultSet">
+		select *
+		from member
+		where me_id=#{userId}
+	</select>
+	
+	<resultMap type="Member" id="memberResultSet">
+		<id property="userId" column="ME_ID"/>
+		<result property="userPwd" column="ME_PW"/>
+		<result property="userName" column="ME_NAME"/>
+		<result property="phone" column="ME_PHONE"/>
+		<result property="NickName" column="ME_NICK"/>
+		<result property="email" column="ME_EMAIL"/>
+		<result property="intro" column="ME_INTRO"/>
+		<result property="enrollDate" column="ME_DATE"/>
+		<result property="easy" column="ME_EASY"/>
+		<result property="account" column="ME_ACOUNT"/>
+		<result property="bank" column="ME_BANK"/>
+		<result property="point" column="ME_POINT"/>
+		<result property="cash" column="ME_CASH"/>
+		<result property="uStatus" column="ME_STATUS"/>
+		<result property="grade" column="ME_GRADE"/>
+		<result property="recent1" column="ME_RECENT1"/>
+		<result property="recent2" column="ME_RECENT2"/>
+		<result property="recent3" column="ME_RECENT3"/>
+		<result property="recent4" column="ME_RECENT4"/>
+		<result property="recent5" column="ME_RECENT5"/>
+		<result property="profileImg" column="ME_CON_NUM"/>
+	</resultMap>
+  
+	<select id="loginMember" parameterType="Member" resultMap="memberResultSet">
+		SELECT *
+		FROM MEMBER
+		WHERE ME_ID=#{userId}
+		AND ME_PW=#{userPwd}
+		AND ME_STATUS='Y'
+	</select>  
+  
+</mapper>
+
