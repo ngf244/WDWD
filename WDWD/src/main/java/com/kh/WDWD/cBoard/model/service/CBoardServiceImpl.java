@@ -29,5 +29,14 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.getBoardList(sqlSession, boGroup, pi);
 	}
 	
+	@Override
+	public int getMyReqOneStepListCount(String userId) {
+		return cBoardDAO.getMyReqOneStepListCount(sqlSession, userId);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId) {
+		return cBoardDAO.selectMyReqOneStepList(sqlSession, pi, userId);
+	}	
 	
 }

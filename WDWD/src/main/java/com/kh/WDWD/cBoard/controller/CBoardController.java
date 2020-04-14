@@ -22,11 +22,29 @@ public class CBoardController {
 	private CBoardService cBoardService;
 	
 	@RequestMapping("reqOneList.my")
-	public ModelAndView reqOneStepListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView reqOneStepListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="boGroup", required=false) Integer boGroup, ModelAndView mv) {
+
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
 		
+		int listCount = cBoardService.getMyReqOneStepListCount(userId);
+		PageInfo pi = Pagination.getReqOneStepListPageInfo(currentPage, listCount);		
 		
+		System.out.println("의뢰1단계리스트 개수 : " + listCount);
+		ArrayList<CBoard> list = cBoardService.selectMyReqOneStepList(pi, userId);
 		
-		mv.setViewName("requestOneStepList");
+		System.out.println("의뢰1단계리스트 toString : " + list);
+		
+		if(list != null) {
+			mv.addObject("list", list)
+			  .addObject("pi", pi)
+			  .addObject("userId", userId)
+			  .setViewName("requestOneStepList");
+		} else {
+			throw new BoardException("내 의뢰 1단계 리스트 조회에 실패하였습니다.");
+		}
 		
 		return mv;
 	}
