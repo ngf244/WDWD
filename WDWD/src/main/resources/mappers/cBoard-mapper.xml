@@ -85,7 +85,7 @@
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
 	</insert>
 	
-	<select id="cBoardDetail" parameterType="_int" resultMap="cBoardResultSet">
+	<select id="cBoardDetail" parameterType="_int" resultMap="CBoardResultSet">
 		select *
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
