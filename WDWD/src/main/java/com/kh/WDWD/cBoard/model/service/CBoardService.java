@@ -11,7 +11,9 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectList(Integer boGroup, PageInfo pi);
 
+	int getMyReqOneStepListCount(String userId);
 
+	ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId);
 
 
 	

@@ -25,4 +25,16 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.getBoardList", boGroup, rowBounds);
 	}
 
+	public int getMyReqOneStepListCount(SqlSessionTemplate sqlSession, String userId) {
+		int result = sqlSession.selectOne("cBoardMapper.getMyReqOneStepListCount", userId);
+		System.out.println("의뢰1단계 개수 : " + result);
+		return sqlSession.selectOne("cBoardMapper.getMyReqOneStepListCount", userId);
+	}
+
+	public ArrayList<CBoard> selectMyReqOneStepList(SqlSessionTemplate sqlSession, PageInfo pi, String userId) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());	
+		
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyReqOneStepList", userId, rowBounds);
+	}	
 }
