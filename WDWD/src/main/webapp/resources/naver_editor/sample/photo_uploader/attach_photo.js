@@ -370,7 +370,6 @@
 			timeout : 3,
 			onerror :  jindo.$Fn(onAjaxError, this).bind()
 		});
-    	
 		oAjax.header("contentType","multipart/form-data");
 		oAjax.header("file-name",encodeURIComponent(tempFile.name));
 		oAjax.header("file-size",tempFile.size);
