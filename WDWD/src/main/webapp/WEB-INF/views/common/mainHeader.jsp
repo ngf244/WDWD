@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 	header {
 		width : 100%;
@@ -221,6 +223,7 @@
 		width : 16%;
 		min-height : 600px;
 		float: left;
+		text-align: center;
 	}
 	section:after {
 		content:""; 
@@ -234,6 +237,45 @@
 		clear: both;
 		height: 0px;
 	}
+	
+	span.smallOption{
+		color : gray;
+		font-weight: bold;
+	}
+
+	#smallOptionBlock{
+		background-color: rgb(211, 211, 211);
+		width: 10%;
+		position: fixed;
+		color: black;
+		display: none;
+		z-index: 99;
+	}
+
+	#smallOptionBlock div{
+		border-bottom: 1px dotted white;
+	}
+	#smallOptionBlock div:hover{
+		background-color: rgb(41, 40, 41);
+		color: white;
+		cursor: pointer;
+	}
+
+	#restrictForm{
+		position: fixed;
+		width: 40%;
+		height: 300px;
+		top: 30%;
+		left: 30%;
+		background-color: beige;
+		z-index: 100;
+		text-align: left;
+		column-width: 300px;
+		column-gap: 5px;
+		column-rule: 1px solid black;
+		display: none;
+	}
+
 </style>
 <title>Insert title here</title>
 </head>
@@ -241,14 +283,12 @@
 	<c:set var="contextPath" value="${ pageContext.servletContext.contextPath }" scope="application"/>
 	<header>
 		<div id="titleHeader">
-			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.me'">
-			<%-- <div id="mainLetter"><img src="${ contextPath }/views/images/왓두글자.PNG"></div> --%>
+			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png">
 			<div id="mainSearch">
 				<input type="text">
 				<img src="${ contextPath }/resources/images/search.png">
 			</div>
 			<div id="basicForm">
-
 				<c:if test="${ empty sessionScope.loginUser }">
 					<div id="loginView">login</div>
 					<div id="signupBtn">sign up</div> 
@@ -321,7 +361,6 @@
               </div>
             </c:if>
 				
-				
 				<script>
 					$('#modalMenu').click(function() {
 						$('#smallInfo').css('display', 'block');
@@ -350,12 +389,43 @@
 				</script>
 			</div>
 		</div>
+		<div id="smallOptionBlock" class="smallOptionBlock">
+			<div>마이페이지</div>
+			<div>게시글 보기</div>
+			<div>작성 댓글 보기</div>
+			<div>제재</div>
+			<input type="hidden" name="userId">
+		</div>
+
+		<div id="restrictForm">
+			<form>
+				아이디 : <input type="text" name="resUserId">
+				<br><br>
+				제재 사유 :
+				<br>
+				<textarea rows="15" cols="50"></textarea>
+				<br><br>
+				제재 기간 : dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+			</form>
+
+		</div>
+		<!-- <script>
+			$('span.smallOption').click(function () {
+				var offset = $(this).offset();
+				console.log(offset);
+				console.log('a');
+			})
+		</script> -->
+					
 		
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
+				<div class="menubar">공지사항</div>
 				<div class="menubar">가이드</div>
-				<div class="menubar">게시판</div>
-				<div class="menubar">포인트 샵</div>
+				<div class="menubar">사진</div>
+				<div class="menubar">미디어</div>
+				<div class="menubar">HIT 갤러리</div>
+				<div class="menubar">문의</div>
 				<div class="menubar">충전소</div>
 				
 				<div id="menuHeaderText">
@@ -363,6 +433,8 @@
 					<span id="menuTextReply">등록된 댓글 321개</span>
 				</div>
 				
+				
+
 				<script>
 					$('#menuTextReply').hide();
 					!function loop(){
@@ -381,22 +453,22 @@
 					/* !function name() {
 						console.log('되나');
 					}() -> !로 시작하고 ()로 끝내면 자동실행*/
-				</script>
-				
-				<script>
+					
 					function goMyPage(){
 						var userId = "${loginUser.userId}";
 						location.href="main.my?userId=" + userId;
 					}
+					
 				</script>
 			</div>
 		</div>
 	</header>
+	
 	<br>
-	
-	
 	<div>
 		<jsp:include page="../login/login.jsp"/>
 	</div>
+
+	
 </body>
 </html>
