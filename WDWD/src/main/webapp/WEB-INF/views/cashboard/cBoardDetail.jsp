@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,10 +77,13 @@
 	.dateImg.next10 {margin-left: 240px;}
 	#boardcontent {
 		width: 80%;
-		height: 500px;
+		min-height: 100px;
 		margin: 0 auto;
 		
 		border: 1px solid black;
+	}
+	#boardcontent img {
+		max-width: 100%;
 	}
 	#conceptWrap {
 		margin-top: 20px;
@@ -224,21 +228,29 @@
 			<span class="redColor">＞ </span>제목
 		</div>
 		<div class="rightLine">
-			어플 로고 이미지 제작
+			${ cBoard.boTitle }
 		</div>
 		
 		<div class="leftLine">
 			<span class="redColor">＞ </span>카테고리
 		</div>
 		<div class="rightLine">
-			로고 이미지
+			<c:if test="${ cBoard.boCategory eq 1 }">
+				컨텐츠 제작
+			</c:if>
+			<c:if test="${ cBoard.boCategory eq 2 }">
+				컨텐츠 수정
+			</c:if>
+			<c:if test="${ cBoard.boCategory eq 3 }">
+				기타
+			</c:if>
 		</div>
 		
 		<div class="leftLine">
 			<span class="redColor">＞ </span> 의뢰인
 		</div>
 		<div class="rightLine">
-			홍길동
+			${ cBoard.boWriter }
 		</div>
 		
 		<div class="leftLine">
@@ -316,7 +328,7 @@
 		<br>
 		
 		<div id="boardcontent">
-			글 내용을 불러올 부분
+			${ cBoard.boContent }
 		</div>
 		
 		<div class="leftLine">
@@ -336,31 +348,31 @@
 			<div class="rightLine">
 				<div class="concept">우아하게</div>
 				<div class="slider-wrap">
-					<input id="concept1" class="range-slider__range" type="range" value="40" min="-50" max="50" disabled>
+					<input id="concept1" class="range-slider__range" type="range" value="${ cBoard.cbStep1 }" min="-50" max="50" disabled>
 				</div>
 				<div class="concept">터프하게</div>
 				<br>
 				<div class="concept">재미있게</div>
 				<div class="slider-wrap">
-					<input id="concept2" class="range-slider__range" type="range" value="-20" min="-50" max="50" disabled>
+					<input id="concept2" class="range-slider__range" type="range" value="${ cBoard.cbStep2 }" min="-50" max="50" disabled>
 				</div>
 				<div class="concept">진지하게</div>
 				<br>
 				<div class="concept">화려하게</div>
 				<div class="slider-wrap">
-					<input id="concept3" class="range-slider__range" type="range" value="30" min="-50" max="50" disabled>
+					<input id="concept3" class="range-slider__range" type="range" value="${ cBoard.cbStep3 }" min="-50" max="50" disabled>
 				</div>
 				<div class="concept">수수하게</div>
 				<br>
 				<div class="concept">대중적으로</div>
 				<div class="slider-wrap">
-					<input id="concept4" class="range-slider__range" type="range" value="0" min="-50" max="50" disabled>
+					<input id="concept4" class="range-slider__range" type="range" value="${ cBoard.cbStep4 }" min="-50" max="50" disabled>
 				</div>
 				<div class="concept">고급스럽게</div>
 				<br>
 				<div class="concept">복고적으로</div>
 				<div class="slider-wrap">
-					<input id="concept5" class="range-slider__range" type="range" value="-50" min="-50" max="50" disabled>
+					<input id="concept5" class="range-slider__range" type="range" value="${ cBoard.cbStep5 }" min="-50" max="50" disabled>
 				</div>
 				<div class="concept">현대적으로</div>
 			</div>

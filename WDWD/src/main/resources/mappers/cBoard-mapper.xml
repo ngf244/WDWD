@@ -21,24 +21,8 @@
 		<result property="boGood" column="BO_GOOD"/>
 		<result property="boCategory" column="BO_CATEGORY"/>
 	</resultMap>
-
-	<select id="getBoardList" resultMap="boardResultSet">
 	
-		select *
-		from board
-		where bo_del='N'and bo_group=#{ boGroup1 }
-		order by bo_num desc
-		
-	</select>
-	
-	<select id="getMyReqOneStepListCount" parameterType="string" resultType="_int">
-		select count(*)
-		from board
-     		 join cash_board on (BO_NUM = CB_NUM)
-		where BO_WRITER = #{userId} and CB_STEP = 1
-	</select>
-	
-	<resultMap type="CBoard" id="CBoardResultSet">
+	<resultMap type="CBoard" id="cBoardResultSet">
 		<id property="boNum" column="BO_NUM"/>
 		<result property="boGroup" column="BO_GROUP"/>
 		<result property="boTitle" column="BO_TITLE"/>
@@ -51,8 +35,9 @@
 		<result property="boGood" column="BO_GOOD"/>
 		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
-		<result property="cbStep" column="CB_STEP" />
-		<result property="cbSecret" column="CB_SECRET" />
+		<result property="boNum" column="CB_NUM"/>
+		<result property="cbStep" column="CB_STEP"/>
+		<result property="cbSecret" column="CB_SECRET"/>
 		<result property="cbCash" column="CB_CASH"/>
 		<result property="cbCate" column="CB_CATE"/>
 		<result property="cbStep1" column="CB_STEP1"/>
@@ -61,16 +46,41 @@
 		<result property="cbStep4" column="CB_STEP4"/>
 		<result property="cbStep5" column="CB_STEP5"/>
 		<result property="cbDate" column="CB_DATE"/>
-		<result property="cbPrimium" column="CB_PRIMIUM"/>		
+		<result property="cbPrimium" column="CB_PRIMIUM"/>
 	</resultMap>
 	
-	<select id="selectMyReqOneStepList" parameterType="string" resultMap="CBoardResultSet">
+
+	<select id="getBoardList" resultMap="boardResultSet">
+	
 		select *
 		from board
-     		 join cash_board on (bo_num = cb_num)
-		where bo_writer = #{userId} and cb_step = 1
-		order by bo_date desc, cb_date asc
+		where bo_del='N'and bo_group=#{ boGroup1 }
+		order by bo_num desc
+		
 	</select>
+	
+	
+	
+	
+	
+	
+	<insert id="cBoardInsert1" parameterType="CBoard">
+		insert into board
+		values (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
+	</insert>
+	
+	<insert id="cBoardInsert2" parameterType="CBoard">
+		insert into cash_board
+		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
+	</insert>
+	
+	<select id="cBoardDetail" parameterType="_int" resultMap="cBoardResultSet">
+		select *
+		from board
+		join cash_board on (board.bo_num = cash_board.cb_num)
+		where bo_num = #{boNum}
+	</select>
+	
 	
 	
 </mapper>
