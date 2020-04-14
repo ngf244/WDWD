@@ -37,4 +37,19 @@ public class CBoardDAO {
 		
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyReqOneStepList", userId, rowBounds);
 	}	
+	
+	public int cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
+		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
+		int result2 = sqlSession.insert("cBoardMapper.cBoardInsert2", b);
+		
+		if(result1 > result2) {
+			return result2;
+		} else {
+			return result1;
+		}
+	}
+
+	public CBoard cBoardDetailView(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
+	}
 }

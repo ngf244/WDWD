@@ -34,7 +34,7 @@ public class PhotoController {
 				// 파일 기본경로
 				String defaultPath = request.getSession().getServletContext().getRealPath("/");
 				// 파일 기본경로 _ 상세경로
-				String path = defaultPath + "resource" + File.separator + "photo_upload" + File.separator;
+				String path = defaultPath + "resources" + File.separator + "photo_upload" + File.separator;
 				File file = new File(path);
 				System.out.println("path:" + path);
 				// 디렉토리 존재하지 않을 경우 디렉토리 생성
@@ -46,7 +46,7 @@ public class PhotoController {
 
 				// 서버에 파일쓰기
 				vo.getFiledata().transferTo(new File(path + realname));
-				file_result += "&bNewLine=true&sFileName=" + original_name + "&sFileURL=/resource/photo_upload/" + realname;
+				file_result += "&bNewLine=true&sFileName=" + original_name + "&sFileURL=/resources/photo_upload/" + realname;
 			} else {
 				file_result += "&errstr=error";
 			}
@@ -75,7 +75,7 @@ public class PhotoController {
 				
 				System.out.println(dftFilePath);
 				
-				String filePath = dftFilePath + "resource" + File.separator + "photo_upload" + File.separator;
+				String filePath = dftFilePath + "resources" + File.separator + "photo_upload" + File.separator;
 				
 				File file = new File(filePath);
 				if(!file.exists()) {
@@ -105,7 +105,7 @@ public class PhotoController {
 				sFileInfo += "&bNewLine=true";
 				// img 태그의 title 속성을 원본파일명으로 적용시켜주기 위함
 				sFileInfo += "&sFileName=" + filename;
-				sFileInfo += "&sFileURL=" + "/resource/photo_upload/" + realFileNm;
+				sFileInfo += "&sFileURL=" + "/WDWD/resources/photo_upload/" + realFileNm;
 				PrintWriter print = response.getWriter();
 				print.print(sFileInfo);
 				print.flush();

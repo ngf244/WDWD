@@ -15,6 +15,9 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId);
 
+	int cBoardInsert(CBoard b);
+
+	CBoard cBoardDetailView(int boNum);
 
 	
 
