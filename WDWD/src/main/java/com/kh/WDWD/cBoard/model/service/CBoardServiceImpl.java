@@ -39,4 +39,14 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.selectMyReqOneStepList(sqlSession, pi, userId);
 	}	
 	
+	@Override
+	public int cBoardInsert(CBoard b) {
+		return cBoardDAO.cBoardInsert(sqlSession, b);
+	}
+
+	@Override
+	public CBoard cBoardDetailView(int boNum) {
+		return cBoardDAO.cBoardDetailView(sqlSession, boNum);
+	}
+	
 }
