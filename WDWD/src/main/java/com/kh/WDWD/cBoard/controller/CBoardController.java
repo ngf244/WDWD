@@ -31,6 +31,7 @@ public class CBoardController {
 	public ModelAndView reqOneStepListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="boGroup", required=false) Integer boGroup, ModelAndView mv) {
 		int dong = 99;
 		int currentPage = 1;
+		int test = 0;
 		if(page != null) {
 			currentPage = page;
 		}
