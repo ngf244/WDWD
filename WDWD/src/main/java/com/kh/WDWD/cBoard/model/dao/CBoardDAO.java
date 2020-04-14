@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Repository("cBoardDAO")
 public class CBoardDAO {
@@ -51,5 +52,25 @@ public class CBoardDAO {
 
 	public CBoard cBoardDetailView(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
+	}
+
+
+	public int doRequest(SqlSessionTemplate sqlSession, Request r) {
+		/*ArrayList<Request> list = null;*/
+		
+		int result = sqlSession.insert("cBoardMapper.doRequest", r);
+		if(result > 0) {
+			result = sqlSession.update("cBoardMapper.reqCountUp", r);
+			/*if(result > 0) {
+				int bId = r.getReNum();
+				list = (ArrayList)sqlSession.selectList("cBoardMapper.reqList", bId);
+			}*/
+		}
+		
+		return result;
+	}
+
+	public ArrayList<Request> reqList(SqlSessionTemplate sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.reqList", bId);
 	}
 }

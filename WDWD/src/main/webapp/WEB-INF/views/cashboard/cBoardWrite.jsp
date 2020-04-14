@@ -364,7 +364,7 @@
 					</div>
 					<div class="rightLine">
 						<b>제목</b><br>
-						<input class="inputText" type="text" name="boTitle"><br>
+						<input class="inputText" type="text" name="boTitle" id="boTitle"><br>
 						<div class="br"></div>
 						
 						<b>카테고리</b><br>
@@ -375,8 +375,8 @@
 						</select><br>
 						<div class="br"></div>
 						
-						<input type="hidden" name="cbDate" id="cbDate" value="0">
 						<c:if test="${ boardType ne 2 }">
+							<input type="hidden" name="cbDate" id="cbDate" value="">
 							<b>마감일</b><br>
 							
 							<select id="optionDay" class="selectDate" onchange="selectDate()">
@@ -436,7 +436,7 @@
 						
 						<c:if test="${ boardType ne 3 }">
 							<b>의뢰비</b><br>
-							<input class="inputText" type="number" value="" name="cbCash"><br>
+							<input class="inputText" type="number" value="" name="cbCash" id="cbCash"><br>
 							<div class="br"></div>
 						</c:if>
 						
@@ -683,7 +683,17 @@
 						$('#submit').click(function(){
 							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 							
-							$('#insertForm').submit();
+							if($('#boTitle').val() == "") {
+								alert('제목을 입력해주세요.');
+							} else if($('#cbDate').val() == "") {
+								alert('마감일을 입력해주세요.');
+							} else if($('#cbCash').val() == "") {
+								alert('의뢰비를 입력해주세요.');
+							} else if($('#content').val() == "") {
+								alert('글 내용을 입력해주세요.');
+							} else if(confirm("글을 작성하시겠습니까?")) {
+								$('#insertForm').submit();	
+							}
 						})
 					</script>
 				</form>

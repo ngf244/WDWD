@@ -50,7 +50,7 @@
       <result property="boDate" column="BO_DATE"/>
       <result property="boUpdate" column="BO_UPDATE"/>
       <result property="boDel" column="BO_DEL"/>
-      <result property="boWriter" column="BO_WRITER"/>
+      <!-- <result property="boWriter" column="BO_WRITER"/> -->
       <result property="boGood" column="BO_GOOD"/>
       <result property="boCategory" column="BO_CATEGORY"/>
       <result property="boReNum" column="BO_RENUM"/>
@@ -64,7 +64,9 @@
       <result property="cbStep4" column="CB_STEP4"/>
       <result property="cbStep5" column="CB_STEP5"/>
       <result property="cbDate" column="CB_DATE"/>
-      <result property="cbPrimium" column="CB_PRIMIUM"/>      
+      <result property="cbPrimium" column="CB_PRIMIUM"/>
+      
+      <result property="boWriter" column="ME_NICK"/>      
    </resultMap>
    
    <select id="selectMyReqOneStepList" parameterType="string" resultMap="CBoardResultSet">
@@ -89,8 +91,37 @@
 		select *
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
+		join member on (board.bo_writer = member.me_id)
 		where bo_num = #{boNum}
 	</select>
-   
+	
+	<insert id="doRequest" parameterType="Request">
+		insert into request
+		values (#{reNum}, #{reId}, #{reCash}, 'N', null, sysdate)
+	</insert>
+	
+	<update id="reqCountUp">
+		update board 
+		set bo_renum = bo_renum + 1 
+		where bo_num = #{reNum}
+	</update>
+	
+	<resultMap type="Request" id="requestResultSet">
+		<id property="reNum" column="RE_NUM"/>
+		<!-- <result property="reId" column="RE_ID"/> -->
+		<result property="reCash" column="RE_CASH"/>
+		<result property="rePlz" column="RE_PLZ"/>
+		<result property="reRefNum" column="RE_REFNUM"/>
+		<result property="reDate" column="RE_DATE"/>
+		<result property="reId" column="ME_NICK"/>
+	</resultMap>
+	
+	<select id="reqList" resultMap="requestResultSet">
+		select *
+		from request
+		join member on (request.re_id = member.me_id)
+		where re_num = #{bId}
+		order by re_date, me_nick
+	</select>
 	
 </mapper>

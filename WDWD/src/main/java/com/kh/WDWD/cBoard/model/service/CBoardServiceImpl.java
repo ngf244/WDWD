@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Service("CBoardService")
 public class CBoardServiceImpl implements CBoardService {
@@ -47,6 +48,16 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public CBoard cBoardDetailView(int boNum) {
 		return cBoardDAO.cBoardDetailView(sqlSession, boNum);
+	}
+
+	@Override
+	public int doRequest(Request r) {
+		return cBoardDAO.doRequest(sqlSession, r);
+	}
+
+	@Override
+	public ArrayList<Request> reqList(int boNum) {
+		return cBoardDAO.reqList(sqlSession, boNum);
 	}
 	
 }

@@ -1,9 +1,14 @@
 package com.kh.WDWD.cBoard.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +25,7 @@ import com.kh.WDWD.cBoard.model.service.CBoardService;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.member.model.vo.Member;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Controller
 public class CBoardController {
@@ -128,6 +134,10 @@ public class CBoardController {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
 		
+		if(b.getCbDate() == null) {
+			b.setCbDate("0");
+		}
+		
 		int result = cBoardService.cBoardInsert(b);
 		
 		if(result != 0) {
@@ -146,7 +156,11 @@ public class CBoardController {
 		if(b != null) {
 			mv.addObject("cBoard", b);
 			switch(b.getCbStep()) {
-				case 1: mv.setViewName("cashboard/1stage"); break;
+				case 1: 
+					ArrayList<Request> list = cBoardService.reqList(boNum);
+					mv.addObject("list", list);
+					mv.setViewName("cashboard/1stage");
+					break;
 				case 2: mv.setViewName("cashboard/2stage"); break;
 				case 3: mv.setViewName("cashboard/3stage"); break;
 			}
@@ -155,6 +169,59 @@ public class CBoardController {
 		}
 		
 		return mv;
+	}
+	
+	@RequestMapping("reqList.ch")
+	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		ArrayList<Request> list = cBoardService.reqList(bId);
+		
+		JSONArray jArr = new JSONArray();
+		for(Request req: list) {
+			JSONObject jUser = new JSONObject();
+			jUser.put("reNum", req.getReNum());
+			jUser.put("reId", req.getReId());
+			jUser.put("reCash", req.getReCash());
+			jUser.put("rePlz", req.getRePlz());
+			jUser.put("reRefNum", req.getReRefNum());
+			jUser.put("reDate", req.getReDate());
+			
+			jArr.add(jUser);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("doRequest.ch")
+	public void doRequest(@ModelAttribute Request r, HttpServletResponse response) {
+		int result = cBoardService.doRequest(r);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			
+			if(result > 0) {
+				out.append("ok");
+				out.flush();
+			} else {
+				out.append("fail");
+				out.flush();
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
