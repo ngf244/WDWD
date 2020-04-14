@@ -43,5 +43,22 @@ public class BoardController {
 		}
 		
 		return mv;
-	}	
+	}
+	
+	@RequestMapping("list.bo")
+	public String boardList() {
+		return "board/boardlist";
+	}
+	@RequestMapping("detail.bo")
+	public String boardDetail() {
+		return "board/boardDetail";
+	}
+	@RequestMapping("writing.bo")
+	public String boardWriting() {
+		return "board/boardwriting";
+	}
+	@RequestMapping("revis.bo")
+	public String boardRevis() {
+		return "board/boardrevis";
+	}
 }

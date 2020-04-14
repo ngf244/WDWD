@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 	header {
 		width : 100%;
@@ -24,7 +26,6 @@
 		display: inline-block;
 		margin: 25px;
 		vertical-align: middle;
-		cursor: pointer;
 	}
 	#mainLetter{
 		width: 400px;
@@ -64,7 +65,7 @@
 		vertical-align: middle;
 		margin-left: 30px;
 	}
-	#loginView, #signupBtn, #welcomeName {
+	#loginBtn, #signupBtn, #welcomeName {
 		padding: 10px;
 		background-color : rgb(52, 152, 219);
 		color : white;
@@ -221,6 +222,7 @@
 		width : 16%;
 		min-height : 600px;
 		float: left;
+		text-align: center;
 	}
 	section:after {
 		content:""; 
@@ -234,6 +236,45 @@
 		clear: both;
 		height: 0px;
 	}
+	
+	span.smallOption{
+		color : gray;
+		font-weight: bold;
+	}
+
+	#smallOptionBlock{
+		background-color: rgb(211, 211, 211);
+		width: 10%;
+		position: fixed;
+		color: black;
+		display: none;
+		z-index: 99;
+	}
+
+	#smallOptionBlock div{
+		border-bottom: 1px dotted white;
+	}
+	#smallOptionBlock div:hover{
+		background-color: rgb(41, 40, 41);
+		color: white;
+		cursor: pointer;
+	}
+
+	#restrictForm{
+		position: fixed;
+		width: 40%;
+		height: 300px;
+		top: 30%;
+		left: 30%;
+		background-color: beige;
+		z-index: 100;
+		text-align: left;
+		column-width: 300px;
+		column-gap: 5px;
+		column-rule: 1px solid black;
+		display: none;
+	}
+
 </style>
 <title>Insert title here</title>
 </head>
@@ -241,86 +282,105 @@
 	<c:set var="contextPath" value="${ pageContext.servletContext.contextPath }" scope="application"/>
 	<header>
 		<div id="titleHeader">
-			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.me'">
-			<%-- <div id="mainLetter"><img src="${ contextPath }/views/images/왓두글자.PNG"></div> --%>
+			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png">
 			<div id="mainSearch">
 				<input type="text">
 				<img src="${ contextPath }/resources/images/search.png">
 			</div>
 			<div id="basicForm">
-
-				<c:if test="${ empty sessionScope.loginUser }">
-					<div id="loginView">login</div>
-					<div id="signupBtn">sign up</div> 
+				<!-- 로그인 안되어 있을 때 -->
+				<!-- 
+				<div id="loginBtn">login</div>
+				<div id="signupBtn">sign up</div> 
+				-->
+				
+				<!-- 로그인 되어 있을 때 -->
+				<div id="welcomeName">김대호님 환영합니다</div><br>
+				<img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
+				<img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
+				<div id="noticeArea" class="notice">
 					
-					<script>
-						$('#loginView').click(function(){
-							$('#loginWrap').show();
-						})
-					</script>
-				</c:if>
-				
-				<c:if test="${ !empty sessionScope.loginUser }">
-          <div id="welcomeName">김대호님 환영합니다</div><br>
-          <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
-          <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
-            <div id="noticeArea" class="notice">
+				</div>
 
-            </div>
+				<div id="smallOptionBlock" class="smallOptionBlock">
+					<div>마이페이지</div>
+					<div>게시글 보기</div>
+					<div>작성 댓글 보기</div>
+					<div>제재</div>
+					<input type="hidden" name="userId">
+				</div>
 
-            <div id="smallInfo">
-              <div id="smallInfoContent">
-                <div style="height: 60px;"></div>
-                <div id="profile_wrap">
-                  <div id="profile_img"><img src=''></div>
-                  <b>김대호 님</b>
-                </div>
+				<div id="restrictForm">
+					<form>
+						아이디 : <input type="text" name="resUserId">
+						<br><br>
+						제재 사유 :
+						<br>
+						<textarea rows="15" cols="50"></textarea>
+						<br><br>
+						제재 기간 : dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+					</form>
 
-                <div style="height: 30px;"></div>
+				</div>
+				<!-- <script>
+					$('span.smallOption').click(function () {
+						var offset = $(this).offset();
+						console.log(offset);
+						console.log('a');
+					})
+				</script> -->
+					
 
-                <div class="smallMenu yellow">
-                  <img src="${ contextPath }/resources/images/point.png">
-                  <br><b>100 POINT</b>
-                </div>
-
-                <div class="smallMenu yellow">
-                  <img src="${ contextPath }/resources/images/cash.png">
-                  <br><b>100 CASH</b>
-                </div>
-
-                <div class="smallMenu blue" onclick="goMyPage();">
-                  <img src="${ contextPath }/resources/images/info.png">
-                  <br><b>마이페이지</b>
-                </div>
-
-                <div class="smallMenu blue">
-                  <img src="${ contextPath }/resources/images/logout.png">
-                  <br><b>로그아웃</b>
-                </div>
-
-                <div style="height: 60px;"></div>
-
-                <div id="recently">최근 본 글</div>
-                <div class="recentlyBoard">
-                  1번글제목이 엄청나게 길면 어떻게 될까요ㅎㅎㅎㅎㅎㅎㅎㅎㅎ
-                </div>
-                <div class="recentlyBoard">
-                  2번글제목
-                </div>
-                <div class="recentlyBoard">
-                  3번글제목
-                </div>
-                <div class="recentlyBoard">
-                  4번글제목
-                </div>
-                <div class="recentlyBoard">
-                  5번글제목
-                </div>				
-
-                </div>
-              </div>
-            </c:if>
-				
+				<div id="smallInfo">
+					<div id="smallInfoContent">
+						<div style="height: 60px;"></div>
+						<div id="profile_wrap">
+							<div id="profile_img"><img src=''></div>
+							<b>김대호 님</b>
+						</div>
+						
+						<div style="height: 30px;"></div>
+						
+						<div class="smallMenu yellow">
+							<img src="${ contextPath }/resources/images/point.png">
+							<br><b>100 POINT</b>
+						</div>
+						
+						<div class="smallMenu yellow">
+							<img src="${ contextPath }/resources/images/cash.png">
+							<br><b>100 CASH</b>
+						</div>
+						
+						<div class="smallMenu blue">
+							<img src="${ contextPath }/resources/images/info.png">
+							<br><b>마이페이지</b>
+						</div>
+						
+						<div class="smallMenu blue">
+							<img src="${ contextPath }/resources/images/logout.png">
+							<br><b>로그아웃</b>
+						</div>
+						
+						<div style="height: 60px;"></div>
+						
+						<div id="recently">최근 본 글</div>
+						<div class="recentlyBoard">
+							1번글제목이 엄청나게 길면 어떻게 될까요ㅎㅎㅎㅎㅎㅎㅎㅎㅎ
+						</div>
+						<div class="recentlyBoard">
+							2번글제목
+						</div>
+						<div class="recentlyBoard">
+							3번글제목
+						</div>
+						<div class="recentlyBoard">
+							4번글제목
+						</div>
+						<div class="recentlyBoard">
+							5번글제목
+						</div>				
+					</div>
+				</div>
 				
 				<script>
 					$('#modalMenu').click(function() {
@@ -353,9 +413,12 @@
 		
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
+				<div class="menubar">공지사항</div>
 				<div class="menubar">가이드</div>
-				<div class="menubar">게시판</div>
-				<div class="menubar">포인트 샵</div>
+				<div class="menubar">사진</div>
+				<div class="menubar">미디어</div>
+				<div class="menubar">HIT 갤러리</div>
+				<div class="menubar">문의</div>
 				<div class="menubar">충전소</div>
 				
 				<div id="menuHeaderText">
@@ -363,6 +426,8 @@
 					<span id="menuTextReply">등록된 댓글 321개</span>
 				</div>
 				
+				
+
 				<script>
 					$('#menuTextReply').hide();
 					!function loop(){
@@ -382,21 +447,11 @@
 						console.log('되나');
 					}() -> !로 시작하고 ()로 끝내면 자동실행*/
 				</script>
-				
-				<script>
-					function goMyPage(){
-						var userId = "${loginUser.userId}";
-						location.href="main.my?userId=" + userId;
-					}
-				</script>
 			</div>
 		</div>
 	</header>
+
 	<br>
 	
-	
-	<div>
-		<jsp:include page="../login/login.jsp"/>
-	</div>
 </body>
 </html>
