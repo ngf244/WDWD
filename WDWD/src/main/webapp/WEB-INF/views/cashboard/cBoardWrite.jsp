@@ -347,7 +347,7 @@
 	<jsp:include page="../common/mainHeader.jsp"/>
 	<section>
 		<div id="left-side"></div>
-
+		
 		<div id="main">
 			<div id="mainWrap">
 				<div id="logoImg">
@@ -357,78 +357,89 @@
 					디자인 요청 상세 내용
 				</div>
 				
-				<form id="writeForm">
+				<form action="insert.ch" method="post" id="insertForm">
+					<input type="hidden" value="${ boardType }" name="boGroup">
 					<div class="leftLine">
 						1. 어떤 작품을 원하시나요?
 					</div>
 					<div class="rightLine">
 						<b>제목</b><br>
-						<input class="inputText" type="text"><br>
+						<input class="inputText" type="text" name="boTitle"><br>
 						<div class="br"></div>
 						
 						<b>카테고리</b><br>
-						<select class="inputText">
-							<option value="로고 이미지">컨텐츠 제작</option>
-							<option value="편집 이미지">컨텐츠 수정</option>
-							<option value="기타 이미지">기타</option>
+						<select class="inputText" id="category" name="boCategory">
+							<option value="1">컨텐츠 제작</option>
+							<option value="2">컨텐츠 수정</option>
+							<option value="3">기타</option>
 						</select><br>
 						<div class="br"></div>
 						
-						<b>마감일</b><br>
+						<input type="hidden" name="cbDate" id="cbDate" value="0">
+						<c:if test="${ boardType ne 2 }">
+							<b>마감일</b><br>
 							
-						<select id="optionDay" class="selectDate" onchange="selectDate()">
-							<option value="0">마감일</option>
-							<option value="1">1일</option>
-							<option value="2">2일</option>
-							<option value="3">3일</option>
-							<option value="4">4일</option>
-							<option value="5">5일</option>
-							<option value="6">6일</option>
-							<option value="7">7일</option>
-							<option value="8">8일</option>
-							<option value="9">9일</option>
-							<option value="10">10일</option>
-						</select>
-						<select id="optionHour" class="selectDate" onchange="selectDate()">
-							<option value="0">마감시간</option>
-							<option value="1">1시간</option>
-							<option value="2">2시간</option>
-							<option value="3">3시간</option>
-							<option value="4">4시간</option>
-							<option value="5">5시간</option>
-							<option value="6">6시간</option>
-							<option value="7">7시간</option>
-							<option value="8">8시간</option>
-							<option value="9">9시간</option>
-							<option value="10">10시간</option>
-							<option value="11">11시간</option>
-							<option value="12">12시간</option>
-						</select>
-						
-						기한 : <span id="month"></span>월 <span id="day"></span>일 <span id="hour"></span>시
-						<div class="br"></div>
-						
-						<script>
-							var dt = new Date();
-							$('#month').text(dt.getMonth() + 1)
-							$('#day').text(dt.getDate())
-							$('#hour').text(dt.getHours())
+							<select id="optionDay" class="selectDate" onchange="selectDate()">
+								<option value="0">마감일</option>
+								<option value="1">1일</option>
+								<option value="2">2일</option>
+								<option value="3">3일</option>
+								<option value="4">4일</option>
+								<option value="5">5일</option>
+								<option value="6">6일</option>
+								<option value="7">7일</option>
+								<option value="8">8일</option>
+								<option value="9">9일</option>
+								<option value="10">10일</option>
+							</select>
+							<select id="optionHour" class="selectDate" onchange="selectDate()">
+								<option value="0">마감시간</option>
+								<option value="1">1시간</option>
+								<option value="2">2시간</option>
+								<option value="3">3시간</option>
+								<option value="4">4시간</option>
+								<option value="5">5시간</option>
+								<option value="6">6시간</option>
+								<option value="7">7시간</option>
+								<option value="8">8시간</option>
+								<option value="9">9시간</option>
+								<option value="10">10시간</option>
+								<option value="11">11시간</option>
+								<option value="12">12시간</option>
+							</select>
 							
-							function selectDate() {
-								dt = new Date();
-								
-								dt.setDate(dt.getDate() + Number($('#optionDay option:selected').val()));
-								dt.setHours(dt.getHours() + Number($('#optionHour option:selected').val()));
-								
+							기한 : <span id="month"></span>월 <span id="day"></span>일 <span id="hour"></span>시
+							<div class="br"></div>
+							
+							<script>
+								var dt = new Date();
 								$('#month').text(dt.getMonth() + 1)
 								$('#day').text(dt.getDate())
 								$('#hour').text(dt.getHours())
-							}
-						</script>
-	
-						<b>의뢰비</b><br>
-						<input class="inputText" type="number" value=""><br>
-						<div class="br"></div>
+								
+								function selectDate() {
+									dt = new Date();
+									
+									dt.setDate(dt.getDate() + Number($('#optionDay option:selected').val()));
+									dt.setHours(dt.getHours() + Number($('#optionHour option:selected').val()));
+									dt.setMinutes(0);
+									dt.setSeconds(0);
+									
+									$('#month').text(dt.getMonth() + 1);
+									$('#day').text(dt.getDate());
+									$('#hour').text(dt.getHours());
+									
+									$('#cbDate').val(dt);
+								}
+							</script>
+						</c:if>
+						
+						<c:if test="${ boardType ne 3 }">
+							<b>의뢰비</b><br>
+							<input class="inputText" type="number" value="" name="cbCash"><br>
+							<div class="br"></div>
+						</c:if>
+						
 					</div>
 					<div class="sectionafter"></div>
 					
@@ -436,7 +447,7 @@
 						2. 무엇을 디자인해드릴까요?
 					</div>
 					<div id="contentWrap">
-						<textarea name="content" id="content"></textarea>
+						<textarea name="boContent" id="content"></textarea>
 						<div id="fileList"></div>
 					</div>
 					<div class="br"></div>
@@ -526,31 +537,31 @@
 						<div class="rightLine">
 							<div class="concept">우아하게</div>
 							<div class="slider-wrap">
-								<input id="concept1" class="range-slider__range" type="range" value="0" min="-50" max="50">
+								<input id="concept1" name="cbStep1" class="range-slider__range" type="range" value="0" min="-50" max="50">
 							</div>
 							<div class="concept">터프하게</div>
 							
 							<div class="concept">재미있게</div>
 							<div class="slider-wrap">
-								<input id="concept2" class="range-slider__range" type="range" value="0" min="-50" max="50">
+								<input id="concept2" name="cbStep2" class="range-slider__range" type="range" value="0" min="-50" max="50">
 							</div>
 							<div class="concept">진지하게</div>
 							
 							<div class="concept">화려하게</div>
 							<div class="slider-wrap">
-								<input id="concept3" class="range-slider__range" type="range" value="0" min="-50" max="50">
+								<input id="concept3" name="cbStep3" class="range-slider__range" type="range" value="0" min="-50" max="50">
 							</div>
 							<div class="concept">수수하게</div>
 							
 							<div class="concept">대중적으로</div>
 							<div class="slider-wrap">
-								<input id="concept4" class="range-slider__range" type="range" value="0" min="-50" max="50">
+								<input id="concept4" name="cbStep4" class="range-slider__range" type="range" value="0" min="-50" max="50">
 							</div>
 							<div class="concept">고급스럽게</div>
 							
 							<div class="concept">복고적으로</div>
 							<div class="slider-wrap">
-								<input id="concept5" class="range-slider__range" type="range" value="0" min="-50" max="50">
+								<input id="concept5" name="cbStep5" class="range-slider__range" type="range" value="0" min="-50" max="50">
 							</div>
 							<div class="concept">현대적으로</div>
 						</div>
@@ -567,6 +578,7 @@
 						<div class="rightLine">
 							
 							<div class='detailWrap'>
+								<input type="hidden" value="Y" name="cbSecret" id="cbSecret">
 								<b>공개여부</b><br>
 								<label class="switch">
 								<input id="detailOpen" type="checkbox">
@@ -584,6 +596,12 @@
 									var check = $("#detailOpen");
 									check.click(function(){
 										$(".detailOpenSwitch").toggle();
+										
+										if($('#cbSecret').val() == "Y") {
+											$('#cbSecret').val('N');
+										} else {
+											$('#cbSecret').val('Y');
+										}
 									});
 									
 									$(document).mousemove(function(e){
@@ -600,6 +618,7 @@
 							</div>
 							
 							<div class='detailWrap'>
+								<input type="hidden" value="N" name="cbPrimium" id="cbPrimium">
 								<b>프리미엄여부</b><br>
 								<label class="switch">
 								<input id="detailPremium" type="checkbox">
@@ -617,6 +636,12 @@
 									var check = $("#detailPremium");
 									check.click(function(){
 										$(".detailPremiumSwitch").toggle();
+										
+										if($('#cbPrimium').val() == "Y") {
+											$('#cbPrimium').val('N');
+										} else {
+											$('#cbPrimium').val('Y');
+										}
 									});
 									
 									$(document).mousemove(function(e){
@@ -658,7 +683,7 @@
 						$('#submit').click(function(){
 							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 							
-							console.log($('#content').val())
+							$('#insertForm').submit();
 						})
 					</script>
 				</form>

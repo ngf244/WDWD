@@ -26,7 +26,7 @@ public class BoardController {
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
-		} 
+		}
 		
 		int listCount = bService.getMyReplyCount(userId);
 		
