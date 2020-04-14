@@ -34,6 +34,7 @@ public class CBoard extends Board{
 		this.cbPrimium = cbPrimium;
 	}
 
+	
 	public int getCbStep() {
 		return cbStep;
 	}

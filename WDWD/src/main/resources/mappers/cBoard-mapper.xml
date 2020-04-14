@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cBoardMapper">
+
 	<select id="getListCount" parameterType="_int" resultType="_int">
 		select count(*)
 		from board
-		where bo_del='N' and bo_group=#{ boGroup1 }
+		where bo_del='N' and bo_group=#{ boGroup }
 	</select>
 
+	
+	<select id="getBoardList" resultMap="boardResultSet">
+	
+		select *
+		from board
+		where bo_del='N'and bo_group=#{ boGroup }
+		order by bo_num desc
+		
+	</select>
 	
 	<resultMap type="Board" id="boardResultSet">
 		<id property="boNum" column="BO_NUM"/>
@@ -20,57 +30,59 @@
 		<result property="boWriter" column="BO_WRITER"/>
 		<result property="boGood" column="BO_GOOD"/>
 		<result property="boCategory" column="BO_CATEGORY"/>
-	</resultMap>
-
-	<select id="getBoardList" resultMap="boardResultSet">
-	
-		select *
-		from board
-		where bo_del='N'and bo_group=#{ boGroup1 }
-		order by bo_num desc
-		
-	</select>
-	
-	<select id="getMyReqOneStepListCount" parameterType="string" resultType="_int">
-		select count(*)
-		from board
-     		 join cash_board on (BO_NUM = CB_NUM)
-		where BO_WRITER = #{userId} and CB_STEP = 1
-	</select>
-	
-	<resultMap type="CBoard" id="CBoardResultSet">
-		<id property="boNum" column="BO_NUM"/>
-		<result property="boGroup" column="BO_GROUP"/>
-		<result property="boTitle" column="BO_TITLE"/>
-		<result property="boContent" column="BO_CON"/>
-		<result property="boView" column="BO_VIEW"/>
-		<result property="boDate" column="BO_DATE"/>
-		<result property="boUpdate" column="BO_UPDATE"/>
-		<result property="boDel" column="BO_DEL"/>
-		<result property="boWriter" column="BO_WRITER"/>
-		<result property="boGood" column="BO_GOOD"/>
-		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
-		<result property="cbStep" column="CB_STEP" />
-		<result property="cbSecret" column="CB_SECRET" />
-		<result property="cbCash" column="CB_CASH"/>
-		<result property="cbCate" column="CB_CATE"/>
-		<result property="cbStep1" column="CB_STEP1"/>
-		<result property="cbStep2" column="CB_STEP2"/>
-		<result property="cbStep3" column="CB_STEP3"/>
-		<result property="cbStep4" column="CB_STEP4"/>
-		<result property="cbStep5" column="CB_STEP5"/>
-		<result property="cbDate" column="CB_DATE"/>
-		<result property="cbPrimium" column="CB_PRIMIUM"/>		
 	</resultMap>
 	
-	<select id="selectMyReqOneStepList" parameterType="string" resultMap="CBoardResultSet">
-		select *
-		from board
-     		 join cash_board on (bo_num = cb_num)
-		where bo_writer = #{userId} and cb_step = 1
-		order by bo_date desc, cb_date asc
-	</select>
 	
+   <select id="getMyReqOneStepListCount" parameterType="string" resultType="_int">
+      select count(*)
+      from board
+            join cash_board on (BO_NUM = CB_NUM)
+      where BO_WRITER = #{userId} and CB_STEP = 1
+   </select>
+   
+   <resultMap type="CBoard" id="CBoardResultSet">
+      <id property="boNum" column="BO_NUM"/>
+      <result property="boGroup" column="BO_GROUP"/>
+      <result property="boTitle" column="BO_TITLE"/>
+      <result property="boContent" column="BO_CON"/>
+      <result property="boView" column="BO_VIEW"/>
+      <result property="boDate" column="BO_DATE"/>
+      <result property="boUpdate" column="BO_UPDATE"/>
+      <result property="boDel" column="BO_DEL"/>
+      <result property="boWriter" column="BO_WRITER"/>
+      <result property="boGood" column="BO_GOOD"/>
+      <result property="boCategory" column="BO_CATEGORY"/>
+      <result property="boReNum" column="BO_RENUM"/>
+      <result property="cbStep" column="CB_STEP" />
+      <result property="cbSecret" column="CB_SECRET" />
+      <result property="cbCash" column="CB_CASH"/>
+      <result property="cbCate" column="CB_CATE"/>
+      <result property="cbStep1" column="CB_STEP1"/>
+      <result property="cbStep2" column="CB_STEP2"/>
+      <result property="cbStep3" column="CB_STEP3"/>
+      <result property="cbStep4" column="CB_STEP4"/>
+      <result property="cbStep5" column="CB_STEP5"/>
+      <result property="cbDate" column="CB_DATE"/>
+      <result property="cbPrimium" column="CB_PRIMIUM"/>      
+   </resultMap>
+   
+   <select id="selectMyReqOneStepList" parameterType="string" resultMap="CBoardResultSet">
+      select *
+      from board
+            join cash_board on (bo_num = cb_num)
+      where bo_writer = #{userId} and cb_step = 1
+   </select>
+    
+   
+   
+   
+	
+
+
+
+
+
+
 	
 </mapper>
