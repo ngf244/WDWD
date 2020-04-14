@@ -26,7 +26,7 @@ public class BoardController {
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
-		} 
+		}
 		
 		int listCount = bService.getMyReplyCount(userId);
 		
@@ -43,5 +43,23 @@ public class BoardController {
 		}
 		
 		return mv;
-	}	
+	}
+	
+	@RequestMapping("list.bo")
+	public String boardList() {
+		return "board/boardlist";
+	}
+	@RequestMapping("detail.bo")
+	public String boardDetail() {
+		return "board/boardDetail";
+	}
+	@RequestMapping("writing.bo")
+	public String boardWriting() {
+		return "board/boardwriting";
+	}
+	@RequestMapping("revis.bo")
+	public String boardRevis() {
+		return "board/boardrevis";
+	}
+	
 }
