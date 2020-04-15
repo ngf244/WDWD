@@ -59,5 +59,10 @@ public class CBoardServiceImpl implements CBoardService {
 	public ArrayList<Request> reqList(int boNum) {
 		return cBoardDAO.reqList(sqlSession, boNum);
 	}
+
+	@Override
+	public int cancleRequest(Request r) {
+		return cBoardDAO.cancleRequest(sqlSession, r);
+	}
 	
 }

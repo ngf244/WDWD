@@ -276,11 +276,23 @@
 				1<!-- div 위치깨짐 방지용 -->
 				
 				<script>
-					/* db에서 받아올 마감시간 */
-					var dateDay = 1;
-					var dateHour = 0;
-					var dateMin = 0;
-					var dateSec = 10;
+					var date = new Date("${cBoard.cbDate}");
+					var dateCur = new Date();
+					var gap = date.getTime() - dateCur.getTime();
+					
+					var dateDay = parseInt(gap/1000/60/60/24);
+					var dateHour = parseInt(gap/1000/60/60) % 24;
+					var dateMin = parseInt(gap/1000/60) % 60;
+					var dateSec = parseInt(gap/1000) % 60;
+					
+					$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
+					$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
+					$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
+					$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
+					$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
+					$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
+					$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
+					$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
 					
 					!function timer(){
 						setTimeout(function() {

@@ -24,6 +24,8 @@ public interface CBoardService {
 
 	ArrayList<Request> reqList(int boNum);
 
+	int cancleRequest(Request r);
+
 	
 
 }

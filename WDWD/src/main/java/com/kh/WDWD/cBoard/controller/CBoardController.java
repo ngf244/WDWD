@@ -224,6 +224,26 @@ public class CBoardController {
 		}
 	}
 	
+	@RequestMapping("cancleRequest.ch")
+	public void cancleRequest(@ModelAttribute Request r, HttpServletResponse response) {
+		int result = cBoardService.cancleRequest(r);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			
+			if(result > 0) {
+				out.append("ok");
+				out.flush();
+			} else {
+				out.append("fail");
+				out.flush();
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@RequestMapping("stage1.ch")
 	public String stage1() {

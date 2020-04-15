@@ -106,6 +106,17 @@
 		where bo_num = #{reNum}
 	</update>
 	
+	<delete id="cancleRequest" parameterType="Request">
+		delete from request
+		where re_num = #{reNum} and re_id = #{reId}
+	</delete>
+	
+	<update id="reqCountDown">
+		update board 
+		set bo_renum = bo_renum - 1 
+		where bo_num = #{reNum}
+	</update>
+	
 	<resultMap type="Request" id="requestResultSet">
 		<id property="reNum" column="RE_NUM"/>
 		<!-- <result property="reId" column="RE_ID"/> -->

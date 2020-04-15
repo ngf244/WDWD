@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,10 +90,17 @@
 									${ r.reId }
 								</div>
 								<div class="editorDate">
-									${ r.reDate }
+									<c:if test="${ cBoard.boGroup eq 3 }">
+										<fmt:formatNumber value="${ r.reCash }" type="number" groupingUsed="true"/> 원
+									</c:if>
+									<c:if test="${ cBoard.boGroup ne 3 }">
+										${ r.reDate }
+									</c:if>
 								</div>
 								<div class="editorCheck">
-									<input type="radio" name="editor" value="">
+									<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+										<input type="radio" name="editor" value="">
+									</c:if>
 								</div>
 							</div>
 							</c:forEach>
@@ -110,9 +118,6 @@
 						});
 					</script>
 					
-					<!-- 작성자가 아닐 경우 라디오버튼 숨기고 에디터 선택 대신에 신청하기 or 취소하기
-					1:1일 경우에는 신청날짜, 경매의 경우 금액 -->
-					
 					<div id="btnList">
 						<c:if test="${ !empty sessionScope.loginUser }">
 							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
@@ -121,6 +126,20 @@
 							
 							<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
 								<div id="doIt" class="button">신청하기</div>
+								<div id="cancleIt" class="button" style="display: none;">취소하기</div>
+								
+								<c:set var="loop_flag" value="false" />
+								<c:forEach var="list" items="${ list }" varStatus="status">
+								    <c:if test="${not loop_flag }">
+								        <c:if test="${ sessionScope.loginUser.nickName eq list.reId }">
+								            <c:set var="loop_flag" value="true" />
+								            <script>
+								            	$('#doIt').hide();
+								            	$('#cancleIt').show();
+								            </script>
+								        </c:if>
+								    </c:if>
+								</c:forEach>
 							</c:if>
 						</c:if>
 
@@ -153,7 +172,33 @@
 								type: 'post',
 								success: function(data){
 									if(data == 'ok') {
-										listReq($('#boNum').val())
+										listReq($('#boNum').val());
+										$('#doIt').hide();
+										$('#cancleIt').show();
+										alert('신청되었습니다.');
+									}
+								}
+							});
+						}
+						
+						$('#cancleIt').click(function(){
+							if(confirm("에디터 등록을 취소하시겠습니까?")) {
+								var userId = '${ sessionScope.loginUser.userId }';
+								cancleReq(userId);
+							}
+						})
+						
+						function cancleReq(userId) {
+							$.ajax({
+								url: 'cancleRequest.ch',
+								data: {reNum: $('#boNum').val(), reId: userId},
+								type: 'post',
+								success: function(data){
+									if(data == 'ok') {
+										listReq($('#boNum').val());
+										$('#cancleIt').hide();
+										$('#doIt').show();
+										alert('신청 취소되었습니다.');
 									}
 								}
 							});
@@ -166,23 +211,35 @@
 								type: 'post',
 								success: function(data){
 									$("#editorListWrap").empty();
-									
-									for(var i in data.list) {
-										var $div = $('<div class="editorList">');
-										var $subDiv1 = $('<div class="editorId">');
-										var $subDiv2 = $('<div class="editorDate">');
-										var $subDiv3 = $('<div class="editorCheck">');
-										var $radio = $('<input type="radio" name="editor" value="">');
-										
-										$subDiv1.text(data.list[i].reId);
-										$subDiv2.text(data.list[i].reDate);
-										
-										$subDiv3.append($radio);
-										$div.append($subDiv1);
-										$div.append($subDiv2);
-										$div.append($subDiv3);
-										
-										$('#editorListWrap').append($div);
+
+									if(data.list.length == 0) {
+										var $p = $('<p style="font-size: 14pt; text-align: center;">');
+										$p.text('참여중인 에디터가 없습니다.');
+										$('#editorListWrap').append($p);
+									} else {
+										for(var i in data.list) {
+											var $div = $('<div class="editorList">');
+											var $subDiv1 = $('<div class="editorId">');
+											var $subDiv2 = $('<div class="editorDate">');
+											var $subDiv3 = $('<div class="editorCheck">');
+											/* var $radio = $('<input type="radio" name="editor" value="">'); */
+											
+											$subDiv1.text(data.list[i].reId);
+											
+											if('${ cBoard.boGroup }' == 3) {
+												var cashNum = data.list[i].reCash;
+												$subDiv2.text(cashNum.toLocaleString() + " 원");
+											} else {
+												$subDiv2.text(data.list[i].reDate);
+											}
+											
+											/* $subDiv3.append($radio); */
+											$div.append($subDiv1);
+											$div.append($subDiv2);
+											$div.append($subDiv3);
+											
+											$('#editorListWrap').append($div);
+										}
 									}
 								}
 							});
