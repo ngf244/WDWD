@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,8 +20,6 @@
 		margin: 30px;
 	}
 	
-	#buttonSelectNSerch {
-	}
 	.select {
 		display: inline-table;
 		height: 30px;
@@ -62,11 +61,15 @@
 	
 	/* 리스트 부분 */	
 	.boardList {
+		height: 199px;
+	
 		padding: 10px;
 		margin: 20px;
 		
 		border: 1px solid black;
 		display: flex;
+		
+		overflow: hidden;
 	}
 	
 	.boardList:hover {
@@ -342,19 +345,67 @@
 						</div>
 					</div>
 										
-					<!-- 페이징 영역 -->					
+					<!-- 페이징 처리 -->
+					
+					<!-- [이전] -->
 					<div class="pagingCenter">
 						<div class="pagination">
-						<a href=""> &laquo; </a>
-						<a href="" class="active"> 1 </a>
-						<a href=""> 2 </a>
-						<a href=""> 3 </a>
-						<a href=""> 4 </a>
-						<a href=""> 5 </a>
-						<a href=""> 6 </a>
-						<a href=""> 7 </a>
-						<a href=""> 8 </a>
+						<c:if test="${ pi.currentPage <= 1 }">
+							<a href=""> &laquo; </a>
+						</c:if>
+						<c:if test="${ pi.currentPage > 1 }">
+							<c:url var="before" value="reqList.my">
+								<c:param name="page" value="${ pi.currentPage - 1 }"/>
+								<c:param name="boWriter" value="${ cboard.boWriter }"/>
+								<c:if test="${ cboard.cbStep ne 0 }">
+									<c:param name="cbStep" value="${ cboard.cbStep }"/>
+								</c:if>
+								<c:if test="${ cboard.boGroup ne null }">
+									<c:param name="boGroup" value="${ cboard.boGroup }"/>
+								</c:if>
+							</c:url>
+							<a href="${ before }"> &laquo; </a>
+						</c:if>
+					
+					<!-- 페이지 -->	
+					<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+						<c:if test="${ p eq pi.currentPage }">
+							<a href="" class="active"> ${ p } </a>
+						</c:if>
+						
+						<c:if test="${ p ne pi.currentPage }">
+							<c:url var="pagination" value="reqList.my">
+								<c:param name="page" value="${ p }"/>
+								<c:param name="boWriter" value="${ cboard.boWriter }"/>
+								<c:if test="${ cboard.cbStep ne 0 }">
+									<c:param name="cbStep" value="${ cboard.cbStep }"/>
+								</c:if>
+								<c:if test="${ cboard.boGroup ne null }">
+									<c:param name="boGroup" value="${ cboard.boGroup }"/>
+								</c:if>
+							</c:url>
+							<a href="${ pagination }">${ p }</a> &nbsp;
+						</c:if>
+					</c:forEach>	
+					
+					<!-- [다음] -->
+					<c:if test="${ pi.currentPage >= pi.maxPage }">
 						<a href=""> &raquo; </a>
+					</c:if>
+					<c:if test="${ pi.currentPage < pi.maxPage }">
+						<c:url var="after" value="reqList.my">
+							<c:param name="page" value="${ pi.currentPage + 1 }"/>
+							<c:param name="boWriter" value="${ cboard.boWriter }"/>
+								<c:if test="${ cboard.cbStep ne 0 }">
+									<c:param name="cbStep" value="${ cboard.cbStep }"/>
+								</c:if>
+								<c:if test="${ cboard.boGroup ne null }">
+									<c:param name="boGroup" value="${ cboard.boGroup }"/>
+								</c:if>
+						</c:url> 
+						<a href="${ after }"> &raquo; </a>
+					</c:if>		
+						
 						</div>
 					</div>
 				</div>

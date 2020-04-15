@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html>
@@ -643,7 +644,7 @@
 							<img class="profile" src="${ contextPath }/resources/images/2020040701.png">
 						</div>
 						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
-						<span id="userId">${ member.userId }</span><span style="display: inline-block;">님</span>
+						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
 								<tr>
@@ -766,7 +767,7 @@
 							<div id="myReqStateText">의뢰 현황</div>
 							<div class="recruit">
 								<span class="stepText">STEP 1. 지원자 모집 중</span>
-								<div class="innerArea" onclick="goToMyReqOneList();">
+								<div class="innerArea" onclick="goToMyReqList(1);">
 									<div class="innerAreaText">5 </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
@@ -776,7 +777,7 @@
 							</div>
 							<div class="working1">
 								<span class="stepText">STEP 2. 작업 진행 중</span>
-								<div class="innerArea" onclick="location.href='reqTwoList.my'">
+								<div class="innerArea" onclick="goToMyReqList(2);">
 									<div class="innerAreaText">2 </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
@@ -786,7 +787,7 @@
 							</div>
 							<div class="complete1">
 								<span class="stepText">STEP 3. 거래 완료</span>
-								<div class="innerArea" onclick="location.href='reqThreeList.my'">
+								<div class="innerArea" onclick="goToMyReqList(3);">
 									<div class="innerAreaText">3 </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
@@ -796,7 +797,7 @@
 							<div id="myWorkStateText">작업 현황</div>
 							<div class="participate">
 								<span class="stepText">STEP 1. 참가 지원 중</span>
-								<div class="innerArea" onclick="location.href='workOneList.my'">
+								<div class="innerArea" onclick="goToMyWorkList(1)">
 									<div class="innerAreaText">7 </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
@@ -806,7 +807,7 @@
 							</div>
 							<div class="working2">
 								<span class="stepText">STEP 2. 작업 진행 중</span>
-								<div class="innerArea" onclick="location.href='workTwoList.my'">
+								<div class="innerArea" onclick="goToMyWorkList(2)">
 									<div class="innerAreaText">2 </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
@@ -816,7 +817,7 @@
 							</div>
 							<div class="complete2">
 								<span class="stepText">STEP 3. 거래 완료</span>
-								<div class="innerArea" onclick="location.href='workThreeList.my'">
+								<div class="innerArea" onclick="goToMyWorkList(3)">
 									<div class="innerAreaText">4 </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
@@ -1048,6 +1049,7 @@
 	
 	<script>
 		var userId = '${ member.userId }';
+		var boWriter = '${ member.userId }';
 		
 		function goToMyReply(){
 			location.href="myReplyList.my?userId=" + userId;
@@ -1057,8 +1059,14 @@
 			location.href="cashChange.my?userId=" + userId;
 		}
 		
-		function goToMyReqOneList(){
-			location.href="reqOneList.my?userId=" + userId;
+		function goToMyReqList(e){
+			var cbStep = e;
+			location.href="reqList.my?boWriter=" + boWriter + "&cbStep=" + cbStep;
+		}
+		
+		function goToMyWorkList(e){
+			var cbStep = e;
+			location.href="workList.my";
 		}
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>

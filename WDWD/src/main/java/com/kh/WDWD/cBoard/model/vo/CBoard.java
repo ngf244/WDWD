@@ -127,8 +127,10 @@ public class CBoard extends Board{
 	public String toString() {
 		return "CBoard [cbStep=" + cbStep + ", cbSecret=" + cbSecret + ", cbCash=" + cbCash + ", cbCate=" + cbCate
 				+ ", cbStep1=" + cbStep1 + ", cbStep2=" + cbStep2 + ", cbStep3=" + cbStep3 + ", cbStep4=" + cbStep4
-				+ ", cbStep5=" + cbStep5 + ", cbDate=" + cbDate + ", cbPrimium=" + cbPrimium + "]";
+				+ ", cbStep5=" + cbStep5 + ", cbDate=" + cbDate + ", cbPrimium=" + cbPrimium + ", toString()="
+				+ super.toString() + "]";
 	}
+
 	
 	
 

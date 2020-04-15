@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,6 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 	
 	@Override
-	public int getMyReqOneStepListCount(String userId) {
-		return cBoardDAO.getMyReqOneStepListCount(sqlSession, userId);
-	}
-
-	@Override
-	public ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId) {
-		return cBoardDAO.selectMyReqOneStepList(sqlSession, pi, userId);
-	}	
-	
-	@Override
 	public int cBoardInsert(CBoard b) {
 		return cBoardDAO.cBoardInsert(sqlSession, b);
 	}
@@ -47,6 +38,16 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public CBoard cBoardDetailView(int boNum) {
 		return cBoardDAO.cBoardDetailView(sqlSession, boNum);
+	}
+
+	@Override
+	public int getMyReqListCount(CBoard cboard) {
+		return cBoardDAO.getMyReqListCount(sqlSession, cboard);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard) {
+		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
 	}
 	
 }

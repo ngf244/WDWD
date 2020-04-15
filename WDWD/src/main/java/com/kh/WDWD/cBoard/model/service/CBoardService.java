@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
@@ -11,13 +12,13 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectList(Integer boGroup, PageInfo pi);
 
-	int getMyReqOneStepListCount(String userId);
-
-	ArrayList<CBoard> selectMyReqOneStepList(PageInfo pi, String userId);
-
 	int cBoardInsert(CBoard b);
 
 	CBoard cBoardDetailView(int boNum);
+
+	int getMyReqListCount(CBoard cboard);
+
+	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
 
 	
 

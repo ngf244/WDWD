@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,30 +28,44 @@ public class CBoardController {
 	@Autowired
 	private CBoardService cBoardService;
 	
-	@RequestMapping("reqOneList.my")
-	public ModelAndView reqOneStepListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="boGroup", required=false) Integer boGroup, ModelAndView mv) {
-
+	@RequestMapping("reqList.my")
+	public ModelAndView reqOneStepListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
 		int currentPage = 1;
-		
 		if(page != null) {
 			currentPage = page;
 		}
 		
+		CBoard cboard = new CBoard();
 		
-		int listCount = cBoardService.getMyReqOneStepListCount(userId);
-		PageInfo pi = Pagination.getReqOneStepListPageInfo(currentPage, listCount);		
+		if(boWriter != null) {
+			cboard.setBoWriter(boWriter);
+		}
 		
-		System.out.println("의뢰1단계리스트 개수 : " + listCount);
-		ArrayList<CBoard> list = cBoardService.selectMyReqOneStepList(pi, userId);
+		if(cbStep != null) {
+			cboard.setCbStep(cbStep);
+		}
 		
-		System.out.println("의뢰1단계리스트 toString : " + list);
+		if(boGroup != null) {
+			cboard.setBoGroup(boGroup);
+		}
+		
+		int listCount = cBoardService.getMyReqListCount(cboard);
+		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		
+		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
 		
 		if(list != null) {
 			mv.addObject("list", list)
 			  .addObject("pi", pi)
-			  .addObject("userId", userId)
-			  .setViewName("requestOneStepList");
+			  .addObject("cboard", cboard);
+			
+			switch(cboard.getCbStep()) {
+			case 1: mv.setViewName("requestOneStepList"); break;
+			case 2: mv.setViewName("requestTwoStepList"); break;
+			case 3: mv.setViewName("requestThreeStepList"); break; 
+			}
+			
 		} else {
 			throw new BoardException("내 의뢰 1단계 리스트 조회에 실패하였습니다.");
 		}
@@ -172,4 +187,7 @@ public class CBoardController {
 	public String stage3() {
 		return "cashboard/3stage";
 	}
+	
+	
+
 }
