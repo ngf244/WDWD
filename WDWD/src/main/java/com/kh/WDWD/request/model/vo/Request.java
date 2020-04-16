@@ -1,7 +1,8 @@
 package com.kh.WDWD.request.model.vo;
 
-public class Request {
-	private int reNum;
+import com.kh.WDWD.cBoard.model.vo.CBoard;
+
+public class Request extends CBoard {
 	private String reId;
 	private int reCash;
 	private String rePlz;
@@ -9,23 +10,14 @@ public class Request {
 	private String reDate;
 	
 	public Request() {}
-	
-	public Request(int reNum, String reId, int reCash, String rePlz, int reRefNum, String reDate) {
+
+	public Request(String reId, int reCash, String rePlz, int reRefNum, String reDate) {
 		super();
-		this.reNum = reNum;
 		this.reId = reId;
 		this.reCash = reCash;
 		this.rePlz = rePlz;
 		this.reRefNum = reRefNum;
 		this.reDate = reDate;
-	}
-
-	public int getReNum() {
-		return reNum;
-	}
-
-	public void setReNum(int reNum) {
-		this.reNum = reNum;
 	}
 
 	public String getReId() {
@@ -70,11 +62,12 @@ public class Request {
 
 	@Override
 	public String toString() {
-		return "Request [reNum=" + reNum + ", reId=" + reId + ", reCash=" + reCash + ", rePlz=" + rePlz + ", reRefNum="
-				+ reRefNum + ", reDate=" + reDate + "]";
+		return "Request [reId=" + reId + ", reCash=" + reCash + ", rePlz=" + rePlz + ", reRefNum=" + reRefNum
+				+ ", reDate=" + reDate + ", toString()=" + super.toString() + "]";
 	}
 	
 	
+
 	
 	
 }

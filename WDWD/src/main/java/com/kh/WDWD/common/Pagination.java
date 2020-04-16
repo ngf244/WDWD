@@ -96,7 +96,7 @@ public class Pagination {
 		return pi;
 	}
 
-	public static PageInfo getReqOneStepListPageInfo(int currentPage, int listCount) {
+	public static PageInfo getReqListPageInfo(int currentPage, int listCount) {
 		
 		PageInfo pi = null;
 		

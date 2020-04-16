@@ -14,7 +14,7 @@ public class AuthorController {
 	
 	@RequestMapping("trade.au")
 	public String authorTrade() {
-		return "author/Trade";
+		return "author/TradeCare";
 	}
 	
 	@RequestMapping("unban.au")
