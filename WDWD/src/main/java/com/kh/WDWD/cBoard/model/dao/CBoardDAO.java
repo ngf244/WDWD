@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Repository("cBoardDAO")
 public class CBoardDAO {
@@ -40,6 +41,35 @@ public class CBoardDAO {
 	public CBoard cBoardDetailView(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
 	}
+
+	public int doRequest(SqlSessionTemplate sqlSession, Request r) {
+		int result = sqlSession.insert("cBoardMapper.doRequest", r);
+		if(result > 0) {
+			result = sqlSession.update("cBoardMapper.reqCountUp", r);
+		}
+		return result;
+	}
+
+	public ArrayList<Request> reqList(SqlSessionTemplate sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.reqList", bId);
+	}
+
+	public int cancleRequest(SqlSessionTemplate sqlSession, Request r) {
+		int result = sqlSession.delete("cBoardMapper.cancleRequest", r);
+		if(result > 0) {
+			result = sqlSession.update("cBoardMapper.reqCountDown", r);
+		}
+		return result;
+	}
+
+	public int go2stage(SqlSessionTemplate sqlSession, Request r) {
+		int result = sqlSession.update("cBoardMapper.go2stage1", r);
+		if(result > 0) {
+			result = sqlSession.update("cBoardMapper.go2stage2", r);
+		}
+		
+		return result;
+  }   
 
 	public int getMyReqListCount(SqlSessionTemplate sqlSession, CBoard cboard) {
 		return sqlSession.selectOne("cBoardMapper.getMyReqListCount", cboard);

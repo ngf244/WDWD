@@ -143,6 +143,10 @@ public class CBoardController {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
 		
+		if(b.getCbDate() == null) {
+			b.setCbDate("0");
+		}
+		
 		int result = cBoardService.cBoardInsert(b);
 		
 		if(result != 0) {
@@ -161,7 +165,11 @@ public class CBoardController {
 		if(b != null) {
 			mv.addObject("cBoard", b);
 			switch(b.getCbStep()) {
-				case 1: mv.setViewName("cashboard/1stage"); break;
+				case 1: 
+					ArrayList<Request> list = cBoardService.reqList(boNum);
+					mv.addObject("list", list);
+					mv.setViewName("cashboard/1stage");
+					break;
 				case 2: mv.setViewName("cashboard/2stage"); break;
 				case 3: mv.setViewName("cashboard/3stage"); break;
 			}
@@ -172,6 +180,90 @@ public class CBoardController {
 		return mv;
 	}
 	
+	@RequestMapping("reqList.ch")
+	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		ArrayList<Request> list = cBoardService.reqList(bId);
+		
+		JSONArray jArr = new JSONArray();
+		for(Request req: list) {
+			JSONObject jUser = new JSONObject();
+			jUser.put("reNum", req.getReNum());
+			jUser.put("reId", req.getReId());
+			jUser.put("reCash", req.getReCash());
+			jUser.put("rePlz", req.getRePlz());
+			jUser.put("reRefNum", req.getReRefNum());
+			jUser.put("reDate", req.getReDate());
+			
+			jArr.add(jUser);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("doRequest.ch")
+	public void doRequest(@ModelAttribute Request r, HttpServletResponse response) {
+		int result = cBoardService.doRequest(r);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			
+			if(result > 0) {
+				out.append("ok");
+				out.flush();
+			} else {
+				out.append("fail");
+				out.flush();
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("cancleRequest.ch")
+	public void cancleRequest(@ModelAttribute Request r, HttpServletResponse response) {
+		int result = cBoardService.cancleRequest(r);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			
+			if(result > 0) {
+				out.append("ok");
+				out.flush();
+			} else {
+				out.append("fail");
+				out.flush();
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("go2stage.ch")
+	public String go2stage(@ModelAttribute Request r) {
+		int result = cBoardService.go2stage(r);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
 	
 	@RequestMapping("stage1.ch")
 	public String stage1() {
@@ -188,7 +280,4 @@ public class CBoardController {
 		return "cashboard/3stage";
 	}
 	
-
-	
-
 }
