@@ -56,7 +56,8 @@
       <result property="cbStep4" column="CB_STEP4"/>
       <result property="cbStep5" column="CB_STEP5"/>
       <result property="cbDate" column="CB_DATE"/>
-      <result property="cbPrimium" column="CB_PRIMIUM"/>      
+      <result property="cbPrimium" column="CB_PRIMIUM"/>
+      <result property="reId" column="RE_ID"/>      
    </resultMap>
    
    <insert id="cBoardInsert1" parameterType="CBoard">
@@ -97,6 +98,9 @@
 		select *
 		from board
 			 join cash_board on (bo_num = cb_num)
+		<if test="cbStep == 2">
+			 left join request on (bo_num = re_num)
+		</if>	 
 		<where>
 			<if test="boWriter != null">
 				bo_writer = #{boWriter}

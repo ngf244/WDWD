@@ -1,7 +1,6 @@
 package com.kh.WDWD.cBoard.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,6 +20,7 @@ import com.kh.WDWD.cBoard.model.service.CBoardService;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.member.model.vo.Member;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Controller
 public class CBoardController {
@@ -29,7 +29,7 @@ public class CBoardController {
 	private CBoardService cBoardService;
 	
 	@RequestMapping("reqList.my")
-	public ModelAndView reqOneStepListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView reqListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
 		int currentPage = 1;
 		if(page != null) {
@@ -188,6 +188,7 @@ public class CBoardController {
 		return "cashboard/3stage";
 	}
 	
+
 	
 
 }

@@ -209,7 +209,7 @@
 								<div class="rightCon">
 									<c:if test="${ rtl.boGroup == '2' }">
 										<div class="rightBtn">
-											참여자 : ${ rtl.boReNum }명
+											매칭 에디터 : ${ rtl.reId }
 										</div>
 										<div class="rightBtn">
 											~ 20${ rtl.cbDate }
@@ -220,7 +220,7 @@
 									</c:if>
 									<c:if test="${ rtl.boGroup == '3' }">
 										<div class="rightBtn">
-											참여자 : ${ rtl.boReNum }명
+											매칭 에디터 : ${ rtl.reId }
 										</div>
 										<div class="rightBtn">
 											~ 20${ rtl.cbDate }
@@ -231,7 +231,7 @@
 									</c:if>
 									<c:if test="${ rtl.boGroup == '4' }">
 										<div class="rightBtn">
-											참여자 : ${ rtl.boReNum }명
+											매칭 에디터 : ${ rtl.reId }
 										</div>
 										<div class="rightBtn">
 											~ 20${ rtl.cbDate }
@@ -244,130 +244,6 @@
 							</div>
 						</div>
 					</c:forEach>
-<!-- 					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 1:1 의뢰<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.13
-								</div>
-								<div class="rightBtn">
-									의뢰비 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 역경매<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.09
-								</div>
-								<div class="rightBtn">
-									낙찰가 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>										
-
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 역경매<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.04
-								</div>
-								<div class="rightBtn">
-									낙찰가 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 콘테스트<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.01
-								</div>
-								<div class="rightBtn">
-									의뢰비 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 콘테스트<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.01
-								</div>
-								<div class="rightBtn">
-									의뢰비 : 20,000
-								</div>
-							</div>
-						</div>
-					</div> -->
 										
 					<!-- 페이징 처리 -->
 					

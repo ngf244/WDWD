@@ -170,42 +170,86 @@
 						<!-- 부트스트랩으로 아래로 창 열리게 해야 함.  -->
 						<div class="select">카테고리 ▼</div>
 						<div class="dropdown-content">
-						    <a href="#">1:1 의뢰</a>
-						    <a href="#">역경매</a>
-						    <a href="#">콘테스트</a>
+							<a href="#"><span onclick="myReqThreeStepList();">전체 보기</span></a>
+						    <a href="#"><span onclick="myReqCateList(2);">1:1 의뢰</span></a>
+						    <a href="#"><span onclick="myReqCateList(3);">역경매</span></a>
+						    <a href="#"><span onclick="myReqCateList(4);">콘테스트</span></a>
 						</div>						
 					</div>
 				
 					<!-- 리스트 시작 -->
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 1:1 의뢰<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
+					<c:forEach var="rthl" items="${ list }">
+						<div class="boardList">
+							<div class="boardImg">
+								<c:if test="${ rthl.boGroup == '2' }">
+									<img src="${ contextPath }/resources/images/1on1_icon.png" style="width: 100%;">
+								</c:if>
+								<c:if test="${ rthl.boGroup == '3' }">
+									<img src="${ contextPath }/resources/images/auction.png" style="width: 100%;">
+								</c:if>
+								<c:if test="${ rthl.boGroup == '4' }">
+									<img src="${ contextPath }/resources/images/trophy_icon.png" style="width: 100%;">
+								</c:if>																
 							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
+							<div class="boardCon">
+								<div class="leftCon">
+									<b>
+									<c:if test="${ rthl.boCategory == '1' }">컨텐츠 제작</c:if>
+									<c:if test="${ rthl.boCategory == '2' }">컨텐츠 수정</c:if>
+									<c:if test="${ rthl.boCategory == '3' }">기타</c:if>
+									  &nbsp; | &nbsp; 제목 : <span style="color: rgb(52, 152, 219);">${ rthl.boTitle }</span> </b><br>
+									<b>등록일</b> : 20${ rthl.boDate }<br>
+									<c:if test="${ rthl.boGroup == '2' }" >
+										<b>의뢰유형</b> : 1:1 의뢰<br>
+									</c:if>
+									<c:if test="${ rthl.boGroup == '3' }" >
+									 	<b>의뢰유형</b> : 역경매<br>
+									</c:if>			
+									<c:if test="${ rthl.boGroup == '4' }" >
+									 	<b>의뢰유형</b> : 콘테스트<br>
+									</c:if>									 						 	 
+									<p><b>내용</b> : ${ rthl.boContent }</p>
 								</div>
-								<div class="rightBtn">
-									~ 2020.04.16
+								<div class="rightCon">
+									<c:if test="${ rthl.boGroup == '2' }">
+										<div class="rightBtn">
+											매칭 에디터 : ${ rthl.reId }
+										</div>
+										<div class="rightBtn">
+											마감일 : 20${ rthl.cbDate }
+										</div>
+										<div class="rightBtn">
+											의뢰비 : ${ rthl.cbCash }
+										</div>
+									</c:if>
+									<c:if test="${ rthl.boGroup == '3' }">
+										<div class="rightBtn">
+											매칭 에디터 : ${ rthl.reId }
+										</div>
+										<div class="rightBtn">
+											마감일 : 20${ rthl.cbDate }
+										</div>
+										<div class="rightBtn">
+											낙찰가 : ${ rthl.cbCash }
+										</div>
+									</c:if>
+									<c:if test="${ rthl.boGroup == '4' }">
+										<div class="rightBtn">
+											우승자 : ${ rthl.boReNum }명
+										</div>
+										<div class="rightBtn">
+											~ 20${ rthl.cbDate }
+										</div>
+										<div class="rightBtn">
+											상금 : ${ rthl.cbCash }
+										</div>
+									</c:if>																		
 								</div>
-								<div class="rightBtn">
-									의뢰비 : 20,000
-								</div>
-								<div class="rightBtn">
-									평점 : <span class="starRating">★★★★★</span>
-								</div>								
 							</div>
 						</div>
-					</div>
+					</c:forEach>
 					
-					<div class="boardList">
+<!-- 					<div class="boardList">
 						<div class="boardImg">
 							<img src="">
 						</div>
@@ -343,7 +387,7 @@
 								</div>								
 							</div>
 						</div>
-					</div>
+					</div> -->
 										
 					<!-- 페이징 처리 -->
 					
@@ -426,6 +470,20 @@
 		}, function(){
 			$(this).css({'background-color':'rgb(235, 239, 242)', 'color':'black'})
 		});
-	</script>		
+	</script>
+	<script>
+		var boWriter = '${ loginUser.userId }'
+			
+		function myReqThreeStepList(){
+			var cbStep = 3;
+			location.href="reqList.my?boWriter=" + boWriter + "&cbStep=" + cbStep;
+		}
+		
+		function myReqCateList(e){
+			var cbStep = 3;
+			location.href = "reqList.my?boGroup=" + e + "&boWriter=" + boWriter + "&cbStep=" + cbStep;	
+		}
+
+	</script>			
 </body>
 </html>
