@@ -164,9 +164,10 @@
 					<div id="buttonSelectNSerch">
 						<div class="select">카테고리 ▼</div>
 						<div class="dropdown-content">
-						    <a href="#">1:1 의뢰</a>
-						    <a href="#">역경매</a>
-						    <a href="#">콘테스트</a>
+							<a href="#"><span onclick="myReqOneStepList();">전체 보기</span></a>
+						    <a href="#"><span onclick="myReqCateList(2);">1:1 의뢰</span></a>
+						    <a href="#"><span onclick="myReqCateList(3);">역경매</span></a>
+						    <a href="#"><span onclick="myReqCateList(4);">콘테스트</span></a>
 						</div>						
 					</div>
 				
@@ -190,7 +191,7 @@
 									<c:if test="${ rol.boCategory == '1' }">컨텐츠 제작</c:if>
 									<c:if test="${ rol.boCategory == '2' }">컨텐츠 수정</c:if>
 									<c:if test="${ rol.boCategory == '3' }">기타</c:if>
-									  &nbsp; | &nbsp; 제목 : ${ rol.boTitle } </b><br>
+									  &nbsp; | &nbsp; 제목 : <span style="color: rgb(52, 152, 219);">${ rol.boTitle }</span> </b><br>
 									<b>등록일</b> : 20${ rol.boDate }<br>
 									<c:if test="${ rol.boGroup == '2' }" >
 										<b>의뢰유형</b> : 1:1 의뢰<br>
@@ -204,145 +205,44 @@
 									<p><b>내용</b> : ${ rol.boContent }</p>
 								</div>
 								<div class="rightCon">
-									<div class="rightBtn">
-										참여자 : ${ rol.boReNum }명
-									</div>
-									<div class="rightBtn">
-										~ 20${ rol.cbDate }
-									</div>
-									<div class="rightBtn">
-										의뢰비 : ${ rol.cbCash }
-									</div>
+									<c:if test="${ rol.boGroup == '2' }">
+										<div class="rightBtn">
+											참여자 : ${ rol.boReNum }명
+										</div>
+										<div class="rightBtn">
+											~ 20${ rol.cbDate }
+										</div>
+										<div class="rightBtn">
+											의뢰비 : ${ rol.cbCash }
+										</div>
+									</c:if>
+									<c:if test="${ rol.boGroup == '3' }">
+										<div class="rightBtn">
+											참여자 : ${ rol.boReNum }명
+										</div>
+										<div class="rightBtn">
+											~ 20${ rol.cbDate }
+										</div>
+										<div class="rightBtn">
+											최소 입찰가 : ${ rol.cbCash }
+										</div>
+									</c:if>
+									<c:if test="${ rol.boGroup == '4' }">
+										<div class="rightBtn">
+											참여자 : ${ rol.boReNum }명
+										</div>
+										<div class="rightBtn">
+											~ 20${ rol.cbDate }
+										</div>
+										<div class="rightBtn">
+											상금 : ${ rol.cbCash }
+										</div>
+									</c:if>																		
 								</div>
 							</div>
 						</div>
 					</c:forEach>
 					
-<%-- 					<div class="boardList">
-						<div class="boardImg">
-							<img src="${ contextPath }/resources/images/auction_icon.png" style="width: 100%;">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 1:1 의뢰<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									참여자 : 7명
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.13
-								</div>
-								<div class="rightBtn">
-									의뢰비 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 역경매<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									참여자 : 6명
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.09
-								</div>
-								<div class="rightBtn">
-									최소 입찰가 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>										
-
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 역경매<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									참여자 : 6명
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.04
-								</div>
-								<div class="rightBtn">
-									최소 입찰가 : 20,000
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 콘테스트<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									참여자 : 3명
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.01
-								</div>
-								<div class="rightBtn">
-									상금 : 50,000
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 콘테스트<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									참여자 : 8명
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.01
-								</div>
-								<div class="rightBtn">
-									상금 : 50,000
-								</div>
-							</div>
-						</div>
-					</div> --%>
-										
 					<!-- 페이징 처리 -->
 					
 					<!-- [이전] -->
@@ -352,11 +252,17 @@
 							<a href=""> &laquo; </a>
 						</c:if>
 						<c:if test="${ pi.currentPage > 1 }">
-							<c:url var="before" value="reqOneList.my">
+							<c:url var="before" value="reqList.my">
 								<c:param name="page" value="${ pi.currentPage - 1 }"/>
-								<c:param name="userId" value="${ userId }"/>
+								<c:param name="boWriter" value="${ cboard.boWriter }"/>
+								<c:if test="${ cboard.cbStep ne 0 }">
+									<c:param name="cbStep" value="${ cboard.cbStep }"/>
+								</c:if>
+								<c:if test="${ cboard.boGroup ne null }">
+									<c:param name="boGroup" value="${ cboard.boGroup }"/>
+								</c:if>
 							</c:url>
-						<a href="${ before }"> &laquo; </a>
+							<a href="${ before }"> &laquo; </a>
 						</c:if>
 					
 					<!-- 페이지 -->	
@@ -366,9 +272,15 @@
 						</c:if>
 						
 						<c:if test="${ p ne pi.currentPage }">
-							<c:url var="pagination" value="reqOneList.my">
+							<c:url var="pagination" value="reqList.my">
 								<c:param name="page" value="${ p }"/>
-								<c:param name="userId" value="${ userId }"/>
+								<c:param name="boWriter" value="${ cboard.boWriter }"/>
+								<c:if test="${ cboard.cbStep ne 0 }">
+									<c:param name="cbStep" value="${ cboard.cbStep }"/>
+								</c:if>
+								<c:if test="${ cboard.boGroup ne null }">
+									<c:param name="boGroup" value="${ cboard.boGroup }"/>
+								</c:if>
 							</c:url>
 							<a href="${ pagination }">${ p }</a> &nbsp;
 						</c:if>
@@ -379,9 +291,15 @@
 						<a href=""> &raquo; </a>
 					</c:if>
 					<c:if test="${ pi.currentPage < pi.maxPage }">
-						<c:url var="after" value="reqOneList.my">
+						<c:url var="after" value="reqList.my">
 							<c:param name="page" value="${ pi.currentPage + 1 }"/>
-							<c:param name="userId" value="${ userId }"/>
+							<c:param name="boWriter" value="${ cboard.boWriter }"/>
+								<c:if test="${ cboard.cbStep ne 0 }">
+									<c:param name="cbStep" value="${ cboard.cbStep }"/>
+								</c:if>
+								<c:if test="${ cboard.boGroup ne null }">
+									<c:param name="boGroup" value="${ cboard.boGroup }"/>
+								</c:if>
 						</c:url> 
 						<a href="${ after }"> &raquo; </a>
 					</c:if>		
@@ -406,6 +324,20 @@
 		}, function(){
 			$(this).css({'background-color':'rgb(235, 239, 242)', 'color':'black'})
 		});
+	</script>
+	<script>
+		var boWriter = '${ loginUser.userId }'
+			
+		function myReqOneStepList(){
+			var cbStep = 1;
+			location.href="reqList.my?boWriter=" + boWriter + "&cbStep=" + cbStep;
+		}
+		
+		function myReqCateList(e){
+			var cbStep = 1;
+			location.href = "reqList.my?boGroup=" + e + "&boWriter=" + boWriter + "&cbStep=" + cbStep;	
+		}
+
 	</script>		
 </body>
 </html>

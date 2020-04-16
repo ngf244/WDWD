@@ -32,14 +32,6 @@
 		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
 	</resultMap>
-	
-	
-   <select id="getMyReqOneStepListCount" parameterType="string" resultType="_int">
-      select count(*)
-      from board
-            join cash_board on (BO_NUM = CB_NUM)
-      where BO_WRITER = #{userId} and CB_STEP = 1
-   </select>
    
    <resultMap type="CBoard" id="CBoardResultSet">
       <id property="boNum" column="BO_NUM"/>
@@ -64,16 +56,9 @@
       <result property="cbStep4" column="CB_STEP4"/>
       <result property="cbStep5" column="CB_STEP5"/>
       <result property="cbDate" column="CB_DATE"/>
-      <result property="cbPrimium" column="CB_PRIMIUM"/>      
+      <result property="cbPrimium" column="CB_PRIMIUM"/>
+      <result property="reId" column="RE_ID"/>      
    </resultMap>
-   
-   <select id="selectMyReqOneStepList" parameterType="string" resultMap="CBoardResultSet">
-      select *
-      from board
-            join cash_board on (bo_num = cb_num)
-      where bo_writer = #{userId} and cb_step = 1
-   </select>
-    
    
    <insert id="cBoardInsert1" parameterType="CBoard">
 		insert into board
@@ -91,6 +76,42 @@
 		join cash_board on (board.bo_num = cash_board.cb_num)
 		where bo_num = #{boNum}
 	</select>
-   
+ 	
+	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">
+		select count(*)
+		from board
+			 join cash_board on (bo_num = cb_num)
+		<where>
+			<if test="boWriter != null">
+				bo_writer = #{boWriter}
+			</if>
+			<if test="boGroup != null">
+				and bo_group = #{boGroup}
+			</if>
+			<if test="cbStep != 0">
+				and cb_step = #{cbStep}
+			</if>
+		</where>
+	</select>
 	
+	<select id="selectMyReqList" parameterType="CBoard" resultMap="CBoardResultSet">
+		select *
+		from board
+			 join cash_board on (bo_num = cb_num)
+		<if test="cbStep == 2">
+			 left join request on (bo_num = re_num)
+		</if>	 
+		<where>
+			<if test="boWriter != null">
+				bo_writer = #{boWriter}
+			</if>
+			<if test="boGroup != null">
+				and bo_group = #{boGroup}
+			</if>
+			<if test="cbStep != 0">
+				and cb_step = #{cbStep}
+			</if>
+		</where> 
+	</select>
+	   	
 </mapper>

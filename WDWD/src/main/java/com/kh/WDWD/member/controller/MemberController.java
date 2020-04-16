@@ -80,11 +80,6 @@ public class MemberController {
 		return "directRequestForm";
 	}
 	
-	@RequestMapping("reqTwoList.my")
-	public String requestTwoListView() {
-		return "requestTwoStepList";
-	}
-	
 	@RequestMapping("reqThreeList.my")
 	public String requestThreeListView() {
 		return "requestThreeStepList";
