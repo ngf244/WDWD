@@ -39,7 +39,12 @@ public class CBoardDAO {
 	}
 
 	public CBoard cBoardDetailView(SqlSessionTemplate sqlSession, int boNum) {
-		return sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
+		CBoard b = sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
+		if(b.getCbStep() > 1) {
+			b.setReId((String)sqlSession.selectOne("cBoardMapper.cBoardReId", boNum));
+		}
+		
+		return b;
 	}
 
 	public int doRequest(SqlSessionTemplate sqlSession, Request r) {

@@ -168,7 +168,7 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("detailView.ch")
-	public ModelAndView cBoardDetailView(@RequestParam("boNum") int boNum, ModelAndView mv) {
+	public ModelAndView cBoardDetailView(@RequestParam("boNum") int boNum, ModelAndView mv, HttpServletRequest request, HttpSession session) {
 		
 		CBoard b = cBoardService.cBoardDetailView(boNum);
 		
@@ -180,7 +180,18 @@ public class CBoardController {
 					mv.addObject("list", list);
 					mv.setViewName("cashboard/1stage");
 					break;
-				case 2: mv.setViewName("cashboard/2stage"); break;
+				case 2: 
+					Member m = (Member)session.getAttribute("loginUser");
+					if(m.getNickName().equals(b.getBoWriter()) || m.getNickName().equals(b.getReId())) {
+						mv.setViewName("cashboard/2stage");
+					} else {
+						String url = (String)request.getHeader("REFERER");
+						int urlNum = url.lastIndexOf("/");
+						
+						mv.addObject("error", "작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.");
+						mv.setViewName(url.substring(urlNum + 1));
+					}
+					break;
 				case 3: mv.setViewName("cashboard/3stage"); break;
 			}
 		} else {

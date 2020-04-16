@@ -554,6 +554,10 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
+					
+					if('${error}' != "") {
+						alert('${error}');
+					}
 				</script>
 			</div>
 		</div>

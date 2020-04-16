@@ -79,6 +79,13 @@
 		where bo_num = #{boNum}
 	</select>
 	
+	<select id="cBoardReId" parameterType="_int">
+		select me_nick
+		from request 
+		join member on (request.re_id = member.me_id)
+		where re_plz = 'Y' and re_num = #{boNum};
+	</select>
+	
 	<insert id="doRequest" parameterType="Request">
 		insert into request
 		values (#{reNum}, #{reId}, #{reCash}, 'N', null, sysdate)
