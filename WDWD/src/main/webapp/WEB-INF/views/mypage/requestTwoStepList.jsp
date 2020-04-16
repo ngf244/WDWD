@@ -209,7 +209,7 @@
 								<div class="rightCon">
 									<c:if test="${ rtl.boGroup == '2' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rtl.reId }
+											에디터 : ${ rtl.reId }
 										</div>
 										<div class="rightBtn">
 											~ 20${ rtl.cbDate }
@@ -220,7 +220,7 @@
 									</c:if>
 									<c:if test="${ rtl.boGroup == '3' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rtl.reId }
+											에디터 : ${ rtl.reId }
 										</div>
 										<div class="rightBtn">
 											~ 20${ rtl.cbDate }
@@ -231,7 +231,7 @@
 									</c:if>
 									<c:if test="${ rtl.boGroup == '4' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rtl.reId }
+											에디터 : ${ rtl.reId }
 										</div>
 										<div class="rightBtn">
 											~ 20${ rtl.cbDate }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Repository("cBoardDAO")
 public class CBoardDAO {
@@ -51,5 +52,18 @@ public class CBoardDAO {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyReqList", cboard, rowBounds);
+	}
+
+
+	public int getMyWorkListCount(SqlSessionTemplate sqlSession, Request request) {
+		return sqlSession.selectOne("cBoardMapper.getMyWorkListCount", request);
+	}
+
+
+	public ArrayList<Request> selectMyWorkList(SqlSessionTemplate sqlSession, PageInfo pi, Request request) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyWorkList", request, rowBounds);
 	}
 }

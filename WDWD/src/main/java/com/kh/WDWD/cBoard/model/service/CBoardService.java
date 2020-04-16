@@ -1,10 +1,10 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.request.model.vo.Request;
 
 public interface CBoardService {
 
@@ -19,6 +19,10 @@ public interface CBoardService {
 	int getMyReqListCount(CBoard cboard);
 
 	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
+
+	int getMyWorkListCount(Request request);
+
+	ArrayList<Request> selectMyWorkList(PageInfo pi, Request request);
 
 	
 

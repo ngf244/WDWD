@@ -1048,8 +1048,7 @@
 	</script>
 	
 	<script>
-		var userId = '${ member.userId }';
-		var boWriter = '${ member.userId }';
+		var userId = '${ loginUser.userId }';
 		
 		function goToMyReply(){
 			location.href="myReplyList.my?userId=" + userId;
@@ -1061,12 +1060,12 @@
 		
 		function goToMyReqList(e){
 			var cbStep = e;
-			location.href="reqList.my?boWriter=" + boWriter + "&cbStep=" + cbStep;
+			location.href="reqList.my?boWriter=" + userId + "&cbStep=" + cbStep;
 		}
 		
 		function goToMyWorkList(e){
 			var cbStep = e;
-			location.href="workList.my";
+			location.href="workList.my?reId=" + userId + "&cbStep=" + cbStep;
 		}
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>

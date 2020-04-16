@@ -67,7 +67,7 @@ public class CBoardController {
 			}
 			
 		} else {
-			throw new BoardException("내 의뢰 1단계 리스트 조회에 실패하였습니다.");
+			throw new BoardException("내 의뢰 리스트 조회에 실패하였습니다.");
 		}
 		
 		return mv;
@@ -188,7 +188,49 @@ public class CBoardController {
 		return "cashboard/3stage";
 	}
 	
-
-	
+	@RequestMapping("workList.my")
+	public ModelAndView workListView(@RequestParam(value="reId", required=false) String reId, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		Request request = new Request();
+		
+		if(reId != null) {
+			request.setBoWriter(reId);
+		}
+		
+		if(cbStep != null) {
+			request.setCbStep(cbStep);
+		}
+		
+		if(boGroup != null) {
+			request.setBoGroup(boGroup);
+		}
+		
+		int listCount = cBoardService.getMyWorkListCount(request);
+		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		
+		ArrayList<Request> list = cBoardService.selectMyWorkList(pi, request);		
+		
+		if(list != null) {
+			mv.addObject("list", list)
+			  .addObject("pi", pi)
+			  .addObject("request", request);
+			
+			switch(request.getCbStep()) {
+			case 1: mv.setViewName("requestOneStepList"); break;
+			case 2: mv.setViewName("requestTwoStepList"); break;
+			case 3: mv.setViewName("requestThreeStepList"); break; 
+			}
+			
+		} else {
+			throw new BoardException("내 작업 리스트 조회에 실패하였습니다.");
+		}
+		
+		return mv;
+	}
 
 }

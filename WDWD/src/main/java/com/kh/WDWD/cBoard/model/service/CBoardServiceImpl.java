@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Service("CBoardService")
 public class CBoardServiceImpl implements CBoardService {
@@ -48,6 +49,16 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard) {
 		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
+	}
+
+	@Override
+	public int getMyWorkListCount(Request request) {
+		return cBoardDAO.getMyWorkListCount(sqlSession, request);
+	}
+
+	@Override
+	public ArrayList<Request> selectMyWorkList(PageInfo pi, Request request) {
+		return cBoardDAO.selectMyWorkList(sqlSession, pi, request);
 	}
 	
 }

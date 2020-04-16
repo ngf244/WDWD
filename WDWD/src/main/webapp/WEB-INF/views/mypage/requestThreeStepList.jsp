@@ -213,7 +213,7 @@
 								<div class="rightCon">
 									<c:if test="${ rthl.boGroup == '2' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rthl.reId }
+											에디터 : ${ rthl.reId }
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }
@@ -221,10 +221,32 @@
 										<div class="rightBtn">
 											의뢰비 : ${ rthl.cbCash }
 										</div>
+										<div class="rightBtn">
+											<c:choose>
+												<c:when test="${ rthl.reGrade == '5' }">
+													평점 : <span class="starRating">★★★★★</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '4' }">
+													평점 : <span class="starRating">★★★★☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '3' }">
+													평점 : <span class="starRating">★★★☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '2' }">
+													평점 : <span class="starRating">★★☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '1' }">
+													평점 : <span class="starRating">★☆☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '0' }">
+													평점 : <span class="starRating">☆☆☆☆☆</span>
+												</c:when>
+											</c:choose>
+										</div>										
 									</c:if>
 									<c:if test="${ rthl.boGroup == '3' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rthl.reId }
+											에디터 : ${ rthl.reId }
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }
@@ -232,16 +254,60 @@
 										<div class="rightBtn">
 											낙찰가 : ${ rthl.cbCash }
 										</div>
+										<div class="rightBtn">
+											<c:choose>
+												<c:when test="${ rthl.reGrade == '5' }">
+													평점 : <span class="starRating">★★★★★</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '4' }">
+													평점 : <span class="starRating">★★★★☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '3' }">
+													평점 : <span class="starRating">★★★☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '2' }">
+													평점 : <span class="starRating">★★☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '1' }">
+													평점 : <span class="starRating">★☆☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '0' }">
+													평점 : <span class="starRating">☆☆☆☆☆</span>
+												</c:when>
+											</c:choose>
+										</div>
 									</c:if>
 									<c:if test="${ rthl.boGroup == '4' }">
 										<div class="rightBtn">
-											우승자 : ${ rthl.boReNum }명
+											우승자 : ${ rthl.reId }
 										</div>
 										<div class="rightBtn">
-											~ 20${ rthl.cbDate }
+											마감일 : 20${ rthl.cbDate }
 										</div>
 										<div class="rightBtn">
 											상금 : ${ rthl.cbCash }
+										</div>
+										<div class="rightBtn">
+											<c:choose>
+												<c:when test="${ rthl.reGrade == '5' }">
+													평점 : <span class="starRating">★★★★★</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '4' }">
+													평점 : <span class="starRating">★★★★☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '3' }">
+													평점 : <span class="starRating">★★★☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '2' }">
+													평점 : <span class="starRating">★★☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '1' }">
+													평점 : <span class="starRating">★☆☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '0' }">
+													평점 : <span class="starRating">☆☆☆☆☆</span>
+												</c:when>
+											</c:choose>
 										</div>
 									</c:if>																		
 								</div>
