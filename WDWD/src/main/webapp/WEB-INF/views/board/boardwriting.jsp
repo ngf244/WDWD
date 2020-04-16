@@ -366,6 +366,7 @@
 
 					var targetDiv= $('#writingPlace');
 
+
 					if (fileValue != "") {
 						$insertImage = $(this).parent().parent().find('.insertImage');
 						$img = $('<img class="inputImg">')
@@ -391,6 +392,27 @@
 						reader.readAsDataURL(this.files[0]);
 					}
 				})
+
+				// function to_fileUp_ajax(){
+				
+				// var formData = new FormData();
+				// formData.append('uploadFile', $('uploadFile')[0].files[0]);
+
+				// 	$.ajax({
+				// 		type : 'post',
+				// 		url : '/test.jsp',
+				// 		data : formData,
+				// 		dataType : 'json',
+				// 		processData : false,
+				// 		contentType : false,
+				// 		success : function(json){
+				// 			alert(json)
+				// 		},
+				// 		error: {
+				// 			alert(error);
+				// 		}
+				// 	});
+				// }
 // ---------------------------------------------------------------------------
 				// contenteditable에 텍스트 복붙 텍스트만 넣기
 				var ele = document.querySelector('#writingPlace'); 

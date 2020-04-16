@@ -489,11 +489,12 @@
 		<div id="main" style="background: white">
 			
 			<div class="forbackcolor">
-				<div class="freeboard">자유갤러리			
+				<div class="freeboard">자유갤러리
 				</div>
 				
 				<div class="writingtitle">
 					<h3>오늘 카페에서 치킨배달 도전한썰 푼다.</h3>
+					<input type="hidden" name="boardNum" value="1">
 				</div>
 				
 				<div class="nickname">
@@ -708,6 +709,43 @@
 					$('input[name=replyPosition]').val(replyNum);
 				})
 
+				$('.reportReply').click(function () {
+					var boardNo = $('input[name=boardNum]').val();
+					console.log(boardNo);
+					var reported = $(this).parent().prev().children()[0].innerText;
+					console.log(reported);
+
+					reportForm(boardNo, reported);
+				})
+				$('.reportBtnArea').click(function () {
+					var boardNo = $('input[name=boardNum]').val();
+					console.log(boardNo);
+					var reported = $(this).closest('.forbackcolor').find('.smallOption').text();
+					console.log(reported);
+
+					reportForm(boardNo, reported);
+				})
+
+				function to_fileUp_ajax(){
+				
+				var formData = new FormData();
+				formData.append('uploadFile', $('uploadFile')[0].files[0]);
+
+					$.ajax({
+						type : 'post',
+						url : '/test.jsp',
+						data : formData,
+						dataType : 'json',
+						processData : false,
+						contentType : false,
+						success : function(json){
+							alert(json)
+						},
+						error: {
+							alert(error);
+						}
+					});
+				}
 			</script>
   																				
 		</div>					
