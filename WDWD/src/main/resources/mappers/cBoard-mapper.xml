@@ -63,8 +63,7 @@
    
    <insert id="cBoardInsert1" parameterType="CBoard">
 		insert into board
-		value
-		s (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
+		values (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
 	</insert>
 	
 	<insert id="cBoardInsert2" parameterType="CBoard">

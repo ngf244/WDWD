@@ -514,7 +514,7 @@
 						
 						function changeFile(fileUrl, fileName) {
 							var $div = $('<div class="fileArea">');
-							var $img = $('<img class="fileAreaImg">');
+							var $img = $('<img class="fileAreaImg" name="imgFile">');
 							var $p = $('<p>')
 							
 							$p.text(fileName);

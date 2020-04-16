@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -144,7 +145,7 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("insert.ch")
-	public String cBoardInsert(@ModelAttribute CBoard b, HttpSession session) {
+	public String cBoardInsert(@ModelAttribute CBoard b, HttpSession session, HttpServletRequest request) {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
 		
@@ -155,6 +156,10 @@ public class CBoardController {
 		int result = cBoardService.cBoardInsert(b);
 		
 		if(result != 0) {
+			
+			
+			
+			
 			// 나중에 경로 수정
 			return "cashboard/cBoardWrite";
 		} else {
