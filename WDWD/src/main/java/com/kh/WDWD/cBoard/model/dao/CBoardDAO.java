@@ -67,12 +67,21 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.reqList", bId);
 	}
 
-
 	public int cancleRequest(SqlSessionTemplate sqlSession, Request r) {
 		int result = sqlSession.delete("cBoardMapper.cancleRequest", r);
 		if(result > 0) {
 			result = sqlSession.update("cBoardMapper.reqCountDown", r);
 		}
+		return result;
+	}
+
+
+	public int go2stage(SqlSessionTemplate sqlSession, Request r) {
+		int result = sqlSession.update("cBoardMapper.go2stage1", r);
+		if(result > 0) {
+			result = sqlSession.update("cBoardMapper.go2stage2", r);
+		}
+		
 		return result;
 	}
 }

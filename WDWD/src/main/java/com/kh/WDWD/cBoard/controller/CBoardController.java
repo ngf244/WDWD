@@ -245,6 +245,17 @@ public class CBoardController {
 		}
 	}
 	
+	@RequestMapping("go2stage.ch")
+	public String go2stage(@ModelAttribute Request r) {
+		int result = cBoardService.go2stage(r);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
 	@RequestMapping("stage1.ch")
 	public String stage1() {
 		return "cashboard/1stage";

@@ -111,8 +111,6 @@
 					
 					<script>
 						$("input:radio[name=editor]").click(function(){
-							console.log($("input[name=editor]:checked").parent().parent());
-							
 							$("input[name=editor]").parent().parent().css('background', '');
 							$("input[name=editor]:checked").parent().parent().css('background', 'rgba(161, 206, 244, 0.55)');
 						});
@@ -121,7 +119,11 @@
 					<div id="btnList">
 						<c:if test="${ !empty sessionScope.loginUser }">
 							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
-								<div id="submit" class="button">에디터 선택</div>
+								<form action="go2stage.ch" method="post" id="selectForm">
+									<div id="selectEdit" class="button">에디터 선택</div>
+									<input type="hidden" id="reNum" name="reNum" value="">
+									<input type="hidden" id="reId" name="reId" value="">
+								</form>
 							</c:if>
 							
 							<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
@@ -245,11 +247,19 @@
 							});
 						}
 						
-						$('#submit').hover(function(){
+						$('#selectEdit').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
 						}, function(){
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						});
+						$('#selectEdit').click(function(){
+							if(confirm("선택한 에디터에게 작업을 맡기시겠습니까?")) {
+								$('#reNum').val($('#boNum').val());
+								$('#reId').val($("input[name=editor]:checked").parent().parent().children().first()[0].innerText);
+								
+								$('#selectForm').submit();	
+							}
+						})
 						$('#cancle').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
 						}, function(){

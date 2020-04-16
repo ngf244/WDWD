@@ -26,6 +26,8 @@ public interface CBoardService {
 
 	int cancleRequest(Request r);
 
+	int go2stage(Request r);
+
 	
 
 }

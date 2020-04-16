@@ -64,5 +64,10 @@ public class CBoardServiceImpl implements CBoardService {
 	public int cancleRequest(Request r) {
 		return cBoardDAO.cancleRequest(sqlSession, r);
 	}
+
+	@Override
+	public int go2stage(Request r) {
+		return cBoardDAO.go2stage(sqlSession, r);
+	}
 	
 }

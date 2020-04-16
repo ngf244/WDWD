@@ -21,7 +21,9 @@ public class PhotoController {
 	
 	// 단일 파일 업로드
 	@RequestMapping("photoUpload.photo")
-	public String photoUpload(HttpServletRequest request, PhotoVo vo) {
+	public String photoUpload(HttpServletRequest request, PhotoVo vo, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
 		String callback = vo.getCallback();
 		String callback_func = vo.getCallback_func();
 		String file_result = "";
@@ -60,6 +62,8 @@ public class PhotoController {
 	// 다중 파일 업로드
 		@RequestMapping("multiplePhotoUpload.photo")
 		public void multiplePhotoUpload(HttpServletRequest request, HttpServletResponse response) {
+			response.setContentType("application/json; charset=utf-8");
+			
 			try {
 				// 파일정보
 				String sFileInfo = "";
@@ -74,7 +78,7 @@ public class PhotoController {
 				// 파일 기본경로 _ 상세경로
 				
 				System.out.println(dftFilePath);
-				System.out.println(filename);
+				System.out.println("Ajax : " + filename);
 				
 				String filePath = dftFilePath + "resources" + File.separator + "photo_upload" + File.separator;
 				

@@ -79,7 +79,8 @@
    
    <insert id="cBoardInsert1" parameterType="CBoard">
 		insert into board
-		values (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
+		value
+		s (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
 	</insert>
 	
 	<insert id="cBoardInsert2" parameterType="CBoard">
@@ -134,5 +135,17 @@
 		where re_num = #{bId}
 		order by re_date, me_nick
 	</select>
+	
+	<update id="go2stage1" parameterType="Request">
+		update (select * from request, member where me_id = re_id)
+		set re_plz = 'Y'
+		where re_num = #{reNum} and me_nick = #{reId}
+	</update>
+	
+	<update id="go2stage2" parameterType="Request">
+		update cash_board
+		set cb_step = 2
+		where cb_num = #{reNum}
+	</update>
 	
 </mapper>
