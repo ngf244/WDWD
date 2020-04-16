@@ -29,29 +29,15 @@ public class CBoardController {
 	private CBoardService cBoardService;
 	
 	@RequestMapping("reqList.my")
-	public ModelAndView reqListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView reqListView(@ModelAttribute CBoard cboard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
 		
-		CBoard cboard = new CBoard();
-		
-		if(boWriter != null) {
-			cboard.setBoWriter(boWriter);
-		}
-		
-		if(cbStep != null) {
-			cboard.setCbStep(cbStep);
-		}
-		
-		if(boGroup != null) {
-			cboard.setBoGroup(boGroup);
-		}
-		
 		int listCount = cBoardService.getMyReqListCount(cboard);
-		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);		
 		
 		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
 		
@@ -189,29 +175,15 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("workList.my")
-	public ModelAndView workListView(@RequestParam(value="reId", required=false) String reId, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView workListView(@ModelAttribute Request request, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
 		
-		Request request = new Request();
-		
-		if(reId != null) {
-			request.setBoWriter(reId);
-		}
-		
-		if(cbStep != null) {
-			request.setCbStep(cbStep);
-		}
-		
-		if(boGroup != null) {
-			request.setBoGroup(boGroup);
-		}
-		
 		int listCount = cBoardService.getMyWorkListCount(request);
-		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);		
 		
 		ArrayList<Request> list = cBoardService.selectMyWorkList(pi, request);		
 		
@@ -221,9 +193,9 @@ public class CBoardController {
 			  .addObject("request", request);
 			
 			switch(request.getCbStep()) {
-			case 1: mv.setViewName("requestOneStepList"); break;
-			case 2: mv.setViewName("requestTwoStepList"); break;
-			case 3: mv.setViewName("requestThreeStepList"); break; 
+			case 1: mv.setViewName("workOneStepList"); break;
+			case 2: mv.setViewName("workTwoStepList"); break;
+			case 3: mv.setViewName("workThreeStepList"); break; 
 			}
 			
 		} else {

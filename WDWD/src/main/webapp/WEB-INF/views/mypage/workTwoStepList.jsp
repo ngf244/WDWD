@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>       
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,8 +20,6 @@
 		margin: 30px;
 	}
 	
-	#buttonSelectNSerch {
-	}
 	.select {
 		display: inline-table;
 		height: 30px;
@@ -62,11 +61,15 @@
 	
 	/* 리스트 부분 */	
 	.boardList {
+		height: 199px;
+	
 		padding: 10px;
 		margin: 20px;
 		
 		border: 1px solid black;
 		display: flex;
+		
+		overflow: hidden;
 	}
 	.boardList:hover{
 		background: rgba(241, 179, 150, 0.1);

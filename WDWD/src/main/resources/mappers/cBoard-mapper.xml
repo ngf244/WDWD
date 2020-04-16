@@ -91,6 +91,7 @@
 			<if test="cbStep != 0">
 				and cb_step = #{cbStep}
 			</if>
+				and bo_del = 'N'
 		</where>
 	</select>
 	
@@ -114,6 +115,7 @@
 			<if test="cbStep != 0">
 				and cb_step = #{cbStep}
 			</if>
+				and bo_del = 'N'
 		</where> 
 	</select>
 	
@@ -150,7 +152,7 @@
 		<result property="reGrade" column="RE_GRADE"/>		      
 	</resultMap>	
 	
-	<select id="getMyWorkListCount" parameterType="Request" resultMap="RequestResultSet">
+	<select id="getMyWorkListCount" parameterType="Request" resultType="_int">
 		select count(*)
 		from board
 		     join cash_board on (bo_num = cb_num)
@@ -165,6 +167,7 @@
 			<if test="cbStep != 0">
 				and cb_step = #{cbStep}
 			</if>
+				and bo_del = 'N'
 		</where>     
 	</select>
 	
@@ -183,6 +186,7 @@
 			<if test="cbStep != 0">
 				and cb_step = #{cbStep}
 			</if>
+				and bo_del = 'N'
 		</where>  	 
 	</select>
 	   	
