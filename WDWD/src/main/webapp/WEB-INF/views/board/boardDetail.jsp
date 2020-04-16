@@ -726,7 +726,7 @@
 					reportForm(boardNo, reported);
 				})
 
-				function to_fileUp_ajax(){
+				/* function to_fileUp_ajax(){
 				
 				var formData = new FormData();
 				formData.append('uploadFile', $('uploadFile')[0].files[0]);
@@ -745,7 +745,7 @@
 							alert(error);
 						}
 					});
-				}
+				} */
 			</script>
   																				
 		</div>					
