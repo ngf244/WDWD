@@ -213,7 +213,7 @@
 								<div class="rightCon">
 									<c:if test="${ rthl.boGroup == '2' }">
 										<div class="rightBtn">
-											에디터 : ${ rthl.reId }
+											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }
@@ -246,7 +246,7 @@
 									</c:if>
 									<c:if test="${ rthl.boGroup == '3' }">
 										<div class="rightBtn">
-											에디터 : ${ rthl.reId }
+											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }
@@ -279,7 +279,7 @@
 									</c:if>
 									<c:if test="${ rthl.boGroup == '4' }">
 										<div class="rightBtn">
-											우승자 : ${ rthl.reId }
+											우승자 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }

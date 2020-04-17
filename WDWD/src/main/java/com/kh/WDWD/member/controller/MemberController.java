@@ -79,24 +79,5 @@ public class MemberController {
 	public String directRequestForm() {
 		return "directRequestForm";
 	}
-	
-	@RequestMapping("reqThreeList.my")
-	public String requestThreeListView() {
-		return "requestThreeStepList";
-	}	
-	
-	@RequestMapping("workOneList.my")
-	public String workOneListView() {
-		return "workOneStepList";
-	}
 
-	@RequestMapping("workTwoList.my")
-	public String workTwoListView() {
-		return "workTwoStepList";
-	}
-	
-	@RequestMapping("workThreeList.my")
-	public String workThreeListView() {
-		return "workThreeStepList";
-	}	
 }
