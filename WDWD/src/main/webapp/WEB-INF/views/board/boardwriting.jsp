@@ -308,8 +308,8 @@
 				<button type="button" class="cancell">취소</button>
 				<button type="button" class="writing">등록</button>
 			</div>
-
-			<div id="fileArea">
+			
+		    <div id="fileArea">
 			</div>
 
 			<script>
@@ -326,15 +326,17 @@
 					$imageNameArea = $('<div class="imageNameArea">');
 					$span = $('<span>');
 					$fileArea=$('<div class=fileArea>');
-					$inputFile=$('<input type=file multiple name=file'+countData+'>');
+					$inputFile=$('<input type=file multiple name=file>');
+					$fileForm=$('<form enctype="multipart/form-data" method="post">');
 					
 					// $insertImage.append($img);
 					$insertImage.append($imgplus);
 					$insertImage.append($ximg);
 
 					$imageNameArea.append($span);
-
-					$fileArea.append($inputFile);
+					
+					$fileForm.append($inputFile);
+					$fileArea.append($fileForm);
 
 					$eachImage.append($insertImage);
 					$eachImage.append($imageNameArea);
@@ -360,6 +362,8 @@
 				})
 
 				$(document).on("change", ":file", function () {
+					ajaxFileUpload($(this));
+					
 					var fileValue = $(this).val();
 					var fileName = fileValue.substring(fileValue.lastIndexOf("\\") + 1);
 					// console.log(fileName);
@@ -392,6 +396,25 @@
 						reader.readAsDataURL(this.files[0]);
 					}
 				})
+				
+				 function ajaxFileUpload(file) {
+					var formData = new FormData(file.parent()[0]);
+					console.log(file.parent()[0]);
+					console.log(file.parent());
+			
+					$.ajax({ 
+						type: "POST", 
+						enctype: 'multipart/form-data', // 필수 
+						url: 'imgUpload.bo', 
+						data: formData, // 필수
+						processData: false, // 필수 
+						contentType: false, // 필수 
+						success: function () { }
+					})
+
+			    }
+				
+				
 
 				// function to_fileUp_ajax(){
 				
@@ -413,6 +436,8 @@
 				// 		}
 				// 	});
 				// }
+
+ 
 // ---------------------------------------------------------------------------
 				// contenteditable에 텍스트 복붙 텍스트만 넣기
 				var ele = document.querySelector('#writingPlace'); 

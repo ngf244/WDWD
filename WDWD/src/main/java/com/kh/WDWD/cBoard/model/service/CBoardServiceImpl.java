@@ -7,9 +7,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
 @Service("CBoardService")
@@ -21,15 +23,16 @@ public class CBoardServiceImpl implements CBoardService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	@Override
-	public int getListCount(Integer boGroup) {
-		return cBoardDAO.getListCount(sqlSession, boGroup);
+		@Override
+	public int getListCount(String boGroup1) {
+		return cBoardDAO.getListCount(sqlSession, boGroup1);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectList(Integer boGroup, PageInfo pi) {
-		return cBoardDAO.getBoardList(sqlSession, boGroup, pi);
+	public ArrayList<CBoard> selectBoardList(String boGroup1, PageInfo pi) {
+		return cBoardDAO.selectBoardList(sqlSession, boGroup1, pi);
 	}
+	
 	
 	@Override
 	public int cBoardInsert(CBoard b) {
@@ -41,6 +44,26 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.cBoardDetailView(sqlSession, boNum);
 	}
 
+	@Override
+	public int doRequest(Request r) {
+		return cBoardDAO.doRequest(sqlSession, r);
+	}
+
+	@Override
+	public ArrayList<Request> reqList(int boNum) {
+		return cBoardDAO.reqList(sqlSession, boNum);
+	}
+
+	@Override
+	public int cancleRequest(Request r) {
+		return cBoardDAO.cancleRequest(sqlSession, r);
+	}
+
+	@Override
+	public int go2stage(Request r) {
+		return cBoardDAO.go2stage(sqlSession, r);
+  }
+  
 	@Override
 	public int getMyReqListCount(CBoard cboard) {
 		return cBoardDAO.getMyReqListCount(sqlSession, cboard);
@@ -60,5 +83,45 @@ public class CBoardServiceImpl implements CBoardService {
 	public ArrayList<Request> selectMyWorkList(PageInfo pi, Request request) {
 		return cBoardDAO.selectMyWorkList(sqlSession, pi, request);
 	}
+  
+	@Override
+	public int contentsInsert(Contents c) {
+		return cBoardDAO.contentsInsert(sqlSession, c);
+	}
+
+	@Override
+	public ArrayList<Contents> fileList(int boNum) {
+		return cBoardDAO.fileList(sqlSession, boNum);
+	}
+
+	@Override
+	public Board cBoardReqView(int boNum) {
+		return cBoardDAO.cBoardReqView(sqlSession, boNum);
+	}
+
+	@Override
+	public int registWrite(Board b) {
+		return cBoardDAO.registWrite(sqlSession, b);
+	}
 	
+	@Override
+	public int getListCount2(Board b) {
+		return cBoardDAO.getListCount2(sqlSession,  b);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectCashOneList(Board b) {
+		return cBoardDAO.selectCashOneList(sqlSession,  b);
+	}
+
+	@Override
+	public int getCateListCount2(Board b) {
+		return cBoardDAO.getCateListCount2(sqlSession,  b);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectCashOneCateList(Board b) {
+		return cBoardDAO.selectCashOneCateList(sqlSession,  b);
+	}
+
 }

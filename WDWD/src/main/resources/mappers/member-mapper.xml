@@ -12,7 +12,7 @@
 		<result property="userPwd" column="ME_PW"/>
 		<result property="userName" column="ME_NAME"/>
 		<result property="phone" column="ME_PHONE"/>
-		<result property="NickName" column="ME_NICK"/>
+		<result property="nickName" column="ME_NICK"/>
 		<result property="email" column="ME_EMAIL"/>
 		<result property="intro" column="ME_INTRO"/>
 		<result property="enrollDate" column="ME_DATE"/>
@@ -38,6 +38,12 @@
 		AND ME_PW=#{userPwd}
 		AND ME_STATUS='Y'
 	</select>  
+
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBER
+		VALUES(#{userId}, #{userPwd}, #{userName}, #{NickName}, #{email}, #{phone} #{intro},
+		SYSDATE, SYSDATE, DEFAULT)
+	</insert>
   
 </mapper>
 

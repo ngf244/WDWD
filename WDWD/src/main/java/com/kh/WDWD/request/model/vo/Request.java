@@ -13,6 +13,7 @@ public class Request extends CBoard {
 	
 	public Request() {}
 
+
 	public Request(int reNum, String reId, int reCash, String rePlz, int reRefNum, String reDate, int reGrade) {
 		super();
 		this.reNum = reNum;
@@ -22,6 +23,14 @@ public class Request extends CBoard {
 		this.reRefNum = reRefNum;
 		this.reDate = reDate;
 		this.reGrade = reGrade;
+	}
+
+	public int getReNum() {
+		return reNum;
+	}
+
+	public void setReNum(int reNum) {
+		this.reNum = reNum;
 	}
 
 	public int getReNum() {
@@ -84,6 +93,7 @@ public class Request extends CBoard {
 	public String toString() {
 		return "Request [reNum=" + reNum + ", reId=" + reId + ", reCash=" + reCash + ", rePlz=" + rePlz + ", reRefNum="
 				+ reRefNum + ", reDate=" + reDate + ", reGrade=" + reGrade + ", toString()=" + super.toString() + "]";
+
 	}
 	
 }
