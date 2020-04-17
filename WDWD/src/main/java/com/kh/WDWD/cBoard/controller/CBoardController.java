@@ -1,16 +1,20 @@
 package com.kh.WDWD.cBoard.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.WDWD.board.model.vo.Board;
@@ -21,41 +25,61 @@ import com.kh.WDWD.cBoard.model.service.CBoardService;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.member.model.vo.Member;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Controller
 public class CBoardController {
-
+	
 	@Autowired
 	private CBoardService cBoardService;
+	
+	@RequestMapping("reqList.my")
+	public ModelAndView reqListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
-	@RequestMapping("reqOneList.my")
-	public ModelAndView reqOneStepListView(@RequestParam("userId") String userId,
-			@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "boGroup", required = false) Integer boGroup, ModelAndView mv) {
 		int currentPage = 1;
-		if (page != null) {
+		if(page != null) {
 			currentPage = page;
 		}
-
-		int listCount = cBoardService.getMyReqOneStepListCount(userId);
-		PageInfo pi = Pagination.getReqOneStepListPageInfo(currentPage, listCount);
-
-		System.out.println("의뢰1단계리스트 개수 : " + listCount);
-		ArrayList<CBoard> list = cBoardService.selectMyReqOneStepList(pi, userId);
-
-		System.out.println("의뢰1단계리스트 toString : " + list);
-
-		if (list != null) {
-			mv.addObject("list", list).addObject("pi", pi).addObject("userId", userId)
-					.setViewName("requestOneStepList");
+		
+		CBoard cboard = new CBoard();
+		
+		if(boWriter != null) {
+			cboard.setBoWriter(boWriter);
+		}
+		
+		if(cbStep != null) {
+			cboard.setCbStep(cbStep);
+		}
+		
+		if(boGroup != null) {
+			cboard.setBoGroup(boGroup);
+		}
+		
+		int listCount = cBoardService.getMyReqListCount(cboard);
+		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		
+		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
+		
+		if(list != null) {
+			mv.addObject("list", list)
+			  .addObject("pi", pi)
+			  .addObject("cboard", cboard);
+			
+			switch(cboard.getCbStep()) {
+			case 1: mv.setViewName("requestOneStepList"); break;
+			case 2: mv.setViewName("requestTwoStepList"); break;
+			case 3: mv.setViewName("requestThreeStepList"); break; 
+			}
+			
 		} else {
 			throw new BoardException("내 의뢰 1단계 리스트 조회에 실패하였습니다.");
 		}
-
+		
 		return mv;
 	}
-
-	// 자유게시판  조회 컨트롤러
+	
+	
+		// 자유게시판  조회 컨트롤러
 	@RequestMapping("actionList.ch")
 	public ModelAndView actionList(@RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		String boGroup1 = "1"; //자유게시판
@@ -168,59 +192,10 @@ public class CBoardController {
 		return mv;
 	}	
 		
-		
-	/*
-	 * @RequestMapping("actionList.ch") public ModelAndView
-	 * actionList(@RequestParam(value="boGroup1", required=false) String boGroup1,
-	 * 
-	 * @RequestParam("boGroup2") String boGroup2, @RequestParam("boGroup3") String
-	 * boGroup3,@RequestParam("boGroup4") String
-	 * boGroup4, @RequestParam(value="page", required=false) Integer
-	 * page, @RequestParam(value="selectCate", required=false) String boCategory,
-	 * ModelAndView mv) {
-	 * 
-	 * System.out.println("boGroup1은? " + boGroup1);
-	 * System.out.println("boGroup2은? " + boGroup2);
-	 * System.out.println("boCategory? " + boCategory);
-	 * 
-	 * System.out.println("boGroup3은? " + boGroup3);
-	 * System.out.println("boGroup4은? " + boGroup4);
-	 * 
-	 * //System.out.println(boGroup2);
-	 * 
-	 * String boGroup2 = "2"; int currentPage = 1; if(page != null) { currentPage =
-	 * page; System.out.println("currentPage : " + currentPage);
-	 * System.out.println("page : " + page); } int listCount =
-	 * cBoardService.getListCount(boGroup1); int listCount2 =
-	 * cBoardService.getListCount2(boGroup2);
-	 * 
-	 * PageInfo pi = Pagination.getPageInfo(currentPage, listCount, boGroup1);
-	 * 
-	 * Board b = new Board(boGroup2, boCategory);
-	 * 
-	 * 
-	 * System.out.println("boGroup1 게시글 개수 : " + listCount);
-	 * 
-	 * ArrayList<CBoard> list = cBoardService.selectList(boGroup1, pi);
-	 * ArrayList<CBoard> list2 = cBoardService.selectCashList(b); if(list != null &&
-	 * list2 != null) { mv.addObject("list", list); mv.addObject("list2", list2);
-	 * mv.addObject("b", b); mv.addObject("pi", pi);
-	 * System.out.println("list 값 : "+list); System.out.println("list2 값 : "+list2);
-	 * System.out.println("pi : " + pi); mv.setViewName("board/boardlist"); } else {
-	 * throw new BoardException("자유게시판 조회에 실패하였습니다."); }
-	 * 
-	 * 
-	 * 
-	 * return mv;
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-
+	
+	
 	@RequestMapping("oneView.ch")
-	public String oneView() {
+		public String oneView() {
 		return "cashboard/oneBoard/onBoardRequestView";
 	}
 
@@ -228,66 +203,157 @@ public class CBoardController {
 	public String oneForm() {
 		return "cashboard/oneBoard/onBoardRequestForm";
 	}
-
+	
+	
+	
+	
+	
 	@RequestMapping("writeView.ch")
 	public String cBoardInsertView(@RequestParam("boardType") int boardType, Model model) {
 		model.addAttribute("boardType", boardType);
 		return "cashboard/cBoardWrite";
 	}
-
+	
 	@RequestMapping("insert.ch")
 	public String cBoardInsert(@ModelAttribute CBoard b, HttpSession session) {
-		Member m = (Member) session.getAttribute("loginUser");
+		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
-
+		
+		if(b.getCbDate() == null) {
+			b.setCbDate("0");
+		}
+		
 		int result = cBoardService.cBoardInsert(b);
-
-		if (result != 0) {
+		
+		if(result != 0) {
 			// 나중에 경로 수정
 			return "cashboard/cBoardWrite";
 		} else {
 			throw new CBoardException("캐쉬게시글 작성에 실패하였습니다.");
 		}
 	}
-
+	
 	@RequestMapping("detailView.ch")
 	public ModelAndView cBoardDetailView(@RequestParam("boNum") int boNum, ModelAndView mv) {
-
+		
 		CBoard b = cBoardService.cBoardDetailView(boNum);
-
-		if (b != null) {
+		
+		if(b != null) {
 			mv.addObject("cBoard", b);
-			switch (b.getCbStep()) {
-			case 1:
-				mv.setViewName("cashboard/1stage");
-				break;
-			case 2:
-				mv.setViewName("cashboard/2stage");
-				break;
-			case 3:
-				mv.setViewName("cashboard/3stage");
-				break;
+			switch(b.getCbStep()) {
+				case 1: 
+					ArrayList<Request> list = cBoardService.reqList(boNum);
+					mv.addObject("list", list);
+					mv.setViewName("cashboard/1stage");
+					break;
+				case 2: mv.setViewName("cashboard/2stage"); break;
+				case 3: mv.setViewName("cashboard/3stage"); break;
 			}
 		} else {
 			throw new BoardException("게시글 상세 조회에 실패하였습니다.");
 		}
-
+		
 		return mv;
 	}
-
+	
+	@RequestMapping("reqList.ch")
+	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		ArrayList<Request> list = cBoardService.reqList(bId);
+		
+		JSONArray jArr = new JSONArray();
+		for(Request req: list) {
+			JSONObject jUser = new JSONObject();
+			jUser.put("reNum", req.getReNum());
+			jUser.put("reId", req.getReId());
+			jUser.put("reCash", req.getReCash());
+			jUser.put("rePlz", req.getRePlz());
+			jUser.put("reRefNum", req.getReRefNum());
+			jUser.put("reDate", req.getReDate());
+			
+			jArr.add(jUser);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("doRequest.ch")
+	public void doRequest(@ModelAttribute Request r, HttpServletResponse response) {
+		int result = cBoardService.doRequest(r);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			
+			if(result > 0) {
+				out.append("ok");
+				out.flush();
+			} else {
+				out.append("fail");
+				out.flush();
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("cancleRequest.ch")
+	public void cancleRequest(@ModelAttribute Request r, HttpServletResponse response) {
+		int result = cBoardService.cancleRequest(r);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			
+			if(result > 0) {
+				out.append("ok");
+				out.flush();
+			} else {
+				out.append("fail");
+				out.flush();
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("go2stage.ch")
+	public String go2stage(@ModelAttribute Request r) {
+		int result = cBoardService.go2stage(r);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
 	@RequestMapping("stage1.ch")
 	public String stage1() {
 		return "cashboard/1stage";
 	}
-
+	
 	@RequestMapping("stage2.ch")
 	public String stage2() {
 		return "cashboard/2stage";
 	}
-
+	
 	@RequestMapping("stage3.ch")
 	public String stage3() {
 		return "cashboard/3stage";
 	}
-
+	
 }

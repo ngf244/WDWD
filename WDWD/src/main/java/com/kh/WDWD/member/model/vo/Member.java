@@ -5,7 +5,7 @@ public class Member {
 	private String userPwd;
 	private String userName;
 	private String phone;
-	private String NickName;
+	private String nickName;
 	private String email;
 	private String intro;
 	private String enrollDate;
@@ -34,7 +34,7 @@ public class Member {
 		this.userPwd = userPwd;
 		this.userName = userName;
 		this.phone = phone;
-		this.NickName = nickName;
+		this.nickName = nickName;
 		this.email = email;
 		this.intro = intro;
 		this.enrollDate = enrollDate;
@@ -51,6 +51,14 @@ public class Member {
 		this.recent4 = recent4;
 		this.recent5 = recent5;
 		this.profileImg = profileImg;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getUserId() {
@@ -85,13 +93,7 @@ public class Member {
 		this.phone = phone;
 	}
 
-	public String getNickName() {
-		return NickName;
-	}
 
-	public void setNickName(String nickName) {
-		NickName = nickName;
-	}
 
 	public String getEmail() {
 		return email;
@@ -224,7 +226,7 @@ public class Member {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userPwd=" + userPwd + ", userName=" + userName + ", phone=" + phone
-				+ ", NickName=" + NickName + ", email=" + email + ", intro=" + intro + ", enrollDate=" + enrollDate
+				+ ", nickName=" + nickName + ", email=" + email + ", intro=" + intro + ", enrollDate=" + enrollDate
 				+ ", easy=" + easy + ", account=" + account + ", bank=" + bank + ", point=" + point + ", cash=" + cash
 				+ ", uStatus=" + uStatus + ", grade=" + grade + ", recent1=" + recent1 + ", recent2=" + recent2
 				+ ", recent3=" + recent3 + ", recent4=" + recent4 + ", recent5=" + recent5 + ", profileImg="

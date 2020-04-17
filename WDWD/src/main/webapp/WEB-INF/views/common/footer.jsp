@@ -49,7 +49,7 @@
 			if(e.target.className == "smallOption"){
 			// if($('.smallOption').is(":hover")) {
 			// if($('smallOption:hover')) {
-				var userId = $('.smallOption').text();
+				var id = e.target.innerHTML;
 				var pointerX = e.clientX;
 				var pointerY = e.clientY;
 				
@@ -59,7 +59,7 @@
 					"display" : "block"
 				})
 
-				$('#smallOptionBlock input').val(userId);
+				$('#smallOptionBlock input').val(id);
 			} else {
 				$('#smallOptionBlock').css({
 					"display" : "none"
@@ -70,17 +70,17 @@
 
 		$('#smallOptionBlock div').click(function () {
 			if($(this).text()=="마이페이지"){
-				console.log($(this).text());
+				// console.log($(this).text());
 				location.href = "#";
 			} else if($(this).text()=="게시글 보기"){
-				console.log($(this).text());
+				// console.log($(this).text());
 				location.href = "#";
 			} else if($(this).text()=="작성 댓글 보기"){
-				console.log($(this).text());
+				// console.log($(this).text());
 				location.href = "#";
 			} else if($(this).text()=="제재"){
-				console.log($(this).text());
-				location.href = "#";
+				// console.log($(this).text());
+				// location.href = "#";
 			}
 
 		})
@@ -91,6 +91,15 @@
 				slideImg[i].src = "${ contextPath }/resources/images/ad/li"+i+".PNG";
 			}
 		})
+
+		function reportForm(boardNo, reported) {
+			$('input[name=boardNo]').val(boardNo);
+			$('input[name=reported]').val(reported);
+			$('input[reporter]').val(${loginUser.getUserId});
+			console.log(boardNo);
+			console.log(reported);
+			$('#reportForm').css('display','block');
+		}
 	</script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cBoardMapper">
 
-	<select id="getListCount" resultType="_int">
+  <select id="getListCount" resultType="_int">
 		select count(*)
 		from board
 		where bo_del='N' and bo_group=#{ boGroup1 }
@@ -32,14 +32,6 @@
 		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
 	</resultMap>
-	
-	
-   <select id="getMyReqOneStepListCount" parameterType="string" resultType="_int">
-      select count(*)
-      from board
-            join cash_board on (BO_NUM = CB_NUM)
-      where BO_WRITER = #{userId} and CB_STEP = 1
-   </select>
    
    <resultMap type="CBoard" id="CBoardResultSet">
       <id property="boNum" column="BO_NUM"/>
@@ -64,21 +56,15 @@
       <result property="cbStep4" column="CB_STEP4"/>
       <result property="cbStep5" column="CB_STEP5"/>
       <result property="cbDate" column="CB_DATE"/>
-      <result property="cbPrimium" column="CB_PRIMIUM"/>
-      <result property="boWriter" column="ME_NICK"/>
+      <result property="cbPrimium" column="CB_PRIMIUM"/>  
+      <result property="boWriter" column="ME_NICK"/>      
+      <result property="reId" column="RE_ID"/>      
    </resultMap>
-   
-   <select id="selectMyReqOneStepList" parameterType="string" resultMap="CBoardResultSet">
-      select *
-      from board
-            join cash_board on (bo_num = cb_num)
-      where bo_writer = #{userId} and cb_step = 1
-   </select>
-    
    
    <insert id="cBoardInsert1" parameterType="CBoard">
 		insert into board
-		values (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
+		value
+		s (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
 	</insert>
 	
 	<insert id="cBoardInsert2" parameterType="CBoard">
@@ -90,11 +76,102 @@
 		select *
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
+		join member on (board.bo_writer = member.me_id)
 		where bo_num = #{boNum}
 	</select>
-   
-   
-   	<select id="getListCount2" resultType="_int">
+	
+	<insert id="doRequest" parameterType="Request">
+		insert into request
+		values (#{reNum}, #{reId}, #{reCash}, 'N', null, sysdate)
+	</insert>
+	
+	<update id="reqCountUp">
+		update board 
+		set bo_renum = bo_renum + 1 
+		where bo_num = #{reNum}
+	</update>
+	
+	<delete id="cancleRequest" parameterType="Request">
+		delete from request
+		where re_num = #{reNum} and re_id = #{reId}
+	</delete>
+	
+	<update id="reqCountDown">
+		update board 
+		set bo_renum = bo_renum - 1 
+		where bo_num = #{reNum}
+	</update>
+	
+	<resultMap type="Request" id="requestResultSet">
+		<id property="reNum" column="RE_NUM"/>
+		<!-- <result property="reId" column="RE_ID"/> -->
+		<result property="reCash" column="RE_CASH"/>
+		<result property="rePlz" column="RE_PLZ"/>
+		<result property="reRefNum" column="RE_REFNUM"/>
+		<result property="reDate" column="RE_DATE"/>
+		<result property="reId" column="ME_NICK"/>
+	</resultMap>
+	
+	<select id="reqList" resultMap="requestResultSet">
+		select *
+		from request
+		join member on (request.re_id = member.me_id)
+		where re_num = #{bId}
+		order by re_date, me_nick
+	</select>
+	
+	<update id="go2stage1" parameterType="Request">
+		update (select * from request, member where me_id = re_id)
+		set re_plz = 'Y'
+		where re_num = #{reNum} and me_nick = #{reId}
+	</update>
+	
+	<update id="go2stage2" parameterType="Request">
+		update cash_board
+		set cb_step = 2
+		where cb_num = #{reNum}
+	</update>
+ 	
+	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">
+		select count(*)
+		from board
+			 join cash_board on (bo_num = cb_num)
+		<where>
+			<if test="boWriter != null">
+				bo_writer = #{boWriter}
+			</if>
+			<if test="boGroup != null">
+				and bo_group = #{boGroup}
+			</if>
+			<if test="cbStep != 0">
+				and cb_step = #{cbStep}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectMyReqList" parameterType="CBoard" resultMap="CBoardResultSet">
+		select *
+		from board
+			 join cash_board on (bo_num = cb_num)
+		<if test="cbStep == 2">
+			 left join request on (bo_num = re_num)
+		</if>	 
+		<where>
+			<if test="boWriter != null">
+				bo_writer = #{boWriter}
+			</if>
+			<if test="boGroup != null">
+				and bo_group = #{boGroup}
+			</if>
+			<if test="cbStep != 0">
+				and cb_step = #{cbStep}
+			</if>
+		</where> 
+	</select>
+	   	
+  
+  
+    	<select id="getListCount2" resultType="_int">
 		select count(*)
 		from board
 		<where>
@@ -178,6 +255,5 @@
 		
 		
 	</select>	
-		
-	
+
 </mapper>
