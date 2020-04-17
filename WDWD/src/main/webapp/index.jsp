@@ -50,9 +50,11 @@
 	<script>
 		
 		function goToBoardList(){
-			var boGroup1 = 1;
-			var group2 = 2;
-			location.href="actionList.ch?boGroup1=" + boGroup1/* +"&boGroup2="+ group2 */;
+			/* var boGroup1 = 1;
+			var boGroup2 = 2;
+			var boGroup3 = 3;
+			var boGroup4 = 4; */
+			location.href="actionList.ch";
 			
 		}
 	

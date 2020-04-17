@@ -6,24 +6,26 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 
 @Repository("cBoardDAO")
 public class CBoardDAO {
 	
-	public int getListCount(SqlSessionTemplate sqlSession, Integer boGroup) {
-		return sqlSession.selectOne("cBoardMapper.getListCount", boGroup);
-		
-	}
-
 	
-	public ArrayList<CBoard> getBoardList(SqlSessionTemplate sqlSession, Integer boGroup, PageInfo pi) {
+	
+	public int getListCount(SqlSessionTemplate sqlSession, String boGroup) {
+		return sqlSession.selectOne("cBoardMapper.getListCount", boGroup);
+	}
+	
+	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, String boGroup1, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
-		return (ArrayList)sqlSession.selectList("cBoardMapper.getBoardList", boGroup, rowBounds);
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectBoardList", boGroup1, rowBounds);
 	}
+	
 
 	public int getMyReqOneStepListCount(SqlSessionTemplate sqlSession, String userId) {
 		int result = sqlSession.selectOne("cBoardMapper.getMyReqOneStepListCount", userId);
@@ -51,5 +53,25 @@ public class CBoardDAO {
 
 	public CBoard cBoardDetailView(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
+	}
+
+
+	public int getListCount2(SqlSessionTemplate sqlSession, Board b) {
+		return sqlSession.selectOne("cBoardMapper.getListCount2", b);
+	}
+
+	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession, Board b) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", b);
+	}
+
+	public int getCateListCount2(SqlSessionTemplate sqlSession, Board b) {
+		
+		System.out.println("bCount :" + b);
+		return sqlSession.selectOne("cBoardMapper.getCateListCount2", b);
+	}
+
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, Board b) {
+		System.out.println("b :" + b);
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", b);
 	}
 }
