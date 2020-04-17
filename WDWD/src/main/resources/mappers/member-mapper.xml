@@ -38,6 +38,12 @@
 		AND ME_PW=#{userPwd}
 		AND ME_STATUS='Y'
 	</select>  
+
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBER
+		VALUES(#{userId}, #{userPwd}, #{userName}, #{NickName}, #{email}, #{phone} #{intro},
+		SYSDATE, SYSDATE, DEFAULT)
+	</insert>
   
 </mapper>
 
