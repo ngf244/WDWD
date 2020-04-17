@@ -95,7 +95,7 @@
 		function reportForm(boardNo, reported) {
 			$('input[name=boardNo]').val(boardNo);
 			$('input[name=reported]').val(reported);
-			$('input[reporter]').val(${loginUser.userId});
+			$('input[reporter]').val('${loginUser.userId}');
 			console.log(boardNo);
 			console.log(reported);
 			$('#reportForm').css('display','block');

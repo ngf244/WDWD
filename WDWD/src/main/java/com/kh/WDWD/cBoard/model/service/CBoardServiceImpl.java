@@ -64,7 +64,7 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.go2stage(sqlSession, r);
   }
   
-  @Override
+	@Override
 	public int getMyReqListCount(CBoard cboard) {
 		return cBoardDAO.getMyReqListCount(sqlSession, cboard);
 	}
@@ -72,6 +72,16 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard) {
 		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
+	}
+
+	@Override
+	public int getMyWorkListCount(Request request) {
+		return cBoardDAO.getMyWorkListCount(sqlSession, request);
+	}
+
+	@Override
+	public ArrayList<Request> selectMyWorkList(PageInfo pi, Request request) {
+		return cBoardDAO.selectMyWorkList(sqlSession, pi, request);
 	}
   
 	@Override
@@ -113,4 +123,5 @@ public class CBoardServiceImpl implements CBoardService {
 	public ArrayList<CBoard> selectCashOneCateList(Board b) {
 		return cBoardDAO.selectCashOneCateList(sqlSession,  b);
 	}
+
 }

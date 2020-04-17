@@ -153,7 +153,7 @@
 	<jsp:include page="../common/mainHeader.jsp"/>
 	<section>
 		<div id="left-side">
-			
+		 	
 		</div>
 		<div id="main">
 			<div class="editRecruitList">

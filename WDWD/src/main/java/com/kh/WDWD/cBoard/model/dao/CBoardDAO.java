@@ -84,11 +84,24 @@ public class CBoardDAO {
 		return sqlSession.selectOne("cBoardMapper.getMyReqListCount", cboard);
 	}
 
+
 	public ArrayList<CBoard> selectMyReqList(SqlSessionTemplate sqlSession, PageInfo pi, CBoard cboard) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyReqList", cboard, rowBounds);
+	}
+
+	public int getMyWorkListCount(SqlSessionTemplate sqlSession, Request request) {
+		return sqlSession.selectOne("cBoardMapper.getMyWorkListCount", request);
+	}
+
+
+	public ArrayList<Request> selectMyWorkList(SqlSessionTemplate sqlSession, PageInfo pi, Request request) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyWorkList", request, rowBounds);
 	}
 
 	public int contentsInsert(SqlSessionTemplate sqlSession, Contents c) {
@@ -131,4 +144,5 @@ public class CBoardDAO {
 		System.out.println("b :" + b);
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", b);
 	}
+
 }

@@ -32,6 +32,10 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
 
+	int getMyWorkListCount(Request request);
+
+	ArrayList<Request> selectMyWorkList(PageInfo pi, Request request);
+
 	int contentsInsert(Contents c);
 
 	ArrayList<Contents> fileList(int boNum);
@@ -49,6 +53,7 @@ public interface CBoardService {
 	ArrayList<CBoard> selectCashOneCateList(Board b);
 
 	
+
 
 
 }

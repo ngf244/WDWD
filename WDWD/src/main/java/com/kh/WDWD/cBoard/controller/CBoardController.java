@@ -39,29 +39,15 @@ public class CBoardController {
 	private CBoardService cBoardService;
 	
 	@RequestMapping("reqList.my")
-	public ModelAndView reqListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView reqListView(@ModelAttribute CBoard cboard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
 		
-		CBoard cboard = new CBoard();
-		
-		if(boWriter != null) {
-			cboard.setBoWriter(boWriter);
-		}
-		
-		if(cbStep != null) {
-			cboard.setCbStep(cbStep);
-		}
-		
-		if(boGroup != null) {
-			cboard.setBoGroup(boGroup);
-		}
-		
 		int listCount = cBoardService.getMyReqListCount(cboard);
-		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);		
 		
 		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
 		
@@ -77,7 +63,7 @@ public class CBoardController {
 			}
 			
 		} else {
-			throw new BoardException("내 의뢰 1단계 리스트 조회에 실패하였습니다.");
+			throw new BoardException("내 의뢰 리스트 조회에 실패하였습니다.");
 		}
 		
 		return mv;
@@ -453,4 +439,35 @@ public class CBoardController {
 		return "cashboard/3stage";
 	}
 	
+  @RequestMapping("workList.my")
+	public ModelAndView workListView(@ModelAttribute Request request, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = cBoardService.getMyWorkListCount(request);
+		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);		
+		
+		ArrayList<Request> list = cBoardService.selectMyWorkList(pi, request);		
+		
+		if(list != null) {
+			mv.addObject("list", list)
+			  .addObject("pi", pi)
+			  .addObject("request", request);
+			
+			switch(request.getCbStep()) {
+			case 1: mv.setViewName("workOneStepList"); break;
+			case 2: mv.setViewName("workTwoStepList"); break;
+			case 3: mv.setViewName("workThreeStepList"); break; 
+			}
+			
+		} else {
+			throw new BoardException("내 작업 리스트 조회에 실패하였습니다.");
+		}
+		
+		return mv;
+	}
+
 }

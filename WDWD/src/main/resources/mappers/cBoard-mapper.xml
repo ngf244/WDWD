@@ -181,6 +181,14 @@
 		select count(*)
 		from board
 			 join cash_board on (bo_num = cb_num)
+		<if test="cbStep == 2">	
+			 left join request on (bo_num = re_num) 
+			 left join member on (re_id = me_id)	
+		</if>
+		<if test="cbStep == 3">	
+			 left join request on (bo_num = re_num) 
+			 left join member on (re_id = me_id)	
+		</if>		
 		<where>
 			<if test="boWriter != null">
 				bo_writer = #{boWriter}
@@ -191,16 +199,22 @@
 			<if test="cbStep != 0">
 				and cb_step = #{cbStep}
 			</if>
+				and bo_del = 'N'
 		</where>
 	</select>
 	
-	<select id="selectMyReqList" parameterType="CBoard" resultMap="CBoardResultSet">
+	<select id="selectMyReqList" parameterType="CBoard" resultMap="RequestResultSet">
 		select *
 		from board
 			 join cash_board on (bo_num = cb_num)
 		<if test="cbStep == 2">
 			 left join request on (bo_num = re_num)
-		</if>	 
+			 left join member on (re_id = me_id)
+		</if>
+		<if test="cbStep == 3">
+			 left join request on (bo_num = re_num)
+			 left join member on (re_id = me_id)
+		</if>
 		<where>
 			<if test="boWriter != null">
 				bo_writer = #{boWriter}
@@ -211,7 +225,91 @@
 			<if test="cbStep != 0">
 				and cb_step = #{cbStep}
 			</if>
+				and bo_del = 'N'
 		</where> 
+	</select>
+	
+	<resultMap type="Request" id="RequestResultSet">
+		<id property="boNum" column="BO_NUM"/>
+		<result property="boGroup" column="BO_GROUP"/>
+		<result property="boTitle" column="BO_TITLE"/>
+		<result property="boContent" column="BO_CON"/>
+		<result property="boView" column="BO_VIEW"/>
+		<result property="boDate" column="BO_DATE"/>
+		<result property="boUpdate" column="BO_UPDATE"/>
+		<result property="boDel" column="BO_DEL"/>
+		<result property="boWriter" column="BO_WRITER"/>
+		<result property="boGood" column="BO_GOOD"/>
+		<result property="boCategory" column="BO_CATEGORY"/>
+		<result property="boReNum" column="BO_RENUM"/>
+		<result property="cbStep" column="CB_STEP" />
+		<result property="cbSecret" column="CB_SECRET" />
+		<result property="cbCash" column="CB_CASH"/>
+		<result property="cbCate" column="CB_CATE"/>
+		<result property="cbStep1" column="CB_STEP1"/>
+		<result property="cbStep2" column="CB_STEP2"/>
+		<result property="cbStep3" column="CB_STEP3"/>
+		<result property="cbStep4" column="CB_STEP4"/>
+		<result property="cbStep5" column="CB_STEP5"/>
+		<result property="cbDate" column="CB_DATE"/>
+		<result property="cbPrimium" column="CB_PRIMIUM"/>
+		<result property="reNum" column="RE_NUM"/>
+		<result property="reId" column="ME_NICK"/>
+		<result property="reCash" column="RE_CASH"/>
+		<result property="rePlz" column="RE_PLZ"/>
+		<result property="reRefNum" column="RE_REFNUM"/>
+		<result property="reDate" column="RE_DATE"/>
+		<result property="reGrade" column="RE_GRADE"/>		      
+	</resultMap>	
+	
+	<select id="getMyWorkListCount" parameterType="Request" resultType="_int">
+		select count(*)
+		from board
+		     join cash_board on (bo_num = cb_num)
+		     left join request on (bo_num = re_num)
+		<if test="cbStep == 2">
+			 left join member on (bo_writer = me_id)
+		</if>
+		<if test="cbStep == 3">
+			 left join member on (bo_writer = me_id)
+		</if>     
+		<where>
+			<if test="reId != null">
+				re_id = #{reId}
+			</if>
+			<if test="boGroup != null">
+				and bo_group = #{boGroup}
+			</if>
+			<if test="cbStep != 0">
+				and cb_step = #{cbStep}
+			</if>
+				and bo_del = 'N'
+		</where>     
+	</select>
+	
+	<select id="selectMyWorkList" parameterType="Request" resultMap="RequestResultSet">
+		select *
+		from board
+			 join cash_board on (bo_num = cb_num)
+			 left join request on (bo_num = re_num)
+		<if test="cbStep == 2">
+			 left join member on (bo_writer = me_id)
+		</if>
+		<if test="cbStep == 3">
+			 left join member on (bo_writer = me_id)
+		</if> 	 
+		<where>
+			<if test="reId != null">
+				re_id = #{reId}
+			</if>
+			<if test="boGroup != null">
+				and bo_group = #{boGroup}
+			</if>
+			<if test="cbStep != 0">
+				and cb_step = #{cbStep}
+			</if>
+				and bo_del = 'N'
+		</where>  	 
 	</select>
 	   	
   
