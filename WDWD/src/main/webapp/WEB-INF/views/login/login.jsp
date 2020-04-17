@@ -74,14 +74,15 @@
    margin-top: 10px;
    text-align: center;
    }
+  	
+	 a:link { color: black; text-decoration: none;}
+	 a:visited { color: black; text-decoration: none;}
+	 a:hover { color: black; text-decoration: underline;}
    
 </style>
 </head>
 <body>
 	<div id="loginWrap" hidden="">
-	   <a id="kakao-login-btn"></a>
-	<a href="http://developers.kakao.com/logout"></a>
-	   
 	      <div class="loginTitle">
 	         <img src="<%= request.getContextPath() %>/images/loginlogo.png" id="logo">
 	      </div>
@@ -91,11 +92,16 @@
 	      		<h5>회원가입시 더 다양한 커뮤니티를 즐길수 있습니다</h5>
 	      </div>
 	      
-	      
 	     <form id="loginForm" action="login.me" method="post">
 	      <div class="loginform">
-	         <input type="text" id="loginId" name="userId" class="inputForm" placeholder="&nbsp;아이디" > <br>
-	         <input type="password" id="loginPw" name="userPwd" class="inputPwForm" placeholder="&nbsp;비밀번호" ><br>
+	         <input type="text" id="loginId" name="userId" class="inputForm" placeholder="&nbsp;아이디" > <br><br>
+	         <input type="password" id="loginPw" name="userPwd" class="inputPwForm" placeholder="&nbsp;비밀번호" ><br><br>
+	         
+	       	<div class="gotofind">
+	         <a href='../login/findid.jsp'>아이디</a>
+	         <a href='../login/findpwd.jsp'>비밀번호찾기</a>
+	       	</div> 
+	        
 	         <input type="submit" id="loginBtn" value="로그인"><br>
 	         <button type="button" id="kakaoBtn">카카오아이디 로그인</button><br>
 	         <button type ="button" id="googleBtn">구글아이디 로그인</button>
@@ -108,6 +114,5 @@
 	      </script>
 	     </form>
 	</div>
-
 </body>
 </html>

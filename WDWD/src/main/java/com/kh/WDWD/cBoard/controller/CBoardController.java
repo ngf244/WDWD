@@ -84,48 +84,119 @@ public class CBoardController {
 	}
 	
 	
-	
-	
-	//자유게시판 및 1:1 조회 컨트롤러
+		// 자유게시판  조회 컨트롤러
 	@RequestMapping("actionList.ch")
-	public ModelAndView actionList(@RequestParam(value="boGroup1", required=false) Integer boGroup,
-			/* @RequestParam("boGroup2") int boGroup2, */ @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
-		
-		
-	   System.out.println("boGroup1은? " + boGroup);
-	   //System.out.println(boGroup2);
-	   boGroup = 1;
-       int currentPage = 1;
-       if(page != null) {
-         currentPage = page;
-         System.out.println("currentPage : " + currentPage);
-         System.out.println("page : " + page);
-       }
-       int listCount = cBoardService.getListCount(boGroup);
-      
-       PageInfo pi = Pagination.getPageInfo(currentPage, listCount, boGroup);   
-	   
+	public ModelAndView actionList(@RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		String boGroup1 = "1"; //자유게시판
 
-       System.out.println("boGroup1 게시글 개수 : " + listCount);
-       
-       ArrayList<CBoard> list = cBoardService.selectList(boGroup, pi);
-	       if(list != null) {
-	    	   Board b = new Board();
-	    	   
-	           mv.addObject("list", list);
-	           mv.addObject("pi", pi);
-	           System.out.println("list 값 : "+list);
-	           System.out.println("pi : " + pi);
-	           mv.setViewName("board/boardlist");
-	        } else {
-	           throw new BoardException("자유게시판 조회에 실패하였습니다.");
-	        }
+		
+		//자유게시판 페이징
+		int currentPage = 1;
+		if(page != null) { 
+			currentPage = page;
+		}
+		
+		int listCount =  cBoardService.getListCount(boGroup1);
+
+		
+		// 자유게시판 페이징
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, boGroup1);
+		
+		ArrayList<CBoard> list = cBoardService.selectBoardList(boGroup1, pi);
+		
+		
+		if(list != null) {
+			mv.addObject("list", list); 
+			mv.addObject("pi", pi);
+			mv.setViewName("board/boardlist"); 
+		} else {
+			
+			throw new BoardException("자유게시판 조회에 실패하였습니다."); 
+		}
+		
+		
+		return mv;
+	}
+
+		
+	// 1:1 조회 컨트롤러
+	@RequestMapping("actionOneList.ch")
+	@ResponseBody
+	public ModelAndView actionOneList(@RequestParam(value = "boGroup2", required = false) String boGroup2, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		String boCategory = "";
+		System.out.println("boGroup2 : " + boGroup2); //1:1게시판
+		System.out.println("boCategory : " + boCategory); //1:1게시판
+		
+		Board b = new Board(boGroup2, boCategory);
+
+		int listCount2 = cBoardService.getListCount2(b);
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(b);
+
+
+		System.out.println("list2" + list2);
+		if(list2 != null) {
+			mv.addObject("list2", list2);
+			if(boGroup2.equals("2")) {
+				mv.setViewName("cashboard/oneBoardList"); 
+			} else if(boGroup2.equals("3")) {
+				mv.setViewName("cashboard/auctionBoardList"); 
+			} else if(boGroup2.equals("4")) {
+				mv.setViewName("cashboard/contestBoardList"); 
+				
+				
+			}
+				
+		} else {
+			throw new BoardException("자유게시판 조회에 실패하였습니다."); 
+		}
+		
+
+
 		
 		return mv;
 	}
 	
 	
+	// 1:1 조회 컨트롤러
+	@RequestMapping("actionOneCateList.ch")
+	@ResponseBody
+	public ModelAndView actionOneCateList(@RequestParam(value="boGroup2", required=false) String boGroup2, @RequestParam(value="boCategory", required=false) String boCategory, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+
+		
+		System.out.println("boCategory 넘어온값은? : " + boCategory); //1:1게시판
+		
+		Board b = new Board(boGroup2, boCategory);
+		
+		
+		int listCount2 = cBoardService.getCateListCount2(b);
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(b);
+
+
+		System.out.println("list2" + list2);
+		if(list2 != null) {
+			mv.addObject("list2", list2);
+			if(boGroup2.equals("2")) {
+				mv.setViewName("cashboard/oneBoardList"); 
+			} else if(boGroup2.equals("3")) {
+				mv.setViewName("cashboard/auctionBoardList"); 
+			} else if(boGroup2.equals("4")) {
+				mv.setViewName("cashboard/contestBoardList"); 
+				
+				
+			}
+				
+			System.out.println("boCategory현재 값은? : " + b.getBoCategory());
+			System.out.println("list2 : " + list2 );
+		} else {
+			
+			throw new BoardException("자유게시판 조회에 실패하였습니다."); 
+		}
 	
+		return mv;
+	}	
+		
 	
 	
 	@RequestMapping("oneView.ch")

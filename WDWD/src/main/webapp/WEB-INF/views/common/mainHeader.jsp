@@ -344,22 +344,25 @@
 			</div>
 			<div id="basicForm">
 				<c:if test="${ empty sessionScope.loginUser }">
+				<c:if test="${ empty sessionScope.signup }">
 					<div id="loginView">login</div>
 					<div id="signupBtn">sign up</div> 
-					
 					<script>
 						$('#loginView').click(function(){
 							$('#loginWrap').show();
 						})
+						
+						$('#signupBtn').click(function(){
+							$('#signupWrap').show();
+						})
 					</script>
 				</c:if>
-				
+			</c:if>
 				<c:if test="${ !empty sessionScope.loginUser }">
           <div id="welcomeName">김대호님 환영합니다</div><br>
           <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
           <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
             <div id="noticeArea" class="notice">
-
             </div>
 
             <div id="smallInfo">
@@ -410,11 +413,9 @@
                 <div class="recentlyBoard">
                   5번글제목
                 </div>				
-
                 </div>
               </div>
             </c:if>
-				
 				<script>
 					$('#modalMenu').click(function() {
 						$('#smallInfo').css('display', 'block');
@@ -516,7 +517,7 @@
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
 				<div class="menubar">공지사항</div>
-				<div class="menubar">가이드</div>
+				<div class="menubar" onclick="guide.jsp">가이드</div>
 				<div class="menubar">사진</div>
 				<div class="menubar">미디어</div>
 				<div class="menubar">HIT 갤러리</div>
@@ -527,9 +528,7 @@
 					<span id="menuTextBoard">등록된 게시물 123개</span>
 					<span id="menuTextReply">등록된 댓글 321개</span>
 				</div>
-				
-				
-
+			
 				<script>
 					$('#menuTextReply').hide();
 					!function loop(){
@@ -566,6 +565,7 @@
 	<br>
 	<div>
 		<jsp:include page="../login/login.jsp"/>
+		<jsp:include page="../login/signup.jsp"/>
 	</div>
 
 	

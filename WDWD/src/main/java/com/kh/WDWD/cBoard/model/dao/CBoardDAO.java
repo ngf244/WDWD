@@ -16,18 +16,20 @@ import com.kh.WDWD.request.model.vo.Request;
 @Repository("cBoardDAO")
 public class CBoardDAO {
 	
-	public int getListCount(SqlSessionTemplate sqlSession, Integer boGroup) {
-		return sqlSession.selectOne("cBoardMapper.getListCount", boGroup);
-		
-	}
-
 	
-	public ArrayList<CBoard> getBoardList(SqlSessionTemplate sqlSession, Integer boGroup, PageInfo pi) {
+	
+	public int getListCount(SqlSessionTemplate sqlSession, String boGroup) {
+		return sqlSession.selectOne("cBoardMapper.getListCount", boGroup);
+	}
+	
+	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, String boGroup1, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
-		return (ArrayList)sqlSession.selectList("cBoardMapper.getBoardList", boGroup, rowBounds);
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectBoardList", boGroup1, rowBounds);
 	}
+	
+
 
 	public int cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
 		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
@@ -109,5 +111,24 @@ public class CBoardDAO {
 		}
 		
 		return result;
+	}
+  
+  	public int getListCount2(SqlSessionTemplate sqlSession, Board b) {
+		return sqlSession.selectOne("cBoardMapper.getListCount2", b);
+	}
+
+	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession, Board b) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", b);
+	}
+
+	public int getCateListCount2(SqlSessionTemplate sqlSession, Board b) {
+		
+		System.out.println("bCount :" + b);
+		return sqlSession.selectOne("cBoardMapper.getCateListCount2", b);
+	}
+
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, Board b) {
+		System.out.println("b :" + b);
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", b);
 	}
 }
