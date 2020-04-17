@@ -506,7 +506,7 @@
 
          <hr>
          <div id="cashCategorySelectArea">
-            <div class="categories" id="oneone"><span>1:1매칭</span></div>
+            <div class="categories" name="categories" value="2"><span>1:1매칭</span></div>
             <div class="forLine"></div>
             <div class="categories"><span>입찰</span></div>
             <div class="forLine"></div>
@@ -514,7 +514,7 @@
          </div>
          <hr>
 
-         <div class="onBoarListView"><jsp:include page="../cashboard/oneBoardList.jsp"/></div>
+         <div class="onBoarListView"></div>
          <div class="auctionListView" style="display: none;"><jsp:include page="../cashboard/auctionBoardList.jsp"/></div>
          <div class="contestListView" style="display: none;"><jsp:include page="../cashboard/contestBoardList.jsp"/></div>
       </div>
@@ -540,21 +540,11 @@
    
    
    <script>
-   		$('.categories:nth-of-type(1)').click(function() {
-   			$('.onBoarListView').show();
-   			$('.auctionListView').hide();
-   			$('.contestListView').hide();
-		})
-   		$('.categories:nth-of-type(3)').click(function() {
-   			$('.onBoarListView').hide();
-   			$('.auctionListView').show();
-   			$('.contestListView').hide();
-		})
-   		$('.categories:nth-of-type(5)').click(function() {
-   			$('.onBoarListView').hide();
-   			$('.auctionListView').hide();
-   			$('.contestListView').show();
-		})
+
+		
+
+   		
+
    
    		
    		/* function showList1(){
@@ -588,6 +578,115 @@
    </script>
    
    
+   <script>
+   
+   	   //자유게시판과 함께 1:1게시판 열림
+	   /* 
+	   $(function(){
+		   $(".onBoarListView").load("cashboard/oneBoardList.jsp");
+
+		   
+		   var boGroup2 = {boGroup2 : 2};
+		   $.ajax({
+			   url: "../cashboard/oneBoardList.jsp",
+	            type: "POST",
+	            dataType: text,
+	            success: function(data){
+	                $('.onBoarListView').html(data);
+	            },
+	            error: function(){
+	                alert("1:1 불러오기 안돼");
+	            }
+			   
+		   });
+		    
+		   
+	   }); 
+    */
+    
+   </script>
+   
+   
+   <script>
+	   $(function(){
+	   		$('.categories:nth-of-type(1)').click(function() {
+	   			$('.onBoarListView').show();
+	   			$('.auctionListView').hide();
+	   			$('.contestListView').hide();
+
+	   			
+	   			var boGroup2 = "2";
+	 		   
+ 		   $.ajax({
+ 			   url:"actionOneList.ch",
+ 			   type:"get",
+ 			   dataType: 'html',
+ 			   data: {"boGroup2" : boGroup2},
+ 			   success: 
+ 				   function(data){ 
+ 					   $(".onBoarListView").html(data);
+ 					   console.log(data);
+ 				   }
+ 		   });
+	 	   });
+   		});
+		   
+
+	   
+	   
+	   $(function(){
+	  		$('.categories:nth-of-type(3)').click(function() {
+	   			$('.onBoarListView').hide();
+	   			$('.auctionListView').show();
+	   			$('.contestListView').hide();
+
+	   			var boGroup2 = "3";
+		   
+		   $.ajax({
+			   url:"actionOneList.ch",
+			   type:"get",
+			   dataType: 'html',
+			   data: {"boGroup2" : boGroup2},
+			   success: 
+				   function(data){ 
+					   $(".auctionBoardList").html(data);
+					   console.log(data);
+				   }
+		   	});
+			});
+	   });
+	   
+	   
+	   
+	   $(function(){
+			$('.categories:nth-of-type(5)').click(function() {
+	   			$('.onBoarListView').hide();
+	   			$('.auctionListView').hide();
+	   			$('.contestListView').show();
+		   var boGroup2 = "4";
+		   
+		   $.ajax({
+			   url:"actionOneList.ch",
+			   type:"get",
+			   dataType: 'html',
+			   data: {"boGroup2" : boGroup2},
+			   success: 
+				   function(data){ 
+					   $(".contestBoardList").html(data);
+					   console.log(data);
+				   }
+		   });
+ 		   });
+		   
+		  	 
+	   });
+	   	   
+	   
+
+	   
+
+   
+   </script>
   
    
 </body>

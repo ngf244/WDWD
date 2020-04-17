@@ -213,7 +213,8 @@
 			<version>0.2.7</version>
 		</dependency>
 		
-		<!-- json관련 라이브러리 -->
+		<!-- JSON관련 라이브러리 -->
+
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>

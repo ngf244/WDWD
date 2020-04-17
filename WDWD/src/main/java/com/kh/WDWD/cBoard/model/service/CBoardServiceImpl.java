@@ -21,15 +21,16 @@ public class CBoardServiceImpl implements CBoardService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	@Override
-	public int getListCount(Integer boGroup) {
-		return cBoardDAO.getListCount(sqlSession, boGroup);
+		@Override
+	public int getListCount(String boGroup1) {
+		return cBoardDAO.getListCount(sqlSession, boGroup1);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectList(Integer boGroup, PageInfo pi) {
-		return cBoardDAO.getBoardList(sqlSession, boGroup, pi);
+	public ArrayList<CBoard> selectBoardList(String boGroup1, PageInfo pi) {
+		return cBoardDAO.selectBoardList(sqlSession, boGroup1, pi);
 	}
+	
 	
 	@Override
 	public int cBoardInsert(CBoard b) {
@@ -70,5 +71,27 @@ public class CBoardServiceImpl implements CBoardService {
 	public ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard) {
 		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
 	}
-	
+  
+  
+	@Override
+	public int getListCount2(Board b) {
+		return cBoardDAO.getListCount2(sqlSession,  b);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectCashOneList(Board b) {
+		return cBoardDAO.selectCashOneList(sqlSession,  b);
+	}
+
+	@Override
+	public int getCateListCount2(Board b) {
+		return cBoardDAO.getCateListCount2(sqlSession,  b);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectCashOneCateList(Board b) {
+		return cBoardDAO.selectCashOneCateList(sqlSession,  b);
+	}
+  
+
 }

@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cBoardMapper">
 
-	<select id="getListCount" parameterType="_int" resultType="_int">
+  <select id="getListCount" resultType="_int">
 		select count(*)
 		from board
-		where bo_del='N' and bo_group=#{ boGroup }
+		where bo_del='N' and bo_group=#{ boGroup1 }
 	</select>
 
 	
-	<select id="getBoardList" resultMap="boardResultSet">
+	<select id="selectBoardList" resultMap="boardResultSet">
 	
 		select *
 		from board
-		where bo_del='N'and bo_group=#{ boGroup }
+		where bo_del='N'and bo_group=#{ boGroup1 }
 		order by bo_num desc
 		
 	</select>
@@ -169,4 +169,91 @@
 		</where> 
 	</select>
 	   	
+  
+  
+    	<select id="getListCount2" resultType="_int">
+		select count(*)
+		from board
+		<where>
+				<if test= "boGroup != null">
+					BO_GROUP = #{ boGroup }
+				</if>
+				
+				<!-- <if test="cbStep != 0">		
+					and cb_step = #{ cbStep }
+				</if> -->
+					and bo_del = 'N'
+		</where>
+		
+	</select>
+	
+	
+		
+	<select id="selectList2" parameterType="Board" resultMap="CBoardResultSet">
+	
+        SELECT *
+		FROM CASH_BOARD  
+		JOIN BOARD ON (BO_NUM = CB_NUM)
+		JOIN MEMBER ON(ME_ID = BO_WRITER)
+		<where>
+				<if test= "boGroup != null">
+					BO_GROUP = #{ boGroup }
+				</if>
+				
+				<!-- <if test="cbStep != 0">		
+					and cb_step = #{ cbStep }
+				</if> -->
+					and bo_del = 'N'
+		</where>
+		
+		
+		
+	</select>
+	
+		
+		
+		
+   	<select id="getCateListCount2" resultType="_int">
+		select count(*)
+		from board
+		<where>
+				<if test= "boGroup != null">
+					BO_GROUP = #{ boGroup }
+				</if>
+				<if test="boCategory != null"> 
+					and BO_CATEGORY = #{ boCategory }
+				</if>
+				<!-- <if test="cbStep != 0">		
+					and cb_step = #{ cbStep }
+				</if> -->
+					and bo_del = 'N'
+		</where>
+		
+	</select>
+	
+	
+		
+	<select id="selectCashOneCateList" parameterType="Board" resultMap="CBoardResultSet">
+	
+        SELECT *
+		FROM CASH_BOARD  
+		JOIN BOARD ON (BO_NUM = CB_NUM)
+		JOIN MEMBER ON(ME_ID = BO_WRITER)
+		<where>
+				<if test= "boGroup != null">
+					BO_GROUP = #{ boGroup }
+				</if>
+				<if test="boCategory != null"> 
+					and BO_CATEGORY = #{ boCategory }
+				</if>
+				<!-- <if test="cbStep != 0">		
+					and cb_step = #{ cbStep }
+				</if> -->
+					and bo_del = 'N'
+		</where>
+		
+		
+		
+	</select>	
+
 </mapper>

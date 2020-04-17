@@ -34,6 +34,12 @@ public class Board {
 		this.boReNum = boReNum;
 	}
 
+	public Board(String boGroup, String boCategory) {
+		super();
+		this.boGroup = boGroup;
+		this.boCategory = boCategory;
+	}
+
 	public int getBoNum() {
 		return boNum;
 	}
