@@ -1,7 +1,6 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;

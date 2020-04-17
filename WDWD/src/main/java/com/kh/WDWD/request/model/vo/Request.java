@@ -24,15 +24,7 @@ public class Request extends CBoard {
 		this.reDate = reDate;
 		this.reGrade = reGrade;
 	}
-
-	public int getReNum() {
-		return reNum;
-	}
-
-	public void setReNum(int reNum) {
-		this.reNum = reNum;
-	}
-
+	
 	public int getReNum() {
 		return reNum;
 	}
