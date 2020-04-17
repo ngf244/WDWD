@@ -61,15 +61,29 @@
       <result property="reId" column="RE_ID"/>      
    </resultMap>
    
+   <resultMap type="Contents" id="ContentsResultSet">
+      <id property="conNum" column="CON_NUM"/>
+      <result property="conOri" column="CON_ORI"/>
+      <result property="conCop" column="CON_COP"/>
+      <result property="conUrl" column="CON_URL"/>
+      <result property="conLevel" column="CON_LEVEL"/>
+      <result property="conStatus" column="CON_STATUS"/>
+      <result property="conRef" column="CON_REF"/>
+   </resultMap>
+   
    <insert id="cBoardInsert1" parameterType="CBoard">
 		insert into board
-		value
-		s (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
+		values (bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, default, default, default, #{boWriter}, default, #{boCategory}, default)
 	</insert>
 	
 	<insert id="cBoardInsert2" parameterType="CBoard">
 		insert into cash_board
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
+	</insert>
+	
+	<insert id="contentsInsert" parameterType="Contents">
+		insert into contents
+		values (con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, #{conLevel}, 'Y', bo_seq.currval)
 	</insert>
 	
 	<select id="cBoardDetail" parameterType="_int" resultMap="CBoardResultSet">
@@ -80,9 +94,23 @@
 		where bo_num = #{boNum}
 	</select>
 	
+	<select id="cBoardReId" parameterType="_int" resultType="string">
+		select me_nick
+		from request 
+		join member on (request.re_id = member.me_id)
+		where re_plz = 'Y' and re_num = #{boNum}
+	</select>
+	
+	<select id="fileList" parameterType="_int" resultMap="ContentsResultSet">
+		select *
+		from contents
+		where con_ref = #{boNum} and con_status = 'Y'
+		order by con_level
+	</select>
+	
 	<insert id="doRequest" parameterType="Request">
 		insert into request
-		values (#{reNum}, #{reId}, #{reCash}, 'N', null, sysdate)
+		values (#{reNum}, #{reId}, #{reCash}, 'N', null, sysdate, default)
 	</insert>
 	
 	<update id="reqCountUp">
@@ -131,6 +159,23 @@
 		set cb_step = 2
 		where cb_num = #{reNum}
 	</update>
+ 	
+ 	<select id="cBoardReqView" resultMap="boardResultSet" parameterType="_int">
+ 		select * 
+ 		from board
+ 		join request on (board.bo_num = request.re_refnum)
+ 	</select>
+ 	
+ 	<insert id="registWrite1" parameterType="Board">
+ 		insert into board
+ 		values (bo_seq.nextval, 5, '에디터 등록글입니다.', #{boContent}, default, default, default, default, #{boWriter}, default, null, default)
+ 	</insert>
+ 	
+ 	<update id="registWrite2" parameterType="Board">
+ 		update request
+ 		set re_refnum = bo_seq.currval
+ 		where re_num = #{boNum} and re_plz = 'Y'
+ 	</update>
  	
 	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">
 		select count(*)

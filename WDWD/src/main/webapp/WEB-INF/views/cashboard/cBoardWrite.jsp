@@ -23,7 +23,7 @@
 		line-height: 50px;
 	}
 	#logoImg img {
-		position: absolute;
+		position: absolute;	
 		width: 50px;
 		height: 50px;
 	}
@@ -503,9 +503,6 @@
 									
 									imgIndexStart = 0;
 									imgIndexEnd = 0;
-									
-									console.log(imgSrc);
-									console.log(imgName);
 								}
 								
 								imgCheck();
@@ -514,7 +511,10 @@
 						
 						function changeFile(fileUrl, fileName) {
 							var $div = $('<div class="fileArea">');
-							var $img = $('<img class="fileAreaImg">');
+							var $img = $('<img class="fileAreaImg" name="imgFile">');
+							var $input1 = $('<input type="hidden" name="conUrl" value=' + fileUrl.substring(0, fileUrl.lastIndexOf('/')) + '>');
+							var $input2 = $('<input type="hidden" name="conCop" value=' + fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '>');
+							var $input3 = $('<input type="hidden" name="conOri" value=' + fileName + '>');
 							var $p = $('<p>')
 							
 							$p.text(fileName);
@@ -522,7 +522,10 @@
 							$img.attr("src", fileUrl);
 							
 							$div.append($img);
-							$div.append($p)
+							$div.append($input1);
+							$div.append($input2);
+							$div.append($input3);
+							$div.append($p);
 							
 							$('#fileList').append($div);
 						}

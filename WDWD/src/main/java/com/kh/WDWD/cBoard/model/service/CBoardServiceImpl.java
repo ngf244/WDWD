@@ -7,9 +7,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
 @Service("CBoardService")
@@ -72,7 +74,26 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
 	}
   
-  
+	@Override
+	public int contentsInsert(Contents c) {
+		return cBoardDAO.contentsInsert(sqlSession, c);
+	}
+
+	@Override
+	public ArrayList<Contents> fileList(int boNum) {
+		return cBoardDAO.fileList(sqlSession, boNum);
+	}
+
+	@Override
+	public Board cBoardReqView(int boNum) {
+		return cBoardDAO.cBoardReqView(sqlSession, boNum);
+	}
+
+	@Override
+	public int registWrite(Board b) {
+		return cBoardDAO.registWrite(sqlSession, b);
+	}
+	
 	@Override
 	public int getListCount2(Board b) {
 		return cBoardDAO.getListCount2(sqlSession,  b);
@@ -92,6 +113,4 @@ public class CBoardServiceImpl implements CBoardService {
 	public ArrayList<CBoard> selectCashOneCateList(Board b) {
 		return cBoardDAO.selectCashOneCateList(sqlSession,  b);
 	}
-  
-
 }

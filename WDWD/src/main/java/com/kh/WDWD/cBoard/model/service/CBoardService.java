@@ -3,8 +3,10 @@ package com.kh.WDWD.cBoard.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
 public interface CBoardService {
@@ -29,6 +31,14 @@ public interface CBoardService {
 	int getMyReqListCount(CBoard cboard);
 
 	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
+
+	int contentsInsert(Contents c);
+
+	ArrayList<Contents> fileList(int boNum);
+
+	Board cBoardReqView(int boNum);
+
+	int registWrite(Board b);
 
 	int getListCount2(Board b);
 
