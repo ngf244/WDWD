@@ -555,8 +555,8 @@
 					}
 					
 					
-					if('${error}' != "") {
-						alert('${error}');
+					if('${param.error}' == "1") {
+						alert('작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.');
 					}
 				</script>
 			</div>

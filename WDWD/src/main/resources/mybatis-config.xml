@@ -13,6 +13,7 @@
 		<typeAlias type="com.kh.WDWD.cash.model.vo.PointNCash" alias="PointNCash"/>
 		<typeAlias type="com.kh.WDWD.cBoard.model.vo.CBoard" alias="CBoard"/>
 		<typeAlias type="com.kh.WDWD.request.model.vo.Request" alias="Request"/>
+		<typeAlias type="com.kh.WDWD.contents.model.vo.Contents" alias="Contents"/>
 	</typeAliases>
 	
 	<mappers>
