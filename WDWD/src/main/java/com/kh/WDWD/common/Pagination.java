@@ -4,7 +4,7 @@ import com.kh.WDWD.board.model.vo.PageInfo;
 
 public class Pagination {
 
-	public static PageInfo getPageInfo(int currentPage, int listCount, Integer boGroup) {
+	public static PageInfo getPageInfo(int currentPage, int listCount, String boGroup) {
 		
 		PageInfo pi = null;
 		
@@ -96,7 +96,7 @@ public class Pagination {
 		return pi;
 	}
 
-	public static PageInfo getReqListPageInfo(int currentPage, int listCount) {
+	public static PageInfo getReqWorkListPageInfo(int currentPage, int listCount) {
 		
 		PageInfo pi = null;
 		

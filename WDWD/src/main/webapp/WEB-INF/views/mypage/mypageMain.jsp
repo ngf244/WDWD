@@ -242,8 +242,8 @@
 	.basicInfo>table{margin: 50px; margin-left: 150px; font-size: 14pt; line-height: 30px;}
 	.addInfo>table{margin: 50px; margin-left: 150px; font-size: 14pt; line-height: 30px;}
 	
-	input{border-radius: 5px; height: 25px;}
-	textarea{border-radius: 5px; resize: none; margin-top: 30px;}
+	input{border-radius: 5px; height: 25px; font-size: 12pt;}
+	textarea{border-radius: 5px; resize: none; margin-top: 30px; font-size: 12pt;}
 	
 	/* 현재 포인트&캐쉬 */
 	.point-cash-area{height: 110px; margin-top: 25px;}
@@ -637,11 +637,18 @@
 				
 				<div class="myprofileArea">
 					<div class="normalInfo">
-						<div class="profileImage">
-							<c:if test="${ member.profileImg eq null }">
-								
+						<div class="profileImage" id="profileImage">
+							<c:if test="${ member.profileImg eq 0 }">
+								<img class="profile" src="${ contextPath }/resources/images/default_profile.png">
 							</c:if>
-							<img class="profile" src="${ contextPath }/resources/images/2020040701.png">
+							<c:if test="${ member.profileImg ne 0 }">
+								<img class="profile" src="${ contextPath }/resources/images/profileImage/point.png">
+							</c:if>
+						</div>
+						<div id="profileImgFileArea">
+							<form action="">
+								<input type="file" hidden="" name="profileImg" class="profileImg" id="profileImg">
+							</form>
 						</div>
 						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
@@ -662,7 +669,26 @@
 								</tr>
 								<tr>
 									<td>>평점 : </td>
-									<td style="color: gold; font-weight: bolder;">★★★★★</td>
+									<td style="color: gold; font-weight: bolder;">
+									<c:if test="${ member.grade eq 0 }">
+										☆☆☆☆☆
+									</c:if>									
+									<c:if test="${ member.grade eq 1 }">
+										★☆☆☆☆
+									</c:if>
+									<c:if test="${ member.grade eq 2 }">
+										★★☆☆☆
+									</c:if>
+									<c:if test="${ member.grade eq 3 }">
+										★★★☆☆
+									</c:if>
+									<c:if test="${ member.grade eq 4 }">
+										★★★★☆
+									</c:if>
+									<c:if test="${ member.grade eq 5 }">
+										★★★★★
+									</c:if>																																				
+									</td>
 									<td>>계좌번호 : </td>
 									<td>${ member.account }</td>
 								</tr>								
@@ -897,13 +923,13 @@
 						<div class="col-sm-12">
 							<div class="row">
 								<div class="col-sm-12">
-									<form action="" name="basicInfoForm">
+									<form action="uMember.my" name="basicInfoForm" method="post">
 										<div class="basicInfo">
 											<div id="basicInfoText">기본 정보</div>
 											<table>
 												<tr>
 													<td style="width: 300px; height: 50px;">이름</td>
-													<td style="height: 50px;"><input type="text" name="userName" class="userName"></td>
+													<td style="height: 50px;"><input type="text" name="userName" class="userName" value="${ loginUser.userName }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">비밀번호</td>
@@ -915,19 +941,19 @@
 												</tr>
 												<tr>
 													<td style="height: 50px;">닉네임</td>
-													<td style="height: 50px;"><input type="text" name="nickName" class="nickName"></td>
+													<td style="height: 50px;"><input type="text" name="nickName" class="nickName" value="${ loginUser.nickName }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">연락처</td>
-													<td style="height: 50px;"><input type="text" name="phone" class="phone"></td>
+													<td style="height: 50px;"><input type="text" name="phone" class="phone" value="${ loginUser.phone }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">이메일</td>
-													<td style="height: 50px;"><input type="email" name="email" class="email"></td>
+													<td style="height: 50px;"><input type="email" name="email" class="email" value="${ loginUser.email }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">자기소개</td>
-													<td style="height: 50px;"><textarea rows="8" cols="65"></textarea></td>
+													<td style="height: 50px;"><textarea rows="8" cols="50">${ loginUser.intro }</textarea></td>
 												</tr>																																																
 											</table>
 										
@@ -938,11 +964,11 @@
 												<table>
 													<tr>
 														<td style="width: 300px; height: 50px;">은행명</td>
-														<td style="height: 50px;"><input type="text" name="bank" class="bank"></td>
+														<td style="height: 50px;"><input type="text" name="bank" class="bank" value="${ loginUser.bank }"></td>
 													</tr>
 													<tr>
 														<td style="height: 50px;">계좌번호</td>
-														<td style="height: 50px;"><input type="text" name="accountNumber" class="accountNumber"></td>
+														<td style="height: 50px;"><input type="text" name="accountNumber" class="accountNumber" value="${ loginUser.account }"></td>
 													</tr>													
 												</table>
 										</div>
@@ -1048,8 +1074,7 @@
 	</script>
 	
 	<script>
-		var userId = '${ member.userId }';
-		var boWriter = '${ member.userId }';
+		var userId = '${ loginUser.userId }';
 		
 		function goToMyReply(){
 			location.href="myReplyList.my?userId=" + userId;
@@ -1061,13 +1086,19 @@
 		
 		function goToMyReqList(e){
 			var cbStep = e;
-			location.href="reqList.my?boWriter=" + boWriter + "&cbStep=" + cbStep;
+			location.href="reqList.my?boWriter=" + userId + "&cbStep=" + cbStep;
 		}
 		
 		function goToMyWorkList(e){
 			var cbStep = e;
-			location.href="workList.my";
+			location.href="workList.my?reId=" + userId + "&cbStep=" + cbStep;
 		}
+	</script>
+	<script>
+		$('.profileImage').on('click', function(){
+			
+			$('.profileImg').click();
+		});
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>

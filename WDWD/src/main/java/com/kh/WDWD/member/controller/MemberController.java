@@ -80,23 +80,22 @@ public class MemberController {
 		return "directRequestForm";
 	}
 	
-	@RequestMapping("reqThreeList.my")
-	public String requestThreeListView() {
-		return "requestThreeStepList";
-	}	
-	
-	@RequestMapping("workOneList.my")
-	public String workOneListView() {
-		return "workOneStepList";
+	// 회원가입  controller
+	@RequestMapping("singUp.me")
+	public String memberInsert(@ModelAttribute Member m, @RequestParam("post") String post, @RequestParam("address1") String address1, @RequestParam("address2") String address2) {
+		
+//		String encPwd = bcryptPasswordEncoder.encode(m.getUserPwd());
+//		m.setUserPwd(encPwd);
+		
+//		System.out.print(m);
+		
+		int result = mService.insertMember(m);
+		
+		if(result > 0) {
+			return "redirect:home.do";
+		}else {
+			throw new MemberException("회원가입에 실패하셨습니다.");
+		}
 	}
 
-	@RequestMapping("workTwoList.my")
-	public String workTwoListView() {
-		return "workTwoStepList";
-	}
-	
-	@RequestMapping("workThreeList.my")
-	public String workThreeListView() {
-		return "workThreeStepList";
-	}	
 }

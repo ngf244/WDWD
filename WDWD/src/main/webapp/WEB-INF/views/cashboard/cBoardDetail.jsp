@@ -356,10 +356,15 @@
 			<span class="redColor">＞ </span>첨부파일
 		</div>
 		<div class="rightLine">
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
+			<c:if test="${ empty fileList }">
+				첨부된 파일이 없습니다.
+			</c:if>
+			
+			<c:if test="${ !empty fileList }">
+				<c:forEach var="file" items="${ fileList }">
+					<span class="downloadName">${ file.conOri }</span> <div class="downloadBtn">download</div><br>
+				</c:forEach>
+			</c:if>
 		</div>
 		
 		<div id="conceptWrap">
