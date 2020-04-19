@@ -150,6 +150,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        cursor: pointer;
     }	
 	
 	/* 회원정보수정버튼 */
@@ -638,19 +639,21 @@
 				<div class="myprofileArea">
 					<div class="normalInfo">
 						<div class="profileImage" id="profileImage">
-							<c:if test="${ member.profileImg eq 0 }">
+<%-- 							<c:if test="${ member.profileImg eq 0 }">
 								<img class="profile" src="${ contextPath }/resources/images/default_profile.png">
 							</c:if>
 							<c:if test="${ member.profileImg ne 0 }">
 								<img class="profile" src="${ contextPath }/resources/images/profileImage/point.png">
-							</c:if>
+							</c:if> --%>
+							<img id="profile" class="profile">
 						</div>
 						<div id="profileImgFileArea">
-							<form action="">
-								<input type="file" hidden="" name="profileImg" class="profileImg" id="profileImg">
+							<form method="post" encType="multipart/form-data" id="profileImgForm">
+								<input type="file" hidden="" name="profileImg" id="profileImg" multiple="multiple" onchange="LoadImg(this)">
 							</form>
 						</div>
 						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
+						<button id="profileEditBtn" class="profileImgUploadBtn" style="width: 150px; margin-left: 320px;">이미지 저장 완료</button>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
@@ -1095,10 +1098,47 @@
 		}
 	</script>
 	<script>
-		$('.profileImage').on('click', function(){
-			
-			$('.profileImg').click();
+		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수
+		$('#profileImage').on('click', function(){
+			$('#profileImg').click();
 		});
+		
+		// 각각의 영역에 파일을 첨부 했을 경우 미리 보기가 가능하도록 하는 함수
+		function LoadImg(value){
+			if(value.files && value.files[0]){
+				var reader = new FileReader();
+				
+				reader.onload = function(e){								
+					$("#profile").attr("src", e.target.result);
+				}
+				
+				reader.readAsDataURL(value.files[0]);
+			}
+		}
+		
+		// 파일 업로드
+			
+		
+		$('.profileImgUploadBtn').on('click', function(){
+			var formData = new FormData($('#profileImgForm')[0]);
+			$.ajax({ 
+				type: "POST", 
+				enctype: 'multipart/form-data', // 필수 
+				url: 'uProfileImg.my', 
+				data: formData, // 필수 
+				processData: false, // 필수 
+				contentType: false, // 필수 
+				cache: false, 
+				success: function(data){ 
+					alert("프로필 이미지가 저장되었습니다.");
+				}, 
+				error: function(e){ 
+					alert("프로필 이미지 저장에 실패하였습니다.");
+				} 
+			});
+		});
+		
+		
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>

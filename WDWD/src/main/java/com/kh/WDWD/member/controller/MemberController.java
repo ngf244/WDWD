@@ -1,5 +1,12 @@
 package com.kh.WDWD.member.controller;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,10 +14,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
@@ -97,5 +109,71 @@ public class MemberController {
 			throw new MemberException("회원가입에 실패하셨습니다.");
 		}
 	}
+	
+	@RequestMapping(value="uProfileImg.my", method=RequestMethod.POST)
+	public @ResponseBody void multipartUpload(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
+		MultipartFile profileImgFile = request.getFile("profileImg");
+		Member m = (Member)(request.getSession().getAttribute("loginUser"));
+		String renameFileName = "";
+		
+		if(profileImgFile != null && !profileImgFile.isEmpty()) {
+			renameFileName = saveFile(profileImgFile, request);
+		}
+		
+		System.out.println("renameFileName : " + renameFileName);
+		
+		if(!renameFileName.equals("")&&!renameFileName.isEmpty()) {
+			int result = mService.updateProfileImg(m);
+			
+			if(result > 0) {
+				response.setContentType("application/json; charset=UTF-8");
+				new Gson().toJson(renameFileName, response.getWriter());
+			} else {
+				throw new MemberException("프로필 이미지 변경에 실패하셨습니다.");
+			}
+		}
+		
+	}
+	
+	public String saveFile(MultipartFile file, HttpServletRequest request) {
+		String root = request.getSession().getServletContext().getRealPath("resources");
+	  
+		String savePath = root + "/profile_Image";
+		
+		File folder = new File(savePath);
+  
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		
+		int ranNum = (int)(Math.random() * 100000);
+		
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+	    String originFileName = file.getOriginalFilename();
+	    String renameFileName 
+	    	= sdf.format(new Date(System.currentTimeMillis())) + ranNum
+	    	+ "." + originFileName.substring(originFileName.lastIndexOf(".") + 1);
+	  
+	    String renamePath = folder + "\\" + renameFileName;
+	  
+	    try {
+	    	file.transferTo(new File(renamePath));
+	    } catch (Exception e) {
+	    	System.out.println("파일 전송 에러 : " + e.getMessage());
+	    	e.printStackTrace();
+	    }
+	    
+	    Contents c = new Contents(originFileName, renameFileName, savePath);
+	    int result = mService.insertContents(c);
+	    
+	    if(result > 0) {
+	    	return renameFileName;
+	    } else {
+	    	throw new MemberException("프로필 이미지 DB저장에 실패하셨습니다.");
+	    }
+	    
+	    
+	}
+
 
 }

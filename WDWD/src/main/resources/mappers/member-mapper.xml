@@ -44,6 +44,16 @@
 		VALUES(#{userId}, #{userPwd}, #{userName}, #{NickName}, #{email}, #{phone} #{intro},
 		SYSDATE, SYSDATE, DEFAULT)
 	</insert>
-  
+	
+	<update id="updateProfileImg" parameterType="Member">
+		update member
+		set me_con_num = con_seq.currval
+		where me_id = #{userId}
+	</update>
+	
+	<insert id="insertContents" parameterType="Contents">
+		insert into contents
+		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, null)
+	</insert>  
 </mapper>
 

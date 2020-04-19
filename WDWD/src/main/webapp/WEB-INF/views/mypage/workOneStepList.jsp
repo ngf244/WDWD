@@ -20,7 +20,7 @@
 		margin: 30px;
 	}
 	
-	.select {
+	.selectCategoryText {
 		display: inline-table;
 		height: 30px;
 		line-height: 30px;
@@ -161,7 +161,7 @@
 				</div>
 				<div id="participateApplyListContent">
 					<div id="buttonSelectNSerch">
-						<div class="select">카테고리 ▼</div>
+						<div class="selectCategoryText">카테고리 ▼</div>
 						<div class="dropdown-content">
 							<a href="#"><span onclick="myWorkOneStepList();">전체 보기</span></a>
 						    <a href="#"><span onclick="myWorkCateList(2);">1:1 의뢰</span></a>

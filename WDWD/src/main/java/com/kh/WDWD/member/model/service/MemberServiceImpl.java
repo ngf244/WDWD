@@ -4,6 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.dao.MemberDAO;
 import com.kh.WDWD.member.model.vo.Member;
 
@@ -29,6 +30,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int insertMember(Member m) {
 		return mDAO.insertMember(sqlSession, m);
+	}
+
+	@Override
+	public int updateProfileImg(Member m) {
+		return mDAO.updateProfileImg(sqlSession, m);
+	}
+
+	@Override
+	public int insertContents(Contents c) {
+		return mDAO.insertContents(sqlSession, c);
 	}	
 
 }

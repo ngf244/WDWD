@@ -1,5 +1,6 @@
 package com.kh.WDWD.member.model.service;
 
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 
 public interface MemberService {
@@ -9,6 +10,10 @@ public interface MemberService {
     Member loginMember(Member m);
 
 	int insertMember(Member m);
+
+	int updateProfileImg(Member m);
+
+	int insertContents(Contents c);
 
 }
 
