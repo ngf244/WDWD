@@ -1117,8 +1117,6 @@
 		}
 		
 		// 파일 업로드
-			
-		
 		$('.profileImgUploadBtn').on('click', function(){
 			var formData = new FormData($('#profileImgForm')[0]);
 			$.ajax({ 
