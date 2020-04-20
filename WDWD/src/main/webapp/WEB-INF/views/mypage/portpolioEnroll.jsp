@@ -144,14 +144,13 @@
 					<div id="portpolioEnrollText">포트폴리오 등록</div>
 				</div>
 				<div id="portpolioEnrollContent">
-					<form action="" method="post" encType="multipart/form-data">
+					<form action="enrollPort.my" method="post" encType="multipart/form-data">
 						<div id="porThumbnail">
 							<img id="portThumbnailImage" width="100%" height="100%" style="display: none;">
 							<div id="thumbnailEnrollArea">
 								<br><br>썸네일 이미지 등록<br><br>
 								<img id="thumbnailImage" src="${ contextPath }/resources/images/Add_File_icon.png" width="50" height="50">
 							</div>
-							
 						</div>
 						<div id="porFormArea">
 							<table id="portEnrollTable">
@@ -162,7 +161,7 @@
 								<tr>
 									<td>포트폴리오 유형</td>
 									<td>
-										<select class="inputText">
+										<select class="inputText" name="portpolioClass">
 											<option>이미지 편집</option>
 											<option>이미지 제작</option>
 											<option>동영상 편집</option>
@@ -215,6 +214,7 @@
 	</section>
 	<jsp:include page="../common/footer.jsp"/>
 	
+	<!-- 완료/취소 버튼 스크립트 -->
 	<script>
 		$('#portCompleteBtn').hover(function(){
 			$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
@@ -226,10 +226,10 @@
 		}, function(){
 			$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 		})
-		
 	</script>
 	
 	<script>
+		/* 썸네일이미지 영역을 클릭 했을 때 파일첨부창이 뜨도록 하는 함수 */
 		$(function(){
 			$('#thumbnailFileArea').hide();
 			
@@ -238,6 +238,7 @@
     		});
 		});
 		
+		/* 썸네일이미지 미리보기를 위한 함수 */
 		var titleImgChecked = false;
 		function LoadImg(value){
 			if(value.files && value.files[0]){
@@ -256,6 +257,7 @@
 	
 	
 	<script>
+		<!-- 파일add 버튼을 클릭했을 때 파일첨부 원도우 창이 뜨게 하는 함수 -->
 		var fileNum = 0;
 		$('#fileAdd').click(function(){
 			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='fileNum" + fileNum + "'>");

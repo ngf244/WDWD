@@ -4,6 +4,7 @@
 	<select id="selectMember" parameterType="string" resultMap="memberResultSet">
 		select *
 		from member
+			 join contents on (me_con_num = con_num)
 		where me_id=#{userId}
 	</select>
 	
@@ -28,7 +29,7 @@
 		<result property="recent3" column="ME_RECENT3"/>
 		<result property="recent4" column="ME_RECENT4"/>
 		<result property="recent5" column="ME_RECENT5"/>
-		<result property="profileImg" column="ME_CON_NUM"/>
+		<result property="profileImg" column="CON_COP"/>
 	</resultMap>
   
 	<select id="loginMember" parameterType="Member" resultMap="memberResultSet">
@@ -54,6 +55,160 @@
 	<insert id="insertContents" parameterType="Contents">
 		insert into contents
 		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, null)
-	</insert>  
+	</insert>
+	
+	<resultMap type="Reply" id="replyResultSet">
+		<id property="rpNum" column="RP_NUM"/>
+		<result property="rpContent" column="RP_CON"/>
+		<result property="rpDate" column="RP_DATE"/>
+		<result property="rpStatus" column="RP_DEL"/>
+		<result property="refNum" column="RP_REFNUM"/>
+		<result property="rpWriter" column="RP_WRITER"/>
+		<result property="rpConNum" column="RP_CON_NUM"/>
+		<result property="rpRp" column="RP_RP"/>
+	</resultMap>
+	
+	<select id="selectRecentlyReply" parameterType="string" resultMap="replyResultSet">
+		<![CDATA[
+			select *
+			from (select *
+				  from reply 
+				  where RP_WRITER = #{userId} and RP_DEL = 'N'
+				  order by RP_NUM DESC) 
+			where ROWNUM <= 5
+		]]>
+	</select>
+	
+	<select id="selectReqOneStepCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+     		 join cash_board on (BO_NUM = CB_NUM)
+		where bo_writer = #{userId} and cb_step = 1 and bo_del = 'N' 
+	</select>
+
+	<select id="selectReqTwoStepCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+     		 join cash_board on (BO_NUM = CB_NUM)
+		where bo_writer = #{userId} and cb_step = 2 and bo_del = 'N' 
+	</select>
+	
+	<select id="selectReqThreeStepCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+     		 join cash_board on (BO_NUM = CB_NUM)
+		where bo_writer = #{userId} and cb_step = 3 and bo_del = 'N' 
+	</select>
+	
+	<select id="selectWorkOneStepCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+     		 join cash_board on (BO_NUM = CB_NUM)
+     		 left join request on (bo_num = re_num)
+		where re_id = #{userId} and cb_step = 1 and bo_del = 'N' 
+	</select>
+	
+	<select id="selectWorkTwoStepCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+     		 join cash_board on (BO_NUM = CB_NUM)
+     		 left join request on (bo_num = re_num)
+		where re_id = #{userId} and cb_step = 2 and bo_del = 'N' 
+	</select>
+
+	<select id="selectWorkThreeStepCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+     		 join cash_board on (BO_NUM = CB_NUM)
+     		 left join request on (bo_num = re_num)
+		where re_id = #{userId} and cb_step = 3 and bo_del = 'N'  
+	</select>					
+	
+	<resultMap type="Board" id="boardResultSet">
+		<id property="boNum" column="BO_NUM"/>
+		<result property="boGroup" column="BO_GROUP"/>
+		<result property="boTitle" column="BO_TITLE"/>
+		<result property="boContent" column="BO_CON"/>
+		<result property="boView" column="BO_VIEW"/>
+		<result property="boDate" column="BO_DATE"/>
+		<result property="boUpdate" column="BO_UPDATE"/>
+		<result property="boDel" column="BO_DEL"/>
+		<result property="boWriter" column="BO_WRITER"/>
+		<result property="boGood" column="BO_GOOD"/>
+		<result property="boCategory" column="BO_CATEGORY"/>
+		<result property="boReNum" column="BO_RENUM"/>
+	</resultMap>
+	
+	<select id="selectRecentlyPBoard" parameterType="string" resultMap="boardResultSet">
+		<![CDATA[
+			select *
+			from (select *
+				  from board 
+				  where bo_writer = #{userId} and bo_del = 'N' and bo_group = 1
+				  order by bo_num DESC) 
+			where ROWNUM <= 5
+		]]>
+	</select>
+	
+	<resultMap type="CBoard" id="CBoardResultSet">
+		<id property="boNum" column="BO_NUM"/>
+		<result property="boGroup" column="BO_GROUP"/>
+		<result property="boTitle" column="BO_TITLE"/>
+		<result property="boContent" column="BO_CON"/>
+		<result property="boView" column="BO_VIEW"/>
+		<result property="boDate" column="BO_DATE"/>
+		<result property="boUpdate" column="BO_UPDATE"/>
+		<result property="boDel" column="BO_DEL"/>
+		<!-- <result property="boWriter" column="BO_WRITER"/> -->
+		<result property="boGood" column="BO_GOOD"/>
+		<result property="boCategory" column="BO_CATEGORY"/>
+		<result property="boReNum" column="BO_RENUM"/>
+		<result property="cbStep" column="CB_STEP" />
+		<result property="cbSecret" column="CB_SECRET" />
+		<result property="cbCash" column="CB_CASH"/>
+		<result property="cbCate" column="CB_CATE"/>
+		<result property="cbStep1" column="CB_STEP1"/>
+		<result property="cbStep2" column="CB_STEP2"/>
+		<result property="cbStep3" column="CB_STEP3"/>
+		<result property="cbStep4" column="CB_STEP4"/>
+		<result property="cbStep5" column="CB_STEP5"/>
+		<result property="cbDate" column="CB_DATE"/>
+		<result property="cbPrimium" column="CB_PRIMIUM"/>  
+		<result property="boWriter" column="ME_NICK"/>      
+		<result property="reId" column="RE_ID"/>      
+	</resultMap>	
+	
+	<select id="selectRecentlyCBoard" parameterType="string" resultMap="CBoardResultSet">
+		<![CDATA[
+			select *
+			from (select *
+				  from board
+                       join cash_board on (bo_num = cb_num)
+				  where bo_writer = #{userId} and bo_del = 'N' and bo_group in (2, 3, 4)
+				  order by bo_num DESC) 
+			where ROWNUM <= 5
+		]]>
+	</select>
+	
+	<resultMap type="PointNCash" id="pointNCashResultSet">
+		<id property="pcNum" column="PC_NUM"/>
+		<result property="pcContent" column="PC_CON"/>
+		<result property="pcAmount" column="PC_USE"/>
+		<result property="pcDate" column="PC_DATE"/>
+		<result property="pcDiv" column="PC_DIV"/>
+		<result property="pcId" column="PC_ID"/>
+	</resultMap>	
+	
+	<select id="selectRecentlyCashChange" parameterType="string" resultMap="pointNCashResultSet">
+		<![CDATA[
+			select *
+			from (select *
+	      		  from point_cash
+	      		  where pc_id = #{userId} and pc_div = 'C'
+	      		  order by pc_num DESC) 
+			where ROWNUM <= 3
+		]]>	
+	</select>
+	  
 </mapper>
 

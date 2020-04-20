@@ -2,6 +2,8 @@ package com.kh.WDWD.member.controller;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.kh.WDWD.board.model.vo.Board;
+import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
@@ -66,9 +72,34 @@ public class MemberController {
 	public ModelAndView myPageView(@RequestParam("userId") String userId, ModelAndView mv) {
 		
 		Member member = mService.selectMember(userId);
+		ArrayList<Reply> rList = mService.selectRecentlyReply(userId);		
+		ArrayList<Board> pList = mService.selectRecentlyPBoard(userId);
+		ArrayList<CBoard> cList = mService.selectRecentlyCBoard(userId);
+		ArrayList<PointNCash> ccList = mService.selectRecentlyCashChange(userId);		
+		
+		int rCount1 = mService.selectReqOneStepCount(userId);
+		int rCount2 = mService.selectReqTwoStepCount(userId);
+		int rCount3 = mService.selectReqThreeStepCount(userId);
+		int WCount1 = mService.selectWorkOneStepCount(userId);
+		int WCount2 = mService.selectWorkTwoStepCount(userId);	
+		int WCount3 = mService.selectWorkThreeStepCount(userId);
+		
+		int[] rwCount = {rCount1, rCount2, rCount3, WCount1, WCount2, WCount3};
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.");
+				
+		Calendar time = Calendar.getInstance();
+		       
+		String nowDay = format.format(time.getTime());
 		
 		if(member != null) {
 			mv.addObject("member", member)
+			  .addObject("rList", rList)
+			  .addObject("rwCount", rwCount)
+			  .addObject("pList", pList)
+			  .addObject("cList", cList)
+			  .addObject("nowDay", nowDay)
+			  .addObject("ccList", ccList)
 			  .setViewName("mypageMain");
 		} else {
 			throw new MemberException("마이페이지 조회에 실패하였습니다.");
