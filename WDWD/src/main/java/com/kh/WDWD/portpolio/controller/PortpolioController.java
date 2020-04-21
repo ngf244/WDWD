@@ -33,6 +33,20 @@ public class PortpolioController {
 		return "portpolioEnroll";
 	}
 	
+	@RequestMapping("portThumbEnroll.my")
+	public @ResponseBody void EnrollPortpolioThumbnail(MultipartHttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		MultipartFile uploadFile = request.getFile("pFile");
+		String renameFileName = "";
+		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
+		
+		if(uploadFile != null && !uploadFile.isEmpty()) {
+			renameFileName = saveFile(uploadFile, request, userId);
+		}
+		
+		response.setContentType("application/json; charset=UTF-8");
+		new Gson().toJson(renameFileName, response.getWriter());
+	}
+	
 	@RequestMapping("portImgEnroll.my")
 	public @ResponseBody void EnrollPortpolioImg(MultipartHttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 		MultipartFile uploadFile = request.getFile("pFile");

@@ -144,7 +144,6 @@
 					<div id="portpolioEnrollText">포트폴리오 등록</div>
 				</div>
 				<div id="portpolioEnrollContent">
-					<form action="enrollPort.my" method="post" encType="multipart/form-data" id="EnrollPortImgForm">
 						<div id="porThumbnail">
 							<img id="portThumbnailImage" width="100%" height="100%" style="display: none;">
 							<div id="thumbnailEnrollArea">
@@ -153,58 +152,70 @@
 							</div>
 						</div>
 						<div id="porFormArea">
-							<table id="portEnrollTable">
-								<tr>
-									<td style="width: 30%;">포트폴리오 제목</td>
-									<td style="width: 40%;"><input type="text" id="poTitle" name="poTitle" class="inputText" style="width: 94%;"></td>
-								</tr>
-								<tr>
-									<td>포트폴리오 유형</td>
-									<td>
-										<select class="inputText" name="poCategory" id="poCategory">
-											<option value="이미지 편집">이미지 편집</option>
-											<option value="이미지 제작">이미지 제작</option>
-											<option value="동영상 편집">동영상 편집</option>
-											<option value="동영상 제작">동영상 제작</option>											
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>본 사이트 이용 여부</td>
-									<td>
-										<input type="radio" id="usingSiteY" name="poUseYn" class="usingSite" value="Y"><label for="usingSiteY">Yes</label>
-										<input type="radio" id="usingSiteN" name="poUseYn" class="usingSite" value="N"><label for="usingSiteN">No</label>
-									</td>
-								</tr>
-								<tr>
-									<td>포트폴리오 설명</td>
-									<td>
-										<textarea name="poDesc" id="poDesc" rows="10" cols="45" style="resize: none;"></textarea>
-									</td>
-								</tr>
-								<tr>
-									<td>파일 첨부</td>
-									<td>
-										<div id="fileList"></div>
-										<div id="fileAdd">
-											<img src="${ contextPath }/resources/images/add.png">
-											<span>파일 추가</span>
-										</div>
-									</td>
-								</tr>
-							</table>
+							<form action="enrollPort.my" method="post" id="EnrollPortForm">
+								<table id="portEnrollTable">
+									<tr>
+										<td style="width: 30%;">포트폴리오 제목</td>
+										<td style="width: 40%;"><input type="text" id="poTitle" name="poTitle" class="inputText" style="width: 94%;"></td>
+									</tr>
+									<tr>
+										<td>포트폴리오 유형</td>
+										<td>
+											<select class="inputText" name="poCategory" id="poCategory">
+												<option value="이미지 편집">이미지 편집</option>
+												<option value="이미지 제작">이미지 제작</option>
+												<option value="동영상 편집">동영상 편집</option>
+												<option value="동영상 제작">동영상 제작</option>											
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>본 사이트 이용 여부</td>
+										<td>
+											<input type="radio" id="usingSiteY" name="poUseYn" class="usingSite" value="Y"><label for="usingSiteY">Yes</label>
+											<input type="radio" id="usingSiteN" name="poUseYn" class="usingSite" value="N"><label for="usingSiteN">No</label>
+										</td>
+									</tr>
+									<tr>
+										<td>포트폴리오 설명</td>
+										<td>
+											<textarea name="poDesc" id="poDesc" rows="10" cols="45" style="resize: none;"></textarea>
+										</td>
+									</tr>
+								</table>
+							</form>
+							
+							<form method="post" encType="multipart/form-data" id="EnrollPortThumbForm">
+								<div id="thumbnailFileArea" class="thumbnailFileArea">
+									<input type="file" hidden="" id="thumbnailImg" class="thumbnailImg" multiple="multiple" name="pFile" onchange="LoadImg(this)">
+								</div>
+							</form>
+							<form method="post" encType="multipart/form-data" id="EnrollPortImgForm">
+								<table id="attachFileTable">	
+									<tr>
+										<td width="165">파일 첨부</td>
+										<td>
+											<div id="fileList"></div>
+											<div id="fileAdd">
+												<img src="${ contextPath }/resources/images/add.png">
+												<span>파일 추가</span>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td height="50">
+											<div id="fileCountArea"><span id="fileCount">0</span>개의 파일이 첨부되었습니다.</div>
+										</td>
+									</tr>
+								</table>	
+							</form>
 						</div>
 						<div style="clear: both;"></div>
-						<form method="post" encType="multipart/form-data" id="EnrollPortThumbForm">
-							<div id="thumbnailFileArea" class="thumbnailFileArea">
-								<input type="file" hidden="" id="thumbnailImg" class="thumbnailImg" multiple="multiple" name="pFile" onchange="LoadImg(this)">
-							</div>
-						</form>						
 						<div class="btnArea">
 							<div id="portCompleteBtn" class="button">완료</div>
 							<div id="portCancelBtn" class="button" onclick="history.back(-1)">취소</div>
 						</div>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -214,8 +225,8 @@
 	</section>
 	<jsp:include page="../common/footer.jsp"/>
 	
-	<!-- 완료/취소 버튼 스크립트 -->
 	<script>
+	    /* 완료&취소 버튼 css적용 스크립트 */
 		$('#portCompleteBtn').hover(function(){
 			$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
 		}, function(){
@@ -238,7 +249,7 @@
     		});
 		});
 		
-		/* 썸네일이미지 미리보기&파일 저장을 위한 함수 */
+		/* 썸네일이미지 미리보기&파일저장을 위한 함수 */
 		var titleImgChecked = false;
 		function LoadImg(value){
 			if(confirm("썸네일 등록을 하시겠습니까?")){
@@ -259,7 +270,7 @@
 				$.ajax({ 
 					type: "POST", 
 					enctype: 'multipart/form-data', // 필수 
-					url: 'portImgEnroll.my', 
+					url: 'portThumbEnroll.my', 
 					data: formData, // 필수 
 					processData: false, // 필수 
 					contentType: false, // 필수 
@@ -283,11 +294,13 @@
 		<!-- 파일add 버튼을 클릭했을 때 파일첨부 원도우 창이 뜨게 하는 함수 -->
 		var fileNum = 0;
 		$('#fileAdd').click(function(){
+			$('#fileList').append()
 			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='pFile' multiple>");
 			$('#fileNum' + fileNum).click();
 			fileNum++;
 		});
 		
+		var fileCount = 0;
 		function changeFile(file) {
 			var fileValue = file.value;
 			var fileUrl = fileValue.lastIndexOf("\\") + 1;
@@ -318,7 +331,7 @@
 				$('#fileList').append($div);
 			}
 			
-			var formData = new FormData($('#EnrollPortImgForm')[0]);
+			var formData = new FormData($('#EnrollPortImgForm')[fileCount]);
 			
 			$.ajax({ 
 				type: "POST", 
@@ -330,6 +343,8 @@
 				cache: false, 
 				success: function(data){ 
 					alert("포트폴리오 이미지가 저장되었습니다.");
+					fileCount++;
+					$('#fileCount').text(fileCount);
 				}, 
 				error: function(e){ 
 					alert("포트폴리오 이미지 저장에 실패하였습니다.");
@@ -339,6 +354,8 @@
 		
 		/* x버튼을 눌렀을 때 input파일태그가 사라지는 함수 */
 		$(document).on("click", ".fileAreaRemove", function(){
+			fileCount--;
+			$('#fileCount').text(fileCount);
 			this.parentNode.remove();
 		});
 		
