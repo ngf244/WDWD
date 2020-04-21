@@ -108,11 +108,6 @@ public class MemberController {
 		return mv;
 	}
 	
-	@RequestMapping("porEnroll.my")
-	public String portpolioEnrollView() {
-		return "portpolioEnroll";
-	}
-	
 	@RequestMapping("portpolioList.my")
 	public String portpolioListView() {
 		return "portpolioList";
@@ -142,7 +137,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="uProfileImg.my", method=RequestMethod.POST)
-	public @ResponseBody void multipartUpload(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody void updateProfileImage(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
 		MultipartFile profileImgFile = request.getFile("profileImg");
 		Member m = (Member)(request.getSession().getAttribute("loginUser"));
 		String renameFileName = "";

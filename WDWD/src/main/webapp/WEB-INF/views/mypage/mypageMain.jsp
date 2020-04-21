@@ -910,7 +910,7 @@
 							<a href=""> &raquo; </a>
 							</div>
 						</div>
-						<div id="portpolioEnrollBtn" onclick="location.href='porEnroll.my'">등록하기</div>
+						<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
 						<div style="clear: both;"></div>						
 					</div>
 				</div>
