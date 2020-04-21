@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css?family=Chewy" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
 	/* 마이페이지 메인 상단 프로필 부분 */
 	#mypageArea{width: 80%; margin: auto; text-align: left;}
@@ -625,7 +626,13 @@
 	/* 공통 플러스 아이콘 */
 	.plusIcon{cursor: pointer; padding-top: 5px;}
 	
-
+	/* sweetAlert */
+	.swal-button{
+		width: 30px;
+		font-weight: normal;
+		text-align: center;
+		padding-right: 36px;
+	}
 </style>
 <title>마이 페이지</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
@@ -1175,10 +1182,18 @@
 				contentType: false, // 필수 
 				cache: false, 
 				success: function(data){ 
-					alert("프로필 이미지가 저장되었습니다.");
+					swal({
+					    title: "Profile",
+					    text: "register success!",
+					    icon: "info" //"info,success,warning,error" 중 택1
+					});
 				}, 
 				error: function(e){ 
-					alert("프로필 이미지 저장에 실패하였습니다.");
+					swal({
+					    title: "Profile",
+					    text: "Picture register fail!",
+					    icon: "error" //"info,success,warning,error" 중 택1
+					});
 				} 
 			});
 		});
