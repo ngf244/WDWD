@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -120,12 +121,14 @@
 		line-height: 30px;
 		font-size: 14pt;
 		text-align: center;
-		background-color: rgb(66, 66, 66);
-		color: white;
+		background-color: rgb(160, 160, 160);
 		border-radius: 5px;
 		cursor: pointer;
 		font-weight: bold;
 	}
+	a:link {text-decoration: none;}
+	a:visited {text-decoration: none;}
+	a:hover {text-decoration: none;}
 	
 	.range-slider__range {
 		-webkit-appearance: none;
@@ -224,6 +227,8 @@
 		
 		<div class="br"></div>
 		
+		<input type="hidden" value="${ cBoard.boNum }" id="boNum" name="boNum">
+		
 		<div class="leftLine">
 			<span class="redColor">＞ </span>제목
 		</div>
@@ -253,73 +258,91 @@
 			${ cBoard.boWriter }
 		</div>
 		
-		<div class="leftLine">
-			<span class="redColor">＞ </span>마감일
-		</div>
-		<div class="rightLine">
-			<!-- 기한 : <span id="month">1</span>월 <span id="day">1</span>일 <span id="hour">12</span>시 -->
-			<img id="dateDay1" class="dateImg" src="${ contextPath }/resources/images/num0.PNG">
-			<img id="dateDay2" class="dateImg next1" src="${ contextPath }/resources/images/num0.PNG">
-			<img class="dateImg next2" src="${ contextPath }/resources/images/numday.PNG">
-			<img id="dateHour1" class="dateImg next3" src="${ contextPath }/resources/images/num0.PNG">
-			<img id="dateHour2" class="dateImg next4" src="${ contextPath }/resources/images/num0.PNG">
-			<img class="dateImg next5" src="${ contextPath }/resources/images/numdash.PNG">
-			<img id="dateMin1" class="dateImg next6" src="${ contextPath }/resources/images/num0.PNG">
-			<img id="dateMin2" class="dateImg next7" src="${ contextPath }/resources/images/num0.PNG">
-			<img class="dateImg next8" src="${ contextPath }/resources/images/numdash.PNG">
-			<img id="dateSec1" class="dateImg next9" src="${ contextPath }/resources/images/num0.PNG">
-			<img id="dateSec2" class="dateImg next10" src="${ contextPath }/resources/images/num0.PNG">
-			1<!-- div 위치깨짐 방지용 -->
-			
-			<script>
-				/* db에서 받아올 마감시간 */
-				var dateDay = 1;
-				var dateHour = 0;
-				var dateMin = 0;
-				var dateSec = 10;
+		<c:if test="${ cBoard.boGroup ne 2 }">
+			<div class="leftLine">
+				<span class="redColor">＞ </span>마감일
+			</div>
+			<div class="rightLine">
+				<!-- 기한 : <span id="month">1</span>월 <span id="day">1</span>일 <span id="hour">12</span>시 -->
+				<img id="dateDay1" class="dateImg" src="${ contextPath }/resources/images/num0.PNG">
+				<img id="dateDay2" class="dateImg next1" src="${ contextPath }/resources/images/num0.PNG">
+				<img class="dateImg next2" src="${ contextPath }/resources/images/numday.PNG">
+				<img id="dateHour1" class="dateImg next3" src="${ contextPath }/resources/images/num0.PNG">
+				<img id="dateHour2" class="dateImg next4" src="${ contextPath }/resources/images/num0.PNG">
+				<img class="dateImg next5" src="${ contextPath }/resources/images/numdash.PNG">
+				<img id="dateMin1" class="dateImg next6" src="${ contextPath }/resources/images/num0.PNG">
+				<img id="dateMin2" class="dateImg next7" src="${ contextPath }/resources/images/num0.PNG">
+				<img class="dateImg next8" src="${ contextPath }/resources/images/numdash.PNG">
+				<img id="dateSec1" class="dateImg next9" src="${ contextPath }/resources/images/num0.PNG">
+				<img id="dateSec2" class="dateImg next10" src="${ contextPath }/resources/images/num0.PNG">
+				1<!-- div 위치깨짐 방지용 -->
 				
-				!function timer(){
-					setTimeout(function() {
-						if(dateDay == 0 && dateHour == 0 && dateMin == 0 && dateSec == 0) {
-							/* 마감일 때 */
-						} else {
-							dateSec--;
+				<script>
+					var date = new Date("${cBoard.cbDate}");
+					var dateCur = new Date();
+					var gap = date.getTime() - dateCur.getTime();
+					
+					var dateDay = parseInt(gap/1000/60/60/24);
+					var dateHour = parseInt(gap/1000/60/60) % 24;
+					var dateMin = parseInt(gap/1000/60) % 60;
+					var dateSec = parseInt(gap/1000) % 60;
+					
+					$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
+					$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
+					$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
+					$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
+					$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
+					$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
+					$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
+					$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
+					
+					!function timer(){
+						setTimeout(function() {
+							if(dateDay == 0 && dateHour == 0 && dateMin == 0 && dateSec == 0) {
+								/* 마감일 때 */
+							} else {
+								dateSec--;
+								
+								if(dateSec == -1){
+									dateSec = 59;
+									dateMin--;
+								}
+								if(dateMin == -1){
+									dateMin = 59;
+									dateHour--;
+								}
+								if(dateHour == -1){
+									dateHour = 23;
+									dateDay--;
+								}
+								
+								$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
+								$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
+								$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
+								$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
+								$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
+								$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
+								$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
+								$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
+							}
 							
-							if(dateSec == -1){
-								dateSec = 59;
-								dateMin--;
-							}
-							if(dateMin == -1){
-								dateMin = 59;
-								dateHour--;
-							}
-							if(dateHour == -1){
-								dateHour = 23;
-								dateDay--;
-							}
-							
-							$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
-							$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
-							$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
-							$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
-							$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
-							$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
-							$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
-							$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
-						}
-						
-						timer();
-					}, 1000)
-				}()
-			</script>
-		</div>
+							timer();
+						}, 1000)
+					}()
+				</script>
+			</div>
+		</c:if>
+			
 		
-		<div class="leftLine">
-			<span class="redColor">＞ </span>의뢰비
-		</div>
-		<div class="rightLine">
-			10,000 원
-		</div>
+		<c:if test="${ cBoard.boGroup ne 3 }">
+			<div class="leftLine">
+				<span class="redColor">＞ </span>의뢰비
+			</div>
+			<div class="rightLine">
+				<fmt:formatNumber value="${ cBoard.cbCash }" type="number" groupingUsed="true"/> 원
+			</div>
+		</c:if>
+		
 		
 		<div class="leftLine" style="width: auto">
 			<span class="redColor">＞ </span>무엇을 디자인해드릴까요?
@@ -335,10 +358,15 @@
 			<span class="redColor">＞ </span>첨부파일
 		</div>
 		<div class="rightLine">
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
-			<span class="downloadName">logo.jpg</span> <div class="downloadBtn">download</div><br>
+			<c:if test="${ empty fileList }">
+				첨부된 파일이 없습니다.
+			</c:if>
+			
+			<c:if test="${ !empty fileList }">
+				<c:forEach var="file" items="${ fileList }">
+					<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
+				</c:forEach>
+			</c:if>
 		</div>
 		
 		<div id="conceptWrap">

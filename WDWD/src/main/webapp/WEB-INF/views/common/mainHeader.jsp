@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -263,18 +264,72 @@
 
 	#restrictForm{
 		position: fixed;
-		width: 40%;
-		height: 300px;
-		top: 30%;
-		left: 30%;
+		width: 30%;
+		min-height: 100px;
+		top: 25%;
+		left: 35%;
 		background-color: beige;
 		z-index: 100;
 		text-align: left;
-		column-width: 300px;
+		/* column-width: 300px;
 		column-gap: 5px;
-		column-rule: 1px solid black;
+		column-rule: 1px solid black; */
+		padding: 15px;
+		border: outset;
 		display: none;
 	}
+
+	#restrictForm textarea{
+		width: 95%;
+		height: 100px;
+	}
+
+	#restrictForm div{
+		text-align: right;
+		margin-right: 3%;
+		margin-top: 50px;
+	}
+
+	#restrictForm button{
+		width: 30%;
+		height: 30px;
+	}
+
+	#reportForm{
+		position: fixed;
+		width: 30%;
+		min-height: 100px;
+		top: 25%;
+		left: 35%;
+		background-color: rgb(245, 222, 220);
+		z-index: 100;
+		text-align: left;
+		/* column-width: 300px;
+		column-gap: 5px;
+		column-rule: 1px solid black; */
+		padding: 15px;
+		border: outset;
+		display: none;
+	}
+
+	#reportForm textarea{
+		width: 95%;
+		height: 100px;
+	}
+
+	#reportForm div{
+		text-align: right;
+		margin-right: 3%;
+		margin-top: 50px;
+	}
+
+	#reportForm button{
+		width: 30%;
+		height: 30px;
+	}
+
+
+
 
 </style>
 <title>Insert title here</title>
@@ -395,29 +450,70 @@
 			<div>마이페이지</div>
 			<div>게시글 보기</div>
 			<div>작성 댓글 보기</div>
-			<div>제재</div>
+			<div id="restrictBtn">제재</div>
 			<input type="hidden" name="userId">
 		</div>
 
 		<div id="restrictForm">
 			<form>
-				아이디 : <input type="text" name="resUserId">
+				아이디 : <input type="text" name="resUserId" readonly>
 				<br><br>
 				제재 사유 :
 				<br>
-				<textarea rows="15" cols="50"></textarea>
+				<textarea></textarea>
 				<br><br>
-				제재 기간 : dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+				제재 기간 : <br>
+				<input type="date" id="restrictToday"> ~ <input type="date" id="restrictTerm">
+				<br>
+				<div>
+					<button type="button" class="registRes">등록</button>
+					<button type="button" class="cancelRes">취소</button>
+				</div>
 			</form>
-
 		</div>
-		<!-- <script>
-			$('span.smallOption').click(function () {
-				var offset = $(this).offset();
-				console.log(offset);
-				console.log('a');
+
+		<div id="reportForm">
+			<form>
+				글 번호 : <input type="text" name="boardNo" readonly>
+				<br><br>
+				신고 대상 : <input type="text" name="reported" readonly>
+				<br><br>
+				신고자 : <input type="text" name="reporter" readonly>
+				<br><br> 
+				신고 사유 : 
+				<br>
+				<textarea></textarea>
+				<br><br>
+				
+				<div>
+					<button type="button" class="registRes">등록</button>
+					<button type="button" class="cancelRes">취소</button>
+				</div>
+			</form>
+		</div>
+		<script>
+			$('#restrictBtn').click(function () {
+				$('#restrictForm').css('display','block');
+				var targetId = $(this).parent().children('input[name=userId]').val();
+				console.log(targetId);
+				$('#restrictForm input[name=resUserId]').val(targetId);
+				// var now = new Date();
+				// var date = now.getDate();
+				// var month = now.getMonth()+1;
+				// var year = now.getFullYear();
+				// var com = year + " - " + month + " - " + date;
+				document.getElementById("restrictToday").valueAsDate = new Date();
 			})
-		</script> -->
+
+			$('.cancelRes').click(function () {
+				$('#restrictForm').css('display','none');
+				$('#reportForm').css('display','none');
+
+				console.log($('#restrictToday').val());
+				console.log($('#restrictTerm').val());
+			})
+
+		</script>
 					
 		
 		<div id="menuHeaderWrap">
@@ -459,6 +555,10 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
+					
+					if('${param.error}' == "1") {
+						alert('작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.');
+					}
 				</script>
 			</div>
 		</div>

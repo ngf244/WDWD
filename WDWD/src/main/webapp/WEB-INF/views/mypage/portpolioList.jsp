@@ -5,9 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <style>
+	
 	.portpolioList{
 		border: 1px solid lightgray;
-		height: 1230px;
+		height: 1190px;
 		width: 80%;
 		margin: auto;
 	}
@@ -40,7 +41,11 @@
 		margin-top: 30px;
 	}
 	
-	.imageEditTap{
+	.editCate{
+		text-align: center;
+	}
+	
+/* 	.imageEditTap{
 		width: 25%;
 		height: 70px;
 		display: inline-block;
@@ -78,7 +83,7 @@
 	
 	.videoEditTap:hover{
 		background: rgb(52, 73, 94);	
-	}
+	} */
 	
 	.portpolioBoard{
 		height: 830px;
@@ -164,6 +169,9 @@
 		height: 120px;
 		font-size: 20pt;
 		line-height: 110px;
+		color: white;
+		background: black;
+		font-weight: bolder;
 	}
 	
 	.portpolioDesc{
@@ -176,7 +184,7 @@
 	
 	.userId{
 		height: 50px;
-		background: #003399;
+		background: black;
 		color: white;
 		font-size: 15pt;
 		font-weight: bolder;
@@ -213,7 +221,7 @@
 		margin: 10px;
 		width: 9%;
 		height: 40px;
-		background: rgba(52, 152, 219, 0.75);
+		background: black;
 		color: white;
 		display: inline-block;
 		cursor: pointer;
@@ -231,7 +239,7 @@
 		margin: 8px;
 		width: 9%;
 		height: 40px;
-		background: rgba(52, 152, 219, 0.75);
+		background: black;
 		color: white;
 		display: inline-block;
 		cursor: pointer;
@@ -296,7 +304,7 @@
 		margin: 8px;
 		width: 9%;
 		height: 40px;
-		background: rgba(52, 152, 219, 0.75);
+		background: black;
 		color: white;
 		display: inline-block;
 		cursor: pointer;
@@ -320,6 +328,46 @@
 	#backToTop{
 		margin-left: 25%;
 	}
+	
+	/* 버튼 css 가져온 것*/
+	button{
+	  background:rgba(52, 152, 219);
+	  color:#fff;
+	  border:none;
+	  position:relative;
+	  height:60px;
+	  font-size:1.3em;
+	  padding:0 2em;
+	  cursor:pointer;
+	  transition:800ms ease all;
+	  outline:none;
+	  font-weight: bold;
+	}
+	button:hover{
+	  background:#fff;
+	  color:rgba(52, 152, 219);
+	}
+	button:before,button:after{
+	  content:'';
+	  position:absolute;
+	  top:0;
+	  right:0;
+	  height:2px;
+	  width:0;
+	  background: rgba(52, 152, 219);
+	  transition:400ms ease all;
+	}
+	button:after{
+	  right:inherit;
+	  top:inherit;
+	  left:0;
+	  bottom:0;
+	}
+	button:hover:before,button:hover:after{
+	  width:100%;
+	  transition:800ms ease all;
+	}
+	
 		
 </style>
 <title>포트폴리오</title>
@@ -336,9 +384,9 @@
 					<div id="portpolioListText">포트폴리오</div>
 				</div>
 				<div id="portpolioListContent">
-					<div class="editClass">
-						<div class="imageEditTap">이미지 편집</div>
-						<div class="videoEditTap">동영상 편집</div>
+					<div class="editCate">
+						<button class="imageEditTap">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="videoEditTap">V I D E O</button>
 					</div>
 					<div class="portpolioBoard">
 						<div class="portpolioThumb"><img src=""></div>
@@ -372,14 +420,14 @@
 						<a href=""> &raquo; </a>
 						</div>
 					</div>
-					<div id="portpolioEnrollBtn" onclick="location.href='porEnroll.my'">등록하기</div>
+					<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
 				</div>
 			</div>
 			
 			<!-- 포트폴리오 디테일 모달창 -->
 			<div id="portDetailModal" class="portDetailModalArea">
 				<div class="portDetailModalContent">
-					<div id="modalCloseBtn" onclick="closeDetail();"><img src="${ contextPath }/resources/images/x_icon2.png" width="30" height="30"></div>
+					<div id="modalCloseBtn" onclick="closeDetail();"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
 					<div style="clear: both;"></div>
 					
 					<div class="portpolioNameContents">
@@ -425,14 +473,14 @@
 							</div>
 							<form>
 								<textarea id="repEnrollCon" name="repEnrollCon" rows="5" cols="95" style="resize: none;"></textarea><br>
-								<div id="repEnrollBtn" type="submit" style="float: right;">등록</div>								
+								<input id="repEnrollBtn" type="submit" style="float: right;" value="등록">								
 							</form>
 						</div>
 					</div>
 				</div>
 				
 				<div id="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
-					<a href="#modalCloseBtn"><img id="backToTop" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%";></a>									
+					<a href="#modalCloseBtn"><img id="backToTop" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%"></a>									
 				</div>
 			</div>			
 			

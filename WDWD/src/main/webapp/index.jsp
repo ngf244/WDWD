@@ -27,13 +27,13 @@
 			<button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=4';">콘테스트 글쓰기</button>
-			<button onclick="javascript:location.href='stage1.ch';">stage1</button>
+			<button onclick="javascript:location.href='detailView.ch?boNum=141';">stage1</button>
 			<button onclick="javascript:location.href='stage2.ch';">stage2</button>
 			<button onclick="javascript:location.href='stage3.ch';">stage3</button>
 			
 			
 			<button onclick="javascript:location.href='list.bo';">boardlist</button>
-			<button onclick="javascript:location.href='detail.bo';">boardDetail</button>
+			<button onclick="javascript:location.href='freeDetail.bo';">boardDetail</button>
 			<button onclick="javascript:location.href='writing.bo';">boardwriting</button>
 			<button onclick="javascript:location.href='revis.bo';">boardrevis</button>
 			<button onclick="javascript:location.href='ban.au';">authorBan</button>
@@ -50,9 +50,11 @@
 	<script>
 		
 		function goToBoardList(){
-			var boGroup1 = 1;
-			var group2 = 2;
-			location.href="actionList.ch?boGroup1=" + boGroup1/* +"&boGroup2="+ group2 */;
+			/* var boGroup1 = 1;
+			var boGroup2 = 2;
+			var boGroup3 = 3;
+			var boGroup4 = 4; */
+			location.href="actionList.ch";
 			
 		}
 	

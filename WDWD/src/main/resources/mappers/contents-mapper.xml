@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="contentsMapper">
+	<select id="getContents" parameterType="_int" resultMap="ContentsMapper">
+		select *
+		from contents
+		where con_ref = #{boNum}
+	</select>
+	
+	<resultMap type="Contents" id="ContentsMapper">
+		<id property="conNum" column="CON_NUM"/>
+		<result property="conOri" column="CON_ORI"/>
+		<result property="conCop" column="CON_COP"/>
+		<result property="conUrl" column="CON_URL"/>
+		<result property="conLevel" column="CON_LEVEL"/>
+		<result property="conStatus" column="CON_STATUS"/>
+		<result property="conRef" column="CON_REF"/>
+	</resultMap>
+	
+</mapper>

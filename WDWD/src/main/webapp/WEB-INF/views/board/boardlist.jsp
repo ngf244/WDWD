@@ -378,78 +378,6 @@
         </c:forEach>
 
 
- <!--         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div>
-         <div class="freeBoardList">
-            <div class="input box1">카테고리</div>
-            <div class="input box2">제목</div>
-            <div class="input box3">작성자</div>
-            <div class="input box4">파일</div>
-            <div class="input box5">조회수</div>
-            <div class="input box6">추천수</div>
-         </div> -->
          
          <div id="freeBoardEnd"></div>
          <br>
@@ -506,7 +434,7 @@
 
          <hr>
          <div id="cashCategorySelectArea">
-            <div class="categories" id="oneone"><span>1:1매칭</span></div>
+            <div class="categories" name="categories" value="2"><span>1:1매칭</span></div>
             <div class="forLine"></div>
             <div class="categories"><span>입찰</span></div>
             <div class="forLine"></div>
@@ -515,8 +443,8 @@
          <hr>
 
          <div class="onBoarListView"><jsp:include page="../cashboard/oneBoardList.jsp"/></div>
-         <div class="auctionListView" style="display: none;"><jsp:include page="../cashboard/auctionBoardList.jsp"/></div>
-         <div class="contestListView" style="display: none;"><jsp:include page="../cashboard/contestBoardList.jsp"/></div>
+         <div class="auctionListView" style="display: none;"><%-- <jsp:include page="../cashboard/auctionBoardList.jsp"/> --%></div>
+         <div class="contestListView" style="display: none;"><%-- <jsp:include page="../cashboard/contestBoardList.jsp"/> --%></div>
       </div>
       <div id="right-side">
       </div>
@@ -537,57 +465,125 @@
          $('html').stop().animate({scrollTop:cashCategorySelectAreaPosition.top},300);
       })
    </script>
-   
-   
+      
    <script>
-   		$('.categories:nth-of-type(1)').click(function() {
-   			$('.onBoarListView').show();
-   			$('.auctionListView').hide();
-   			$('.contestListView').hide();
-		})
-   		$('.categories:nth-of-type(3)').click(function() {
-   			$('.onBoarListView').hide();
-   			$('.auctionListView').show();
-   			$('.contestListView').hide();
-		})
-   		$('.categories:nth-of-type(5)').click(function() {
-   			$('.onBoarListView').hide();
-   			$('.auctionListView').hide();
-   			$('.contestListView').show();
-		})
    
-   		
-   		/* function showList1(){
-   			$('.onBoarListView'){
-   				$choice = $(this);
-   				console.log($choice);
-	   			$choice.show();
-	   			$(this).not($choice).hide();
-   				
-   			}
-   		}
-   		function showList2(){
-   			$('.onBoarListView'){
-   				$choice = $(this);
-	   			$choice.show();
-	   			$(this).not($choice).hide();
-   				
-   			}
-   		}
-   		function showList3(){
-   			$('.onBoarListView'){
-   				$choice = $(this);
-	   			$choice.show();
-	   			$(this).not($choice).hide();
-   				
-   			}
-   		} */
-   		
-	   
-   		
+   	   //자유게시판과 함께 1:1게시판 열림
+	   /* 
+	   $(function(){
+		   $(".onBoarListView").load("cashboard/oneBoardList.jsp");
+
+		   
+		   var boGroup2 = {boGroup2 : 2};
+		   $.ajax({
+			   url: "../cashboard/oneBoardList.jsp",
+	            type: "POST",
+	            dataType: text,
+	            success: function(data){
+	                $('.onBoarListView').html(data);
+	            },
+	            error: function(){
+	                alert("1:1 불러오기 안돼");
+	            }
+			   
+		   });
+		    
+		   
+	   }); 
+    */
+    
    </script>
    
    
+   <script>
+	   $(function(){
+  		   var boGroup = "2";
+ 		   $.ajax({
+ 			   url:"actionOneList.ch",
+ 			   type:"get",
+ 			   dataType: 'html',
+ 			   data: {"boGroup" : boGroup},
+ 			   success: 
+ 				   function(data){ 
+ 					   $(".onBoarListView").html(data);
+ 					   console.log(data);
+ 				   }
+ 		   });
+		   
+	   		$('.categories:nth-of-type(1)').click(function() {
+	   			$('.onBoarListView').show();
+	   			$('.auctionListView').hide();
+	   			$('.contestListView').hide();
+
+	 		   
+ 		   $.ajax({
+ 			   url:"actionOneList.ch",
+ 			   type:"get",
+ 			   dataType: 'html',
+ 			   data: {"boGroup" : boGroup},
+ 			   success: 
+ 				   function(data){ 
+ 					   $(".onBoarListView").html(data);
+ 					   console.log(data);
+ 				   }
+ 		   });
+	 	   });
+   		});
+		   
+
+	   
+	   
+	   $(function(){
+	  		$('.categories:nth-of-type(3)').click(function() {
+	   			$('.onBoarListView').hide();
+	   			$('.auctionListView').show();
+	   			$('.contestListView').hide();
+
+	   			var boGroup = "3";
+		   
+		   $.ajax({
+			   url:"actionOneList.ch",
+			   type:"get",
+			   dataType: 'html',
+			   data: {"boGroup" : boGroup},
+			   success: 
+				   function(data){ 
+					   $(".auctionListView").html(data);
+				   }
+		   	});
+			});
+	   });
+	   
+	   
+	   
+	   $(function(){
+			$('.categories:nth-of-type(5)').click(function() {
+	   			$('.onBoarListView').hide();
+	   			$('.auctionListView').hide();
+	   			$('.contestListView').show();
+		   var boGroup = "4";
+		   
+		   $.ajax({
+			   url:"actionOneList.ch",
+			   type:"get",
+			   dataType: 'html',
+			   data: {"boGroup" : boGroup},
+			   success: 
+				   function(data){ 
+					   $(".contestListView").html(data);
+				   }
+		   });
+ 		   });
+		   
+		  	 
+	   });
+	   	   
+	   
+
+	   
+
+   
+   </script>
   
    
 </body>

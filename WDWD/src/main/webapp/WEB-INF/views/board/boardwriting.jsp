@@ -81,6 +81,11 @@
 			vertical-align: top;
 		}
 
+		#writingPlace img{
+			max-width: 80%;
+			height: auto;
+		}
+
 		#imageInputArea {
 			width: 100%;
 			min-height: 50px;
@@ -141,13 +146,23 @@
 			font-weight: bold;
 		}
 
-		.imageNameArea span {
+		.imageNameArea .origin {
 			width: 100%;
 			height: 10px;
 			margin-top: 10px;
 			display: table-cell;
 			vertical-align: middle;
 			text-align: center;
+		}
+
+		.imageNameArea .rename {
+			width: 100%;
+			height: 10px;
+			margin-top: 10px;
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			display: none;
 		}
 
 		.fileArea {
@@ -246,72 +261,72 @@
 		<div id="left-side">
 		</div>
 		<div id="main">
-			<div class="boardtitle">
-				자유갤러리
-			</div>
-			<div class="nick">
-				아이디(닉네임)
-				<span class="smallOption">김대호</span>
-			</div>
-			<div class="writingtitle">
-				<select class="catecory">
-					<option value="choese">게시글 선택</option>
-					<option value="information">정보</option>
-					<option value="jjalbbang">짤방</option>
-					<option value="conceptual">개념글</option>
-					<option value="anyting">아무말</option>
-				</select>
+			<form id="writingForm" action="freeWriting.bo" method="GET" onsubmit="return TransferToForm();">
+				<div class="boardtitle">
+					자유갤러리
+				</div>
+				<div class="nick">
+					아이디(닉네임)
+					<span class="smallOption" name="userNick">김대호</span>
+				</div>
+				<div class="writingtitle">
+					<select class="catecory" name = "freeBoardCategory">
+						<option value="choese">게시글 선택</option>
+						<option value="information">정보</option>
+						<option value="jjalbbang">짤방</option>
+						<option value="conceptual">개념글</option>
+						<option value="anyting">아무말</option>
+					</select>
 
-				<input type="text" class="titleform" placeholder="제목을 입력해주세요">
-			</div>
-			<div class="boardnotice">
-				※ 음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의 책임을 질 수 있습니다.<br>
-				※ 커뮤니티도 하나의 인격입니다. 글 등록전 서로 존중하는 글을 씁시다.
-			</div>
+					<input type="text" class="titleform" placeholder="제목을 입력해주세요" name="freeBoardTitle">
+				</div>
+				<div class="boardnotice">
+					※ 음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의 책임을 질 수 있습니다.<br>
+					※ 커뮤니티도 하나의 인격입니다. 글 등록전 서로 존중하는 글을 씁시다.
+				</div>
 
-			<div class="slide">
-				<ul>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-				</ul>
-			</div>
+				<div class="slide">
+					<ul>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+					</ul>
+				</div>
+				
+				<hr>
+					<div id="writingPlace" contenteditable="true" name="writingContent"></div>
+				<hr>
+
+				<div id=imageInputArea>
+					<!-- <div class="eachImage">
+						<div class="insertImage">
+							<img class="inputImg">
+							<img class="plusBtn" src="${ contextPath }/resources/images/add.png">
+							<img class="xBtn" src="${ contextPath }/resources/images/x-button.png">
+						</div>
+						<div class="imageNameArea">
+							<span class="origin">ddd</span>
+							<span class="rename">ddd</span>
+						</div>
+						<div class="fileArea">
+							<form enctype="multipart/form-data" method="post">
+								<input type="file" multiple>
+							</form>
+						</div>
+					</div> -->
+				</div>
+
+
+				<div class="writingbutton">
+					<button type="button" id="uploadFileBtn">파일 올리기</button>
+					<button type="button" class="cancell" onclick="history.back();">취소</button>
+					<button type="submit" class="writing" onclick="return confirm('이대로 등록하시겠습니까')">등록</button>
+				</div>
+
+			</form>
 			
-			<hr>
-				<div id="writingPlace" contenteditable="true"></div>
-			<hr>
-
-
-
-
-			<div id=imageInputArea>
-				<!-- <div class="eachImage">
-					<div class="insertImage">
-						<img class="inputImg">
-						<img class="plusBtn" src="${ contextPath }/resources/images/add.png">
-						<img class="xBtn" src="${ contextPath }/resources/images/x-button.png">
-					</div>
-					<div class="imageNameArea">
-						<span>ddd</span>
-					</div>
-					<div class="fileArea">
-						<input type="file" multiple>
-					</div>
-				</div> -->
-			</div>
-
-
-			<div class="writingbutton">
-				<button type="button" id="uploadFileBtn">파일 올리기</button>
-				<button type="button" class="cancell">취소</button>
-				<button type="button" class="writing">등록</button>
-			</div>
-
-			<div id="fileArea">
-			</div>
-
 			<script>
 				var countData = 1;
 				
@@ -324,17 +339,21 @@
 					$imgplus = $('<img class="plusBtn" src="${ contextPath }/resources/images/add.png">')
 					$ximg = $('<img class="xBtn" src="${ contextPath }/resources/images/x-button.png">');
 					$imageNameArea = $('<div class="imageNameArea">');
-					$span = $('<span>');
+					$spanOrigin = $('<span class="origin" name="fileOriginName">');
+					$spanRename = $('<span class="rename" name="fileReName">');
 					$fileArea=$('<div class=fileArea>');
-					$inputFile=$('<input type=file multiple name=file'+countData+'>');
+					$fileForm=$('<form enctype="multipart/form-data" method="post">');
+					$inputFile=$('<input type=file multiple name=file>');
 					
 					// $insertImage.append($img);
 					$insertImage.append($imgplus);
 					$insertImage.append($ximg);
 
-					$imageNameArea.append($span);
-
-					$fileArea.append($inputFile);
+					$imageNameArea.append($spanOrigin);
+					$imageNameArea.append($spanRename);
+					
+					$fileForm.append($inputFile);
+					$fileArea.append($fileForm);
 
 					$eachImage.append($insertImage);
 					$eachImage.append($imageNameArea);
@@ -348,49 +367,66 @@
 
 				$(document).on("click", ".xBtn", function () {
 					// $('.eachImage img').click(function () {
-					// console.log(this);
 					$(this).parent().parent().remove();
 					deleteimg();
 				})
 
 				$(document).on("click", ".plusBtn", function () {
-					// console.log(this);
 					var fileBtn = $(this).parent().parent().find("input[type=file]");
 					fileBtn.click();
 				})
+				
+				function ajaxFileUpload(file) {
+					var formData = new FormData(file.parent()[0]);
+
+					var result;
+			
+					$.ajax({ 
+						type: "POST", 
+						enctype: 'multipart/form-data', // 필수 
+						url: 'imgUpload.bo', 
+						data: formData, // 필수
+						processData: false, // 필수 
+						contentType: false, // 필수 
+						success: function (data) {
+							file.closest('.eachImage').find('.rename').text(data);
+							$img.attr('src', '${ contextPath }/resources/free_photo_upload/${loginUser.userId}/'+data);
+							$targetImg.attr('src', '${ contextPath }/resources/free_photo_upload/${loginUser.userId}/'+data);
+						}
+					})
+					return result;
+			    }
 
 				$(document).on("change", ":file", function () {
+					ajaxFileUpload($(this));
+					
 					var fileValue = $(this).val();
 					var fileName = fileValue.substring(fileValue.lastIndexOf("\\") + 1);
-					// console.log(fileName);
 
 					var targetDiv= $('#writingPlace');
 
 					if (fileValue != "") {
-						$insertImage = $(this).parent().parent().find('.insertImage');
+						$insertImage = $(this).parent().parent().parent().find('.insertImage');
 						$img = $('<img class="inputImg">')
 						$insertImage.append($img);
 
-						$img = $(this).parent().parent().find('.inputImg');
-						$plusBtn = $(this).parent().parent().find('.plusBtn');
+						$plusBtn = $(this).parent().parent().parent().find('.plusBtn');
 						$plusBtn.remove();
-						$span = $(this).parent().parent().find('span');
-						$span.text(fileName);
+						var spanOrigin = $(this).parent().parent().parent().find('.origin');
+						spanOrigin.text(fileName);
+						var spanRename = $(this).parent().parent().parent().find('.rename');
 						$br = $('<br>');
-						$br2 = $('<br>');
+						// $br2 = $('<br>');
 						$targetImg = $('<img>');
 
-						var reader = new FileReader();
-						reader.onload = function (e) {
-							$img.attr('src', e.target.result);
-							targetDiv.append($br);
-							targetDiv.append($targetImg);
-							targetDiv.append($br2);
-							$targetImg.attr('src', reader.result);
-						}
-						reader.readAsDataURL(this.files[0]);
+						targetDiv.append($br);
+						targetDiv.append($targetImg);
+						// targetDiv.append($br2);
+						
 					}
 				})
+
+ 
 // ---------------------------------------------------------------------------
 				// contenteditable에 텍스트 복붙 텍스트만 넣기
 				var ele = document.querySelector('#writingPlace'); 
@@ -417,10 +453,10 @@
 
 					for (var i= 0; i < targetimg.length; i++){
 						var string = targetimg[i].src;
-						var cutString = string.substring(string.length-10, string.length);
+						targetsrcs.push(string);
+						// var cutString = string.substring(string.length-10, string.length);
 						// console.log(cutString);
-						targetsrcs.push(cutString);
-						// targetsrcs.push(targetimg[i].src);
+						// targetsrcs.push(cutString);
 					}
 
 
@@ -429,9 +465,9 @@
 
 					for (var i= 0; i < bottomimg.length; i++){
 						var string = bottomimg[i].src;
-						var cutString = string.substring(string.length-10, string.length);
-						bottomsrcs.push(cutString);
-						// bottomsrcs.push(bottomimg[i].src);
+						bottomsrcs.push(string);
+						// var cutString = string.substring(string.length-10, string.length);
+						// bottomsrcs.push(cutString);
 					}
 
 					// console.log("target : " + targetsrcs.length);
@@ -477,6 +513,41 @@
 							}
 						}
 					}
+				}
+
+				function TransferToForm() {
+					var writingContent = $('#writingPlace').html();
+					var originNames = new Array();
+					var reNames = new Array();
+					
+					$('#writingForm').prepend('<input type="hidden" name="writingContent">');
+					$('input[name=writingContent]').val(writingContent);
+					
+					$('.origin').each(function () {
+						originNames.push($(this).text());
+					})
+
+					for(var i in originNames){
+						//띄워쓰기로 구분하기 때문에 큰따음표로 다시감싸야함
+						$('#writingForm').append('<input type="hidden" name="fileOriginName" value="'+originNames[i]+'">');
+						// $('#writingForm').append('<input type="hidden" name="fileOriginName">');
+						// var input = $('input[name=fileOriginName]');
+						// input.eq(i).val(originNames[i]);
+					}
+					
+					$('.rename').each(function () {
+						reNames.push($(this).text());
+					})
+					
+					for(var i in reNames){
+						$('#writingForm').append('<input type="hidden" name="fileRename" value="'+reNames[i]+'">');
+					}
+					
+					console.log(writingContent);
+					console.log(originNames);
+					console.log(reNames);
+
+					return true;
 				}
 			
 			</script>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +13,7 @@
 	#registWrap {
 		margin-top: 50px;
 		width: auto;
-		min-height: 500px;
+		min-height: 100px;
 		height: auto;
 	}
 	#buyerInfo {
@@ -21,6 +22,12 @@
 		margin-bottom: 30px;
 		
 		border: 1px solid black;
+	}
+	#notRegist {
+		width: 60%;
+		margin: 0 auto;
+		text-align: center;
+		font-size: 14pt;
 	}
 	#contentWrap {
 		width: 80%;
@@ -50,6 +57,10 @@
 		white-space: nowrap;
 		width: 140px;
 		height: 25px;
+		margin:0px;
+		display:inline-block;
+		font-size:15px;
+		font-weight:bold;
 	}
 	.fileAreaImg {
 		width: 140px;
@@ -76,9 +87,9 @@
 	}
 	#registChat {
 		position: absolute;
-		bottom: 100px;
 		right: 50px;
 		width: 300px;
+		background-color: white;
 	}
 	#chatTitle {
 		height: 40px;
@@ -91,29 +102,46 @@
 	#chatMain {
 		height: 400px;
 		overflow: auto;
+		text-align: center;
 		
-		border: 1px solid black;
+	}
+	.chatDate {
+		font-size: 10pt;
 	}
 	.leftChat {
 		float: left;
-		width: 70%;
+		max-width: 70%;
 		background-color: rgb(224, 224, 224);
 		padding: 10px;
-		margin: 10px;
+		margin: 10px 10px 0px 10px;
 		border-radius: 20px;
 		font-size: 11pt;
 		word-break: break-all;
 	}
+	.leftChatTime {
+		float: left;
+		text-align: left;
+		margin-left: 5%;
+		font-size: 10pt;
+		margin-bottom: 5px;
+	}
 	.rightChat {
 		float: right;
-		width: 70%;
+		max-width: 70%;
 		background-color: rgba(243, 156, 18, 0.32);
 		text-align: right;
 		padding: 10px;
-		margin: 10px;
+		margin: 10px 10px 0px 10px;
 		border-radius: 20px;
 		font-size: 11pt;
 		word-break: break-all;
+	}
+	.rightChatTime {
+		float: right;
+		text-align: right;
+		margin-right: 5%;
+		font-size: 10pt;
+		margin-bottom: 5px;
 	}
 	#chatBottom {
 		border: 1px solid black;
@@ -123,6 +151,7 @@
 		min-height: 50px;
 		resize: none;
 		font-size: 11pt;
+		border: none;
 		/* overflow-y:hidden */
 	}
 	#chatBottom div {
@@ -137,7 +166,7 @@
 		border-radius: 4px;
 		background-color: rgb(255, 241, 118);
 		cursor: pointer;
-		border: 1px solid black;
+		font-size: 10pt;
 	}
 	#btnList {
 		text-align: center;
@@ -188,105 +217,212 @@
 							</div>
 						</div>
 						
-						<div id="contentWrap">
-							<textarea name="content" id="content"></textarea>
-							<div id="fileList"></div>
+						<div id="registViewWrap">
+							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+								<c:if test="${ empty reqB }">
+									<div id="notRegist">
+										<img src='${ contextPath }/resources/images/drawing.jpg' style="width: 100%;"><br><br>
+										에디터가 작업중입니다.
+									</div>
+								</c:if>
+								
+								<c:if test="${ !empty reqB }">
+									<div id="boardcontent">
+										${ reqB.boContent }
+									</div>
+									
+									<div class="leftLine">
+										<span class="redColor">＞ </span>첨부파일
+									</div>
+									<div class="rightLine">
+										<c:if test="${ empty reqFileList}">
+											첨부된 파일이 없습니다.
+										</c:if>
+										
+										<c:if test="${ !empty reqFileList }">
+											<c:forEach var="file" items="${ reqFileList }">
+												<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
+											</c:forEach>
+										</c:if>
+									</div>
+								</c:if>
+							</c:if>
+							
+							<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
+								<c:if test="${ empty reqB }">
+									<form action="registWrite.ch" method="post" id="registWriteForm">
+										<div id="contentWrap">
+											<input type="hidden" value="${ cBoard.boNum }" name="boNum">
+											<input type="hidden" value=0 name="updateCheck">
+											<textarea name="boContent" id="content"></textarea>
+											<div id="fileList"></div>
+										</div>
+									</form>
+								</c:if>
+								
+								<script>
+									var editor_object = [];
+									
+									function editorLoad() {
+										nhn.husky.EZCreator.createInIFrame({
+											oAppRef: editor_object,
+											elPlaceHolder: "content",
+											sSkinURI: "${ contextPath }/resources/naver_editor/SmartEditor2Skin.html",
+											htParams : {
+												bUseToolbar : true,
+												bUseVerticalResizer : true,
+												bUseModeChanger : true,
+											}
+										});
+									}
+									editorLoad();
+									
+									var contentValue = "";
+									var imgCount = 0;
+									var imgTempCount = 0;
+									var imgIndexStart = 0;
+									var imgIndexEnd = 0;
+									var imgSrc = new Array;
+									var imgName = new Array;
+									
+									!function imgCheck(){
+										setTimeout(function() {
+											editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+											
+											contentValue = $('#content').val();
+											imgTempCount = (contentValue.match(/<img src=/g) || []).length;
+											
+											if(imgTempCount != imgCount) {
+												$('#fileList').empty();
+												imgCount = imgTempCount;
+												imgSrc = new Array;
+												imgName = new Array;
+												
+												for(var i = 0; i < imgCount; i++) {
+													imgIndexStart = contentValue.indexOf('<img src=', imgIndexEnd) + 10;
+													imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
+													
+													imgSrc.push(contentValue.substring(imgIndexStart, imgIndexEnd));
+													
+													imgIndexStart = contentValue.indexOf('title=', imgIndexEnd) + 7;
+													imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
+													
+													imgName.push(contentValue.substring(imgIndexStart, imgIndexEnd));
+													
+													changeFile(imgSrc[i], imgName[i]);
+												}
+												
+												imgIndexStart = 0;
+												imgIndexEnd = 0;
+											}
+											
+											imgCheck();
+										}, 500)
+									}()
+									
+									function changeFile(fileUrl, fileName) {
+										var $div = $('<div class="fileArea">');
+										var $img = $('<img class="fileAreaImg" name="imgFile">');
+										var $input1 = $('<input type="hidden" name="conUrl" value=' + fileUrl.substring(0, fileUrl.lastIndexOf('/')) + '>');
+										var $input2 = $('<input type="hidden" name="conCop" value=' + fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '>');
+										var $input3 = $('<input type="hidden" name="conOri" value=' + fileName + '>');
+										var $p = $('<p>')
+										
+										$p.text(fileName);
+										
+										$img.attr("src", fileUrl);
+										
+										$div.append($img);
+										$div.append($input1);
+										$div.append($input2);
+										$div.append($input3);
+										$div.append($p);
+										
+										$('#fileList').append($div);
+									}
+								</script>
+								
+								<c:if test="${ !empty reqB }">
+									<div id="boardcontent">
+										${ reqB.boContent }
+									</div>
+									
+									<div class="leftLine">
+										<span class="redColor">＞ </span>첨부파일
+									</div>
+									<div class="rightLine">
+										<c:if test="${ empty reqFileList }">
+											첨부된 파일이 없습니다.
+										</c:if>
+										
+										<c:if test="${ !empty reqFileList }">
+											<c:forEach var="file" items="${ reqFileList }">
+												<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
+											</c:forEach>
+										</c:if>
+									</div>
+								</c:if>
+							</c:if>
 						</div>
 						
 						<script>
-							var editor_object = [];
-							
-							nhn.husky.EZCreator.createInIFrame({
-								oAppRef: editor_object,
-								elPlaceHolder: "content",
-								sSkinURI: "${ contextPath }/resources/naver_editor/SmartEditor2Skin.html",
-								htParams : {
-									bUseToolbar : true,
-									bUseVerticalResizer : true,
-									bUseModeChanger : true,
+							function loadChat(chatCon, chatDate, position) {
+								var date = new Date(chatDate);
+	                        	
+								var $div0 = $('<div class="chatDate">');
+								$div0.text(date.getFullYear() + "년 " + (date.getMonth() + 1) + "월 " + date.getDate() + "일");
+								
+								if($('.chatDate').last().text() != $div0.text()) {
+									$('#chatMain').append($div0);
 								}
-							});
-							
-							var contentValue = "";
-							var imgCount = 0;
-							var imgTempCount = 0;
-							var imgIndexStart = 0;
-							var imgIndexEnd = 0;
-							var imgSrc = new Array;
-							var imgName = new Array;
-							
-							!function imgCheck(){
-								setTimeout(function() {
-									editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-									
-									contentValue = $('#content').val();
-									imgTempCount = (contentValue.match(/<img src=/g) || []).length;
-									
-									if(imgTempCount != imgCount) {
-										$('#fileList').empty();
-										imgCount = imgTempCount;
-										imgSrc = new Array;
-										imgName = new Array;
-										
-										for(var i = 0; i < imgCount; i++) {
-											imgIndexStart = contentValue.indexOf('<img src=', imgIndexEnd) + 10;
-											imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
-											
-											imgSrc.push(contentValue.substring(imgIndexStart, imgIndexEnd));
-											
-											imgIndexStart = contentValue.indexOf('title=', imgIndexEnd) + 7;
-											imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
-											
-											imgName.push(contentValue.substring(imgIndexStart, imgIndexEnd));
-											
-											changeFile(imgSrc[i], imgName[i]);
-										}
-										
-										imgIndexStart = 0;
-										imgIndexEnd = 0;
-										
-										console.log(imgSrc);
-										console.log(imgName);
-									}
-									
-									imgCheck();
-								}, 500)
-							}()
-							
-							function changeFile(fileUrl, fileName) {
-								var $div = $('<div class="fileArea">');
-								var $img = $('<img class="fileAreaImg">');
-								var $p = $('<p>')
 								
-								$p.text(fileName);
+	                        	var $div1 = $('<div class="' + position + 'Chat">');
+	                        	var $div2 = $('<div class="sectionafter">');
+	                        	var $div3 = $('<div class="' + position + 'ChatTime">');
+								var $div4 = $('<div class="sectionafter">');
+								$div1.text(chatCon);
+								$div3.text((date.getHours() >= 10 ? date.getHours() : ("0" + date.getHours()))
+										+ ":" 
+										+ (date.getMinutes() >= 10 ? date.getMinutes() : ("0" + date.getMinutes())));
 								
-								$img.attr("src", fileUrl);
+								var prevTime = $('#chatMain').children().last().prev();
+								if(prevTime.attr('class') == $div3.attr('class') && prevTime.text() == $div3.text()) {
+									prevTime.remove();
+								}
 								
-								$div.append($img);
-								$div.append($p)
-								
-								$('#fileList').append($div);
+								$('#chatMain').append($div1);
+								$('#chatMain').append($div2);
+								$('#chatMain').append($div3);
+								$('#chatMain').append($div4);
 							}
 						</script>
 						
 						<div id="registChat">
 							<div id="chatTitle">1:1 채팅방</div>
 							<div id="chatMain">
-								<div class="leftChat">받은 채팅222222222222222222222222222222222222222222222222222222</div>
-								<div class="rightChat">보낸 채팅</div>
-								<div class="rightChat">보낸 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
-								<div class="leftChat">받은 채팅</div>
+								<c:if test="${ empty chatList }">
+									<div id="chatStart" style="margin-top: 100px;">채팅을 시작해보세요!</div>
+								</c:if>
 							</div>
+							
+							<c:if test="${ !empty chatList }">
+								<c:forEach var="chat" items="${ chatList }">
+									<c:if test="${ chat.chatWriter eq loginUser.nickName }">
+										<script>
+											loadChat('${ chat.chatCon }', '${chat.chatDate}', 'right');
+										</script>
+									</c:if>
+									
+									<c:if test="${ chat.chatWriter ne loginUser.nickName }">
+										<script>
+											loadChat('${ chat.chatCon }', '${chat.chatDate}', 'left');
+										</script>
+									</c:if>
+								</c:forEach>
+							</c:if>
+							
 							<div id="chatBottom">
-								<textarea id="inputText">123</textarea>
+								<textarea id="inputText"></textarea>
 								<div id="sendText">전송</div>
 							</div>
 						</div>
@@ -299,6 +435,8 @@
 						
 						<script src="http://localhost:82/socket.io/socket.io.js"></script>
 				        <script>
+				        	$('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
+				        	
 				            $(document).ready(function(){
 				            	$(document).ready(function(){
 				                    var socket = io("http://localhost:82");
@@ -311,6 +449,7 @@
 				                            if($("#inputText").val() == '\n') {
 				                            	$("#inputText").val('');
 				                            } else {
+				                            	$('#inputText').val($('#inputText').val().substr(0, $('#inputText').val().length - 1));
 				                            	$('#sendText').click();	
 				                            }
 				                        }
@@ -319,29 +458,36 @@
 				                    //msg_process를 클릭할 때
 				                    $("#sendText").click(function(){
 				                        //소켓에 send_msg라는 이벤트로 input에 #msg의 벨류를 담고 보내준다.
-				                        var arr = [$("#inputText").val(), 'a'];
+				                        var chatArr = [$("#inputText").val(), '${ loginUser.userId }', "${ cBoard.boNum }"];
 				                        
 				                        /* ajax로 채팅db에 등록할 것 */
+				                        $.ajax({
+											url: 'sendChat.ch',
+											data: {chatCon: chatArr[0], chatWriter: chatArr[1], chatRefNum: chatArr[2]},
+											type: 'post',
+											success: function(data){
+												socket.emit("chatArr", data);
+											}
+										});
 				                        
-				                        socket.emit("send_msg", arr);
 				                        //#msg에 벨류값을 비워준다.
 				                        $("#inputText").val('');
 				                        $("#inputText").height(50 + 'px');
 				                    });
 				                    
+				                    
 				                    //소켓 서버로 부터 send_msg를 통해 이벤트를 받을 경우 
-				                    socket.on('send_msg', function(msg) {
-				                        //div 태그를 만들어 텍스트를 msg로 지정을 한뒤 #chat_box에 추가를 시켜준다.
-				                        
-				                        /* msg[1] 이랑 세션에 loginUser랑 비교해서 left에 담을지 right에 담을 지 */
-				                        
-				                        console.log(msg);
-				                        $('<div></div>').text(msg[0]).appendTo("#chatMain");
-				                        
-				                        console.log($('#chatMain'));
-				                        console.log($('#chatMain')[0]);
-				                        
-				                        $('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
+				                    socket.on('chatArr', function(chatArr) {
+				                    	if(chatArr.chatNum == "${ cBoard.boNum }") {
+				                    		$('#chatStart').hide();
+					                        if(chatArr.chatWriter == '${ loginUser.nickName }') {
+					                        	loadChat(chatArr.chatCon, chatArr.chatDate, 'right');
+					                        } else {
+					                        	loadChat(chatArr.chatCon, chatArr.chatDate, 'left');
+					                        }
+					                        
+					                        $('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
+				                    	}
 				                    });
 				                });
 				            });
@@ -363,21 +509,116 @@
 					</div> <br>
 					
 					<div id="btnList">
-						<div id="submit" class="button">작성하기</div>
+						<div id="submit" class="button">수락하기</div>
 						<div id="cancle" class="button">돌아가기</div>
 					</div>
 					
+					<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+						<c:if test="${ empty reqB }">
+							<script>
+								$('#submit').hide();
+							</script>
+						</c:if>
+					</c:if>
+					
+					<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
+						<c:if test="${ empty reqB }">
+							<script>
+								$('#submit').text('작성하기');
+								$('#submit').attr('onclick', 'registWrite();')
+								$('#submit').attr('id', 'registWrite');
+							</script>
+						</c:if>
+						
+						<c:if test="${ !empty reqB }">
+							<script>
+								$('#submit').text('수정하기');
+								$('#submit').attr('onclick', 'registUpdate();');
+								$('#submit').attr('id', 'registUpdate');
+							</script>
+						</c:if>
+					</c:if>
+					
 					<script>
-						$('#submit').hover(function(){
+						$('.button').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
 						}, function(){
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						});
-						$('#cancle').hover(function(){
-							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
-						}, function(){
-							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
-						})
+						
+						
+ 						function registWrite(){
+ 							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+					
+ 							if(confirm("글을 등록하시겠습니까?")) {
+ 								$('#registWriteForm').submit();	
+ 							} 
+ 						}
+						
+						function registUpdate(){
+							$('#registViewWrap').empty();
+							
+							var $form = $('<form action="registWrite.ch" method="post" id="registWriteForm">');
+							var $div = $('<div id="contentWrap">');
+							var $input1 = $('<input type="hidden" value="${ cBoard.boNum }" name="boNum">');
+							var $input2 = $('<input type="hidden" value=1 name="updateCheck">');
+							var $textarea = $('<textarea name="boContent" id="content">');
+							var $div2 = $('<div id="fileList">');
+							
+							$div.append($input1);
+							$div.append($input2);
+							$div.append($textarea);
+							$div.append($div2);
+							$form.append($div);
+							$('#registViewWrap').append($form);
+							
+							editorLoad();
+							
+							setTimeout(function() {
+								editor_object.getById["content"].exec("SET_IR", [""]); //내용초기화
+
+								var reqContent = '${ reqB.boContent }'.replace(/\"/gi, "'");
+								editor_object.getById["content"].exec("PASTE_HTML", [reqContent]);
+								
+								!function imgCheck(){
+									setTimeout(function() {
+										editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+										
+										contentValue = $('#content').val();
+										imgTempCount = (contentValue.match(/<img src=/g) || []).length;
+										
+										if(imgTempCount != imgCount) {
+											$('#fileList').empty();
+											imgCount = imgTempCount;
+											imgSrc = new Array;
+											imgName = new Array;
+											
+											for(var i = 0; i < imgCount; i++) {
+												imgIndexStart = contentValue.indexOf('<img src=', imgIndexEnd) + 10;
+												imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
+												
+												imgSrc.push(contentValue.substring(imgIndexStart, imgIndexEnd));
+												
+												imgIndexStart = contentValue.indexOf('title=', imgIndexEnd) + 7;
+												imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
+												
+												imgName.push(contentValue.substring(imgIndexStart, imgIndexEnd));
+												
+												changeFile(imgSrc[i], imgName[i]);
+											}
+											
+											imgIndexStart = 0;
+											imgIndexEnd = 0;
+										}
+										
+										imgCheck();
+									}, 500)
+								}()
+							}, 500);
+							
+							$('#registUpdate').attr('id', 'registWrite').attr('onclick', 'registWrite();');
+						}
+						
 					</script>
 				</div>
 			</div>

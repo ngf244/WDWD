@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -376,6 +378,7 @@
 		position: relative;
 		background-color: white;
 		padding-bottom: 20px;
+		padding-top: 20px;
 	}
 
 	.replies>div:first-child{
@@ -463,8 +466,10 @@
 
 	.replies2>img{
 		position: absolute;
-		left: 1%;
-		top: 30%;
+		left: 5%;
+		top: 3%;
+		width: 3%;
+		height: auto;
 	}
 
 	.replies2>div:first-child{
@@ -489,38 +494,100 @@
 		<div id="main" style="background: white">
 			
 			<div class="forbackcolor">
-				<div class="freeboard">자유갤러리			
+				<div class="freeboard">자유갤러리
 				</div>
 				
 				<div class="writingtitle">
-					<h3>오늘 카페에서 치킨배달 도전한썰 푼다.</h3>
+					<h3>${ b.boTitle }</h3>
+					<input type="hidden" name="boardNum" value="${ b.boNum }">
 				</div>
 				
 				<div class="nickname">
-					<h4><span class="smallOption">안양그녀</span></h4>
+					<h4><span class="smallOption">${ b.boWriterNick }</span></h4>
 				</div>
 				
 				<div class="writinglist">
-					<h4>오늘 카페에서 치킨먹은 빌런짓 했는데 다 쳐다보더랑</h4> 
+					${ b.boContent }
+					
+					
 				</div>
-				
+				<c:forEach var="arr" items="${entirDir}" varStatus="i">
+					<script>
+						var dir = '${arr}';
+						$('.writinglist img').eq(${ i.count }-1).attr('src','${ contextPath }/resources/free_photo_upload/'+dir);
+					</script>
+					<!-- ${ arr }
+					------
+					${ i.count } -->
+				</c:forEach>
+
 				<div class="wrtingCommendArea">
 					<div class = "recommendArea">
 						<img src="${ contextPath }/resources/images/추천버튼.png">
 						<div>
 							<div>추천</div>
-							<div>1</div>
+							<div id="recommendCount">${b.boGood}</div>
 						</div>
 					</div>
 					<div class="scrapBtnArea">
 						<img src="${ contextPath }/resources/images/스크랩버튼.png">
-						<div>게시물 스크랩</div>
+						<div id="scrapCondition">${ scrapCondition }</div>
 					</div>
 					<div class="reportBtnArea">
 						<img src="${ contextPath }/resources/images/신고버튼.PNG">
 						<div>신고하기</div>
 					</div>
 				</div>
+
+				<script>
+					$('.recommendArea').click(function () {
+						var boNum = $('input[name=boardNum]').val();
+						var userId = "${loginUser.userId}";
+
+						if(userId == ""){
+							alert('로그인 후 이용해 주세요');
+						} else {
+							$.ajax({
+								url : "addRecommend.bo",
+								data : {boNum : boNum, userId : userId},
+								type : "get",
+								success : function (data) {
+									if(data.trim() == "already"){
+										alert('게시물은 한번만 추천할 수 있습니다.');
+									} else {
+										var count = Number($('#recommendCount').text());
+										// count *= 1;
+										// console.log(typeof(count));
+										$('#recommendCount').text(count+1);
+										console.log("추천 재대로 됨");
+									}
+								}
+							})
+						}
+					})
+						
+						$('.scrapBtnArea').click(function () {
+							var boNum = $('input[name=boardNum]').val();
+							var userId = "${loginUser.userId}";
+							// var condition = $('#scrapCondition').text();
+							if(userId == ""){
+								alert('로그인 후 이용해 주세요');
+							} else {
+								$.ajax({
+									url : "scrapToggle.bo",
+									data : {boNum : boNum, userId : userId},
+									type : "get",
+									success : function (data) {
+										if(data.trim() == "insert"){
+											$('#scrapCondition').text('스크랩 해제');
+										} else {
+											$('#scrapCondition').text('게시물 스크랩');
+										}
+									}
+								})
+							}
+						})
+				</script>
 			</div>
 
 			<div class="slide">
@@ -536,8 +603,30 @@
 			<!-- 글쓰기 경계선 -->
 			<div class="replyline">
 				<div class="replycommand">
-					<span>댓글</span><span>(n)</span><span>등록순</span><span>|</span><span>최신순</span>
+					<span>댓글</span><span>(${b.boReNum})</span><span>등록순</span><span>|</span><span>최신순</span>
 				</div>
+				
+				<c:forEach var="reply" items="${ ReplyArr }">
+					<div class = replies>
+					<input type="hidden" value="${ reply.rpNum }">
+						<div>
+							<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
+						</div>
+						<div>
+							<span class="reportReply">신고하기</span>
+						</div>
+						<div class="replyWriting">
+							<div class="replyPicture">
+								<img>
+							</div>
+							<div class="replyWriteArea">${ reply.rpContent }
+							</div>
+							<div class="reply2Btn">
+								<span> 댓글 </span>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
 
 				<div class = replies>
 					<input type="hidden" value="1">
@@ -600,7 +689,7 @@
 					</div>
 				</div>
 
-				<div class = replies>
+				<div class = replies style="display: none;">
 					<input type="hidden" value="3">
 					<div>
 						<span class="smallOption">아이디1</span><span class="writingDate">(2020-04-13 12:10:50)</span>
@@ -612,7 +701,7 @@
 						<div class="replyPicture">
 							<img src="">
 						</div>
-						<div class="replyWriteArea">asfdsaf<br>dafadsfsaf<br>많이 구려보이냐<br>응
+						<div class="replyWriteArea">댓글 디폴트
 						</div>
 						<div class="reply2Btn">
 							<span> 댓글 </span>
@@ -620,7 +709,7 @@
 					</div>
 				</div>
 
-				<div class = replies2>
+				<div class = replies2 style="display: none;">
 					<input type="hidden" value="3-2">
 					<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
 					<div>
@@ -633,7 +722,7 @@
 						<div class="replyPicture">
 							<img src="${ contextPath }/resources/images/x-button.png">
 						</div>
-						<div class="replyWriteArea">asfdsaf<br>dafadsfsaf<br>많이 구려보이냐<br>응
+						<div class="replyWriteArea">대댓글 디폴트
 						</div>
 						<div class="reply2Btn">
 							<span> 댓글 </span>
@@ -708,6 +797,24 @@
 					$('input[name=replyPosition]').val(replyNum);
 				})
 
+				$('.reportReply').click(function () {
+					var boardNo = $('input[name=boardNum]').val();
+					console.log(boardNo);
+					var reported = $(this).parent().prev().children()[0].innerText;
+					console.log(reported);
+
+					reportForm(boardNo, reported);
+				})
+				$('.reportBtnArea').click(function () {
+					var boardNo = $('input[name=boardNum]').val();
+					console.log(boardNo);
+					var reported = $(this).closest('.forbackcolor').find('.smallOption').text();
+					console.log(reported);
+
+					reportForm(boardNo, reported);
+				})
+
+				
 			</script>
   																				
 		</div>					

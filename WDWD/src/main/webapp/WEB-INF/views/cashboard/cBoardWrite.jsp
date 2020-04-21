@@ -23,7 +23,7 @@
 		line-height: 50px;
 	}
 	#logoImg img {
-		position: absolute;
+		position: absolute;	
 		width: 50px;
 		height: 50px;
 	}
@@ -364,7 +364,7 @@
 					</div>
 					<div class="rightLine">
 						<b>제목</b><br>
-						<input class="inputText" type="text" name="boTitle"><br>
+						<input class="inputText" type="text" name="boTitle" id="boTitle"><br>
 						<div class="br"></div>
 						
 						<b>카테고리</b><br>
@@ -375,8 +375,8 @@
 						</select><br>
 						<div class="br"></div>
 						
-						<input type="hidden" name="cbDate" id="cbDate" value="0">
 						<c:if test="${ boardType ne 2 }">
+							<input type="hidden" name="cbDate" id="cbDate" value="">
 							<b>마감일</b><br>
 							
 							<select id="optionDay" class="selectDate" onchange="selectDate()">
@@ -411,6 +411,7 @@
 							기한 : <span id="month"></span>월 <span id="day"></span>일 <span id="hour"></span>시
 							<div class="br"></div>
 							
+						
 							<script>
 								var dt = new Date();
 								$('#month').text(dt.getMonth() + 1)
@@ -436,7 +437,7 @@
 						
 						<c:if test="${ boardType ne 3 }">
 							<b>의뢰비</b><br>
-							<input class="inputText" type="number" value="" name="cbCash"><br>
+							<input class="inputText" type="number" value="" name="cbCash" id="cbCash"><br>
 							<div class="br"></div>
 						</c:if>
 						
@@ -502,9 +503,6 @@
 									
 									imgIndexStart = 0;
 									imgIndexEnd = 0;
-									
-									console.log(imgSrc);
-									console.log(imgName);
 								}
 								
 								imgCheck();
@@ -513,7 +511,10 @@
 						
 						function changeFile(fileUrl, fileName) {
 							var $div = $('<div class="fileArea">');
-							var $img = $('<img class="fileAreaImg">');
+							var $img = $('<img class="fileAreaImg" name="imgFile">');
+							var $input1 = $('<input type="hidden" name="conUrl" value=' + fileUrl.substring(0, fileUrl.lastIndexOf('/')) + '>');
+							var $input2 = $('<input type="hidden" name="conCop" value=' + fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '>');
+							var $input3 = $('<input type="hidden" name="conOri" value=' + fileName + '>');
 							var $p = $('<p>')
 							
 							$p.text(fileName);
@@ -521,7 +522,10 @@
 							$img.attr("src", fileUrl);
 							
 							$div.append($img);
-							$div.append($p)
+							$div.append($input1);
+							$div.append($input2);
+							$div.append($input3);
+							$div.append($p);
 							
 							$('#fileList').append($div);
 						}
@@ -683,7 +687,17 @@
 						$('#submit').click(function(){
 							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 							
-							$('#insertForm').submit();
+							if($('#boTitle').val() == "") {
+								alert('제목을 입력해주세요.');
+							} else if($('#cbDate').val() == "") {
+								alert('마감일을 입력해주세요.');
+							} else if($('#cbCash').val() == "") {
+								alert('의뢰비를 입력해주세요.');
+							} else if($('#content').val() == "") {
+								alert('글 내용을 입력해주세요.');
+							} else if(confirm("글을 작성하시겠습니까?")) {
+								$('#insertForm').submit();	
+							}
 						})
 					</script>
 				</form>

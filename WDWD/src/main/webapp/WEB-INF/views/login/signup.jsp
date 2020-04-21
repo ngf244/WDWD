@@ -245,7 +245,7 @@
 		});
 	 }
 	});
-	
+    
 	$('#joinForm').on('submit',function(){
 		var inval_Arr = new Array(8).fill(false);
 		if(idJ.test($('#singId').val())){
