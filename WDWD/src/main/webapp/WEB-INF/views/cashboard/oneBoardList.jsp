@@ -477,14 +477,14 @@ height: 100%;
 					<div id="dropCategory">
 						<div id="buttonSelect">&nbsp;전체 카테고리</div>
 						<div class="dropdown-category" >
-							<span onclick="selectCate();">전체 보기</span> 
+							<span onclick="selectCate('');">전체 보기</span> 
 							<span onclick="selectCate(1);">제작 디자인</span> 
 							<span onclick="selectCate(2);">편집 디자인</span> 
 							<span onclick="selectCate(3);">기타 디자인</span>
 						</div>
 					</div>
 					<div id="dropProgress">
-						<button class="buttonDrop" onclick="buttonDrop()">전체</button>
+						<button class="buttonDrop" onclick="buttonDrop('')">전체</button>
 						<button class="buttonDrop" onclick="buttonDrop(1)">진행</button>
 						<button class="buttonDrop" onclick="buttonDrop(3)">마감</button>
 					</div>
@@ -620,10 +620,9 @@ height: 100%;
 	
 	<!-- 제작, 편집, 기타 카테고리 버튼  -->
 	<script>
-		boCategory = "";
-		cbStep = 0;
-		/* 전역변수로 활용 */
-		boGroup = "2";
+		var boCategory = "";
+		var boGroup = "2";
+		var cbStep = 0;
 	
 	    /* 리스트로 글 넘기기 */
 		$('.boardList').on('click', function(){
@@ -633,16 +632,25 @@ height: 100%;
 		
 	
 		/* 카테고리 선택 시 글보기 */
-
-		function selectCate(num){
-			boCategory = num;
+		function selectCate(num1){
+			console.log("selectCate 실행");
+			console.log("num1 : ", num1)
+			boCategory = num1;
+			console.log("selectCate boCategory : " , boCategory);
+			console.log("selectCate boGroup : " , boGroup);
+			console.log("selectCate cbStep : " , cbStep);
 			
 			getList(boCategory, boGroup, cbStep);
 			
 		}	
 			
 		function buttonDrop(num2){
+			console.log("buttonDrop 실행");
+			console.log("num2 : ", num2);
 			cbStep = num2;
+			console.log("buttonDrop boCategory : " , boCategory);
+			console.log("buttonDrop boGroup : " , boGroup);
+			console.log("buttonDrop cbStep : " , cbStep);
 			
 			getList(boCategory, boGroup, cbStep);
 		}
@@ -654,6 +662,9 @@ height: 100%;
 		
 		function getList(num1, num2, num3) {
 			console.log('getList실행');
+			console.log("num1 : ", num1)
+			console.log("num2 : ", num2)
+			console.log("num3 : ", num3)
 			 boCategory = num1;
 			 boGroup = num2
 			 cbStep = num3;
@@ -666,6 +677,7 @@ height: 100%;
 		            type: "GET",
 		            data: {"boCategory" : boCategory, "boGroup" : boGroup, "cbStep" : cbStep },
 		            success: function(data){
+						console.log(data);
 		                $('.onBoarListView').html(data);
 		            },
 		            error: function(){

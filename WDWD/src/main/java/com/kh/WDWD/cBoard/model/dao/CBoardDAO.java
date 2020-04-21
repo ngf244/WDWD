@@ -139,6 +139,7 @@ public class CBoardDAO {
 	}
 
 	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard) {
+		System.out.println(cBoard);
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard);
 	}
 

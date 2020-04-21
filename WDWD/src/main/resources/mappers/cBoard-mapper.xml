@@ -412,10 +412,10 @@
 				<if test= "boGroup != null">
 					BO_GROUP = #{ boGroup }
 				</if>
-				<if test="boCategory == ''"> 
+				<if test="boCategory != null">
 					and BO_CATEGORY = #{ boCategory }
 				</if>
-				<if test="cbStep != 0">		
+				<if test="cbStep != 0">
 					and cb_step = #{ cbStep }
 				</if>
 					and bo_del = 'N'
