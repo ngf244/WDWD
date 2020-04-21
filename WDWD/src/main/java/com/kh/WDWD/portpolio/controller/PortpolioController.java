@@ -1,24 +1,14 @@
 package com.kh.WDWD.portpolio.controller;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
-import com.kh.WDWD.contents.model.vo.Contents;
-import com.kh.WDWD.member.model.exception.MemberException;
-import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.service.PortpolioService;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 
@@ -32,6 +22,14 @@ public class PortpolioController {
 	public String portEnrollView() {
 		return "portpolioEnroll";
 	}
+	
+	@RequestMapping("portEnroll.my")
+	public ModelAndView EnrollPortpolio(@ModelAttribute Portpolio p, MultipartHttpServletRequest request, HttpServletResponse response, ModelAndView mv) {
+		
+		
+		return mv;
+	}
+	
 	
 	
 	
