@@ -21,5 +21,7 @@
 		<mapper resource="mappers/board-mapper.xml"/>
 		<mapper resource="mappers/cash-mapper.xml"/>
     	<mapper resource="mappers/cBoard-mapper.xml"/>
+    	<mapper resource="mappers/contents-mapper.xml"/>
+    	<mapper resource="mappers/reply-mapper.xml"/>
 	</mappers>
 </configuration>

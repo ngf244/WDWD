@@ -25,4 +25,71 @@
 		where RP_WRITER = #{userId} AND RP_DEL = 'N'
 		order by RP_DATE DESC
 	</select>
+	
+	<insert id="boardWriting" parameterType="Board">
+		insert into board
+		values(bo_seq.nextval, #{boGroup}, #{boTitle}, #{boContent}, default, 
+			default, default, default, #{boWriter}, default, #{boCategory}, default)
+	</insert>
+	
+	<insert id="insertContents" parameterType="arraylist">
+		insert into contents
+		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, bo_seq.currval)
+	</insert>
+	
+	<select id="freeDetail" parameterType="_int" resultMap="boardResultSet">
+		select b.*, m.me_nick
+		from board b
+    		join member m on (bo_writer = me_id)
+		where bo_num = #{boNum}
+	</select>
+	
+	<resultMap type="Board" id="boardResultSet">
+		<id property="boNum" column="BO_NUM"/>
+		<result property="boGroup" column="BO_GROUP"/>
+		<result property="boTitle" column="BO_TITLE"/>
+		<result property="boContent" column="BO_CON"/>
+		<result property="boView" column="BO_VIEW"/>
+		<result property="boDate" column="BO_DATE"/>
+		<result property="boUpdate" column="BO_UPDATE"/>
+		<result property="boDel" column="BO_DEL"/>
+		<result property="boWriter" column="BO_WRITER"/>
+		<result property="boGood" column="BO_GOOD"/>
+		<result property="boCategory" column="BO_CATEGORY"/>
+		<result property="boReNum" column="BO_RENUM"/>
+		<result property="boWriterNick" column="ME_NICK"/>
+	</resultMap>
+	
+	<select id="checkRecommendExist" resultType="_int">
+		select count(*)
+		from recommend
+		where me_id = #{userId} and bo_num = #{boNum}
+	</select>
+	
+	<insert id="insertRecommend">
+		insert into recommend
+		values(#{userId}, #{boNum})
+	</insert>
+	
+	<update id="updateBoardRecommend">
+		update board
+		set bo_good = bo_good + 1
+		where bo_num = #{boNum}
+	</update>
+	
+	<select id="checkScrap" resultType="_int">
+		select count(*)
+		from scrap
+		where me_id = #{userId} and bo_num = #{boNum}
+	</select>
+	
+	<insert id="insertScrap">
+		insert into scrap
+		values(#{userId}, #{boNum})
+	</insert>
+	
+	<delete id="deleteScrap">
+		delete from scrap
+		where me_id = #{userId} and bo_num = #{boNum}
+	</delete>
 </mapper>

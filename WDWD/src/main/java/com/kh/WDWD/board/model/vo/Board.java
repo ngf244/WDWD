@@ -14,11 +14,12 @@ public class Board {
 	private int boGood;
 	private String boCategory;
 	private int boReNum;
+	private String boWriterNick;
 	
 	public Board() {}
 
 	public Board(int boNum, String boGroup, String boTitle, String boContent, int boView, String boDate,
-			String boUpdate, String boDel, String boWriter, int boGood, String boCategory, int boReNum) {
+			String boUpdate, String boDel, String boWriter, int boGood, String boCategory, int boReNum, String boWriterNick) {
 		super();
 		this.boNum = boNum;
 		this.boGroup = boGroup;
@@ -32,6 +33,7 @@ public class Board {
 		this.boGood = boGood;
 		this.boCategory = boCategory;
 		this.boReNum = boReNum;
+		this.boWriterNick = boWriterNick;
 	}
 
 	public Board(String boGroup, String boCategory) {
@@ -136,12 +138,20 @@ public class Board {
 		this.boReNum = boReNum;
 	}
 
+	public String getBoWriterNick() {
+		return boWriterNick;
+	}
+
+	public void setBoWriterNick(String boWriterNick) {
+		this.boWriterNick = boWriterNick;
+	}
+
 	@Override
 	public String toString() {
 		return "Board [boNum=" + boNum + ", boGroup=" + boGroup + ", boTitle=" + boTitle + ", boContent=" + boContent
 				+ ", boView=" + boView + ", boDate=" + boDate + ", boUpdate=" + boUpdate + ", boDel=" + boDel
 				+ ", boWriter=" + boWriter + ", boGood=" + boGood + ", boCategory=" + boCategory + ", boReNum="
-				+ boReNum + "]";
+				+ boReNum + ", boWriterNick=" + boWriterNick + "]";
 	}
 	
 }
