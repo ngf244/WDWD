@@ -140,5 +140,19 @@
 		<url-pattern>*.photo</url-pattern>
 	</servlet-mapping>
  
+ 
+	 <!-- 캐쉬 게시판 관련 -->
+	  <servlet>
+	    <servlet-name>guideServlet</servlet-name>
+	    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	    <init-param>
+	      <param-name>contextConfigLocation</param-name>
+	      <param-value>/WEB-INF/spring/appServlet/guideboard-context.xml</param-value>
+	    </init-param>
+	  </servlet>
+	  <servlet-mapping>
+	    <servlet-name>guideServlet</servlet-name>
+	    <url-pattern>*.guide</url-pattern>
+	  </servlet-mapping>  
 </web-app>
 

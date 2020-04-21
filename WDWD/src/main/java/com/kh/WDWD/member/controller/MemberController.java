@@ -108,7 +108,7 @@ public class MemberController {
 
 	
 	// 회원가입  controller
-	@RequestMapping("singUp.me")
+	@RequestMapping("signUp.me")
 	public String memberInsert(@ModelAttribute Member m, @RequestParam("post") String post, @RequestParam("address1") String address1, @RequestParam("address2") String address2) {
 		
 //		String encPwd = bcryptPasswordEncoder.encode(m.getUserPwd());

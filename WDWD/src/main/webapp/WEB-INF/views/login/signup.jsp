@@ -56,7 +56,7 @@
 	color: white;
 }
 
-#cancellbutton {
+#cancelbutton {
 	margin-top: 20px;
 	text-align: center;
 	height: 70px;
@@ -83,11 +83,11 @@
 <body>
 	<div id="signupWrap" hidden="">
 		<div class="signuptitle">
+			<form action="signUp.me" method="post" id="joinForm">
 			<img src="<%= request.getContextPath() %>/sources/image/logintitle.png" id="logo">
-		</div>
+		
 
 		<div class="titletext">
-				<form action="singUp.me" method="post" id="joinForm">
 			<h4>아이디</h4>
 			<input type="text" id="signId" name="signinId" class="inputForm">
 			<div class="check_font" id="id_check"></div>
@@ -152,11 +152,20 @@
 
 	
 		<div class="signbutton">
-			<button type="button" id="cancellbutton">취소</button>
-			<button type="button" id="signbutton" name="signin">가입하기</button>
+			<button onclick="goBack()" id="cancelbutton">취소</button>
+			<button type="submit" id="signbutton" name="signin">가입하기</button>
 		</div>
+		
+		<!-- 취소 버튼시 이전페이지 이동 -->
+		<script>
+		function goBack(){
+			window.history.back();
+		}
+		</script>
 		</form>
-	</div>	
+	</div>
+</div>	
+	
 	
 	<script type="text/javascript">
 	
@@ -188,7 +197,7 @@
 	$(document).ready(function(){
 		
     //아이디 중복 확인 
-    $("#signId").val()==''){
+    if($("#signId").val()==''){
 		$('#id_check').text('아이디를 입력해주세요.');
 		$('#id_check').css('color', 'red');
 		
@@ -203,9 +212,8 @@
 			async : true,
 			type : 'POST',
 			data : singId,
-			url: 'idcheck.do'
-			dateTyep: 'json',
-			contentType: "application/json"; charset=UTF-8",
+			url: 'idcheck.do',
+			dataType: 'json',
 			succes : function(date){
 				
 				
@@ -237,7 +245,8 @@
 		});
 	 }
 	});
-	$('form').on('submit',function(){
+	
+	$('#joinForm').on('submit',function(){
 		var inval_Arr = new Array(8).fill(false);
 		if(idJ.test($('#singId').val())){
 			inval_Arr[0] = true;
@@ -263,9 +272,9 @@
 		// 이름 정규식
 		
 		if(nameJ.test($('#signname').val())){
-			inval_Arr[2] = true;
+			inval_Arr[3] = true;
 		}else{
-			inval_Arr[2] = false;
+			inval_Arr[3] = false;
 			alert('이름을 확인해주세요');
 			
 			return false;
@@ -407,11 +416,11 @@
 	});
 	
 	//이메일 설정
-	$("signmail").blur(function(){
+	$("signemail").blur(function(){
 		if(mailJ.test($(this).val())){
 			$("#email_check").text('');
 		}else{
-			$('#email_check').text('이메일 양식을 확인해주세요');
+			$('#email_check').text('이메일을 확인해주세요');
 			$('#email_check').css('color','red');
 		}	
 	});
@@ -473,7 +482,7 @@
 		
 		
 		// 휴대폰 정규식
-		$('#signphone').blue(function(){
+		$('#signphone').blur(function(){
 			if(phoneJ.test($(this).val())){
 				console.log(nameJ.test($(this).val()));
 				$("#phone_check").text('');
@@ -482,7 +491,6 @@
 				$('#phone_check').css('color','red');
 			}
 		});
-	});	
 	</script>
 </body>
 </html>

@@ -39,10 +39,12 @@
 		AND ME_STATUS='Y'
 	</select>  
 
+
+	<!-- 회원가입 쿼리문 -->
 	<insert id="insertMember" parameterType="member">
 		INSERT INTO MEMBER
 		VALUES(#{userId}, #{userPwd}, #{userName}, #{NickName}, #{email}, #{phone} #{intro},
-		SYSDATE, SYSDATE, DEFAULT)
+		stsdate, stsdate, default)
 	</insert>
   
 </mapper>
