@@ -80,28 +80,6 @@ public class MemberController {
 		return "directRequestForm";
 	}
 	
-	@RequestMapping("reqThreeList.my")
-	public String requestThreeListView() {
-		return "requestThreeStepList";
-	}	
-	
-	@RequestMapping("workOneList.my")
-	public String workOneListView() {
-		return "workOneStepList";
-	}
-
-	@RequestMapping("workTwoList.my")
-	public String workTwoListView() {
-		return "workTwoStepList";
-	}
-	
-	@RequestMapping("workThreeList.my")
-	public String workThreeListView() {
-		return "workThreeStepList";
-
-	}	
-
-	
 	// 회원가입  controller
 	@RequestMapping("singUp.me")
 	public String memberInsert(@ModelAttribute Member m, @RequestParam("post") String post, @RequestParam("address1") String address1, @RequestParam("address2") String address2) {
@@ -119,4 +97,5 @@ public class MemberController {
 			throw new MemberException("회원가입에 실패하셨습니다.");
 		}
 	}
+
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -553,6 +554,10 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
+					
+					if('${param.error}' == "1") {
+						alert('작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.');
+					}
 				</script>
 			</div>
 		</div>

@@ -1,9 +1,13 @@
 package com.kh.WDWD.cBoard.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -25,6 +29,7 @@ import com.kh.WDWD.cBoard.model.exception.CBoardException;
 import com.kh.WDWD.cBoard.model.service.CBoardService;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.common.Pagination;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -35,29 +40,15 @@ public class CBoardController {
 	private CBoardService cBoardService;
 	
 	@RequestMapping("reqList.my")
-	public ModelAndView reqListView(@RequestParam(value="boWriter", required=false) String boWriter, @RequestParam(value="cbStep", required=false) Integer cbStep, @RequestParam(value="boGroup", required=false) String boGroup, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView reqListView(@ModelAttribute CBoard cboard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
 		
-		CBoard cboard = new CBoard();
-		
-		if(boWriter != null) {
-			cboard.setBoWriter(boWriter);
-		}
-		
-		if(cbStep != null) {
-			cboard.setCbStep(cbStep);
-		}
-		
-		if(boGroup != null) {
-			cboard.setBoGroup(boGroup);
-		}
-		
 		int listCount = cBoardService.getMyReqListCount(cboard);
-		PageInfo pi = Pagination.getReqListPageInfo(currentPage, listCount);		
+		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);		
 		
 		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
 		
@@ -73,7 +64,7 @@ public class CBoardController {
 			}
 			
 		} else {
-			throw new BoardException("내 의뢰 1단계 리스트 조회에 실패하였습니다.");
+			throw new BoardException("내 의뢰 리스트 조회에 실패하였습니다.");
 		}
 		
 		return mv;
@@ -210,9 +201,11 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("insert.ch")
-	public String cBoardInsert(@ModelAttribute CBoard b, HttpSession session) {
+	public String cBoardInsert(@ModelAttribute CBoard b, HttpSession session, HttpServletRequest request, 
+			@RequestParam(value="conUrl", required=false) String[] conUrl, @RequestParam(value="conCop", required=false) String[] conCop, @RequestParam(value="conOri", required=false) String[] conOri) {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
+		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/", "<img src=\"/WDWD/resources/real_photo/"));
 		
 		if(b.getCbDate() == null) {
 			b.setCbDate("0");
@@ -221,6 +214,17 @@ public class CBoardController {
 		int result = cBoardService.cBoardInsert(b);
 		
 		if(result != 0) {
+			if(conUrl != null) {
+				ArrayList<Contents> contentArr = new ArrayList<Contents>();
+				
+				for(int i = 0; i < conUrl.length; i++) {
+					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
+					
+					copyFile(c, request);
+					result = cBoardService.contentsInsert(c);
+				}
+			}
+			
 			// 나중에 경로 수정
 			return "cashboard/cBoardWrite";
 		} else {
@@ -228,21 +232,100 @@ public class CBoardController {
 		}
 	}
 	
+	public void copyFile(Contents c, HttpServletRequest request) {
+		File folder1 = new File(request.getSession().getServletContext().getRealPath("resources") + "\\photo_upload");
+		File folder2 = new File(request.getSession().getServletContext().getRealPath("resources") + "\\real_photo");
+		if(!folder2.exists()) {
+			folder2.mkdirs();
+		}
+		
+		try {
+			FileInputStream fis = new FileInputStream(folder1.getAbsolutePath() + File.separator + c.getConCop());
+			FileOutputStream fos = new FileOutputStream(folder2.getAbsolutePath() + File.separator + c.getConCop());
+
+			int data = 0;
+			while((data=fis.read())!=-1) {
+				fos.write(data);
+			}
+			fis.close();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("registWrite.ch")
+	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request,
+			@RequestParam(value="conUrl", required=false) String[] conUrl, @RequestParam(value="conCop", required=false) String[] conCop, @RequestParam(value="conOri", required=false) String[] conOri) {
+		Member m = (Member)session.getAttribute("loginUser");
+		b.setBoWriter(m.getUserId());
+		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/", "<img src=\"/WDWD/resources/real_photo/"));
+		
+		int result = cBoardService.registWrite(b);
+		
+		if(result != 0) {
+			if(conUrl != null) {
+				ArrayList<Contents> contentArr = new ArrayList<Contents>();
+				
+				for(int i = 0; i < conUrl.length; i++) {
+					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
+					
+					copyFile(c, request);
+					result = cBoardService.contentsInsert(c);
+				}
+			}
+			
+			// 나중에 경로 수정
+			return "cashboard/cBoardWrite";
+		} else {
+			throw new CBoardException("에디터 글 등록에 실패하였습니다.");
+		}
+	}
+	
 	@RequestMapping("detailView.ch")
-	public ModelAndView cBoardDetailView(@RequestParam("boNum") int boNum, ModelAndView mv) {
+	public ModelAndView cBoardDetailView(@RequestParam("boNum") int boNum, ModelAndView mv, HttpServletRequest request, HttpSession session) {
 		
 		CBoard b = cBoardService.cBoardDetailView(boNum);
+		ArrayList<Contents> fileList = cBoardService.fileList(boNum);
 		
 		if(b != null) {
-			mv.addObject("cBoard", b);
 			switch(b.getCbStep()) {
 				case 1: 
 					ArrayList<Request> list = cBoardService.reqList(boNum);
 					mv.addObject("list", list);
+					mv.addObject("cBoard", b);
+					mv.addObject("fileList", fileList);
 					mv.setViewName("cashboard/1stage");
 					break;
-				case 2: mv.setViewName("cashboard/2stage"); break;
-				case 3: mv.setViewName("cashboard/3stage"); break;
+				case 2:
+					String userNick = "";
+					if(session.getAttribute("loginUser") != null) {
+						Member m = (Member)session.getAttribute("loginUser");
+						userNick = m.getNickName();
+					}
+					
+					if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
+						Board reqB = cBoardService.cBoardReqView(boNum);
+						mv.addObject("reqB", reqB);
+						mv.addObject("cBoard", b);
+						mv.addObject("fileList", fileList);
+						mv.setViewName("cashboard/2stage");
+					} else {
+						String url = (String)request.getHeader("REFERER");
+						int urlNum = url.lastIndexOf("/");
+						String urlName = url.substring(urlNum + 1);
+						if(urlName.equals("")) {
+							urlName = "index.me";
+						}
+						mv.addObject("error", "1");
+						mv.setViewName("redirect:" + urlName);
+					}
+					break;
+				case 3: 
+					mv.addObject("cBoard", b);
+					mv.addObject("fileList", fileList);
+					mv.setViewName("cashboard/3stage"); 
+					break;
 			}
 		} else {
 			throw new BoardException("게시글 상세 조회에 실패하였습니다.");
@@ -351,4 +434,35 @@ public class CBoardController {
 		return "cashboard/3stage";
 	}
 	
+  @RequestMapping("workList.my")
+	public ModelAndView workListView(@ModelAttribute Request request, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = cBoardService.getMyWorkListCount(request);
+		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);		
+		
+		ArrayList<Request> list = cBoardService.selectMyWorkList(pi, request);		
+		
+		if(list != null) {
+			mv.addObject("list", list)
+			  .addObject("pi", pi)
+			  .addObject("request", request);
+			
+			switch(request.getCbStep()) {
+			case 1: mv.setViewName("workOneStepList"); break;
+			case 2: mv.setViewName("workTwoStepList"); break;
+			case 3: mv.setViewName("workThreeStepList"); break; 
+			}
+			
+		} else {
+			throw new BoardException("내 작업 리스트 조회에 실패하였습니다.");
+		}
+		
+		return mv;
+	}
+
 }

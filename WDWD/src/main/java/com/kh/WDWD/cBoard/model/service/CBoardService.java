@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
 public interface CBoardService {
@@ -30,6 +31,18 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
 
+	int getMyWorkListCount(Request request);
+
+	ArrayList<Request> selectMyWorkList(PageInfo pi, Request request);
+
+	int contentsInsert(Contents c);
+
+	ArrayList<Contents> fileList(int boNum);
+
+	Board cBoardReqView(int boNum);
+
+	int registWrite(Board b);
+
 	int getListCount2(CBoard cBoard);
 
 	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
@@ -39,6 +52,7 @@ public interface CBoardService {
 	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
 
 	
+
 
 
 }

@@ -110,6 +110,7 @@
 					<br><br>
 					
 					<script>
+						
 						$("input:radio[name=editor]").click(function(){
 							$("input[name=editor]").parent().parent().css('background', '');
 							$("input[name=editor]:checked").parent().parent().css('background', 'rgba(161, 206, 244, 0.55)');
@@ -119,7 +120,7 @@
 					<div id="btnList">
 						<c:if test="${ !empty sessionScope.loginUser }">
 							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
-								<form action="go2stage.ch" method="post" id="selectForm">
+								<form action="go2stage.ch" method="post" id="selectForm" style="display:inline-block;" >
 									<div id="selectEdit" class="button">에디터 선택</div>
 									<input type="hidden" id="reNum" name="reNum" value="">
 									<input type="hidden" id="reId" name="reId" value="">

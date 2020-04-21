@@ -213,7 +213,7 @@
 								<div class="rightCon">
 									<c:if test="${ rthl.boGroup == '2' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rthl.reId }
+											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }
@@ -221,10 +221,32 @@
 										<div class="rightBtn">
 											의뢰비 : ${ rthl.cbCash }
 										</div>
+										<div class="rightBtn">
+											<c:choose>
+												<c:when test="${ rthl.reGrade == '5' }">
+													평점 : <span class="starRating">★★★★★</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '4' }">
+													평점 : <span class="starRating">★★★★☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '3' }">
+													평점 : <span class="starRating">★★★☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '2' }">
+													평점 : <span class="starRating">★★☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '1' }">
+													평점 : <span class="starRating">★☆☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '0' }">
+													평점 : <span class="starRating">☆☆☆☆☆</span>
+												</c:when>
+											</c:choose>
+										</div>										
 									</c:if>
 									<c:if test="${ rthl.boGroup == '3' }">
 										<div class="rightBtn">
-											매칭 에디터 : ${ rthl.reId }
+											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
 											마감일 : 20${ rthl.cbDate }
@@ -232,162 +254,66 @@
 										<div class="rightBtn">
 											낙찰가 : ${ rthl.cbCash }
 										</div>
+										<div class="rightBtn">
+											<c:choose>
+												<c:when test="${ rthl.reGrade == '5' }">
+													평점 : <span class="starRating">★★★★★</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '4' }">
+													평점 : <span class="starRating">★★★★☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '3' }">
+													평점 : <span class="starRating">★★★☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '2' }">
+													평점 : <span class="starRating">★★☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '1' }">
+													평점 : <span class="starRating">★☆☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '0' }">
+													평점 : <span class="starRating">☆☆☆☆☆</span>
+												</c:when>
+											</c:choose>
+										</div>
 									</c:if>
 									<c:if test="${ rthl.boGroup == '4' }">
 										<div class="rightBtn">
-											우승자 : ${ rthl.boReNum }명
+											우승자 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											~ 20${ rthl.cbDate }
+											마감일 : 20${ rthl.cbDate }
 										</div>
 										<div class="rightBtn">
 											상금 : ${ rthl.cbCash }
+										</div>
+										<div class="rightBtn">
+											<c:choose>
+												<c:when test="${ rthl.reGrade == '5' }">
+													평점 : <span class="starRating">★★★★★</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '4' }">
+													평점 : <span class="starRating">★★★★☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '3' }">
+													평점 : <span class="starRating">★★★☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '2' }">
+													평점 : <span class="starRating">★★☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '1' }">
+													평점 : <span class="starRating">★☆☆☆☆</span>
+												</c:when>
+												<c:when test="${ rthl.reGrade == '0' }">
+													평점 : <span class="starRating">☆☆☆☆☆</span>
+												</c:when>
+											</c:choose>
 										</div>
 									</c:if>																		
 								</div>
 							</div>
 						</div>
 					</c:forEach>
-					
-<!-- 					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 1:1 의뢰<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.13
-								</div>
-								<div class="rightBtn">
-									의뢰비 : 20,000
-								</div>
-								<div class="rightBtn">
-									평점 : <span class="starRating">★★★★☆</span>
-								</div>								
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 역경매<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.09
-								</div>
-								<div class="rightBtn">
-									낙찰가 : 20,000
-								</div>
-								<div class="rightBtn">
-									평점 : <span class="starRating">★★★★★</span>
-								</div>									
-							</div>
-						</div>
-					</div>										
-
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 역경매<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.04
-								</div>
-								<div class="rightBtn">
-									낙찰가 : 20,000
-								</div>
-								<div class="rightBtn">
-									평점 : <span class="starRating">★★☆☆☆</span>
-								</div>									
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 콘테스트<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.01
-								</div>
-								<div class="rightBtn">
-									상금 : 50,000
-								</div>
-								<div class="rightBtn">
-									평점 : <span class="starRating">★★☆☆☆</span>
-								</div>									
-							</div>
-						</div>
-					</div>
-					
-					<div class="boardList">
-						<div class="boardImg">
-							<img src="">
-						</div>
-						<div class="boardCon">
-							<div class="leftCon">
-								 <b>로고 디자인  &nbsp; | &nbsp; 제목 : 스타곰탕 로고 의뢰 </b><br>
-								 등록일 : 2020.03.20.<br>
-								 의뢰유형 : 콘테스트<br>
-								 내용 : 스타곰탕은 곰탕을 냉동해서 판매하는 온라인 마켓 입니다. 인스타그램을 기반으로 론칭 성장해서 30~40대 초반 젊은 주부들이 고객의 대부분을 차지 하고 있습니다.
-							</div>
-							<div class="rightCon">
-								<div class="rightBtn">
-									매칭 에디터 : editor01
-								</div>
-								<div class="rightBtn">
-									~ 2020.04.01
-								</div>
-								<div class="rightBtn">
-									상금 : 50,000
-								</div>
-								<div class="rightBtn">
-									평점 : <span class="starRating">★★★☆☆</span>
-								</div>								
-							</div>
-						</div>
-					</div> -->
 										
 					<!-- 페이징 처리 -->
 					

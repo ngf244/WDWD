@@ -372,7 +372,7 @@
 		});
     	
 		oAjax.header("contentType","multipart/form-data");
-		oAjax.header("file-name",decodeURIComponent(tempFile.name));
+		oAjax.header("file-name",encodeURIComponent(tempFile.name));
 		oAjax.header("file-size",tempFile.size);
 		oAjax.header("file-Type",tempFile.type);
 		oAjax.request(tempFile);
