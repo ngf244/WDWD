@@ -10,6 +10,7 @@ import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -121,6 +122,21 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public ArrayList<CBoard> selectCashOneCateList(CBoard cBoard) {
 		return cBoardDAO.selectCashOneCateList(sqlSession, cBoard);
+	}
+
+	@Override
+	public Chat sendChat(Chat c) {
+		return cBoardDAO.sendChat(sqlSession, c);
+	}
+
+	@Override
+	public ArrayList<Chat> chatList(int boNum) {
+		return cBoardDAO.chatList(sqlSession, boNum);
+	}
+
+	@Override
+	public int registDelete(int boNum) {
+		return cBoardDAO.registDelete(sqlSession, boNum);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import com.kh.WDWD.cBoard.model.exception.BoardException;
 import com.kh.WDWD.cBoard.model.exception.CBoardException;
 import com.kh.WDWD.cBoard.model.service.CBoardService;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
@@ -255,13 +257,17 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("registWrite.ch")
-	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request,
+	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request, @RequestParam("updateCheck") int updateCheck,
 			@RequestParam(value="conUrl", required=false) String[] conUrl, @RequestParam(value="conCop", required=false) String[] conCop, @RequestParam(value="conOri", required=false) String[] conOri) {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
 		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/", "<img src=\"/WDWD/resources/real_photo/"));
 		
-		int result = cBoardService.registWrite(b);
+		int result = 0;
+		if(updateCheck == 1) {
+			result = cBoardService.registDelete(b.getBoNum());
+		}
+		result = cBoardService.registWrite(b);
 		
 		if(result != 0) {
 			if(conUrl != null) {
@@ -275,8 +281,7 @@ public class CBoardController {
 				}
 			}
 			
-			// 나중에 경로 수정
-			return "cashboard/cBoardWrite";
+			return "redirect:detailView.ch?boNum=" + b.getBoNum();
 		} else {
 			throw new CBoardException("에디터 글 등록에 실패하였습니다.");
 		}
@@ -306,7 +311,15 @@ public class CBoardController {
 					
 					if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
 						Board reqB = cBoardService.cBoardReqView(boNum);
+						ArrayList<Contents> reqFileList = new ArrayList<>();
+						if(reqB != null) {
+							reqFileList = cBoardService.fileList(reqB.getBoNum());
+						}
+						ArrayList<Chat> chatList = cBoardService.chatList(boNum);
+						
 						mv.addObject("reqB", reqB);
+						mv.addObject("reqFileList", reqFileList);
+						mv.addObject("chatList", chatList);
 						mv.addObject("cBoard", b);
 						mv.addObject("fileList", fileList);
 						mv.setViewName("cashboard/2stage");
@@ -416,6 +429,30 @@ public class CBoardController {
 			return "redirect:detailView.ch?boNum=" + r.getReNum();
 		} else {
 			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping("sendChat.ch")
+	public void sendChat(@ModelAttribute Chat c, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		Chat result = cBoardService.sendChat(c);
+		
+		JSONObject chat = new JSONObject();
+		
+		chat.put("chatNum", result.getChatRefNum());
+		chat.put("chatCon", result.getChatCon());
+		chat.put("chatDate", result.getChatDate());
+		chat.put("chatWriter", result.getChatWriter());
+		
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(chat);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

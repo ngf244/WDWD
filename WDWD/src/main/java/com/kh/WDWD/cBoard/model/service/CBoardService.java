@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -48,8 +49,14 @@ public interface CBoardService {
 	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
 	
 	int getCateListCount2(CBoard cBoard);
-	
+
 	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
+	
+  Chat sendChat(Chat c);
+
+	ArrayList<Chat> chatList(int boNum);
+	
+	int registDelete(int boNum);
 
 	
 

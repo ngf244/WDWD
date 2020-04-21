@@ -121,12 +121,14 @@
 		line-height: 30px;
 		font-size: 14pt;
 		text-align: center;
-		background-color: rgb(66, 66, 66);
-		color: white;
+		background-color: rgb(160, 160, 160);
 		border-radius: 5px;
 		cursor: pointer;
 		font-weight: bold;
 	}
+	a:link {text-decoration: none;}
+	a:visited {text-decoration: none;}
+	a:hover {text-decoration: none;}
 	
 	.range-slider__range {
 		-webkit-appearance: none;
@@ -362,7 +364,7 @@
 			
 			<c:if test="${ !empty fileList }">
 				<c:forEach var="file" items="${ fileList }">
-					<span class="downloadName">${ file.conOri }</span> <div class="downloadBtn">download</div><br>
+					<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
 				</c:forEach>
 			</c:if>
 		</div>
