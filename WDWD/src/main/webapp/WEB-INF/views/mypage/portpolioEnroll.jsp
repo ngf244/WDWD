@@ -156,12 +156,12 @@
 							<table id="portEnrollTable">
 								<tr>
 									<td style="width: 30%;">포트폴리오 제목</td>
-									<td style="width: 40%;"><input type="text" id="portpolioName" name="portpolioName" class="inputText" style="width: 94%;"></td>
+									<td style="width: 40%;"><input type="text" id="poTitle" name="poTitle" class="inputText" style="width: 94%;"></td>
 								</tr>
 								<tr>
 									<td>포트폴리오 유형</td>
 									<td>
-										<select class="inputText" name="portpolioClass" id="portpolioClass">
+										<select class="inputText" name="poCategory" id="poCategory">
 											<option value="이미지 편집">이미지 편집</option>
 											<option value="이미지 제작">이미지 제작</option>
 											<option value="동영상 편집">동영상 편집</option>
@@ -172,14 +172,14 @@
 								<tr>
 									<td>본 사이트 이용 여부</td>
 									<td>
-										<input type="radio" id="usingSiteY" name="usingSite" class="usingSite" value="Y"><label for="usingSiteY">Yes</label>
-										<input type="radio" id="usingSiteN" name="usingSite" class="usingSite" value="N"><label for="usingSiteN">No</label>
+										<input type="radio" id="usingSiteY" name="poUseYn" class="usingSite" value="Y"><label for="usingSiteY">Yes</label>
+										<input type="radio" id="usingSiteN" name="poUseYn" class="usingSite" value="N"><label for="usingSiteN">No</label>
 									</td>
 								</tr>
 								<tr>
 									<td>포트폴리오 설명</td>
 									<td>
-										<textarea name="portDesc" id="portDesc" rows="10" cols="45" style="resize: none;"></textarea>
+										<textarea name="poDesc" id="poDesc" rows="10" cols="45" style="resize: none;"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -260,7 +260,7 @@
 		<!-- 파일add 버튼을 클릭했을 때 파일첨부 원도우 창이 뜨게 하는 함수 -->
 		var fileNum = 0;
 		$('#fileAdd').click(function(){
-			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='fileNum' multiple>");
+			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='fileNum" + fileNum + "' multiple>");
 			$('#fileNum' + fileNum).click();
 			fileNum++;
 		});
@@ -299,37 +299,6 @@
 		/* x버튼을 눌렀을 때 input파일태그가 사라지는 함수 */
 		$(document).on("click", ".fileAreaRemove", function(){
 			this.parentNode.remove();
-		});
-		
-		/* 완료버튼을 눌렀을 때 서버로 파일을 전송하는 함수 */
-		$('#portCompleteBtn').on('click', function(){
-			var formData = new FormData($('#EnrollPortForm')[0]);
-			var portTitle = $('#portpolioName').val();
-			var portClass = $('#portpolioClass').val();
-			var usingSite = $('.usingSite:checked').val();
-			var portDesc = $('#portDesc').val();
-			
-			console.log("포트폴리오 파일 : " + formData);
-			console.log("포트폴리오 제목 : " + portTitle);
-			console.log("포트폴리오 유형 : " + portClass);
-			console.log("포트폴리오 사이트 이용여부 : " + usingSite);
-			console.log("포트폴리오 상세설명 : " + portDesc);
-			
-			$.ajax({ 
-				type: "POST", 
-				enctype: 'multipart/form-data', // 필수 
-				url: 'portEnroll.my', 
-				data: {formData: formData, portTitle: portTitle, portClass: portClass, usingSite: usingSite, portDesc: portDesc}, // 필수 
-				processData: false, // 필수 
-				contentType: false, // 필수 
-				cache: false, 
-				success: function(data){ 
-					alert("포트폴리오 등록이 완료되었습니다.");
-				}, 
-				error: function(e){ 
-					alert("포트폴리오 등록에 실패하였습니다.");
-				} 
-			});
 		});
 		
 	</script>	
