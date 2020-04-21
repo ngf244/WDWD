@@ -30,6 +30,13 @@ public class Contents {
 		this.conUrl = conUrl;
 		this.conLevel = conLevel;
 	}
+	
+	public Contents(String conOri, String conCop, String conUrl) {
+		super();
+		this.conOri = conOri;
+		this.conCop = conCop;
+		this.conUrl = conUrl;
+	}
 
 	public int getConNum() {
 		return conNum;

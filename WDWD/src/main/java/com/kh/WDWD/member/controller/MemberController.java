@@ -1,5 +1,14 @@
 package com.kh.WDWD.member.controller;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,10 +16,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.kh.WDWD.board.model.vo.Board;
+import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.cash.model.vo.PointNCash;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
@@ -54,20 +72,40 @@ public class MemberController {
 	public ModelAndView myPageView(@RequestParam("userId") String userId, ModelAndView mv) {
 		
 		Member member = mService.selectMember(userId);
+		ArrayList<Reply> rList = mService.selectRecentlyReply(userId);		
+		ArrayList<Board> pList = mService.selectRecentlyPBoard(userId);
+		ArrayList<CBoard> cList = mService.selectRecentlyCBoard(userId);
+		ArrayList<PointNCash> ccList = mService.selectRecentlyCashChange(userId);		
+		
+		int rCount1 = mService.selectReqOneStepCount(userId);
+		int rCount2 = mService.selectReqTwoStepCount(userId);
+		int rCount3 = mService.selectReqThreeStepCount(userId);
+		int WCount1 = mService.selectWorkOneStepCount(userId);
+		int WCount2 = mService.selectWorkTwoStepCount(userId);	
+		int WCount3 = mService.selectWorkThreeStepCount(userId);
+		
+		int[] rwCount = {rCount1, rCount2, rCount3, WCount1, WCount2, WCount3};
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.");
+				
+		Calendar time = Calendar.getInstance();
+		       
+		String nowDay = format.format(time.getTime());
 		
 		if(member != null) {
 			mv.addObject("member", member)
+			  .addObject("rList", rList)
+			  .addObject("rwCount", rwCount)
+			  .addObject("pList", pList)
+			  .addObject("cList", cList)
+			  .addObject("nowDay", nowDay)
+			  .addObject("ccList", ccList)
 			  .setViewName("mypageMain");
 		} else {
 			throw new MemberException("마이페이지 조회에 실패하였습니다.");
 		}
 		
 		return mv;
-	}
-	
-	@RequestMapping("porEnroll.my")
-	public String portpolioEnrollView() {
-		return "portpolioEnroll";
 	}
 	
 	@RequestMapping("portpolioList.my")
@@ -97,5 +135,71 @@ public class MemberController {
 			throw new MemberException("회원가입에 실패하셨습니다.");
 		}
 	}
+	
+	@RequestMapping(value="uProfileImg.my", method=RequestMethod.POST)
+	public @ResponseBody void updateProfileImage(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
+		MultipartFile profileImgFile = request.getFile("profileImg");
+		Member m = (Member)(request.getSession().getAttribute("loginUser"));
+		String renameFileName = "";
+		
+		if(profileImgFile != null && !profileImgFile.isEmpty()) {
+			renameFileName = saveFile(profileImgFile, request);
+		}
+		
+		System.out.println("renameFileName : " + renameFileName);
+		
+		if(!renameFileName.equals("")&&!renameFileName.isEmpty()) {
+			int result = mService.updateProfileImg(m);
+			
+			if(result > 0) {
+				response.setContentType("application/json; charset=UTF-8");
+				new Gson().toJson(renameFileName, response.getWriter());
+			} else {
+				throw new MemberException("프로필 이미지 변경에 실패하셨습니다.");
+			}
+		}
+		
+	}
+	
+	public String saveFile(MultipartFile file, HttpServletRequest request) {
+		String root = request.getSession().getServletContext().getRealPath("resources");
+	  
+		String savePath = root + "/profile_Image";
+		
+		File folder = new File(savePath);
+  
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		
+		int ranNum = (int)(Math.random() * 100000);
+		
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+	    String originFileName = file.getOriginalFilename();
+	    String renameFileName 
+	    	= sdf.format(new Date(System.currentTimeMillis())) + ranNum
+	    	+ "." + originFileName.substring(originFileName.lastIndexOf(".") + 1);
+	  
+	    String renamePath = folder + "\\" + renameFileName;
+	  
+	    try {
+	    	file.transferTo(new File(renamePath));
+	    } catch (Exception e) {
+	    	System.out.println("파일 전송 에러 : " + e.getMessage());
+	    	e.printStackTrace();
+	    }
+	    
+	    Contents c = new Contents(originFileName, renameFileName, savePath);
+	    int result = mService.insertContents(c);
+	    
+	    if(result > 0) {
+	    	return renameFileName;
+	    } else {
+	    	throw new MemberException("프로필 이미지 DB저장에 실패하셨습니다.");
+	    }
+	    
+	    
+	}
+
 
 }
