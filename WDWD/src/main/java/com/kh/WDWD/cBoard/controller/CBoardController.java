@@ -264,6 +264,7 @@ public class CBoardController {
 		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/", "<img src=\"/WDWD/resources/real_photo/"));
 		
 		int result = 0;
+		
 		if(updateCheck == 1) {
 			result = cBoardService.registDelete(b.getBoNum());
 		}

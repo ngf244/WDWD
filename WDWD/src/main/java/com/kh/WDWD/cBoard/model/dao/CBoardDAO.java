@@ -157,11 +157,20 @@ public class CBoardDAO {
 
 	public int registDelete(SqlSessionTemplate sqlSession, int boNum) {
 		int result = sqlSession.update("cBoardMapper.registDelete1", boNum);
+		
+		System.out.println("result1 : " + result);
+		System.out.println(boNum);
+		
 		if(result > 0) {
 			result = sqlSession.delete("cBoardMapper.registDelete2", boNum);
-			if(result > 0) {
-				return sqlSession.delete("cBoardMapper.registDelete3", boNum);  
-			}
+			
+			System.out.println("result2 : " + result);
+			
+			result =  sqlSession.delete("cBoardMapper.registDelete3", boNum);
+			
+			System.out.println("result3 : " + result);
+			
+			return 1;
 		}
 		
 		return 0;
