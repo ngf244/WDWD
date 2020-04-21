@@ -14,6 +14,7 @@
 		<typeAlias type="com.kh.WDWD.cBoard.model.vo.CBoard" alias="CBoard"/>
 		<typeAlias type="com.kh.WDWD.request.model.vo.Request" alias="Request"/>
 		<typeAlias type="com.kh.WDWD.contents.model.vo.Contents" alias="Contents"/>
+		<typeAlias type="com.kh.WDWD.cBoard.model.vo.Chat" alias="Chat"/>
 	</typeAliases>
 	
 	<mappers>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
+import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -142,6 +143,31 @@ public class CBoardDAO {
 	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, Board b) {
 		System.out.println("b :" + b);
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", b);
+	}
+
+	public Chat sendChat(SqlSessionTemplate sqlSession, Chat c) {
+		int result = sqlSession.insert("cBoardMapper.sendChat", c);
+		
+		if(result > 0) {
+			return sqlSession.selectOne("cBoardMapper.receiveChat");
+		}
+		return null; 
+	}
+
+	public ArrayList<Chat> chatList(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.chatList", boNum);
+	}
+
+	public int registDelete(SqlSessionTemplate sqlSession, int boNum) {
+		int result = sqlSession.update("cBoardMapper.registDelete1", boNum);
+		if(result > 0) {
+			result = sqlSession.delete("cBoardMapper.registDelete2", boNum);
+			if(result > 0) {
+				return sqlSession.delete("cBoardMapper.registDelete3", boNum);  
+			}
+		}
+		
+		return 0;
 	}
 
 }

@@ -188,7 +188,7 @@
 	$(document).ready(function(){
 		
     //아이디 중복 확인 
-    $("#signId").val()==''){
+    if($("#signId").val()==''){
 		$('#id_check').text('아이디를 입력해주세요.');
 		$('#id_check').css('color', 'red');
 		
@@ -203,9 +203,8 @@
 			async : true,
 			type : 'POST',
 			data : singId,
-			url: 'idcheck.do'
-			dateTyep: 'json',
-			contentType: "application/json"; charset=UTF-8",
+			url: 'idcheck.do',
+			dataType: 'json',
 			succes : function(date){
 				
 				
@@ -237,7 +236,7 @@
 		});
 	 }
 	});
-	$('form').on('submit',function(){
+	$('#joinForm').on('submit',function(){
 		var inval_Arr = new Array(8).fill(false);
 		if(idJ.test($('#singId').val())){
 			inval_Arr[0] = true;
@@ -473,7 +472,7 @@
 		
 		
 		// 휴대폰 정규식
-		$('#signphone').blue(function(){
+		$('#signphone').blur(function(){
 			if(phoneJ.test($(this).val())){
 				console.log(nameJ.test($(this).val()));
 				$("#phone_check").text('');
@@ -482,7 +481,6 @@
 				$('#phone_check').css('color','red');
 			}
 		});
-	});	
 	</script>
 </body>
 </html>

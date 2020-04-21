@@ -164,6 +164,7 @@
  		select * 
  		from board
  		join request on (board.bo_num = request.re_refnum)
+ 		where re_num = #{boNum}
  	</select>
  	
  	<insert id="registWrite1" parameterType="Board">
@@ -176,6 +177,22 @@
  		set re_refnum = bo_seq.currval
  		where re_num = #{boNum} and re_plz = 'Y'
  	</update>
+ 	
+ 	<update id="registDelete1">
+ 		update request
+ 		set re_refnum = null
+ 		where re_num = #{boNum} and re_plz = 'Y'
+ 	</update>
+ 	
+ 	<delete id="registDelete2">
+ 		delete from contents
+ 		where con_ref = #{boNum}
+ 	</delete>
+ 	
+ 	<delete id="registDelete3">
+ 		delete from board
+ 		where bo_num = #{boNum}
+ 	</delete>
  	
 	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">
 		select count(*)
@@ -202,6 +219,34 @@
 				and bo_del = 'N'
 		</where>
 	</select>
+	
+	<insert id="sendChat" parameterType="Chat">
+		insert into chat
+		values (chat_seq.nextval, #{chatCon}, to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'), #{chatRefNum}, #{chatWriter})
+	</insert>
+	
+	<select id="receiveChat" resultMap="ChatResultSet">
+		select *
+		from chat
+		join member on (chat_writer = me_id)
+		where chat_num = (select max(chat_num) from chat)
+	</select>
+	
+	<select id="chatList" parameterType="_int" resultMap="ChatResultSet">
+		select *
+		from chat
+		join member on (chat_writer = me_id)
+		where chat_refnum = #{boNum}
+		order by chat_num
+	</select>
+	
+	<resultMap type="Chat" id="ChatResultSet">
+		<id property="chatNum" column="CHAT_NUM"/>
+		<result property="chatCon" column="CHAT_CON"/>
+		<result property="chatDate" column="CHAT_DATE"/>
+		<result property="chatRefNum" column="CHAT_REFNUM"/>
+		<result property="chatWriter" column="ME_NICK"/>
+	</resultMap>
 	
 	<select id="selectMyReqList" parameterType="CBoard" resultMap="RequestResultSet">
 		select *
