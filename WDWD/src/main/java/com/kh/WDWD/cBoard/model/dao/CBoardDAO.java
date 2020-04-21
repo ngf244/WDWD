@@ -35,10 +35,12 @@ public class CBoardDAO {
 		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
 		int result2 = sqlSession.insert("cBoardMapper.cBoardInsert2", b);
 		
-		if(result1 > result2) {
-			return result2;
+		int boNum = sqlSession.selectOne("cBoardMapper.cBoardSelect");
+		
+		if(result1 > 0 && result2 > 0) {
+			return boNum;
 		} else {
-			return result1;
+			return 0;
 		}
 	}
 
@@ -117,10 +119,10 @@ public class CBoardDAO {
 	}
 
 
-	public int registWrite(SqlSessionTemplate sqlSession, Board b) {
+	public int registWrite(SqlSessionTemplate sqlSession, Board b, int boardNum) {
 		int result = sqlSession.insert("cBoardMapper.registWrite1", b);
 		if(result > 0) {
-			result = sqlSession.update("cBoardMapper.registWrite2", b);
+			result = sqlSession.update("cBoardMapper.registWrite2", boardNum);
 		}
 		
 		return result;
@@ -174,6 +176,10 @@ public class CBoardDAO {
 		}
 		
 		return 0;
+	}
+
+	public int go3stage(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("cBoardMapper.go3stage", boNum);
 	}  
 
 }

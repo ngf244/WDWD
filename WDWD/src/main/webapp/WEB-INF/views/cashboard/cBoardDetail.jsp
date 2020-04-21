@@ -408,5 +408,12 @@
 		
 		<div class="br"></div>
 	</div>
+	
+	<script>
+		$(document).on("contextmenu dragstart selectstart", '#boardcontent img', function(e){
+            alert('불법 이미지 다운을 막고 있습니다.');
+			return false;
+        });
+	</script>
 </body>
 </html>

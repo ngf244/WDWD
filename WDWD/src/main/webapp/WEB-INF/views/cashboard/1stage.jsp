@@ -266,6 +266,13 @@
 						}, function(){
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						})
+						
+						$('.downloadBtn').click(function(e){
+							if("${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
+								e.preventDefault();
+								alert('원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.');
+							}
+						})
 					</script>
 				</div>
 			</div>

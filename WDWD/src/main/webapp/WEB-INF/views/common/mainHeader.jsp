@@ -556,8 +556,12 @@
 					}
 					
 					
-					if('${param.error}' == "1") {
+					if('${param.sysMsg}' == "1") {
 						alert('작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.');
+					} else if('${param.sysMsg}' == "2") {
+						alert('선택 완료되었습니다.');
+					} else if('${param.sysMsg}' == "3") {
+						alert('작성 완료되었습니다.');
 					}
 				</script>
 			</div>

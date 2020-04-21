@@ -213,9 +213,9 @@ public class CBoardController {
 			b.setCbDate("0");
 		}
 		
-		int result = cBoardService.cBoardInsert(b);
+		int boNum = cBoardService.cBoardInsert(b);
 		
-		if(result != 0) {
+		if(boNum != 0) {
 			if(conUrl != null) {
 				ArrayList<Contents> contentArr = new ArrayList<Contents>();
 				
@@ -223,12 +223,11 @@ public class CBoardController {
 					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
 					
 					copyFile(c, request);
-					result = cBoardService.contentsInsert(c);
+					int result = cBoardService.contentsInsert(c);
 				}
 			}
 			
-			// 나중에 경로 수정
-			return "cashboard/cBoardWrite";
+			return "redirect:detailView.ch?sysMsg=3&boNum=" + boNum;
 		} else {
 			throw new CBoardException("캐쉬게시글 작성에 실패하였습니다.");
 		}
@@ -257,7 +256,7 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("registWrite.ch")
-	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request, @RequestParam("updateCheck") int updateCheck,
+	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request, @RequestParam("updateCheck") int updateCheck, @RequestParam("boardNum") int boardNum,
 			@RequestParam(value="conUrl", required=false) String[] conUrl, @RequestParam(value="conCop", required=false) String[] conCop, @RequestParam(value="conOri", required=false) String[] conOri) {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
@@ -268,7 +267,7 @@ public class CBoardController {
 		if(updateCheck == 1) {
 			result = cBoardService.registDelete(b.getBoNum());
 		}
-		result = cBoardService.registWrite(b);
+		result = cBoardService.registWrite(b, boardNum);
 		
 		if(result != 0) {
 			if(conUrl != null) {
@@ -282,7 +281,7 @@ public class CBoardController {
 				}
 			}
 			
-			return "redirect:detailView.ch?boNum=" + b.getBoNum();
+			return "redirect:detailView.ch?sysMsg=3&boNum=" + boardNum;
 		} else {
 			throw new CBoardException("에디터 글 등록에 실패하였습니다.");
 		}
@@ -331,11 +330,19 @@ public class CBoardController {
 						if(urlName.equals("")) {
 							urlName = "index.me";
 						}
-						mv.addObject("error", "1");
+						mv.addObject("sysMsg", "1");
 						mv.setViewName("redirect:" + urlName);
 					}
 					break;
 				case 3: 
+					Board reqB = cBoardService.cBoardReqView(boNum);
+					ArrayList<Contents> reqFileList = new ArrayList<>();
+					if(reqB != null) {
+						reqFileList = cBoardService.fileList(reqB.getBoNum());
+					}
+					
+					mv.addObject("reqB", reqB);
+					mv.addObject("reqFileList", reqFileList);
 					mv.addObject("cBoard", b);
 					mv.addObject("fileList", fileList);
 					mv.setViewName("cashboard/3stage"); 
@@ -427,7 +434,18 @@ public class CBoardController {
 		int result = cBoardService.go2stage(r);
 		
 		if(result != 0) {
-			return "redirect:detailView.ch?boNum=" + r.getReNum();
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("go3stage.ch")
+	public String go3stage(@RequestParam("boNum") int boNum) {
+		int result = cBoardService.go3stage(boNum);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + boNum;
 		} else {
 			throw new CBoardException("에디터 선택에 실패하였습니다.");
 		}

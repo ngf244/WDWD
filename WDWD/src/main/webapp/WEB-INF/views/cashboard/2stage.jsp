@@ -202,7 +202,7 @@
 						<img src='${ contextPath }/resources/images/writeIcon.jpg'>1
 					</div>
 					<div id="mainTitle">
-						참여 에디터 : <span>user01</span>
+						참여 에디터 : <span>${ cBoard.reId }</span>
 					</div>
 					
 					
@@ -241,7 +241,7 @@
 										
 										<c:if test="${ !empty reqFileList }">
 											<c:forEach var="file" items="${ reqFileList }">
-												<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
+												<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a>
 											</c:forEach>
 										</c:if>
 									</div>
@@ -252,7 +252,7 @@
 								<c:if test="${ empty reqB }">
 									<form action="registWrite.ch" method="post" id="registWriteForm">
 										<div id="contentWrap">
-											<input type="hidden" value="${ cBoard.boNum }" name="boNum">
+											<input type="hidden" value="${ cBoard.boNum }" name="boardNum">
 											<input type="hidden" value=0 name="updateCheck">
 											<textarea name="boContent" id="content"></textarea>
 											<div id="fileList"></div>
@@ -546,6 +546,11 @@
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						});
 						
+						$('#submit').click(function(){
+							if(confirm("해당 글을 채택하시겠습니까?")) {
+								location.href = "go3stage.ch?boNum=${ cBoard.boNum }";
+							}
+						})
 						
  						function registWrite(){
  							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
@@ -560,13 +565,15 @@
 							
 							var $form = $('<form action="registWrite.ch" method="post" id="registWriteForm">');
 							var $div = $('<div id="contentWrap">');
-							var $input1 = $('<input type="hidden" value="${ cBoard.boNum }" name="boNum">');
+							var $input1 = $('<input type="hidden" value="${ reqB.boNum }" name="boNum">');
 							var $input2 = $('<input type="hidden" value=1 name="updateCheck">');
+							var $input3 = $('<input type="hidden" value="${ cBoard.boNum }" name="boardNum">');
 							var $textarea = $('<textarea name="boContent" id="content">');
 							var $div2 = $('<div id="fileList">');
 							
 							$div.append($input1);
 							$div.append($input2);
+							$div.append($input3);
 							$div.append($textarea);
 							$div.append($div2);
 							$form.append($div);
