@@ -390,8 +390,8 @@
 						contentType: false, // 필수 
 						success: function (data) {
 							file.closest('.eachImage').find('.rename').text(data);
-							$img.attr('src', '${ contextPath }/resources/photo_upload/${loginUser.userId}/'+data);
-							$targetImg.attr('src', '${ contextPath }/resources/photo_upload/${loginUser.userId}/'+data);
+							$img.attr('src', '${ contextPath }/resources/free_photo_upload/${loginUser.userId}/'+data);
+							$targetImg.attr('src', '${ contextPath }/resources/free_photo_upload/${loginUser.userId}/'+data);
 						}
 					})
 					return result;
