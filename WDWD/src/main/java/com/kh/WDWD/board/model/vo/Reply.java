@@ -9,11 +9,12 @@ public class Reply {
 	private String rpWriter;
 	private int rpConNum;
 	private int rpRp;
+	private String rpWriterNick;
 	
 	public Reply() {}
 
 	public Reply(int rpNum, String rpContent, String rpDate, String rpStatus, int refNum, String rpWriter, int rpConNum,
-			int rpRp) {
+			int rpRp, String rpWriterNick) {
 		super();
 		this.rpNum = rpNum;
 		this.rpContent = rpContent;
@@ -23,6 +24,7 @@ public class Reply {
 		this.rpWriter = rpWriter;
 		this.rpConNum = rpConNum;
 		this.rpRp = rpRp;
+		this.rpWriterNick = rpWriterNick;
 	}
 
 	public int getRpNum() {
@@ -89,11 +91,19 @@ public class Reply {
 		this.rpRp = rpRp;
 	}
 
+	public String getRpWriterNick() {
+		return rpWriterNick;
+	}
+
+	public void setRpWriterNick(String rpWriterNick) {
+		this.rpWriterNick = rpWriterNick;
+	}
+
 	@Override
 	public String toString() {
 		return "Reply [rpNum=" + rpNum + ", rpContent=" + rpContent + ", rpDate=" + rpDate + ", rpStatus=" + rpStatus
-				+ ", refNum=" + refNum + ", rpWriter=" + rpWriter + ", rpConNum=" + rpConNum + ", rpRp=" + rpRp + "]";
+				+ ", refNum=" + refNum + ", rpWriter=" + rpWriter + ", rpConNum=" + rpConNum + ", rpRp=" + rpRp
+				+ ", rpWriterNick=" + rpWriterNick + "]";
 	}
-	
 	
 }

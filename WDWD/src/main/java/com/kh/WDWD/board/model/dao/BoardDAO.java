@@ -1,13 +1,16 @@
 package com.kh.WDWD.board.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.contents.model.vo.Contents;
 
 @Repository("bDAO")
 public class BoardDAO {
@@ -21,6 +24,57 @@ public class BoardDAO {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());		
 		
 		return (ArrayList)sqlSession.selectList("boardMapper.selectMyReplyList", userId, rowBounds);
+	}
+
+	public int boardWriting(SqlSessionTemplate sqlSession, Board b) {
+		return sqlSession.insert("boardMapper.boardWriting", b);
+	}
+
+	public int insertContents(SqlSessionTemplate sqlSession, ArrayList<Contents> contentArr) {
+		int count = 0;
+		for (Contents content : contentArr) {
+			int result = sqlSession.insert("boardMapper.insertContents", content);
+			count += result;
+		}
+		
+		return count;
+	}
+
+	public Board freeDetail(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("boardMapper.freeDetail", boNum);
+	}
+
+	public ArrayList<Contents> getContents(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("contentsMapper.getContents", boNum);
+	}
+
+	// 추천 관련 DAO
+	public int checkRecommendExist(SqlSessionTemplate sqlSession, HashMap recommendRequest) {
+		return sqlSession.selectOne("boardMapper.checkRecommendExist", recommendRequest);
+	}
+	public int insertRecommend(SqlSessionTemplate sqlSession, HashMap recommendRequest) {
+		return sqlSession.insert("boardMapper.insertRecommend", recommendRequest);
+	}
+	public int updateBoardRecommend(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("boardMapper.updateBoardRecommend", boNum);
+	}
+
+	// Scrapt 관련 DAO
+	public int checkScrap(SqlSessionTemplate sqlSession, HashMap scraptToggle) {
+		return sqlSession.selectOne("boardMapper.checkScrap", scraptToggle);
+	}
+	public int insertScrap(SqlSessionTemplate sqlSession, HashMap scraptToggle) {
+		return sqlSession.insert("boardMapper.insertScrap", scraptToggle);
+	}
+	public int deleteScrap(SqlSessionTemplate sqlSession, HashMap scraptToggle) {
+		return sqlSession.delete("boardMapper.deleteScrap", scraptToggle);
+	}
+
+	public ArrayList<Reply> getReplyList(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("replyMapper.getReplyList", boNum);
+	}
+	public ArrayList<Reply> getReplyList2(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("replyMapper.getReplyList2", boNum);
 	}
 
 
