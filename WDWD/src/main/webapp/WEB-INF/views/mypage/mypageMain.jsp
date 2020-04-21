@@ -615,7 +615,7 @@
 	#cashChange{height: 700px; margin-top: 30px;}
 	.cashChangeText{text-indent: 10px; height: 70px; border: 1px solid lightgray; font-size: 18pt; font-weight: bolder; line-height: 60px; background: #D5D5D5;}
 	.cashChangeArea{height: 600px; border: 1px solid lightgray; margin-top: 30px; border-radius: 10px;}
-	.monthArea{width: 18%; height: 65px; border: 1px solid lightgray; border-radius: 100px; margin: 15px; margin-left: 440px; text-align: center; line-height: 62px;}
+	.monthArea{width: 18%; height: 65px; border: 1px solid lightgray; border-radius: 100px; margin: 15px; margin-left: 430px; text-align: center; line-height: 62px;}
 	.changeList{width: 90%; height: 125px; margin-left: 60px; margin-top: 20px; border-bottom: 1px solid silver; font-size: 11pt;}
 	.changeClass1{height: 65%; width: 11%; border: 1px solid red; margin: 8px; border-radius: 100px; line-height: 80px; color: red; float: left;}
 	.changeClass2{height: 65%; width: 11%; border: 1px solid green; margin: 8px; border-radius: 100px; line-height: 80px; color: green; float: left;}
@@ -955,7 +955,7 @@
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty ccList }">
-									<div class="ccList">- 캐쉬 변동 내역이 없습니다.</div>
+									<div class="ccList" style="text-align: center; color: red;">※ 캐쉬 변동 내역이 없습니다.</div>
 								</c:if>
 						</div>
 					</div>

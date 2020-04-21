@@ -144,11 +144,11 @@
 					<div id="portpolioEnrollText">포트폴리오 등록</div>
 				</div>
 				<div id="portpolioEnrollContent">
-					<form action="enrollPort.my" method="post" encType="multipart/form-data" id="EnrollPortForm">
+					<form action="enrollPort.my" method="post" encType="multipart/form-data" id="EnrollPortImgForm">
 						<div id="porThumbnail">
 							<img id="portThumbnailImage" width="100%" height="100%" style="display: none;">
 							<div id="thumbnailEnrollArea">
-								<br><br>썸네일 이미지 등록<br><br>
+								<br><br><br>썸네일 이미지 등록<br><br>
 								<img id="thumbnailImage" src="${ contextPath }/resources/images/Add_File_icon.png" width="50" height="50">
 							</div>
 						</div>
@@ -185,7 +185,6 @@
 								<tr>
 									<td>파일 첨부</td>
 									<td>
-										<form></form>
 										<div id="fileList"></div>
 										<div id="fileAdd">
 											<img src="${ contextPath }/resources/images/add.png">
@@ -196,10 +195,11 @@
 							</table>
 						</div>
 						<div style="clear: both;"></div>
-						
-						<div id="thumbnailFileArea" class="thumbnailFileArea">
-							<input type="file" hidden="" id="thumbnailImg1" class="thumbnailImg1" multiple="multiple" name="thumbnailImg1" onchange="LoadImg(this)">
-						</div>						
+						<form method="post" encType="multipart/form-data" id="EnrollPortThumbForm">
+							<div id="thumbnailFileArea" class="thumbnailFileArea">
+								<input type="file" hidden="" id="thumbnailImg" class="thumbnailImg" multiple="multiple" name="pFile" onchange="LoadImg(this)">
+							</div>
+						</form>						
 						<div class="btnArea">
 							<div id="portCompleteBtn" class="button">완료</div>
 							<div id="portCancelBtn" class="button" onclick="history.back(-1)">취소</div>
@@ -234,24 +234,47 @@
 			$('#thumbnailFileArea').hide();
 			
 			$('#porThumbnail').click(function(){
-    			$('#thumbnailImg1').click();
+    			$('#thumbnailImg').click();
     		});
 		});
 		
-		/* 썸네일이미지 미리보기를 위한 함수 */
+		/* 썸네일이미지 미리보기&파일 저장을 위한 함수 */
 		var titleImgChecked = false;
 		function LoadImg(value){
-			if(value.files && value.files[0]){
-				var reader = new FileReader();
-				
-				reader.onload = function(e){								
-    				$('#portThumbnailImage').attr("src", e.target.result).css("display", "block");
-    				$('#thumbnailEnrollArea').css("display", "none");
+			if(confirm("썸네일 등록을 하시겠습니까?")){
+				if(value.files && value.files[0]){
+					var reader = new FileReader();
+					
+					reader.onload = function(e){								
+	    				$('#portThumbnailImage').attr("src", e.target.result).css("display", "block");
+	    				$('#thumbnailEnrollArea').css("display", "none");
+					}
+					
+					titleImgChecked = true;
+	    			reader.readAsDataURL(value.files[0]);
 				}
 				
-				titleImgChecked = true;
-    			reader.readAsDataURL(value.files[0]);
+				var formData = new FormData($('#EnrollPortThumbForm')[0]);
+				
+				$.ajax({ 
+					type: "POST", 
+					enctype: 'multipart/form-data', // 필수 
+					url: 'portImgEnroll.my', 
+					data: formData, // 필수 
+					processData: false, // 필수 
+					contentType: false, // 필수 
+					cache: false, 
+					success: function(data){ 
+						alert("포트폴리오 썸네일 이미지가 저장되었습니다.");
+					}, 
+					error: function(e){ 
+						alert("포트폴리오 썸네일 이미지 저장에 실패하였습니다.");
+					} 
+				});
+			} else{
+				alert("썸네일 이미지를 저장하지 않았습니다.");
 			}
+			
 		}		
 	</script>
 	
@@ -260,7 +283,7 @@
 		<!-- 파일add 버튼을 클릭했을 때 파일첨부 원도우 창이 뜨게 하는 함수 -->
 		var fileNum = 0;
 		$('#fileAdd').click(function(){
-			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='fileNum" + fileNum + "' multiple>");
+			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='pFile' multiple>");
 			$('#fileNum' + fileNum).click();
 			fileNum++;
 		});
@@ -294,6 +317,24 @@
 				
 				$('#fileList').append($div);
 			}
+			
+			var formData = new FormData($('#EnrollPortImgForm')[0]);
+			
+			$.ajax({ 
+				type: "POST", 
+				enctype: 'multipart/form-data', // 필수 
+				url: 'portImgEnroll.my', 
+				data: formData, // 필수 
+				processData: false, // 필수 
+				contentType: false, // 필수 
+				cache: false, 
+				success: function(data){ 
+					alert("포트폴리오 이미지가 저장되었습니다.");
+				}, 
+				error: function(e){ 
+					alert("포트폴리오 이미지 저장에 실패하였습니다.");
+				} 
+			});
 		}
 		
 		/* x버튼을 눌렀을 때 input파일태그가 사라지는 함수 */
