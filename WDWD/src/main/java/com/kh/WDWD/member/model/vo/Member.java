@@ -1,5 +1,7 @@
 package com.kh.WDWD.member.model.vo;
 
+import com.kh.WDWD.contents.model.vo.Contents;
+
 public class Member {
 	private String userId;
 	private String userPwd;
@@ -21,14 +23,14 @@ public class Member {
 	private int recent3;
 	private int recent4;
 	private int recent5;
-	private int profileImg;
+	private String profileImg;
 	
 	public Member() {}
 
 	public Member(String userId, String userPwd, String userName, String phone, String nickName, String email,
 			String intro, String enrollDate, String easy, String account, String bank, int point, int cash,
 			String uStatus, int grade, int recent1, int recent2, int recent3, int recent4, int recent5,
-			int profileImg) {
+			String profileImg) {
 		super();
 		this.userId = userId;
 		this.userPwd = userPwd;
@@ -51,14 +53,6 @@ public class Member {
 		this.recent4 = recent4;
 		this.recent5 = recent5;
 		this.profileImg = profileImg;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
 	}
 
 	public String getUserId() {
@@ -93,7 +87,13 @@ public class Member {
 		this.phone = phone;
 	}
 
+	public String getNickName() {
+		return nickName;
+	}
 
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 
 	public String getEmail() {
 		return email;
@@ -215,23 +215,25 @@ public class Member {
 		this.recent5 = recent5;
 	}
 
-	public int getProfileImg() {
+	public String getProfileImg() {
 		return profileImg;
 	}
 
-	public void setProfileImg(int profileImg) {
+	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
 	}
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userPwd=" + userPwd + ", userName=" + userName + ", phone=" + phone
+		return "Member [userId=" + userId + ", userPwd=" + userPwd + ", userName=" + userName + ", phone=" + phone
 				+ ", nickName=" + nickName + ", email=" + email + ", intro=" + intro + ", enrollDate=" + enrollDate
 				+ ", easy=" + easy + ", account=" + account + ", bank=" + bank + ", point=" + point + ", cash=" + cash
 				+ ", uStatus=" + uStatus + ", grade=" + grade + ", recent1=" + recent1 + ", recent2=" + recent2
 				+ ", recent3=" + recent3 + ", recent4=" + recent4 + ", recent5=" + recent5 + ", profileImg="
 				+ profileImg + "]";
 	}
+
+	
 	
 	
 }

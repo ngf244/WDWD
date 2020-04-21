@@ -76,6 +76,7 @@ public class CBoardController {
 		// 자유게시판  조회 컨트롤러
 	@RequestMapping("actionList.ch")
 	public ModelAndView actionList(@RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
 		String boGroup1 = "1"; //자유게시판
 
 		
@@ -95,6 +96,7 @@ public class CBoardController {
 		
 		
 		if(list != null) {
+			
 			mv.addObject("list", list); 
 			mv.addObject("pi", pi);
 			mv.setViewName("board/boardlist"); 
@@ -111,75 +113,67 @@ public class CBoardController {
 	// 1:1 조회 컨트롤러
 	@RequestMapping("actionOneList.ch")
 	@ResponseBody
-	public ModelAndView actionOneList(@RequestParam(value = "boGroup2", required = false) String boGroup2, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView actionOneList(@ModelAttribute CBoard cBoard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
 		String boCategory = "";
-		System.out.println("boGroup2 : " + boGroup2); //1:1게시판
+		System.out.println("boGroup2 : " + cBoard.getBoGroup()); //1:1게시판
 		System.out.println("boCategory : " + boCategory); //1:1게시판
 		
-		Board b = new Board(boGroup2, boCategory);
 
-		int listCount2 = cBoardService.getListCount2(b);
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(b);
+		int listCount2 = cBoardService.getListCount2(cBoard);
+		System.out.println("리스트 갯수 : " + listCount2);
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(cBoard);
 
-
-		System.out.println("list2" + list2);
+		System.out.println("ArrayList size : " + list2.size());
+		System.out.println("list2 print : " + list2);
 		if(list2 != null) {
 			mv.addObject("list2", list2);
-			if(boGroup2.equals("2")) {
+			if(cBoard.getBoGroup().equals("2")) {
 				mv.setViewName("cashboard/oneBoardList"); 
-			} else if(boGroup2.equals("3")) {
+			} else if(cBoard.getBoGroup().equals("3")) {
 				mv.setViewName("cashboard/auctionBoardList"); 
-			} else if(boGroup2.equals("4")) {
+			} else if(cBoard.getBoGroup().equals("4")) {
 				mv.setViewName("cashboard/contestBoardList"); 
-				
-				
 			}
-				
 		} else {
 			throw new BoardException("자유게시판 조회에 실패하였습니다."); 
 		}
-		
-
-
-		
 		return mv;
+		
 	}
 	
 	
 	// 1:1 조회 컨트롤러
-	@RequestMapping("actionOneCateList.ch")
+	@RequestMapping("actionCateList.ch")
 	@ResponseBody
-	public ModelAndView actionOneCateList(@RequestParam(value="boGroup2", required=false) String boGroup2, @RequestParam(value="boCategory", required=false) String boCategory, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public ModelAndView actionCateList(@ModelAttribute CBoard cBoard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
 
+		System.out.println("boGroup 넘어온값은? : " + cBoard.getBoGroup()); //1:1게시판
+		System.out.println("cbStep 넘어온값은? : " + cBoard.getCbStep()); //1:1게시판
+		System.out.println("boCategory 넘어온값은? : " + cBoard.getBoCategory()); //1:1게시판
 		
-		System.out.println("boCategory 넘어온값은? : " + boCategory); //1:1게시판
+		String boGroup = cBoard.getBoGroup();
+		int cbStep = cBoard.getCbStep();
+		String boCategory = cBoard.getBoCategory();
 		
-		Board b = new Board(boGroup2, boCategory);
 		
-		
-		int listCount2 = cBoardService.getCateListCount2(b);
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(b);
+		int listCount2 = cBoardService.getCateListCount2(cBoard);
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard);
 
 
 		System.out.println("list2" + list2);
 		if(list2 != null) {
 			mv.addObject("list2", list2);
-			if(boGroup2.equals("2")) {
+			if(boGroup.equals("2")) {
+
 				mv.setViewName("cashboard/oneBoardList"); 
-			} else if(boGroup2.equals("3")) {
+			} else if(boGroup.equals("3")) {
 				mv.setViewName("cashboard/auctionBoardList"); 
-			} else if(boGroup2.equals("4")) {
+			} else if(boGroup.equals("4")) {
 				mv.setViewName("cashboard/contestBoardList"); 
-				
-				
 			}
-				
-			System.out.println("boCategory현재 값은? : " + b.getBoCategory());
-			System.out.println("list2 : " + list2 );
 		} else {
-			
 			throw new BoardException("자유게시판 조회에 실패하였습니다."); 
 		}
 	

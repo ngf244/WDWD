@@ -484,8 +484,8 @@ height: 100%;
 						</div>
 					</div>
 					<div id="dropProgress">
-						<button class="buttonDrop" onclick="buttonDrop(1)">전체</button>
-						<button class="buttonDrop" onclick="buttonDrop(2)">진행</button>
+						<button class="buttonDrop" onclick="buttonDrop()">전체</button>
+						<button class="buttonDrop" onclick="buttonDrop(1)">진행</button>
 						<button class="buttonDrop" onclick="buttonDrop(3)">마감</button>
 					</div>
 					<!-- <div id="guideBtn">이용 가이드</div> -->
@@ -620,42 +620,63 @@ height: 100%;
 	
 	<!-- 제작, 편집, 기타 카테고리 버튼  -->
 	<script>
+		boCategory = "";
+		cbStep = 0;
+		/* 전역변수로 활용 */
+		boGroup = "2";
 	
+	    /* 리스트로 글 넘기기 */
 		$('.boardList').on('click', function(){
 			var boNum = $(this).children("input[name=boNum]").val();
-			console.log(boNum);
 			location.href= "detailView.ch?boNum=" + boNum; 
 		});
 		
 	
-	
-		function selectCate(e){
-			var boCategory = e;
-		    var	boGroup2 = "2";
-			console.log(boCategory);
+		/* 카테고리 선택 시 글보기 */
+
+		function selectCate(num){
+			boCategory = num;
 			
+			getList(boCategory, boGroup, cbStep);
 			
+		}	
+			
+		function buttonDrop(num2){
+			cbStep = num2;
+			
+			getList(boCategory, boGroup, cbStep);
+		}
+		
+		/* window.onload = function () {
+			console.log('실행');
+			getList(boCategory, boGroup, cbStep);
+		} */
+		
+		function getList(num1, num2, num3) {
+			console.log('getList실행');
+			 boCategory = num1;
+			 boGroup = num2
+			 cbStep = num3;
+			
+				console.log("전역 카테1 :", boCategory);
+				console.log("전역 진행1 :", cbStep);
+
 			$.ajax({
-				   url: "actionOneCateList.ch",	
+				   url: "actionCateList.ch",	
 		            type: "GET",
-		            data: {"boCategory" : boCategory, "boGroup2" : boGroup2 },
+		            data: {"boCategory" : boCategory, "boGroup" : boGroup, "cbStep" : cbStep },
 		            success: function(data){
 		                $('.onBoarListView').html(data);
 		            },
 		            error: function(){
 		                alert("1:1 카테고리 실패");
 		            }
-				   
 			   });
-			
-			
-			/* var boGroup1 = "1";
-			console.log(e);
-			var e = e;
-			location.replace('actionList.ch?boGroup2='+ 2 + '&selectCate=' + e +'&boGroup1=' + boGroup1); */
-			//location.href="actionList.ch?boGroup="
-			/* 이부분 다시 고치자 */
-		}	
+		}
+		
+		
+		
+		
 	</script>
 
 </body>

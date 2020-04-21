@@ -33,7 +33,7 @@
 			
 			
 			<button onclick="javascript:location.href='list.bo';">boardlist</button>
-			<button onclick="javascript:location.href='detail.bo';">boardDetail</button>
+			<button onclick="javascript:location.href='freeDetail.bo';">boardDetail</button>
 			<button onclick="javascript:location.href='writing.bo';">boardwriting</button>
 			<button onclick="javascript:location.href='revis.bo';">boardrevis</button>
 			<button onclick="javascript:location.href='ban.au';">authorBan</button>

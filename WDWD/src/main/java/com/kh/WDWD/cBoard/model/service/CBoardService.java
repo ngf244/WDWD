@@ -44,15 +44,15 @@ public interface CBoardService {
 
 	int registWrite(Board b);
 
-	int getListCount2(Board b);
+	int getListCount2(CBoard cBoard);
 
-	ArrayList<CBoard> selectCashOneList(Board b);
+	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
 	
-	int getCateListCount2(Board b);
+	int getCateListCount2(CBoard cBoard);
+
+	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
 	
-	ArrayList<CBoard> selectCashOneCateList(Board b);
-	
-	Chat sendChat(Chat c);
+  Chat sendChat(Chat c);
 
 	ArrayList<Chat> chatList(int boNum);
 	

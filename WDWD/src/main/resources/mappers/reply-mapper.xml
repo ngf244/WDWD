@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="replyMapper">
+	<select id="getReplyList" resultMap="replyResultSet">
+		select r.*, m.me_nick
+		from reply r
+    		join member m on(r.rp_writer = m.me_id)
+		where rp_refnum = 101 and rp_rp is null
+	</select>
+	
+	<select id="getReplyList2" resultMap="replyResultSet">
+		select r.*, m.me_nick
+		from reply r
+		    join member m on(r.rp_writer = m.me_id)
+		where rp_refnum = 101 and rp_rp is not null
+	</select>
+	
+	<resultMap type="Reply" id="replyResultSet">
+		<id property="rpNum" column="RP_NUM"/>
+		<result property="rpContent" column="RP_CON"/>
+		<result property="rpDate" column="RP_DATE"/>
+		<result property="rpStatus" column="RP_DEL"/>
+		<result property="refNum" column="RP_REFNUM"/>
+		<result property="rpWriter" column="RP_WRITER"/>
+		<result property="rpConNum" column="RP_CON_NUM"/>
+		<result property="rpRp" column="RP_RP"/>
+		<result property="rpWriterNick" column="ME_NICK"/>
+	</resultMap>
+</mapper>

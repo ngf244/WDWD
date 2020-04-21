@@ -624,7 +624,6 @@ height: 100%;
 	
 		$('.boardList').on('click', function(){
 			var boNum = $(this).children("input[name=boNum]").val();
-			console.log(boNum);
 			location.href= "detailView.ch?boNum=" + boNum; 
 		});
 		
@@ -633,15 +632,14 @@ height: 100%;
 		function selectCate(e){
 			var boCategory = e;
 		    var	boGroup2 = "3";
-			console.log(boCategory);
 			
 			
 			$.ajax({
-				   url: "actionOneCateList.ch",	
+				   url: "actionCateList.ch",	
 		            type: "GET",
 		            data: {"boCategory" : boCategory, "boGroup2" : boGroup2 },
 		            success: function(data){
-		                $('.onBoarListView').html(data);
+		                $('.auctionListView').html(data);
 		            },
 		            error: function(){
 		                alert("1:1 카테고리 실패");

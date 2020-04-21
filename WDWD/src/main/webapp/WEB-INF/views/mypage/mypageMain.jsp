@@ -150,6 +150,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        cursor: pointer;
     }	
 	
 	/* 회원정보수정버튼 */
@@ -268,15 +269,16 @@
 	}
 	
 	/* 내 글 관리 부분 */
-	#mypostManagement{height: 830px; margin-top: 25px;}
+	#mypostManagement{height: 730px; margin-top: 25px;}
 	.mypostText{text-indent: 10px; height: 70px; font-size: 18pt; font-weight: bolder; line-height: 65px; background: #EAEAEA;}
 	.mypostArea{height: 700px; margin-top: 30px;}
 	.mypostArea>div>span{font-size: 14pt; margin-left: 20px; font-weight: bold;}
 	#replyText{font-size: 14pt; margin-left: 20px; font-weight: bold;}
+	#ScrapText{font-size: 14pt; margin-left: 20px; font-weight: bold;}
 	.pointArea{
 		float: left;
 		width: 47%;
-		height: 400px;
+		height: 300px;
 		border: 1px solid lightgray;
 		display: inline-block;
 		border-radius: 10px;
@@ -284,21 +286,37 @@
 	.cashArea{
 		float: right;
 		width: 47%;
-		height: 400px;
+		height: 300px;
 		border: 1px solid lightgray;
 		display: inline-block;
 		border-radius: 10px;		
 	}
 	.replyArea{
-		width: 100%;
+		float: left;
+		width: 47%;
 		height: 300px;
 		border: 1px solid lightgray;
 		margin-top: 25px;
 		border-radius: 10px;
 	}
-	.postList{line-height: 45px; padding: 15px; padding-left: 30px;}
-	.replayList1{width: 45%; line-height: 45px; padding: 15px; padding-left: 22px; float: left; margin-right: 30px;}
-	.replayList2{width: 45%; line-height: 45px; padding: 15px; padding-left: 22px; float: left;}
+	.scrapArea{
+		float: right;
+		width: 47%;
+		height: 300px;
+		border: 1px solid lightgray;
+		margin-top: 25px;
+		display: inline-block;
+		border-radius: 10px;
+	}
+	
+	.postList{width: 90%; line-height: 45px; padding: 15px; padding-left: 22px;}
+	.replayList{width: 90%; line-height: 45px; padding: 15px; padding-left: 22px; float: left; margin-right: 30px;}
+	.scrapList{width: 90%; line-height: 45px; padding: 15px; padding-left: 22px; float: left;}
+	
+	.pList{overflow: hidden; width: 100%;}
+	.cList{overflow: hidden; width: 100%;}
+	.rList{overflow: hidden; width: 100%;}
+	.sList{overflow: hidden; width: 100%;}
 	
 	/* 나의 의뢰/작업 현황 */
 	#myReqWorkState{height: 810px; margin-top: 25px;}
@@ -638,19 +656,21 @@
 				<div class="myprofileArea">
 					<div class="normalInfo">
 						<div class="profileImage" id="profileImage">
-							<c:if test="${ member.profileImg eq 0 }">
+<%-- 							<c:if test="${ member.profileImg eq 0 }">
 								<img class="profile" src="${ contextPath }/resources/images/default_profile.png">
 							</c:if>
 							<c:if test="${ member.profileImg ne 0 }">
 								<img class="profile" src="${ contextPath }/resources/images/profileImage/point.png">
-							</c:if>
+							</c:if> --%>
+							<img id="profile" class="profile" src="${ contextPath }/resources/profile_Image/${ member.profileImg }"/>
 						</div>
 						<div id="profileImgFileArea">
-							<form action="">
-								<input type="file" hidden="" name="profileImg" class="profileImg" id="profileImg">
+							<form method="post" encType="multipart/form-data" id="profileImgForm">
+								<input type="file" hidden="" name="profileImg" id="profileImg" multiple="multiple" onchange="LoadImg(this)">
 							</form>
 						</div>
 						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
+						<button id="profileEditBtn" class="profileImgUploadBtn" style="width: 120px; margin-left: 320px;">이미지 저장</button>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
@@ -734,51 +754,58 @@
 					
 					<div class="mypostArea">
 						<div class="pointArea">
-							<span style="display: inline-block;">포인트 게시글</span>
+							<span style="display: inline-block;">자유 게시판</span>
 							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/>
 							<div class="postList">
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
+								<c:if test="${ !empty pList}">
+									<c:forEach var="p" items="${ pList }">
+										<div class="pList">- ${ p.boTitle }</div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty pList }">
+									<div class="pList">- 작성한 게시물이 없습니다.</div>
+								</c:if>
 							</div>
 						</div>
 						<div class="cashArea">
-							<span style="display: inline-block;">캐쉬 게시글</span>
+							<span style="display: inline-block;">캐쉬 게시판</span>
 							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/>
 							<div class="postList">
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
-								<div>- 게시글 제목</div>
+								<c:if test="${ !empty cList}">
+									<c:forEach var="cList" items="${ cList }">
+										<div class="cList">- ${ cList.boTitle }</div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty cList }">
+									<div class="cList">- 작성한 게시물이 없습니다.</div>
+								</c:if>
 							</div>
 						</div>
 						<div style="clear:both;"></div>
 						<div class="replyArea">
 							<div id="replyText">댓글&nbsp;<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyReply();"/></div>
-							<div class="replayList1">
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
+							<div class="replayList">
+								<c:if test="${ !empty rList}">
+									<c:forEach var="r" items="${ rList }">
+										<div class="rList">- ${ r.rpContent }</div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty rList }">
+									<div class="rList">- 작성한 댓글이 없습니다.</div>
+								</c:if>
 							</div>
-							<div class="replayList2">
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-								<div>- 댓글 내용</div>
-							</div>
-							<div style="clear: both;"></div>							
 						</div>
-											
+						<div class="scrapArea">
+							<div id="ScrapText">스크랩&nbsp;<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyScrap();"/></div>
+							<div class="scrapList">
+								<div class="sList">- 스크랩 제목</div>
+								<div class="sList">- 스크랩 제목</div>
+								<div class="sList">- 스크랩 제목</div>
+								<div class="sList">- 스크랩 제목</div>
+								<div class="sList">- 스크랩 제목</div>
+							</div>
+						</div>
+						<div style="clear: both;"></div>					
 					</div>
 				</div>
 				<!-- 내 의뢰/작업 현황 -->
@@ -794,7 +821,7 @@
 							<div class="recruit">
 								<span class="stepText">STEP 1. 지원자 모집 중</span>
 								<div class="innerArea" onclick="goToMyReqList(1);">
-									<div class="innerAreaText">5 </div>건
+									<div class="innerAreaText">${ rwCount[0] } </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
 							</div>
@@ -804,7 +831,7 @@
 							<div class="working1">
 								<span class="stepText">STEP 2. 작업 진행 중</span>
 								<div class="innerArea" onclick="goToMyReqList(2);">
-									<div class="innerAreaText">2 </div>건
+									<div class="innerAreaText">${ rwCount[1] } </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
 							</div>
@@ -814,7 +841,7 @@
 							<div class="complete1">
 								<span class="stepText">STEP 3. 거래 완료</span>
 								<div class="innerArea" onclick="goToMyReqList(3);">
-									<div class="innerAreaText">3 </div>건
+									<div class="innerAreaText">${ rwCount[2] } </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
 							</div>						
@@ -824,7 +851,7 @@
 							<div class="participate">
 								<span class="stepText">STEP 1. 참가 지원 중</span>
 								<div class="innerArea" onclick="goToMyWorkList(1)">
-									<div class="innerAreaText">7 </div>건
+									<div class="innerAreaText">${ rwCount[3] } </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
 							</div>
@@ -834,7 +861,7 @@
 							<div class="working2">
 								<span class="stepText">STEP 2. 작업 진행 중</span>
 								<div class="innerArea" onclick="goToMyWorkList(2)">
-									<div class="innerAreaText">2 </div>건
+									<div class="innerAreaText">${ rwCount[4] } </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
 							</div>
@@ -844,7 +871,7 @@
 							<div class="complete2">
 								<span class="stepText">STEP 3. 거래 완료</span>
 								<div class="innerArea" onclick="goToMyWorkList(3)">
-									<div class="innerAreaText">4 </div>건
+									<div class="innerAreaText">${ rwCount[5] } </div>건
 								</div>
 								<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
 							</div>
@@ -883,7 +910,7 @@
 							<a href=""> &raquo; </a>
 							</div>
 						</div>
-						<div id="portpolioEnrollBtn" onclick="location.href='porEnroll.my'">등록하기</div>
+						<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
 						<div style="clear: both;"></div>						
 					</div>
 				</div>
@@ -895,19 +922,41 @@
 					</div>
 					<div class="cashChangeArea">
 						<div class="dateArea">
-							<div class="monthArea">2020.03.</div>
-							<div class="changeList">
-								<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
-								<div class="chageDesc">2020. 03.10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2,000 지출 </div>
-							</div>
-							<div class="changeList">
-								<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
-								<div class="chageDesc">2020. 03.05&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3,000 입금 </div>
-							</div>
-							<div class="changeList">
-								<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
-								<div class="chageDesc">2020. 03.02&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4,000 충전 </div>
-							</div>														
+							<div class="monthArea">${ nowDay }</div>
+							<c:if test="${ !empty ccList}">
+									<c:forEach var="cc" items="${ ccList }">
+										<c:if test="${ cc.pcContent eq '캐쉬 충전' }">
+											<div class="changeList">
+											<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
+											<div class="chageDesc">
+												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<fmt:formatNumber value="${ cc.pcAmount }"/>충전
+											</div>
+										</div>
+										</c:if>
+										<c:if test="${ cc.pcContent eq '의뢰 비용' }">
+											<div class="changeList">
+											<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
+											<div class="chageDesc">
+												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<fmt:formatNumber value="${ cc.pcAmount }"/>지출
+											</div>
+										</div>
+										</c:if>
+										<c:if test="${ cc.pcContent eq '의뢰 수주' }">
+											<div class="changeList">
+											<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
+											<div class="chageDesc">
+												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+											</div>
+										</div>
+										</c:if>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty ccList }">
+									<div class="ccList">- 캐쉬 변동 내역이 없습니다.</div>
+								</c:if>
 						</div>
 					</div>
 				</div>
@@ -987,7 +1036,7 @@
 			<!-- 포트폴리오 디테일 모달창 -->
 			<div id="portDetailModal" class="portDetailModalArea">
 				<div class="portDetailModalContent">
-					<div id="modalCloseBtn" onclick="closeDetail();"><img src="${ contextPath }/resources/images/x_icon2.png" width="30" height="30"></div>
+					<div id="modalCloseBtn" onclick="closeDetail();"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
 					<div style="clear: both;"></div>
 					
 					<div class="portpolioNameContents">
@@ -1012,7 +1061,7 @@
 						<div id="deleteBtn">삭제</div>
 					</div>					
 					<div style="clear: both;"></div>
-					<div class="ModalReplyArea">
+					<div class="replyArea">
 						<div class="replayText">댓글(0건)</div>
 						<div class="repWriterImg">
 							<img src="">
@@ -1033,14 +1082,15 @@
 							</div>
 							<form>
 								<textarea id="repEnrollCon" name="repEnrollCon" rows="5" cols="95" style="resize: none;"></textarea><br>
-								<div id="repEnrollBtn" style="float: right;">등록</div>								
+								<input id="repEnrollBtn" type="submit" style="float: right;" value="등록">								
 							</form>
 						</div>
 					</div>
 				</div>
+				
 				<div id="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
 					<a href="#modalCloseBtn"><img id="backToTop" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%"></a>									
-				</div>				
+				</div>
 			</div>			
 							
 		</div>
@@ -1095,10 +1145,45 @@
 		}
 	</script>
 	<script>
-		$('.profileImage').on('click', function(){
-			
-			$('.profileImg').click();
+		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수
+		$('#profileImage').on('click', function(){
+			$('#profileImg').click();
 		});
+		
+		// 각각의 영역에 파일을 첨부 했을 경우 미리 보기가 가능하도록 하는 함수
+		function LoadImg(value){
+			if(value.files && value.files[0]){
+				var reader = new FileReader();
+				
+				reader.onload = function(e){								
+					$("#profile").attr("src", e.target.result);
+				}
+				
+				reader.readAsDataURL(value.files[0]);
+			}
+		}
+		
+		// 파일 업로드
+		$('.profileImgUploadBtn').on('click', function(){
+			var formData = new FormData($('#profileImgForm')[0]);
+			$.ajax({ 
+				type: "POST", 
+				enctype: 'multipart/form-data', // 필수 
+				url: 'uProfileImg.my', 
+				data: formData, // 필수 
+				processData: false, // 필수 
+				contentType: false, // 필수 
+				cache: false, 
+				success: function(data){ 
+					alert("프로필 이미지가 저장되었습니다.");
+				}, 
+				error: function(e){ 
+					alert("프로필 이미지 저장에 실패하였습니다.");
+				} 
+			});
+		});
+		
+		
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>
