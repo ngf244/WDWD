@@ -67,7 +67,7 @@
 		vertical-align: middle;
 		margin-left: 30px;
 	}
-	#loginView, #signupBtn, #welcomeName {
+	#loginView, #signupBtn, #welcomeName #logout{
 		padding: 10px;
 		background-color : rgb(52, 152, 219);
 		color : white;
@@ -347,7 +347,8 @@
 				<c:if test="${ empty sessionScope.loginUser }">
 				<c:if test="${ empty sessionScope.signup }">
 					<div id="loginView">login</div>
-					<div id="signupBtn">sign up</div> 
+					<div id="signupBtn">sign up</div>
+					
 					<script>
 						$('#loginView').click(function(){
 							$('#loginWrap').show();
@@ -360,7 +361,7 @@
 				</c:if>
 			</c:if>
 				<c:if test="${ !empty sessionScope.loginUser }">
-          <div id="welcomeName">김대호님 환영합니다</div><br>
+          <div id="welcomeName">김대호님 환영합니다</div>
           <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
           <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
             <div id="noticeArea" class="notice">
@@ -392,7 +393,7 @@
                 </div>
 
                 <div class="smallMenu blue">
-                  <img src="${ contextPath }/resources/images/logout.png">
+                  <img src="${ contextPath }/resources/images/logout.png" onclick="location.href='logout.me'">
                   <br><b>로그아웃</b>
                 </div>
 

@@ -7,7 +7,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
 <title>로그인</title>
-<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <style>
    .loginTitle{
    margin-top: 60px;
@@ -106,13 +105,7 @@
 	         <button type="button" id="kakaoBtn">카카오아이디 로그인</button><br>
 	         <button type ="button" id="googleBtn">구글아이디 로그인</button>
 	      </div>
-	      
-	      <script>
-	      	$('#loginBtn').click(function(){
-	      		$('#loginForm').submit();
-	      	})
-	      </script>
-	     </form>
+	    </form>
 	</div>
 </body>
 </html>

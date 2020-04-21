@@ -40,10 +40,11 @@
 		AND ME_STATUS='Y'
 	</select>  
 
-	<insert id="insertMember" parameterType="member">
+	<!-- 회원가입 쿼리문 -->
+	<insert id="insertMember" parameterType="Member">
 		INSERT INTO MEMBER
 		VALUES(#{userId}, #{userPwd}, #{userName}, #{NickName}, #{email}, #{phone} #{intro},
-		SYSDATE, SYSDATE, DEFAULT)
+		stsdate, stsdate, default)
 	</insert>
 	
 	<update id="updateProfileImg" parameterType="Member">
