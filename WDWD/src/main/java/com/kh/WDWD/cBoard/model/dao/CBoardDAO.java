@@ -125,23 +125,21 @@ public class CBoardDAO {
 		return result;
 	}
   
-  	public int getListCount2(SqlSessionTemplate sqlSession, Board b) {
-		return sqlSession.selectOne("cBoardMapper.getListCount2", b);
+  public int getListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
+		return sqlSession.selectOne("cBoardMapper.getListCount2", cBoard);
 	}
 
 	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession, Board b) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", b);
 	}
 
-	public int getCateListCount2(SqlSessionTemplate sqlSession, Board b) {
-		
-		System.out.println("bCount :" + b);
-		return sqlSession.selectOne("cBoardMapper.getCateListCount2", b);
+	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
+		return sqlSession.selectOne("cBoardMapper.getCateListCount2", cBoard);
 	}
 
-	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, Board b) {
-		System.out.println("b :" + b);
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", b);
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard);
 	}
+
 
 }
