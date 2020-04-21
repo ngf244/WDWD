@@ -171,43 +171,23 @@
 	   	
   
   
-    	<select id="getListCount2" resultType="_int">
+   	<select id="getListCount2" resultType="_int">
 		select count(*)
 		from board
-		<where>
-				<if test= "boGroup != null">
-					BO_GROUP = #{ boGroup }
-				</if>
-				
-				<!-- <if test="cbStep != 0">		
-					and cb_step = #{ cbStep }
-				</if> -->
-					and bo_del = 'N'
-		</where>
+			join cash_board on (bo_num = cb_num)
+		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
 		
 	</select>
 	
 	
 		
-	<select id="selectList2" parameterType="Board" resultMap="CBoardResultSet">
-	
-        SELECT *
+	<select id="selectList2" parameterType="CBoard" resultMap="CBoardResultSet">
+		
+		SELECT *
 		FROM CASH_BOARD  
-		JOIN BOARD ON (BO_NUM = CB_NUM)
-		JOIN MEMBER ON(ME_ID = BO_WRITER)
-		<where>
-				<if test= "boGroup != null">
-					BO_GROUP = #{ boGroup }
-				</if>
-				
-				<!-- <if test="cbStep != 0">		
-					and cb_step = #{ cbStep }
-				</if> -->
-					and bo_del = 'N'
-		</where>
-		
-		
-		
+			JOIN BOARD ON (BO_NUM = CB_NUM)
+			JOIN MEMBER ON(ME_ID = BO_WRITER)
+		where BO_GROUP = #{ boGroup } and bo_del = 'N'
 	</select>
 	
 		
@@ -216,6 +196,7 @@
    	<select id="getCateListCount2" resultType="_int">
 		select count(*)
 		from board
+			join cash_board on (bo_num = cb_num)
 		<where>
 				<if test= "boGroup != null">
 					BO_GROUP = #{ boGroup }
@@ -223,9 +204,9 @@
 				<if test="boCategory != null"> 
 					and BO_CATEGORY = #{ boCategory }
 				</if>
-				<!-- <if test="cbStep != 0">		
+				<if test="cbStep != 0">		
 					and cb_step = #{ cbStep }
-				</if> -->
+				</if>
 					and bo_del = 'N'
 		</where>
 		
@@ -243,12 +224,12 @@
 				<if test= "boGroup != null">
 					BO_GROUP = #{ boGroup }
 				</if>
-				<if test="boCategory != null"> 
+				<if test="boCategory == ''"> 
 					and BO_CATEGORY = #{ boCategory }
 				</if>
-				<!-- <if test="cbStep != 0">		
+				<if test="cbStep != 0">		
 					and cb_step = #{ cbStep }
-				</if> -->
+				</if>
 					and bo_del = 'N'
 		</where>
 		

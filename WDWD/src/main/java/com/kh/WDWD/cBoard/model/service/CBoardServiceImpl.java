@@ -1,12 +1,12 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
@@ -74,23 +74,23 @@ public class CBoardServiceImpl implements CBoardService {
   
   
 	@Override
-	public int getListCount2(Board b) {
-		return cBoardDAO.getListCount2(sqlSession,  b);
+	public int getListCount2(CBoard cBoard) {
+		return cBoardDAO.getListCount2(sqlSession,  cBoard);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectCashOneList(Board b) {
-		return cBoardDAO.selectCashOneList(sqlSession,  b);
+	public ArrayList<CBoard> selectCashOneList(CBoard cBoard) {
+		return cBoardDAO.selectCashOneList(sqlSession,  cBoard);
 	}
 
 	@Override
-	public int getCateListCount2(Board b) {
-		return cBoardDAO.getCateListCount2(sqlSession,  b);
+	public int getCateListCount2(CBoard cBoard) {
+		return cBoardDAO.getCateListCount2(sqlSession, cBoard);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectCashOneCateList(Board b) {
-		return cBoardDAO.selectCashOneCateList(sqlSession,  b);
+	public ArrayList<CBoard> selectCashOneCateList(CBoard cBoard) {
+		return cBoardDAO.selectCashOneCateList(sqlSession, cBoard);
 	}
   
 

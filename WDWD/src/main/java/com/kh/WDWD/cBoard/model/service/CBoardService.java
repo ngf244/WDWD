@@ -1,8 +1,8 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.request.model.vo.Request;
@@ -30,13 +30,13 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
 
-	int getListCount2(Board b);
+	int getListCount2(CBoard cBoard);
 
-	ArrayList<CBoard> selectCashOneList(Board b);
+	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
 	
-	int getCateListCount2(Board b);
+	int getCateListCount2(CBoard cBoard);
 	
-	ArrayList<CBoard> selectCashOneCateList(Board b);
+	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
 
 	
 

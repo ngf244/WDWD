@@ -1,12 +1,12 @@
 package com.kh.WDWD.cBoard.model.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.request.model.vo.Request;
@@ -85,23 +85,22 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectMyReqList", cboard, rowBounds);
 	}
   
-  	public int getListCount2(SqlSessionTemplate sqlSession, Board b) {
-		return sqlSession.selectOne("cBoardMapper.getListCount2", b);
+  	public int getListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
+  		
+		return sqlSession.selectOne("cBoardMapper.getListCount2", cBoard);
 	}
 
 	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession, Board b) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", b);
 	}
 
-	public int getCateListCount2(SqlSessionTemplate sqlSession, Board b) {
+	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
 		
-		System.out.println("bCount :" + b);
-		return sqlSession.selectOne("cBoardMapper.getCateListCount2", b);
+		return sqlSession.selectOne("cBoardMapper.getCateListCount2", cBoard);
 	}
 
-	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, Board b) {
-		System.out.println("b :" + b);
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", b);
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard);
 	}
   
   
