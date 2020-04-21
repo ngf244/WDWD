@@ -577,11 +577,13 @@
 		   
 		  	 
 	   });
-	   	   
 	   
-
-	   
-
+	   /* 리스트로 글 넘기기 */
+	   $('.input.box2').on('click', function(){
+	      var boNum = $(this).prev().prev().val();
+	      console.log(boNum);
+	      location.href= "detail.bo?boNum=" + boNum; 
+	   });
    
    </script>
   

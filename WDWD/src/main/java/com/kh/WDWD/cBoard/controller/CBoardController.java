@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
@@ -115,17 +118,14 @@ public class CBoardController {
 	@ResponseBody
 	public ModelAndView actionOneList(@ModelAttribute CBoard cBoard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
-		String boCategory = "";
-		System.out.println("boGroup2 : " + cBoard.getBoGroup()); //1:1게시판
-		System.out.println("boCategory : " + boCategory); //1:1게시판
+//		System.out.println("boGroup2 : " + cBoard.getBoGroup()); //1:1게시판
+//		System.out.println("boCategory : " + boCategory); //1:1게시판
 		
-
-		int listCount2 = cBoardService.getListCount2(cBoard);
-		System.out.println("리스트 갯수 : " + listCount2);
+//		System.out.println("리스트 갯수 : " + listCount2);
 		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(cBoard);
 
-		System.out.println("ArrayList size : " + list2.size());
-		System.out.println("list2 print : " + list2);
+//		System.out.println("ArrayList size : " + list2.size());
+//		System.out.println("list2 print : " + list2);
 		if(list2 != null) {
 			mv.addObject("list2", list2);
 			if(cBoard.getBoGroup().equals("2")) {
@@ -145,8 +145,7 @@ public class CBoardController {
 	
 	// 1:1 조회 컨트롤러
 	@RequestMapping("actionCateList.ch")
-	@ResponseBody
-	public ModelAndView actionCateList(@ModelAttribute CBoard cBoard, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+	public void actionCateList(@ModelAttribute CBoard cBoard, @RequestParam(value="page", required=false) Integer page, HttpServletResponse response) {
 		
 
 		System.out.println("boGroup 넘어온값은? : " + cBoard.getBoGroup()); //1:1게시판
@@ -157,27 +156,17 @@ public class CBoardController {
 		int cbStep = cBoard.getCbStep();
 		String boCategory = cBoard.getBoCategory();
 		
-		
 		int listCount2 = cBoardService.getCateListCount2(cBoard);
 		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard);
 
-
 		System.out.println("list2" + list2);
-		if(list2 != null) {
-			mv.addObject("list2", list2);
-			if(boGroup.equals("2")) {
-
-				mv.setViewName("cashboard/oneBoardList"); 
-			} else if(boGroup.equals("3")) {
-				mv.setViewName("cashboard/auctionBoardList"); 
-			} else if(boGroup.equals("4")) {
-				mv.setViewName("cashboard/contestBoardList"); 
-			}
-		} else {
-			throw new BoardException("자유게시판 조회에 실패하였습니다."); 
+		
+		response.setContentType("application/json; charset=UTF-8");
+		try {
+			new Gson().toJson(list2, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			throw new BoardException("리스트 가져오기 실패");
 		}
-	
-		return mv;
 	}	
 		
 	
