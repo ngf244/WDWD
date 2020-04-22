@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
 	.portpolioEnroll{
 		border: 1px solid lightgray;
@@ -172,8 +173,8 @@
 									<tr>
 										<td>본 사이트 이용 여부</td>
 										<td>
-											<input type="radio" id="usingSiteY" name="poUseYn" class="usingSite" value="Y"><label for="usingSiteY">Yes</label>
-											<input type="radio" id="usingSiteN" name="poUseYn" class="usingSite" value="N"><label for="usingSiteN">No</label>
+											<input type="radio" id="usingSiteY" name="poUseYn" class="poUseYn" value="Y"><label for="usingSiteY">Yes</label>
+											<input type="radio" id="usingSiteN" name="poUseYn" class="poUseYn" value="N"><label for="usingSiteN">No</label>
 										</td>
 									</tr>
 									<tr>
@@ -188,6 +189,8 @@
 							<form method="post" encType="multipart/form-data" id="EnrollPortThumbForm">
 								<div id="thumbnailFileArea" class="thumbnailFileArea">
 									<input type="file" hidden="" id="thumbnailImg" class="thumbnailImg" multiple="multiple" name="pFile" onchange="LoadImg(this)">
+									<span id="thumbnailOriginName" style="display: none;"></span>
+									<span id="thumbnailModifyName" style="display: none;"></span>
 								</div>
 							</form>
 							<form method="post" encType="multipart/form-data" id="EnrollPortImgForm">
@@ -252,8 +255,13 @@
 		/* 썸네일이미지 미리보기&파일저장을 위한 함수 */
 		var titleImgChecked = false;
 		function LoadImg(value){
+			
 			if(confirm("썸네일 등록을 하시겠습니까?")){
 				if(value.files && value.files[0]){
+					var fileValue = value.value;
+					var fileUrl = fileValue.lastIndexOf("\\") + 1;
+					var fileName = fileValue.substring(fileUrl);
+					
 					var reader = new FileReader();
 					
 					reader.onload = function(e){								
@@ -276,14 +284,29 @@
 					contentType: false, // 필수 
 					cache: false, 
 					success: function(data){ 
-						alert("포트폴리오 썸네일 이미지가 저장되었습니다.");
+						$('#thumbnailOriginName').text(fileName);
+						$('#thumbnailModifyName').text(data);
+						
+						swal({
+						    title: "포트폴리오 썸네일",
+						    text: "이미지 등록 성공!",
+						    icon: "success" //"info,success,warning,error" 중 택1
+						});
 					}, 
 					error: function(e){ 
-						alert("포트폴리오 썸네일 이미지 저장에 실패하였습니다.");
+						swal({
+						    title: "포트폴리오 썸네일",
+						    text: "이미지 등록 실패!",
+						    icon: "warning" //"info,success,warning,error" 중 택1
+						});
 					} 
 				});
 			} else{
-				alert("썸네일 이미지를 저장하지 않았습니다.");
+				swal({
+				    title: "포트폴리오 썸네일",
+				    text: "이미지 등록을 하지 않았습니다.",
+				    icon: "info" //"info,success,warning,error" 중 택1
+				});
 			}
 			
 		}		
@@ -294,8 +317,22 @@
 		<!-- 파일add 버튼을 클릭했을 때 파일첨부 원도우 창이 뜨게 하는 함수 -->
 		var fileNum = 0;
 		$('#fileAdd').click(function(){
-			$('#fileList').append()
-			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='pFile' multiple>");
+			var $fileList = $('#fileList');
+			$fileForm = $('<form enctype="multipart/form-data" style="display: inline;" method="post">');
+			$inputFile = $("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='pFile' multiple>");
+			
+			$fileForm.append($inputFile);
+			$fileList.append($fileForm);
+			
+			$pocOrigin = $('<span class="pocOrigin" name="pocOrigin" id="pocOrigin" style="display: none;">');
+			$pocModify = $('<span class="pocModify" name="pocModify" id="pocModify" style="display: none;">');
+			$imageNameArea = $('<div class="imageNameArea" style="display: inline;">');
+			
+			$imageNameArea.append($pocOrigin);
+			$imageNameArea.append($pocModify);
+			
+			$fileList.append($imageNameArea)
+			
 			$('#fileNum' + fileNum).click();
 			fileNum++;
 		});
@@ -331,7 +368,9 @@
 				$('#fileList').append($div);
 			}
 			
-			var formData = new FormData($('#EnrollPortImgForm')[fileCount]);
+			var formData = new FormData($(file).parent()[0]);
+			console.log($(file).parent().next().children('span[name="pocOrigin"]')[0]);
+			console.log($(file).parent().next().children('span[name="pocModify"]')[0]);
 			
 			$.ajax({ 
 				type: "POST", 
@@ -342,12 +381,19 @@
 				contentType: false, // 필수 
 				cache: false, 
 				success: function(data){ 
-					alert("포트폴리오 이미지가 저장되었습니다.");
 					fileCount++;
 					$('#fileCount').text(fileCount);
+					$(file).parent().next().children('span[name="pocOrigin"]').text(fileName);
+					console.log(fileName);
+					$(file).parent().next().children('span[name="pocModify"]').text(data);
+					console.log(data);
 				}, 
 				error: function(e){ 
-					alert("포트폴리오 이미지 저장에 실패하였습니다.");
+					swal({
+					    title: "포트폴리오 첨부파일",
+					    text: "등록 실패!",
+					    icon: "error" //"info,success,warning,error" 중 택1
+					});
 				} 
 			});
 		}
@@ -358,6 +404,47 @@
 			$('#fileCount').text(fileCount);
 			this.parentNode.remove();
 		});
+		
+		$('#portCompleteBtn').click(function(){
+			
+			if($('#poTitle').val() == "") {
+				alert('제목을 입력해주세요.');
+			} else if($('#poCategory').val() == "") {
+				alert('포트폴리오 유형을 선택해주세요.');
+			} else if($(':radio[name="poUseYn"]:checked').length < 1) {
+				alert('사이트 이용 여부를 체크해주세요.');
+			} else if($('#poDesc').val() == "") {
+				alert('포트폴리오 상세 설명을 입력해주세요.')	;
+			} else if(confirm("포트폴리오를 등록하시겠습니까?")) {
+				
+				$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + $('#thumbnailOriginName').text() + '">');				
+				$('#EnrollPortForm').append('<input type="hidden" name="pocModifys" value="' + $('#thumbnailModifyName').text() + '">');
+				
+				var pocOrigins = new Array();
+
+				$('.pocOrigin').each(function () {
+					pocOrigins.push($(this).text());
+				});
+				
+				for(var i in pocOrigins){
+					//띄워쓰기로 구분하기 때문에 큰따음표로 다시감싸야함
+					$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + pocOrigins[i] + '">');
+				}
+				
+				var pocModifys = new Array();
+				
+				$('.pocModify').each(function () {
+					pocModifys.push($(this).text());
+				});
+				
+				for(var i in pocModifys){
+					//띄워쓰기로 구분하기 때문에 큰따음표로 다시감싸야함
+					$('#EnrollPortForm').append('<input type="hidden" name="pocModifys" value="' + pocModifys[i] + '">');
+				}
+				
+				$('#EnrollPortForm').submit();	
+			}
+		})
 		
 	</script>	
 		

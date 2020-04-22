@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css?family=Chewy" rel="stylesheet">
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
 	/* 마이페이지 메인 상단 프로필 부분 */
 	#mypageArea{width: 80%; margin: auto; text-align: left;}
@@ -1183,15 +1182,15 @@
 				cache: false, 
 				success: function(data){ 
 					swal({
-					    title: "Profile",
-					    text: "register success!",
+					    title: "프로필 사진",
+					    text: "등록 성공!",
 					    icon: "info" //"info,success,warning,error" 중 택1
 					});
 				}, 
 				error: function(e){ 
 					swal({
-					    title: "Profile",
-					    text: "Picture register fail!",
+					    title: "프로필 사진",
+					    text: "등록 실패!",
 					    icon: "error" //"info,success,warning,error" 중 택1
 					});
 				} 

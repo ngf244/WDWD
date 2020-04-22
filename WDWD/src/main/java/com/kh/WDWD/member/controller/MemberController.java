@@ -108,11 +108,6 @@ public class MemberController {
 		return mv;
 	}
 	
-	@RequestMapping("portpolioList.my")
-	public String portpolioListView() {
-		return "portpolioList";
-	}
-	
 	@RequestMapping("directReq.my")
 	public String directRequestForm() {
 		return "directRequestForm";
