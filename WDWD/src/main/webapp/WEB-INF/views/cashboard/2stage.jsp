@@ -241,7 +241,7 @@
 										
 										<c:if test="${ !empty reqFileList }">
 											<c:forEach var="file" items="${ reqFileList }">
-												<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a>
+												<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
 											</c:forEach>
 										</c:if>
 									</div>
@@ -366,6 +366,22 @@
 						</div>
 						
 						<script>
+							$('#registViewWrap .downloadBtn').click(function(e){
+								if("${cBoard.boWriter}" == "${sessionScope.loginUser.nickName}") {
+									e.preventDefault();
+									alert('원본 파일은 게시글을 채택한 후에 다운로드할 수 있습니다.');
+								}
+							})
+						
+							for(var i = 0; i < $('#boardcontent img').length; i++) {
+								var $watermark = $('<img>');
+								$watermark.attr('class', 'watermark_free');
+								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+								
+								$('header').append($watermark);
+								setWaterMark($('#boardcontent img').eq(i), $watermark);
+							}
+						
 							function loadChat(chatCon, chatDate, position) {
 								var date = new Date(chatDate);
 	                        	
@@ -547,10 +563,10 @@
 						});
 						
 						$('#submit').click(function(){
-							if(confirm("해당 글을 채택하시겠습니까?")) {
-								location.href = "go3stage.ch?boNum=${ cBoard.boNum }";
+							if(confirm('해당 작업물을 채택하시겠습니까?')) {
+								location.href="go3stage.ch?boNum=${ cBoard.boNum }"
 							}
-						})
+						});
 						
  						function registWrite(){
  							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
@@ -566,8 +582,8 @@
 							var $form = $('<form action="registWrite.ch" method="post" id="registWriteForm">');
 							var $div = $('<div id="contentWrap">');
 							var $input1 = $('<input type="hidden" value="${ reqB.boNum }" name="boNum">');
-							var $input2 = $('<input type="hidden" value=1 name="updateCheck">');
-							var $input3 = $('<input type="hidden" value="${ cBoard.boNum }" name="boardNum">');
+							var $input2 = $('<input type="hidden" value="${ cBoard.boNum }" name="boardNum">');
+							var $input3 = $('<input type="hidden" value=1 name="updateCheck">');
 							var $textarea = $('<textarea name="boContent" id="content">');
 							var $div2 = $('<div id="fileList">');
 							
@@ -625,7 +641,6 @@
 							
 							$('#registUpdate').attr('id', 'registWrite').attr('onclick', 'registWrite();');
 						}
-						
 					</script>
 				</div>
 			</div>

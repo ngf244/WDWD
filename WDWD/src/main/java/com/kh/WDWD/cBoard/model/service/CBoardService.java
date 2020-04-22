@@ -59,6 +59,10 @@ public interface CBoardService {
 	int registDelete(int boNum);
 	
 	int go3stage(int boNum);
+	
+	ArrayList<CBoard> checkTime();
+	
+	int timeOut(int boNum);
 
 	
 

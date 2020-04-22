@@ -85,24 +85,59 @@
 						
 						<c:if test="${ cBoard.boReNum ne 0 }">
 							<c:forEach var="r" items="${ list }">
-							<div class="editorList">
-								<div class="editorId">
-									${ r.reId }
-								</div>
-								<div class="editorDate">
-									<c:if test="${ cBoard.boGroup eq 3 }">
-										<fmt:formatNumber value="${ r.reCash }" type="number" groupingUsed="true"/> 원
-									</c:if>
-									<c:if test="${ cBoard.boGroup ne 3 }">
-										${ r.reDate }
-									</c:if>
-								</div>
-								<div class="editorCheck">
-									<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
-										<input type="radio" name="editor" value="">
-									</c:if>
-								</div>
-							</div>
+								<c:if test="${ r.reId eq sessionScope.loginUser.nickName }">
+									<div class="editorList" style="background: rgba(161, 206, 244, 0.55);">
+										<div class="editorId">
+											${ r.reId }
+										</div>
+										<div class="editorDate">
+											<c:if test="${ cBoard.boGroup eq 3 }">
+												<fmt:formatNumber value="${ r.reCash }" type="number" groupingUsed="true"/> CASH
+											</c:if>
+											<c:if test="${ cBoard.boGroup ne 3 }">
+												${ r.reDate }
+											</c:if>
+										</div>
+										<div class="editorCheck">
+											<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+												<c:if test="${ cBoard.boGroup eq 2 }">
+													<input type="radio" name="editor" value="">
+												</c:if>
+											</c:if>
+										</div>
+									</div>
+								</c:if>
+							</c:forEach>
+							
+							<c:forEach var="r" items="${ list }">
+								<c:if test="${ r.reId ne sessionScope.loginUser.nickName }">
+									<div class="editorList">
+										<div class="editorId">
+											${ r.reId }
+										</div>
+										<div class="editorDate">
+											<c:if test="${ cBoard.boGroup eq 3 }">
+												<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+													<fmt:formatNumber value="${ r.reCash }" type="number" groupingUsed="true"/> CASH
+												</c:if>
+												
+												<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
+													비공개입니다.
+												</c:if>
+											</c:if>
+											<c:if test="${ cBoard.boGroup ne 3 }">
+												${ r.reDate }
+											</c:if>
+										</div>
+										<div class="editorCheck">
+											<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+												<c:if test="${ cBoard.boGroup eq 2 }">
+													<input type="radio" name="editor" value="">
+												</c:if>
+											</c:if>
+										</div>
+									</div>
+								</c:if>
 							</c:forEach>
 						</c:if>
 					</div>
@@ -110,7 +145,6 @@
 					<br><br>
 					
 					<script>
-						
 						$("input:radio[name=editor]").click(function(){
 							$("input[name=editor]").parent().parent().css('background', '');
 							$("input[name=editor]:checked").parent().parent().css('background', 'rgba(161, 206, 244, 0.55)');
@@ -120,11 +154,13 @@
 					<div id="btnList">
 						<c:if test="${ !empty sessionScope.loginUser }">
 							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
-								<form action="go2stage.ch" method="post" id="selectForm" style="display:inline-block;" >
-									<div id="selectEdit" class="button">에디터 선택</div>
-									<input type="hidden" id="reNum" name="reNum" value="">
-									<input type="hidden" id="reId" name="reId" value="">
-								</form>
+								<c:if test="${ cBoard.boGroup eq 2 }">
+									<form action="go2stage.ch" method="post" id="selectForm" style="display:inline-block;" >
+										<div id="selectEdit" class="button">에디터 선택</div>
+										<input type="hidden" id="reNum" name="reNum" value="">
+										<input type="hidden" id="reId" name="reId" value="">
+									</form>
+								</c:if>
 							</c:if>
 							
 							<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">

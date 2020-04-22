@@ -130,6 +130,15 @@
 	a:visited {text-decoration: none;}
 	a:hover {text-decoration: none;}
 	
+	.watermark_free {
+		position: absolute;
+		opacity: 0.3;
+	}
+	.watermark_lock {
+		position: absolute;
+		opacity: 0.9;
+	}
+	
 	.range-slider__range {
 		-webkit-appearance: none;
 		width: calc(100%);
@@ -262,7 +271,7 @@
 			<div class="leftLine">
 				<span class="redColor">＞ </span>마감일
 			</div>
-			<div class="rightLine">
+			<div id="timeCount" class="rightLine">
 				<!-- 기한 : <span id="month">1</span>월 <span id="day">1</span>일 <span id="hour">12</span>시 -->
 				<img id="dateDay1" class="dateImg" src="${ contextPath }/resources/images/num0.PNG">
 				<img id="dateDay2" class="dateImg next1" src="${ contextPath }/resources/images/num0.PNG">
@@ -298,8 +307,9 @@
 					
 					!function timer(){
 						setTimeout(function() {
-							if(dateDay == 0 && dateHour == 0 && dateMin == 0 && dateSec == 0) {
-								/* 마감일 때 */
+							if(dateDay <= 0 && dateHour <= 0 && dateMin <= 0 && dateSec <= 0) {
+								$('#timeCount').empty();
+								$('#timeCount').html('<b>마감되었습니다.</b>');
 							} else {
 								dateSec--;
 								
@@ -414,6 +424,42 @@
             alert('불법 이미지 다운을 막고 있습니다.');
 			return false;
         });
+		
+		$(document).on("contextmenu dragstart selectstart", '.watermark_free', function(e){
+            alert('불법 이미지 다운을 막고 있습니다.');
+			return false;
+        });
+		
+		$(document).on("contextmenu dragstart selectstart", '.watermark_lock', function(e){
+            alert('불법 이미지 다운을 막고 있습니다.');
+			return false;
+        });
+		
+		function setWaterMark(img, watermark) {
+			var image_box = $("#mainIcon");
+			var water_mark = $(".water_mark");
+			
+			watermark.css("left", img.offset().left + "px");
+			watermark.css("top", img.offset().top + "px");
+			watermark.css("width", img.innerWidth());
+			watermark.css("height", img.innerHeight());
+		}
+		
+		if('${ cBoard.cbStep }' != 2) {
+			for(var i = 0; i < $('#boardcontent img').length; i++) {
+				var $watermark = $('<img>');
+				if('${ cBoard.cbSecret }' == 'Y') {
+					$watermark.attr('class', 'watermark_free');
+					$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+				} else {
+					$watermark.attr('class', 'watermark_lock');
+					$watermark.attr('src', '${ contextPath }/resources/images/watermark_lock.jpg');
+				}
+				
+				$('header').append($watermark);
+				setWaterMark($('#boardcontent img').eq(i), $watermark);
+			}
+		}
 	</script>
 </body>
 </html>

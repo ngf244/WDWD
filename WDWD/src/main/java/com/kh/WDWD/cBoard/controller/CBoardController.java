@@ -271,8 +271,6 @@ public class CBoardController {
 		
 		if(result != 0) {
 			if(conUrl != null) {
-				ArrayList<Contents> contentArr = new ArrayList<Contents>();
-				
 				for(int i = 0; i < conUrl.length; i++) {
 					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
 					
@@ -355,23 +353,19 @@ public class CBoardController {
 		return mv;
 	}
 	
-	@RequestMapping("reqList.ch")
-	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+	@RequestMapping("checkTime.ch")
+	public void checkTime(HttpServletResponse response) {
 		response.setContentType("application/json; charset=utf-8");
 		
-		ArrayList<Request> list = cBoardService.reqList(bId);
+		ArrayList<CBoard> list = cBoardService.checkTime();
 		
 		JSONArray jArr = new JSONArray();
-		for(Request req: list) {
-			JSONObject jUser = new JSONObject();
-			jUser.put("reNum", req.getReNum());
-			jUser.put("reId", req.getReId());
-			jUser.put("reCash", req.getReCash());
-			jUser.put("rePlz", req.getRePlz());
-			jUser.put("reRefNum", req.getReRefNum());
-			jUser.put("reDate", req.getReDate());
+		for(CBoard b: list) {
+			JSONObject jBoard = new JSONObject();
+			jBoard.put("boNum", b.getBoNum());
+			jBoard.put("cbDate", b.getCbDate());
 			
-			jArr.add(jUser);
+			jArr.add(jBoard);
 		}
 		
 		JSONObject sendJson = new JSONObject();
@@ -385,6 +379,14 @@ public class CBoardController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping("timeOut.ch")
+	public void timeOut(@RequestParam("boNum") int boNum, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		int result = cBoardService.timeOut(boNum);
+		
 	}
 	
 	@RequestMapping("doRequest.ch")
@@ -423,6 +425,38 @@ public class CBoardController {
 				out.flush();
 			}
 			
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("reqList.ch")
+	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		ArrayList<Request> list = cBoardService.reqList(bId);
+		
+		JSONArray jArr = new JSONArray();
+		for(Request req: list) {
+			JSONObject jUser = new JSONObject();
+			jUser.put("reNum", req.getReNum());
+			jUser.put("reId", req.getReId());
+			jUser.put("reCash", req.getReCash());
+			jUser.put("rePlz", req.getRePlz());
+			jUser.put("reRefNum", req.getReRefNum());
+			jUser.put("reDate", req.getReDate());
+			
+			jArr.add(jUser);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -108,6 +108,20 @@
 								alert('원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.');
 							}
 						})
+						
+						for(var i = 0; i < $('#boardcontent img').length; i++) {
+							var $watermark = $('<img>');
+							if('${ cBoard.cbSecret }' == 'Y') {
+								$watermark.attr('class', 'watermark_free');
+								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+							} else {
+								$watermark.attr('class', 'watermark_lock');
+								$watermark.attr('src', '${ contextPath }/resources/images/watermark_lock.jpg');
+							}
+							
+							$('header').append($watermark);
+							setWaterMark($('#boardcontent img').eq(i), $watermark);
+						}
 					</script>
 				</div>	
 			</div>

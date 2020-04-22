@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
-import com.kh.WDWD.cBoard.model.vo.Chat;  
+import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -160,26 +160,34 @@ public class CBoardDAO {
 	public int registDelete(SqlSessionTemplate sqlSession, int boNum) {
 		int result = sqlSession.update("cBoardMapper.registDelete1", boNum);
 		
-		System.out.println("result1 : " + result);
-		System.out.println(boNum);
-		
 		if(result > 0) {
 			result = sqlSession.delete("cBoardMapper.registDelete2", boNum);
-			
-			System.out.println("result2 : " + result);
-			
 			result =  sqlSession.delete("cBoardMapper.registDelete3", boNum);
-			
-			System.out.println("result3 : " + result);
-			
 			return 1;
 		}
-		
 		return 0;
 	}
 
 	public int go3stage(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.update("cBoardMapper.go3stage", boNum);
+	}
+
+	public ArrayList<CBoard> checkTime(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.checkTime");
+	}
+
+	public int timeOut(SqlSessionTemplate sqlSession, int boNum) {
+		Request r = sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
+		
+		if(r == null) {
+			sqlSession.update("cBoardMapper.plusTime", boNum);
+		} else {
+			if(sqlSession.update("cBoardMapper.okCash1", r) <= 0 || sqlSession.update("cBoardMapper.okCash2", r) <= 0) {
+				return 0;
+			}
+		}
+		
+		return 0;
 	}  
 
 }

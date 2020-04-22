@@ -144,4 +144,14 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.go3stage(sqlSession, boNum);
 	}
 
+	@Override
+	public ArrayList<CBoard> checkTime() {
+		return cBoardDAO.checkTime(sqlSession);
+	}
+
+	@Override
+	public int timeOut(int boNum) {
+		return cBoardDAO.timeOut(sqlSession, boNum);
+	}
+
 }
