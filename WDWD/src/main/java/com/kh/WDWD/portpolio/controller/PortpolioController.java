@@ -158,16 +158,21 @@ public class PortpolioController {
 					pcArr.add(pc);
 				}
 			} else {
-				throw new PortpolioException("젠장 리스트 길이가 다르다..");
+				throw new PortpolioException("리스트의 길이가 맞지 않습니다.");
 			}
 			
 			int PortConResult = pService.insertPortpolioCotents(pcArr);
 			
-		} else {
+			if(PortConResult >= pocModifys.size()) {
+				return "redirect:portpolioList.my";
+			} else {
+				throw new BoardException("포트폴리오 콘텐츠 테이블 입력에 실패하였습니다.");
+			}
 			
+		} else {
+			throw new PortpolioException("포트폴리오 테이블 입력에 실패하였습니다");
 		}
 		
-		return "redirect:portpolioList.my";
 	}
 	
 	public String FileMove(ArrayList<String> pocModifys, String userId, HttpServletRequest request) {
@@ -222,9 +227,9 @@ public class PortpolioController {
     			}
     		}
     		if(file.delete()){
-    			System.out.println("폴더삭제 성공");
+    			System.out.println("폴더 삭제 성공");
     		}else{
-    			System.out.println("폴더삭제 실패");
+    			System.out.println("폴더 삭제 실패");
     		}
     		
     	}else{

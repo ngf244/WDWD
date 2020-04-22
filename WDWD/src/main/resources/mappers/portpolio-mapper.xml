@@ -8,6 +8,6 @@
 	
 	<insert id="insertPortpolioContents" parameterType="PortpolioContents">
 		insert into po_contents
-		values(poc_seq.nextval, po_seq.currval, #{pocOrigin}, #{pocModify}, #{pocPath}, DEFAULT)
+		values(poc_seq.nextval, po_seq.currval, #{pocOrigin}, #{pocModify}, #{pocPath}, DEFAULT, null)
 	</insert>	  
 </mapper>

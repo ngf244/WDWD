@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 
@@ -16,7 +17,13 @@ public class PortpolioDAO {
 	}
 
 	public int insertPortpolioContents(SqlSessionTemplate sqlSession, ArrayList<PortpolioContents> pcArr) {
-		return sqlSession.insert("portpolioMapper.insertPortpolioContents", pcArr);
+		int count = 0;
+		for (PortpolioContents pc : pcArr) {
+			int result = sqlSession.insert("portpolioMapper.insertPortpolioContents", pc);
+			count += result;
+		}
+		
+		return count;
 	}
 
 }

@@ -402,6 +402,8 @@
 		$(document).on("click", ".fileAreaRemove", function(){
 			fileCount--;
 			$('#fileCount').text(fileCount);
+			console.log(this.parent().prev());
+			
 			this.parentNode.remove();
 		});
 		
@@ -418,7 +420,7 @@
 			} else if(confirm("포트폴리오를 등록하시겠습니까?")) {
 				
 				$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + $('#thumbnailOriginName').text() + '">');				
-				$('#EnrollPortForm').append('<input type="hidden" name="pocModifys" value="' + $('#thumbnailModifyName').text() + '">');
+				$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + $('#thumbnailModifyName').text() + '">');
 				
 				var pocOrigins = new Array();
 
@@ -427,7 +429,6 @@
 				});
 				
 				for(var i in pocOrigins){
-					//띄워쓰기로 구분하기 때문에 큰따음표로 다시감싸야함
 					$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + pocOrigins[i] + '">');
 				}
 				
@@ -438,8 +439,7 @@
 				});
 				
 				for(var i in pocModifys){
-					//띄워쓰기로 구분하기 때문에 큰따음표로 다시감싸야함
-					$('#EnrollPortForm').append('<input type="hidden" name="pocModifys" value="' + pocModifys[i] + '">');
+					$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + pocModifys[i] + '">');
 				}
 				
 				$('#EnrollPortForm').submit();	
