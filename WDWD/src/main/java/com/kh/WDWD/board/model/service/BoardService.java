@@ -35,4 +35,16 @@ public interface BoardService {
 	ArrayList<Reply> getReplyList(int boNum);
 
 	ArrayList<Reply> getReplyList2(int boNum);
+
+	ArrayList<Contents> getReplyContents(ArrayList<Reply> replyArr);
+
+	ArrayList<Contents> getReply2Contents(ArrayList<Reply> replyArr);
+
+	int insertOneContent(Contents c);
+
+	int insertReply(Reply r);
+
+	int plusViewCount(int boNum);
+
+	int plusReplyCount(int boNum);
 }

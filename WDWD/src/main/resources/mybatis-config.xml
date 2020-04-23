@@ -23,11 +23,11 @@
 		<mapper resource="mappers/member-mapper.xml"/>
 		<mapper resource="mappers/board-mapper.xml"/>
 		<mapper resource="mappers/cash-mapper.xml"/>
-    <mapper resource="mappers/cBoard-mapper.xml"/>
-   	<mapper resource="mappers/portpolio-mapper.xml"/>
-   	<mapper resource="mappers/contents-mapper.xml"/>
-   	<mapper resource="mappers/reply-mapper.xml"/>
-    <mapper resource="mappers/guideboard-mapper.xml"/>
+	    <mapper resource="mappers/cBoard-mapper.xml"/>
+	   	<mapper resource="mappers/portpolio-mapper.xml"/>
+	   	<mapper resource="mappers/contents-mapper.xml"/>
+	   	<mapper resource="mappers/reply-mapper.xml"/>
+	    <mapper resource="mappers/guideboard-mapper.xml"/>
 	</mappers>
 	
 </configuration>

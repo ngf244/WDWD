@@ -52,6 +52,10 @@ public class BoardServiceImpl implements BoardService {
 		return bDAO.getContents(sqlSession, boNum);
 	}
 	
+	@Override
+	public int plusViewCount(int boNum) {
+		return bDAO.plusViewCount(sqlSession, boNum);
+	}
 	//recommend
 	@Override
 	public int checkRecommendExist(HashMap recommendRequest) {
@@ -88,4 +92,28 @@ public class BoardServiceImpl implements BoardService {
 	public ArrayList<Reply> getReplyList2(int boNum) {
 		return bDAO.getReplyList2(sqlSession, boNum);
 	}
+
+	@Override
+	public ArrayList<Contents> getReplyContents(ArrayList<Reply> replyArr) {
+		return bDAO.getReplyContents(sqlSession, replyArr);
+	}
+	@Override
+	public ArrayList<Contents> getReply2Contents(ArrayList<Reply> replyArr) {
+		return bDAO.getReply2Contents(sqlSession, replyArr);
+	}
+
+	@Override
+	public int insertOneContent(Contents c) {
+		return bDAO.insertOneContent(sqlSession, c);
+	}
+	@Override
+	public int insertReply(Reply r) {
+		return bDAO.insertReply(sqlSession, r);
+	}
+
+	@Override
+	public int plusReplyCount(int boNum) {
+		return bDAO.plusReplyCount(sqlSession, boNum);
+	}
+
 }

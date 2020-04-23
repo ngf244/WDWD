@@ -32,7 +32,7 @@
 			default, default, default, #{boWriter}, default, #{boCategory}, default)
 	</insert>
 	
-	<insert id="insertContents" parameterType="arraylist">
+	<insert id="insertContents" parameterType="Contents">
 		insert into contents
 		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, bo_seq.currval)
 	</insert>
@@ -43,6 +43,12 @@
     		join member m on (bo_writer = me_id)
 		where bo_num = #{boNum}
 	</select>
+	
+	<update id="plusViewCount">
+		update board
+		set bo_view = bo_view + 1
+		where bo_num = #{boNum}
+	</update>
 	
 	<resultMap type="Board" id="boardResultSet">
 		<id property="boNum" column="BO_NUM"/>
@@ -92,4 +98,10 @@
 		delete from scrap
 		where me_id = #{userId} and bo_num = #{boNum}
 	</delete>
+	
+	<update id="plusReplyCount">
+		update board
+		set bo_renum = bo_renum + 1
+		where bo_num = #{boNum}
+	</update>
 </mapper>
