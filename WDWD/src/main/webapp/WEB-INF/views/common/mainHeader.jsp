@@ -522,7 +522,7 @@
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
 				<div class="menubar">공지사항</div>
-				<div class="menubar" onclick="guide.jsp">가이드</div>
+				<div class="menubar" onclick="location.href='guidemain.jsp';">가이드</div>
 				<div class="menubar">사진</div>
 				<div class="menubar">미디어</div>
 				<div class="menubar">HIT 갤러리</div>
@@ -607,13 +607,10 @@
 			</div>
 		</div>
 	</header>
-	
 	<br>
 	<div>
 		<jsp:include page="../login/login.jsp"/>
 		<jsp:include page="../login/signup.jsp"/>
 	</div>
-
-	
 </body>
 </html>

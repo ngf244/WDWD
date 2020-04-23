@@ -43,9 +43,17 @@
 	<!-- 회원가입 쿼리문 -->
 	<insert id="insertMember" parameterType="Member">
 		INSERT INTO MEMBER
-		VALUES(#{userId}, #{userPwd}, #{userName}, #{NickName}, #{email}, #{phone} #{intro},
-		stsdate, stsdate, default)
+		VALUES(#{userId}, #{userPwd}, #{userName}, #{phone}, #{nickName}, #{email}, #{intro}, sysdate, 'N', default, default, 
+		default, default, default, default, default, default, default, default, default, default)
 	</insert>
+	
+	
+	<!-- 아이디 확인  -->
+	<select id ="idCheck" parameterType="Member">
+		select userId from myMember
+		where userId = #{userId}
+	</select>
+	
 	
 	<update id="updateProfileImg" parameterType="Member">
 		update member
