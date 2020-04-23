@@ -3,11 +3,82 @@
 <mapper namespace="portpolioMapper">
 	<insert id="enrollPortpolio" parameterType="Portpolio">
 		insert into portpolio
-		values(po_seq.nextval, #{poTitle}, #{poWriter}, #{poDesc}, #{poCategory}, SYSDATE, SYSDATE, DEFAULT, DEFAULT, DEFAULT)
+		values(po_seq.nextval, #{poTitle}, #{poWriter}, #{poDesc}, #{poCategory}, SYSDATE, SYSDATE, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
 	</insert>
 	
 	<insert id="insertPortpolioContents" parameterType="PortpolioContents">
 		insert into po_contents
-		values(poc_seq.nextval, po_seq.currval, #{pocOrigin}, #{pocModify}, #{pocPath}, DEFAULT, null)
-	</insert>	  
+		values(poc_seq.nextval, po_seq.currval, #{pocOrigin}, #{pocModify}, #{pocPath}, DEFAULT, #{pocLevel})
+	</insert>
+	
+	<resultMap type="Portpolio" id="portpolioResultSet">
+		<id property="poNum" column="PO_NUM"/>
+		<result property="poTitle" column="PO_TITLE"/>
+		<result property="poWriter" column="PO_WRITER"/>
+		<result property="poDesc" column="PO_DESC"/>
+		<result property="poCategory" column="PO_CATEGORY"/>
+		<result property="poEnrollDate" column="PO_ENROLLDATE"/>
+		<result property="poModifyDate" column="PO_MODIFYDATE"/>
+		<result property="poUseYn" column="PO_USE_YN"/>
+		<result property="poFee" column="PO_FEE"/>
+		<result property="poCount" column="PO_COUNT"/>
+		<result property="poStatus" column="PO_STATUS"/>
+	</resultMap>
+	
+	<select id="getPortpolioCount" parameterType="Portpolio" resultType="_int">
+		select count(*)
+		from portpolio
+		<where>
+			po_writer = #{poWriter}
+			and po_status = 'Y'
+			<if test="poCategory != null">
+				<if test="poCategory == image">
+					and po_category in ('이미지 편집', '이미지 제작')
+				</if>
+				<if test="poCategory == video">
+					and po_category in ('동영상 편집', '이미지 제작') 				
+				</if>
+			</if>
+		</where>
+	</select>
+	
+	<resultMap type="PortpolioContents" id="pcResultSet">
+		<id property="poNum" column="PO_NUM"/>
+		<result property="poTitle" column="PO_TITLE"/>
+		<result property="poWriter" column="PO_WRITER"/>
+		<result property="poDesc" column="PO_DESC"/>
+		<result property="poCategory" column="PO_CATEGORY"/>
+		<result property="poEnrollDate" column="PO_ENROLLDATE"/>
+		<result property="poModifyDate" column="PO_MODIFYDATE"/>
+		<result property="poUseYn" column="PO_USE_YN"/>
+		<result property="poFee" column="PO_FEE"/>
+		<result property="poCount" column="PO_COUNT"/>
+		<result property="poStatus" column="PO_STATUS"/>
+		<result property="pocNum" column="POC_NUM"/>
+		<result property="pocRef" column="POC_REF"/>
+		<result property="pocOrigin" column="POC_ORGIN"/>
+		<result property="pocModify" column="POC_MODIFY"/>
+		<result property="pocPath" column="POC_PATH"/>
+		<result property="pocStatus" column="POC_STATUS"/>
+		<result property="pocLevel" column="POC_LEVEL"/>
+	</resultMap>
+	
+	<select id="selectPortpolioList" parameterType="Portpolio" resultMap="pcResultSet">
+		select *
+		from portpolio
+     		 join po_contents on (PO_NUM = POC_REF)
+		<where>
+			po_writer = #{poWriter} and poc_level = 0 and po_status = 'Y'
+			<if test="poCategory != null">
+				<if test="poCategory == image">
+					and po_category in ('이미지 편집', '이미지 제작')
+				</if>
+				<if test="poCategory == video">
+					and po_category in ('동영상 편집', '이미지 제작') 				
+				</if>
+			</if>
+		</where>
+		order by po_enrolldate desc, poc_modify desc
+	</select>
+		  
 </mapper>

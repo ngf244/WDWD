@@ -889,7 +889,7 @@
 				<div id="portpolio">
 					<div class="portpolioText">
 						포트폴리오
-						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="location.href='portpolioList.my'"/>
+						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyPortpolioList();"/>
 						<div id="smallReqBtn">의뢰 요청</div>
 					</div>
 					<div class="portpolioArea">
@@ -1149,6 +1149,15 @@
 			var cbStep = e;
 			location.href="workList.my?reId=" + userId + "&cbStep=" + cbStep;
 		}
+		
+		function goToMyPortpolioList(){
+			var poWriter = userId;
+			location.href="portpolioList.my?poWriter=" + poWriter
+		}
+		
+		$(function(){
+			
+		});
 	</script>
 	<script>
 		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수

@@ -2,10 +2,11 @@ package com.kh.WDWD.portpolio.model.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.kh.WDWD.contents.model.vo.Contents;
+import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 
@@ -24,6 +25,17 @@ public class PortpolioDAO {
 		}
 		
 		return count;
+	}
+
+	public int getPortpolioCount(SqlSessionTemplate sqlSession, Portpolio p) {
+		return sqlSession.selectOne("portpolioMapper.getPortpolioCount", p);
+	}
+
+	public ArrayList<Portpolio> selectPortpolioList(SqlSessionTemplate sqlSession, PageInfo pi, Portpolio p) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("portpolioMapper.selectPortpolioList", p, rowBounds);
 	}
 
 }

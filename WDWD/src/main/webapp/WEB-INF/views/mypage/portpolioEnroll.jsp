@@ -402,7 +402,7 @@
 		$(document).on("click", ".fileAreaRemove", function(){
 			fileCount--;
 			$('#fileCount').text(fileCount);
-			console.log(this.parent().prev());
+			($(this).parent().prev()).remove();
 			
 			this.parentNode.remove();
 		});
