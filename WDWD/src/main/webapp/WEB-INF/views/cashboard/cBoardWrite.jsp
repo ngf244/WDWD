@@ -672,6 +672,7 @@
 						<div id="cancle" class="button">돌아가기</div>
 					</div>
 					
+					<script src="http://localhost:82/socket.io/socket.io.js"></script>
 					<script>
 						$('#submit').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
@@ -724,6 +725,11 @@
 									}
 								}).then((result) => {
 									if(result) {
+										if('${boardType}' != 2) {
+											var socket = io("http://localhost:82");
+											socket.emit("chatArr", data);
+										}
+										
 										$('#insertForm').submit();
 									}
 								});
