@@ -74,5 +74,5 @@ public class MemberDAO {
 	public ArrayList<PointNCash> selectRecentlyCashChange(SqlSessionTemplate sqlSession, String userId) {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyCashChange", userId);
 	}
-	
-}
+
+	}
