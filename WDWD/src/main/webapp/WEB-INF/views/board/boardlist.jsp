@@ -354,15 +354,15 @@
          <br>
          <div id="freeMenuBar">
             <div id="freeDropCategory">
-               <div id="freebuttonselect">&nbsp;전체 카테고리</div>
-               <div class="freedropdown-category">
-                  <a href="#">공통</a> 
-                  <a href="#">짤방</a> 
-                  <a href="#">아무말</a>
-                  <a href="#">요청</a>
-                  <a href="#">질문</a>
-               </div>
-            </div>
+					<div id="freebuttonselect">&nbsp;전체 카테고리</div>
+					<div class="freedropdown-category">
+						<a href="actionList.ch?boGroup=1&boCategory=공통">공통</a> 
+						<a href="actionList.ch?boGroup=1&boCategory=짤방">짤방</a> 
+						<a href="actionList.ch?boGroup=1&boCategory=아무말">아무말</a> 
+						<a href="actionList.ch?boGroup=1&boCategory=요청">요청</a> 
+						<a href="actionList.ch?boGroup=1&boCategory=질문">질문</a>
+					</div>
+				</div>
             <form>
                <div id="searchArea">
                   <select name="searchOption">
