@@ -167,7 +167,7 @@
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
 		join member on (board.bo_writer = member.me_id)
-		where cb_step = 1 and bo_group = 3
+		where bo_group = 3 and cb_date != '마감'
 	</select>
 	
 	<select id="getCbCash" resultMap="requestResultSet2">
@@ -180,13 +180,15 @@
 		where rownum = 1
 	</select>
 	
-	<!-- <update id="plusTime" parameterType="_int">
-		update
-	</update> -->
+	<update id="endTime" parameterType="_int">
+		update cash_board
+		set cb_date = '마감'
+		where cb_num = #{boNum}
+	</update>
 	
 	<update id="okCash1" parameterType="Request">
 		update cash_board
-		set cb_cash = #{reCash}, cb_step = 2
+		set cb_cash = #{reCash}, cb_step = 2, cb_date = '마감'
 		where cb_num = #{reNum}
 	</update>
 	

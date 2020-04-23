@@ -369,7 +369,10 @@
 							$('#registViewWrap .downloadBtn').click(function(e){
 								if("${cBoard.boWriter}" == "${sessionScope.loginUser.nickName}") {
 									e.preventDefault();
-									alert('원본 파일은 게시글을 채택한 후에 다운로드할 수 있습니다.');
+									swal({
+										title: "원본 파일은 게시글을 채택한 후에 다운로드할 수 있습니다.",
+										icon: "error"
+									});
 								}
 							})
 						
@@ -453,60 +456,57 @@
 				        <script>
 				        	$('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
 				        	
-				            $(document).ready(function(){
-				            	$(document).ready(function(){
-				                    var socket = io("http://localhost:82");
-				                    
-				                    //msg에서 키를 누를떄
-				                    $("#inputText").keyup(function(key){
-				                        //해당하는 키가 엔터키(13) 일떄
-				                        if(key.keyCode == 13){
-				                            //msg_process를 클릭해준다.
-				                            if($("#inputText").val() == '\n') {
-				                            	$("#inputText").val('');
-				                            } else {
-				                            	$('#inputText').val($('#inputText').val().substr(0, $('#inputText').val().length - 1));
-				                            	$('#sendText').click();	
-				                            }
+			            	$(document).ready(function(){
+			                    var socket = io("http://localhost:82");
+			                    
+			                    //msg에서 키를 누를떄
+			                    $("#inputText").keyup(function(key){
+			                        //해당하는 키가 엔터키(13) 일떄
+			                        if(key.keyCode == 13){
+			                            //msg_process를 클릭해준다.
+			                            if($("#inputText").val() == '\n') {
+			                            	$("#inputText").val('');
+			                            } else {
+			                            	$('#inputText').val($('#inputText').val().substr(0, $('#inputText').val().length - 1));
+			                            	$('#sendText').click();	
+			                            }
+			                        }
+			                    });
+			                    
+			                    //msg_process를 클릭할 때
+			                    $("#sendText").click(function(){
+			                        //소켓에 send_msg라는 이벤트로 input에 #msg의 벨류를 담고 보내준다.
+			                        var chatArr = [$("#inputText").val(), '${ loginUser.userId }', "${ cBoard.boNum }"];
+			                        
+			                        /* ajax로 채팅db에 등록할 것 */
+			                        $.ajax({
+										url: 'sendChat.ch',
+										data: {chatCon: chatArr[0], chatWriter: chatArr[1], chatRefNum: chatArr[2]},
+										type: 'post',
+										success: function(data){
+											socket.emit("chatArr", data);
+										}
+									});
+			                        
+			                        //#msg에 벨류값을 비워준다.
+			                        $("#inputText").val('');
+			                        $("#inputText").height(50 + 'px');
+			                    });
+			                    
+			                    //소켓 서버로 부터 send_msg를 통해 이벤트를 받을 경우 
+			                    socket.on('chatArr', function(chatArr) {
+			                    	if(chatArr.chatNum == "${ cBoard.boNum }") {
+			                    		$('#chatStart').hide();
+				                        if(chatArr.chatWriter == '${ loginUser.nickName }') {
+				                        	loadChat(chatArr.chatCon, chatArr.chatDate, 'right');
+				                        } else {
+				                        	loadChat(chatArr.chatCon, chatArr.chatDate, 'left');
 				                        }
-				                    });
-				                    
-				                    //msg_process를 클릭할 때
-				                    $("#sendText").click(function(){
-				                        //소켓에 send_msg라는 이벤트로 input에 #msg의 벨류를 담고 보내준다.
-				                        var chatArr = [$("#inputText").val(), '${ loginUser.userId }', "${ cBoard.boNum }"];
 				                        
-				                        /* ajax로 채팅db에 등록할 것 */
-				                        $.ajax({
-											url: 'sendChat.ch',
-											data: {chatCon: chatArr[0], chatWriter: chatArr[1], chatRefNum: chatArr[2]},
-											type: 'post',
-											success: function(data){
-												socket.emit("chatArr", data);
-											}
-										});
-				                        
-				                        //#msg에 벨류값을 비워준다.
-				                        $("#inputText").val('');
-				                        $("#inputText").height(50 + 'px');
-				                    });
-				                    
-				                    
-				                    //소켓 서버로 부터 send_msg를 통해 이벤트를 받을 경우 
-				                    socket.on('chatArr', function(chatArr) {
-				                    	if(chatArr.chatNum == "${ cBoard.boNum }") {
-				                    		$('#chatStart').hide();
-					                        if(chatArr.chatWriter == '${ loginUser.nickName }') {
-					                        	loadChat(chatArr.chatCon, chatArr.chatDate, 'right');
-					                        } else {
-					                        	loadChat(chatArr.chatCon, chatArr.chatDate, 'left');
-					                        }
-					                        
-					                        $('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
-				                    	}
-				                    });
-				                });
-				            });
+				                        $('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
+			                    	}
+			                    });
+			                });
 				        </script>
 	
 						<script> 
@@ -563,17 +563,47 @@
 						});
 						
 						$('#submit').click(function(){
-							if(confirm('해당 작업물을 채택하시겠습니까?')) {
-								location.href="go3stage.ch?boNum=${ cBoard.boNum }"
-							}
+							swal({
+								title: "해당 작업물을 채택하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '작성하기',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									location.href="go3stage.ch?boNum=${ cBoard.boNum }"
+								}
+							});
 						});
 						
  						function registWrite(){
  							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 					
- 							if(confirm("글을 등록하시겠습니까?")) {
- 								$('#registWriteForm').submit();	
- 							} 
+ 							swal({
+								title: "글을 등록하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '작성하기',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									$('#registWriteForm').submit();	
+								}
+							});
  						}
 						
 						function registUpdate(){

@@ -164,7 +164,10 @@
 							</c:if>
 							
 							<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
-								<div id="doIt" class="button">신청하기</div>
+								<c:if test="${ cBoard.cbDate ne '마감' }">
+									<div id="doIt" class="button">신청하기</div>
+								</c:if>
+								
 								<div id="cancleIt" class="button" style="display: none;">취소하기</div>
 								
 								<c:set var="loop_flag" value="false" />
@@ -190,18 +193,40 @@
 							var userId = '${ sessionScope.loginUser.userId }';
 							var reCash = 0;
 							
-							if(confirm("에디터 등록을 하시겠습니까?")) {
-								if('${ cBoard.boGroup }' == 3) {
-									reCash = prompt("작업할 의뢰비를 입력해주세요.");
-									if(isNaN(reCash)) {
-										alert('의뢰비는 숫자만 입력하실 수 있습니다.');
+							swal({
+								title: "에디터 등록을 하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '확인',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									if('${ cBoard.boGroup }' == 3) {
+										var reCash = 0
+										
+										swal({
+											title: "작업할 의뢰비를 입력해주세요.",
+											icon: "info",
+											content: {
+												element: "input",
+												attributes: {type: "number"},
+												value: reCash
+											}
+										}).then((input) => {
+											doReq(userId, input);
+										});
 									} else {
 										doReq(userId, reCash);
 									}
-								} else {
-									doReq(userId, reCash);
 								}
-							}
+							});
 						})
 						
 						function doReq(userId, reCash) {
@@ -214,17 +239,35 @@
 										listReq($('#boNum').val());
 										$('#doIt').hide();
 										$('#cancleIt').show();
-										alert('신청되었습니다.');
+										swal({
+											title: "신청되었습니다.",
+											icon: "success"
+										});
 									}
 								}
 							});
 						}
 						
 						$('#cancleIt').click(function(){
-							if(confirm("에디터 등록을 취소하시겠습니까?")) {
-								var userId = '${ sessionScope.loginUser.userId }';
-								cancleReq(userId);
-							}
+							swal({
+								title: "에디터 등록을 취소하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '확인',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									var userId = '${ sessionScope.loginUser.userId }';
+									cancleReq(userId);
+								}
+							});
 						})
 						
 						function cancleReq(userId) {
@@ -237,7 +280,10 @@
 										listReq($('#boNum').val());
 										$('#cancleIt').hide();
 										$('#doIt').show();
-										alert('신청 취소되었습니다.');
+										swal({
+											title: "신청 취소되었습니다.",
+											icon: "success"
+										});
 									}
 								}
 							});
@@ -257,27 +303,51 @@
 										$('#editorListWrap').append($p);
 									} else {
 										for(var i in data.list) {
-											var $div = $('<div class="editorList">');
-											var $subDiv1 = $('<div class="editorId">');
-											var $subDiv2 = $('<div class="editorDate">');
-											var $subDiv3 = $('<div class="editorCheck">');
-											/* var $radio = $('<input type="radio" name="editor" value="">'); */
-											
-											$subDiv1.text(data.list[i].reId);
-											
-											if('${ cBoard.boGroup }' == 3) {
-												var cashNum = data.list[i].reCash;
-												$subDiv2.text(cashNum.toLocaleString() + " 원");
-											} else {
-												$subDiv2.text(data.list[i].reDate);
+											if(data.list[i].reId == '${ sessionScope.loginUser.nickName }') {
+												var $div = $('<div class="editorList" style="background: rgba(161, 206, 244, 0.55);">');
+												var $subDiv1 = $('<div class="editorId">');
+												var $subDiv2 = $('<div class="editorDate">');
+												var $subDiv3 = $('<div class="editorCheck">');
+												
+												$subDiv1.text(data.list[i].reId);
+												
+												if('${ cBoard.boGroup }' == 3) {
+													var cashNum = data.list[i].reCash;
+													$subDiv2.text(cashNum.toLocaleString() + " CASH");
+												} else {
+													$subDiv2.text(data.list[i].reDate);
+												}
+												
+												$div.append($subDiv1);
+												$div.append($subDiv2);
+												$div.append($subDiv3);
+												
+												$('#editorListWrap').append($div);
 											}
-											
-											/* $subDiv3.append($radio); */
-											$div.append($subDiv1);
-											$div.append($subDiv2);
-											$div.append($subDiv3);
-											
-											$('#editorListWrap').append($div);
+										}
+										
+										for(var i in data.list) {
+											if(data.list[i].reId != '${ sessionScope.loginUser.nickName }') {
+												var $div = $('<div class="editorList">');
+												var $subDiv1 = $('<div class="editorId">');
+												var $subDiv2 = $('<div class="editorDate">');
+												var $subDiv3 = $('<div class="editorCheck">');
+												
+												$subDiv1.text(data.list[i].reId);
+												
+												if('${ cBoard.boGroup }' == 3) {
+													var cashNum = data.list[i].reCash;
+													$subDiv2.text("비공개입니다.");
+												} else {
+													$subDiv2.text(data.list[i].reDate);
+												}
+												
+												$div.append($subDiv1);
+												$div.append($subDiv2);
+												$div.append($subDiv3);
+												
+												$('#editorListWrap').append($div);
+											}
 										}
 									}
 								}
@@ -290,12 +360,27 @@
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						});
 						$('#selectEdit').click(function(){
-							if(confirm("선택한 에디터에게 작업을 맡기시겠습니까?")) {
-								$('#reNum').val($('#boNum').val());
-								$('#reId').val($("input[name=editor]:checked").parent().parent().children().first()[0].innerText);
-								
-								$('#selectForm').submit();	
-							}
+							swal({
+								title: "선택한 에디터에게 작업을 맡기시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '확인',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									$('#reNum').val($('#boNum').val());
+									$('#reId').val($("input[name=editor]:checked").parent().parent().children().first()[0].innerText);
+									
+									$('#selectForm').submit();	
+								}
+							});
 						})
 						$('#cancle').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
@@ -306,7 +391,10 @@
 						$('.downloadBtn').click(function(e){
 							if("${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
 								e.preventDefault();
-								alert('원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.');
+								swal({
+									title: "원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.",
+									icon: "error"
+								});
 							}
 						})
 					</script>

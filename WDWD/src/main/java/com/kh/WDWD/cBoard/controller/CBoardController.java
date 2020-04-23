@@ -292,59 +292,66 @@ public class CBoardController {
 		ArrayList<Contents> fileList = cBoardService.fileList(boNum);
 		
 		if(b != null) {
-			switch(b.getCbStep()) {
-				case 1: 
-					ArrayList<Request> list = cBoardService.reqList(boNum);
-					mv.addObject("list", list);
-					mv.addObject("cBoard", b);
-					mv.addObject("fileList", fileList);
-					mv.setViewName("cashboard/1stage");
-					break;
-				case 2:
-					String userNick = "";
-					if(session.getAttribute("loginUser") != null) {
-						Member m = (Member)session.getAttribute("loginUser");
-						userNick = m.getNickName();
-					}
-					
-					if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
+			if(b.getBoGroup().equals("4")) {
+				
+				
+				
+				mv.setViewName("redirect:index.me");
+			} else {
+				switch(b.getCbStep()) {
+					case 1: 
+						ArrayList<Request> list = cBoardService.reqList(boNum);
+						mv.addObject("list", list);
+						mv.addObject("cBoard", b);
+						mv.addObject("fileList", fileList);
+						mv.setViewName("cashboard/1stage");
+						break;
+					case 2:
+						String userNick = "";
+						if(session.getAttribute("loginUser") != null) {
+							Member m = (Member)session.getAttribute("loginUser");
+							userNick = m.getNickName();
+						}
+						
+						if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
+							Board reqB = cBoardService.cBoardReqView(boNum);
+							ArrayList<Contents> reqFileList = new ArrayList<>();
+							if(reqB != null) {
+								reqFileList = cBoardService.fileList(reqB.getBoNum());
+							}
+							ArrayList<Chat> chatList = cBoardService.chatList(boNum);
+							
+							mv.addObject("reqB", reqB);
+							mv.addObject("reqFileList", reqFileList);
+							mv.addObject("chatList", chatList);
+							mv.addObject("cBoard", b);
+							mv.addObject("fileList", fileList);
+							mv.setViewName("cashboard/2stage");
+						} else {
+							String url = (String)request.getHeader("REFERER");
+							int urlNum = url.lastIndexOf("/");
+							String urlName = url.substring(urlNum + 1);
+							if(urlName.equals("")) {
+								urlName = "index.me";
+							}
+							mv.addObject("sysMsg", "1");
+							mv.setViewName("redirect:" + urlName);
+						}
+						break;
+					case 3: 
 						Board reqB = cBoardService.cBoardReqView(boNum);
 						ArrayList<Contents> reqFileList = new ArrayList<>();
 						if(reqB != null) {
 							reqFileList = cBoardService.fileList(reqB.getBoNum());
 						}
-						ArrayList<Chat> chatList = cBoardService.chatList(boNum);
 						
 						mv.addObject("reqB", reqB);
 						mv.addObject("reqFileList", reqFileList);
-						mv.addObject("chatList", chatList);
 						mv.addObject("cBoard", b);
 						mv.addObject("fileList", fileList);
-						mv.setViewName("cashboard/2stage");
-					} else {
-						String url = (String)request.getHeader("REFERER");
-						int urlNum = url.lastIndexOf("/");
-						String urlName = url.substring(urlNum + 1);
-						if(urlName.equals("")) {
-							urlName = "index.me";
-						}
-						mv.addObject("sysMsg", "1");
-						mv.setViewName("redirect:" + urlName);
-					}
-					break;
-				case 3: 
-					Board reqB = cBoardService.cBoardReqView(boNum);
-					ArrayList<Contents> reqFileList = new ArrayList<>();
-					if(reqB != null) {
-						reqFileList = cBoardService.fileList(reqB.getBoNum());
-					}
-					
-					mv.addObject("reqB", reqB);
-					mv.addObject("reqFileList", reqFileList);
-					mv.addObject("cBoard", b);
-					mv.addObject("fileList", fileList);
-					mv.setViewName("cashboard/3stage"); 
-					break;
+						mv.setViewName("cashboard/3stage"); 
+						break;
+				}
 			}
 		} else {
 			throw new BoardException("게시글 상세 조회에 실패하였습니다.");
@@ -507,21 +514,6 @@ public class CBoardController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	@RequestMapping("stage1.ch")
-	public String stage1() {
-		return "cashboard/1stage";
-	}
-	
-	@RequestMapping("stage2.ch")
-	public String stage2() {
-		return "cashboard/2stage";
-	}
-	
-	@RequestMapping("stage3.ch")
-	public String stage3() {
-		return "cashboard/3stage";
 	}
 	
   @RequestMapping("workList.my")

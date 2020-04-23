@@ -179,8 +179,10 @@ public class CBoardDAO {
 	public int timeOut(SqlSessionTemplate sqlSession, int boNum) {
 		Request r = sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
 		
+		System.out.println(boNum + ":" +  r);
+		
 		if(r == null) {
-			sqlSession.update("cBoardMapper.plusTime", boNum);
+			sqlSession.update("cBoardMapper.endTime", boNum);
 		} else {
 			if(sqlSession.update("cBoardMapper.okCash1", r) <= 0 || sqlSession.update("cBoardMapper.okCash2", r) <= 0) {
 				return 0;

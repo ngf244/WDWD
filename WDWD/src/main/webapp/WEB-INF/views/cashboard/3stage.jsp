@@ -105,7 +105,10 @@
 						$('.downloadBtn').click(function(e){
 							if("${reqB.boWriter}" != "${sessionScope.loginUser.userId}" && "${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
 								e.preventDefault();
-								alert('원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.');
+								swal({
+									title: "원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.",
+									icon: "error"
+								});
 							}
 						})
 						
