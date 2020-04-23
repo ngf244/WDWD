@@ -5,9 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +36,9 @@ import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.request.model.vo.Request;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 @Controller
 public class CBoardController {
@@ -211,6 +213,14 @@ public class CBoardController {
 					int result = cBoardService.contentsInsert(c);
 				}
 			}
+			
+			try {
+				Socket socket = IO.socket("http://localhost:82");
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return "redirect:detailView.ch?sysMsg=3&boNum=" + boNum;
 		} else {
 			throw new CBoardException("캐쉬게시글 작성에 실패하였습니다.");
@@ -281,9 +291,7 @@ public class CBoardController {
 		
 		if(b != null) {
 			if(b.getBoGroup().equals("4")) {
-				
-				
-				
+				// 콘테스트는 아직
 				mv.setViewName("redirect:index.me");
 			} else {
 				switch(b.getCbStep()) {

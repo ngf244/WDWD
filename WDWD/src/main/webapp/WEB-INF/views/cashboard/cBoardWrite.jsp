@@ -725,11 +725,6 @@
 									}
 								}).then((result) => {
 									if(result) {
-										if('${boardType}' != 2) {
-											var socket = io("http://localhost:82");
-											socket.emit("chatArr", data);
-										}
-										
 										$('#insertForm').submit();
 									}
 								});
