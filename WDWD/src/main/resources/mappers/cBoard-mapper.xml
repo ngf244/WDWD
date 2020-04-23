@@ -438,7 +438,7 @@
 		FROM CASH_BOARD  
 			JOIN BOARD ON (BO_NUM = CB_NUM)
 			JOIN MEMBER ON(ME_ID = BO_WRITER)
-		where BO_GROUP = #{ boGroup } and bo_del = 'N'
+		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
 	</select>
 	
 		
@@ -452,7 +452,7 @@
 				<if test= "boGroup != null">
 					BO_GROUP = #{ boGroup }
 				</if>
-				<if test="boCategory != null"> 
+				<if test="boCategory != ''"> 
 					and BO_CATEGORY = #{ boCategory }
 				</if>
 				<if test="cbStep != 0">		
@@ -475,10 +475,10 @@
 				<if test= "boGroup != null">
 					BO_GROUP = #{ boGroup }
 				</if>
-				<if test="boCategory != null">
+				<if test="boCategory != ''"> 
 					and BO_CATEGORY = #{ boCategory }
 				</if>
-				<if test="cbStep != 0">
+				<if test="cbStep != 0">		
 					and cb_step = #{ cbStep }
 				</if>
 					and bo_del = 'N'

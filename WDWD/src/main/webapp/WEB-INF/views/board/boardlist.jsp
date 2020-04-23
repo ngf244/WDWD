@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -417,204 +417,301 @@
 						<c:if test="${ pi.currentPage <= 1 }">
 							<a>[이전]</a>
 						</c:if>
-						<c:if test="${ pi.currentPage > 1 }">
-							<c:url var="before" value="actionList.ch">
-								<c:param name="page" value="${ pi.currentPage - 1 }"/>
+
+					<!-- 페이지 -->
+					<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+						<c:if test="${ p eq pi.currentPage }">
+							<a class="currentP">${ p }</a>
+						</c:if>
+
+						<c:if test="${ p ne pi.currentPage }">
+							<c:url var="pagination" value="actionList.ch">
+								<c:param name="boGroup" value="${ pi.boGroup }" />
+								<c:param name="page" value="${ p }" />
 							</c:url>
-							<a href="${ before }">[이전]</a> &nbsp;
-						</c:if>
-						
-						<!-- 페이지 -->
-						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-							<c:if test="${ p eq pi.currentPage }">
-								<a class="currentP">${ p }</a>
-							</c:if>	
-							
-							<c:if test="${ p ne pi.currentPage }">
-								<c:url var="pagination" value="actionList.ch">
-									<c:param name="boGroup" value="${ pi.boGroup }"/>
-									<c:param name="page" value="${ p }"/>
-								</c:url>
-								<a href="${ pagination }">${ p }</a> &nbsp;
+							<a href="${ pagination }">${ p }</a> &nbsp;
 							</c:if>
-						</c:forEach>
-						
-						<!-- [다음] -->
-						<c:if test="${ pi.currentPage >= pi.maxPage }">
-							<a>[다음]</a>
-						</c:if>
-						<c:if test="${ pi.currentPage < pi.maxPage }">
-							<c:url var="after" value="actionList.ch">
-								<c:param name="page" value="${ pi.currentPage + 1 }"/>
-							</c:url> 
-							<a href="${ after }">[다음]</a>
-						</c:if>
-               
-               
-               
-               <div class="sectionafter" style="display: inline-block"></div>
-            </div>
-            <div class="writingBtnArea" style="background-color: red;">
-               <button class="writingBtn">글쓰기</button>
-            </div>
-         </div>
-         <br><br><br><br><br><br><br>
+					</c:forEach>
 
-         <hr>
-         <div id="cashCategorySelectArea">
-            <div class="categories" name="categories" value="2"><span>1:1매칭</span></div>
-            <div class="forLine"></div>
-            <div class="categories"><span>입찰</span></div>
-            <div class="forLine"></div>
-            <div class="categories"><span>콘테스트</span></div>
-         </div>
-         <hr>
+					<!-- [다음] -->
+					<c:if test="${ pi.currentPage >= pi.maxPage }">
+						<a>[다음]</a>
+					</c:if>
+					<c:if test="${ pi.currentPage < pi.maxPage }">
+						<c:url var="after" value="actionList.ch">
+							<c:param name="page" value="${ pi.currentPage + 1 }" />
+						</c:url>
+						<a href="${ after }">[다음]</a>
+					</c:if>
 
-         <div class="onBoarListView"><jsp:include page="../cashboard/oneBoardList.jsp"/></div>
-         <div class="auctionListView" style="display: none;"><%-- <jsp:include page="../cashboard/auctionBoardList.jsp"/> --%></div>
-         <div class="contestListView" style="display: none;"><%-- <jsp:include page="../cashboard/contestBoardList.jsp"/> --%></div>
-      </div>
-      <div id="right-side">
-      </div>
-   </section>
-   <jsp:include page="../common/footer.jsp"/>
-   <script>
-      var menuPosition = $('.sideMenu').offset(); 
-      $(window).scroll(function () {
-         var scrollTop = $(window).scrollTop();
-         $('.sideMenu').stop().animate({top:menuPosition.top+scrollTop},200);
-      })
-      $('#sideTop').click(function () {
-         var freeBoardPosition = $('#menuHeaderWrap').offset();
-         $('html').stop().animate({scrollTop:freeBoardPosition.top},300);
-      })
-      $('#sideBottom').click(function () {
-         var cashCategorySelectAreaPosition = $('#cashCategorySelectArea').offset();
-         $('html').stop().animate({scrollTop:cashCategorySelectAreaPosition.top},300);
-      })
-   </script>
-      
-   <script>
-   
-   	   //자유게시판과 함께 1:1게시판 열림
-	   /* 
-	   $(function(){
+
+
+					<div class="sectionafter" style="display: inline-block"></div>
+				</div>
+				<div class="writingBtnArea" style="background-color: red;">
+					<button class="writingBtn">글쓰기</button>
+				</div>
+			</div>
+			<br> <br> <br> <br> <br> <br> <br>
+
+			<hr>
+			<div id="cashCategorySelectArea">
+				<div class="categories" name="categories" value="2">
+					<span>1:1매칭</span>
+				</div>
+				<div class="forLine"></div>
+				<div class="categories">
+					<span>입찰</span>
+				</div>
+				<div class="forLine"></div>
+				<div class="categories">
+					<span>콘테스트</span>
+				</div>
+			</div>
+			<hr>
+
+			<div class="onBoarListView"><jsp:include
+					page="../cashboard/oneBoardList.jsp" /></div>
+			<div class="auctionListView" style="display: none;">
+				<%-- <jsp:include page="../cashboard/auctionBoardList.jsp"/> --%>
+			</div>
+			<div class="contestListView" style="display: none;">
+				<%-- <jsp:include page="../cashboard/contestBoardList.jsp"/> --%>
+			</div>
+		</div>
+		<div id="right-side"></div>
+	</section>
+	<jsp:include page="../common/footer.jsp" />
+	<script>
+		var menuPosition = $('.sideMenu').offset();
+		$(window).scroll(function() {
+			var scrollTop = $(window).scrollTop();
+			$('.sideMenu').stop().animate({
+				top : menuPosition.top + scrollTop
+			}, 200);
+		})
+		$('#sideTop').click(function() {
+			var freeBoardPosition = $('#menuHeaderWrap').offset();
+			$('html').stop().animate({
+				scrollTop : freeBoardPosition.top
+			}, 300);
+		})
+		$('#sideBottom').click(
+				function() {
+					var cashCategorySelectAreaPosition = $(
+							'#cashCategorySelectArea').offset();
+					$('html').stop().animate({
+						scrollTop : cashCategorySelectAreaPosition.top
+					}, 300);
+				})
+	</script>
+
+	<script>
+		//자유게시판과 함께 1:1게시판 열림
+		/* 
+		$(function(){
 		   $(".onBoarListView").load("cashboard/oneBoardList.jsp");
 
 		   
 		   var boGroup2 = {boGroup2 : 2};
 		   $.ajax({
 			   url: "../cashboard/oneBoardList.jsp",
-	            type: "POST",
-	            dataType: text,
-	            success: function(data){
-	                $('.onBoarListView').html(data);
-	            },
-	            error: function(){
-	                alert("1:1 불러오기 안돼");
-	            }
+		         type: "POST",
+		         dataType: text,
+		         success: function(data){
+		             $('.onBoarListView').html(data);
+		         },
+		         error: function(){
+		             alert("1:1 불러오기 안돼");
+		         }
 			   
 		   });
 		    
 		   
-	   }); 
-    */
-    
-   </script>
-   
-   
-   <script>
-	   $(function(){
-  		   var boGroup = "2";
- 		   $.ajax({
- 			   url:"actionOneList.ch",
- 			   type:"get",
- 			   dataType: 'html',
- 			   data: {"boGroup" : boGroup},
- 			   success: 
- 				   function(data){ 
- 					   $(".onBoarListView").html(data);
- 					   console.log(data);
- 				   }
- 		   });
-		   
-	   		$('.categories:nth-of-type(1)').click(function() {
-	   			$('.onBoarListView').show();
-	   			$('.auctionListView').hide();
-	   			$('.contestListView').hide();
+		}); 
+		 */
+	</script>
 
-	 		   
- 		   $.ajax({
- 			   url:"actionOneList.ch",
- 			   type:"get",
- 			   dataType: 'html',
- 			   data: {"boGroup" : boGroup},
- 			   success: 
- 				   function(data){ 
- 					   $(".onBoarListView").html(data);
- 					   console.log(data);
- 				   }
- 		   });
-	 	   });
-   		});
-		   
 
-	   
-	   
-	   $(function(){
-	  		$('.categories:nth-of-type(3)').click(function() {
-	   			$('.onBoarListView').hide();
-	   			$('.auctionListView').show();
-	   			$('.contestListView').hide();
+	<script>
+		$(function() {
+			var boCategory = "";
 
-	   			var boGroup = "3";
-		   
-		   $.ajax({
-			   url:"actionOneList.ch",
-			   type:"get",
-			   dataType: 'html',
-			   data: {"boGroup" : boGroup},
-			   success: 
-				   function(data){ 
-					   $(".auctionListView").html(data);
-				   }
-		   	});
+			var cbStep = 0;
+
+			/* $.ajax({
+				url : "actionOneList.ch",
+				type : "get",
+				dataType : 'html',
+				data : {
+					"boGroup" : boGroup
+				},
+				success : function(data) {
+					$(".onBoarListView").html(data);
+				}
+			}); */
+
+			$('.categories:nth-of-type(1)').click(function() {
+				var boGroup = "2";
+				//$('.onBoarListView').show();
+				//$('.auctionListView').hide();
+				//$('.contestListView').hide(); 
+
+				//$('.onBoarListView').css('display', 'block');
+				//$('.auctionListView').css('display', 'none');
+				//$('.contestListView').css('display', 'none');
+
+				$.ajax({
+
+					url : "actionCateList.ch",
+					type : "GET",
+					data : {
+						"boCategory" : boCategory,
+						"boGroup" : boGroup,
+						"cbStep" : cbStep
+					},
+					success : function(data) {
+
+						$('#attachFromHere').empty();
+						//console.log("3 : ",$boardList);
+						for ( var i in data) {
+							console.log("i가 몇개? ", data.length);
+
+							console.log("data?", data);
+
+							var $newboardList = boardList.clone();
+							$('#attachFromHere').append($newboardList);
+
+							$('.boardBoNum').eq(i).val(data[i].boNum);
+							$('.boardTitles').eq(i).html(data[i].boTitle);
+							$('.boardReq').eq(i).html(data[i].boWriter);
+							$('.boardContents').eq(i).html(data[i].boContent);
+							$('.rightBtns').eq(i).html(data[i].boReNum);
+							$('.cbDate').eq(i).html(data[i].cbDate);
+							$('.cbCash').eq(i).html(data[i].cbCash);
+
+						}
+
+					},
+					error : function() {
+						alert("1:1 카테고리 실패");
+					}
+				});
 			});
-	   });
-	   
-	   
-	   
-	   $(function(){
+		});
+
+		$(function() {
+			$('.categories:nth-of-type(3)').click(function() {
+				//$('.onBoarListView').hide();
+				//$('.auctionListView').show();
+				//$('.contestListView').hide();
+
+				//$('.onBoarListView').css('display', 'none');
+				//$('.auctionListView').css('display', 'block');
+				//$('.contestListView').css('display', 'none');
+
+				var boGroup = "3";
+
+				$.ajax({
+
+					url : "actionCateList.ch",
+					type : "GET",
+					data : {
+						"boCategory" : boCategory,
+						"boGroup" : boGroup,
+						"cbStep" : cbStep
+					},
+					success : function(data) {
+
+						console.log("boGourp3?????", boGroup);
+
+						$('#attachFromHere').empty();
+						//console.log("3 : ",$boardList);
+						for ( var i in data) {
+							console.log("i가 몇개? ", data.length);
+
+							console.log("data?", data);
+
+							var $newboardList = boardList.clone();
+							$('#attachFromHere').append($newboardList);
+
+							$('.boardBoNum').eq(i).val(data[i].boNum);
+							$('.boardTitles').eq(i).html(data[i].boTitle);
+							$('.boardReq').eq(i).html(data[i].boWriter);
+							$('.boardContents').eq(i).html(data[i].boContent);
+							$('.rightBtns').eq(i).html(data[i].boReNum);
+							$('.cbDate').eq(i).html(data[i].cbDate);
+							$('.cbCash').eq(i).html(data[i].cbCash);
+
+						}
+
+					},
+					error : function() {
+						alert("1:1 카테고리 실패");
+					}
+				});
+			});
+		});
+
+		$(function() {
 			$('.categories:nth-of-type(5)').click(function() {
-	   			$('.onBoarListView').hide();
-	   			$('.auctionListView').hide();
-	   			$('.contestListView').show();
-		   var boGroup = "4";
-		   
-		   $.ajax({
-			   url:"actionOneList.ch",
-			   type:"get",
-			   dataType: 'html',
-			   data: {"boGroup" : boGroup},
-			   success: 
-				   function(data){ 
-					   $(".contestListView").html(data);
-				   }
-		   });
- 		   });
-		   
-		  	 
-	   });
-	   
-	   /* 리스트로 글 넘기기 */
-	   $('.input.box2').on('click', function(){
-	      var boNum = $(this).prev().prev().val();
-	      console.log(boNum);
-	      location.href= "detail.bo?boNum=" + boNum; 
-	   });
-   
-   </script>
-  
-   
+				//$('.onBoarListView').hide();
+				//$('.auctionListView').hide();
+				//$('.contestListView').show(); 
+				//$('.onBoarListView').css('display', 'none');
+				//$('.auctionListView').css('display', 'none');
+				//$('.contestListView').css('display', 'block');
+				var boGroup = "4";
+
+				$.ajax({
+
+					url : "actionCateList.ch",
+					type : "GET",
+					data : {
+						"boCategory" : boCategory,
+						"boGroup" : boGroup,
+						"cbStep" : cbStep
+					},
+					success : function(data) {
+						console.log("boGourp4?????", boGroup);
+
+						$('#attachFromHere').empty();
+						//console.log("3 : ",$boardList);
+						for ( var i in data) {
+							console.log("i가 몇개? ", data.length);
+
+							console.log("data?", data);
+
+							var $newboardList = boardList.clone();
+							$('#attachFromHere').append($newboardList);
+
+							$('.boardBoNum').eq(i).val(data[i].boNum);
+							$('.boardTitles').eq(i).html(data[i].boTitle);
+							$('.boardReq').eq(i).html(data[i].boWriter);
+							$('.boardContents').eq(i).html(data[i].boContent);
+							$('.rightBtns').eq(i).html(data[i].boReNum);
+							$('.cbDate').eq(i).html(data[i].cbDate);
+							$('.cbCash').eq(i).html(data[i].cbCash);
+
+						}
+
+					},
+					error : function() {
+						alert("1:1 카테고리 실패");
+					}
+				});
+			});
+
+		});
+
+		/* 리스트로 글 넘기기 */
+		$('.input.box2').on('click', function() {
+			var boNum = $(this).prev().prev().val();
+			console.log(boNum);
+			location.href = "detail.bo?boNum=" + boNum;
+		});
+	</script>
+
+
 </body>
 </html>
