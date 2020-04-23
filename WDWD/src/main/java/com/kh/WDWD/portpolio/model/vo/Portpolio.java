@@ -125,5 +125,7 @@ public class Portpolio {
 				+ ", poCategory=" + poCategory + ", poEnrollDate=" + poEnrollDate + ", poModifyDate=" + poModifyDate
 				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + ", poStatus=" + poStatus + "]";
 	}
+
+	
 	
 }

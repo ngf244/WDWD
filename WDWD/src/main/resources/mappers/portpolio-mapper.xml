@@ -32,10 +32,10 @@
 			po_writer = #{poWriter}
 			and po_status = 'Y'
 			<if test="poCategory != null">
-				<if test="poCategory == image">
+				<if test="poCategory == 'image'">
 					and po_category in ('이미지 편집', '이미지 제작')
 				</if>
-				<if test="poCategory == video">
+				<if test="poCategory == 'video'">
 					and po_category in ('동영상 편집', '이미지 제작') 				
 				</if>
 			</if>

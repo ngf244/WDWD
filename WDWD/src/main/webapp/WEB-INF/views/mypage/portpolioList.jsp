@@ -407,9 +407,10 @@
 				</div>
 				<div id="portpolioListContent">
 					<div class="editCate">
-						<button class="totalEditTap">T O T A L</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button class="imageEditTap">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button class="videoEditTap">V I D E O</button>
+					${ portpolio.poWriter }
+						<button class="totalEditTap" onclick="goToTotal();">T O T A L</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="imageEditTap" onclick="goToImage();">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="videoEditTap" onclick="goToVideo();">V I D E O</button>
 					</div>
 					<div class="portpolioBoard">
 						<c:forEach var="port" items="${ list }">
@@ -554,6 +555,22 @@
 			$('#portDetailModal').hide();
 		}
 		
+		/* 포트폴리오 카테고리(전체, 이미지, 동영상) */
+		var poWriter = '${ portpolio.poWriter }';
+		
+		function goToTotal(){
+			location.href="portpolioList.my?poWriter=" + poWriter;
+		}
+		
+		function goToImage(){
+			var poCategory = "image";
+			location.href="portpolioList.my?poWriter=" + poWriter + "&poCategory=" + poCategory;
+		}
+		
+		function goToVideo(){
+			var poCategory = "video";
+			location.href="portpolioList.my?poWriter=" + poWriter + "&poCategory=" + poCategory;
+		}		
 		
 	</script>
 

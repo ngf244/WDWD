@@ -1152,7 +1152,7 @@
 		
 		function goToMyPortpolioList(){
 			var poWriter = userId;
-			location.href="portpolioList.my?poWriter=" + poWriter
+			location.href="portpolioList.my?poWriter=" + poWriter;
 		}
 		
 		$(function(){

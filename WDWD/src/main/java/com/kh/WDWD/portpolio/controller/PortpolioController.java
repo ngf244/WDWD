@@ -245,12 +245,15 @@ public class PortpolioController {
 										  @RequestParam(value="page", required=false) Integer page, 
 										  ModelAndView mv) {
 		
+		System.out.println("콘트롤러에서 p 찍어보기 : " + p);
+		
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
 		
 		int listCount = pService.getPortpolioCount(p);
+		System.out.println("listCount : " + listCount);
 		PageInfo pi = Pagination.getPortpolioListPageInfo(currentPage, listCount);
 		
 		ArrayList<Portpolio> list = pService.selectPortpolioList(pi, p);

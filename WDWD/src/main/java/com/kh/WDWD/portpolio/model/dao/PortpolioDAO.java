@@ -28,10 +28,13 @@ public class PortpolioDAO {
 	}
 
 	public int getPortpolioCount(SqlSessionTemplate sqlSession, Portpolio p) {
+		System.out.println("count" + p);
 		return sqlSession.selectOne("portpolioMapper.getPortpolioCount", p);
+		
 	}
 
 	public ArrayList<Portpolio> selectPortpolioList(SqlSessionTemplate sqlSession, PageInfo pi, Portpolio p) {
+		System.out.println("select" + p);
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
