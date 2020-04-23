@@ -42,7 +42,7 @@ public interface CBoardService {
 
 	Board cBoardReqView(int boNum);
 
-	int registWrite(Board b);
+	int registWrite(Board b, int boardNum);
 
 	int getListCount2(CBoard cBoard);
 
@@ -52,11 +52,17 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
 	
-  Chat sendChat(Chat c);
+	Chat sendChat(Chat c);
 
 	ArrayList<Chat> chatList(int boNum);
 	
 	int registDelete(int boNum);
+	
+	int go3stage(int boNum);
+	
+	ArrayList<CBoard> checkTime();
+	
+	int timeOut(int boNum);
 
 	
 

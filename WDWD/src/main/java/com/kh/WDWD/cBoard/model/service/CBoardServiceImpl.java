@@ -100,8 +100,8 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public int registWrite(Board b) {
-		return cBoardDAO.registWrite(sqlSession, b);
+	public int registWrite(Board b, int boardNum) {
+		return cBoardDAO.registWrite(sqlSession, b, boardNum);
 	}
 	
 	@Override
@@ -137,6 +137,21 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public int registDelete(int boNum) {
 		return cBoardDAO.registDelete(sqlSession, boNum);
+	}
+
+	@Override
+	public int go3stage(int boNum) {
+		return cBoardDAO.go3stage(sqlSession, boNum);
+	}
+
+	@Override
+	public ArrayList<CBoard> checkTime() {
+		return cBoardDAO.checkTime(sqlSession);
+	}
+
+	@Override
+	public int timeOut(int boNum) {
+		return cBoardDAO.timeOut(sqlSession, boNum);
 	}
 
 }

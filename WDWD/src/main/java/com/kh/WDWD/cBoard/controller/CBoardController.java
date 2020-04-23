@@ -202,9 +202,9 @@ public class CBoardController {
 			b.setCbDate("0");
 		}
 		
-		int result = cBoardService.cBoardInsert(b);
+		int boNum = cBoardService.cBoardInsert(b);
 		
-		if(result != 0) {
+		if(boNum != 0) {
 			if(conUrl != null) {
 				ArrayList<Contents> contentArr = new ArrayList<Contents>();
 				
@@ -212,12 +212,11 @@ public class CBoardController {
 					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
 					
 					copyFile(c, request);
-					result = cBoardService.contentsInsert(c);
+					int result = cBoardService.contentsInsert(c);
 				}
 			}
 			
-			// 나중에 경로 수정
-			return "cashboard/cBoardWrite";
+			return "redirect:detailView.ch?sysMsg=3&boNum=" + boNum;
 		} else {
 			throw new CBoardException("캐쉬게시글 작성에 실패하였습니다.");
 		}
@@ -246,22 +245,21 @@ public class CBoardController {
 	}
 	
 	@RequestMapping("registWrite.ch")
-	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request, @RequestParam("updateCheck") int updateCheck,
+	public String registWrite(@ModelAttribute Board b, HttpSession session, HttpServletRequest request, @RequestParam("updateCheck") int updateCheck, @RequestParam("boardNum") int boardNum,
 			@RequestParam(value="conUrl", required=false) String[] conUrl, @RequestParam(value="conCop", required=false) String[] conCop, @RequestParam(value="conOri", required=false) String[] conOri) {
 		Member m = (Member)session.getAttribute("loginUser");
 		b.setBoWriter(m.getUserId());
 		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/", "<img src=\"/WDWD/resources/real_photo/"));
 		
 		int result = 0;
+		
 		if(updateCheck == 1) {
 			result = cBoardService.registDelete(b.getBoNum());
 		}
-		result = cBoardService.registWrite(b);
+		result = cBoardService.registWrite(b, boardNum);
 		
 		if(result != 0) {
 			if(conUrl != null) {
-				ArrayList<Contents> contentArr = new ArrayList<Contents>();
-				
 				for(int i = 0; i < conUrl.length; i++) {
 					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
 					
@@ -270,7 +268,7 @@ public class CBoardController {
 				}
 			}
 			
-			return "redirect:detailView.ch?boNum=" + b.getBoNum();
+			return "redirect:detailView.ch?sysMsg=3&boNum=" + boardNum;
 		} else {
 			throw new CBoardException("에디터 글 등록에 실패하였습니다.");
 		}
@@ -283,51 +281,66 @@ public class CBoardController {
 		ArrayList<Contents> fileList = cBoardService.fileList(boNum);
 		
 		if(b != null) {
-			switch(b.getCbStep()) {
-				case 1: 
-					ArrayList<Request> list = cBoardService.reqList(boNum);
-					mv.addObject("list", list);
-					mv.addObject("cBoard", b);
-					mv.addObject("fileList", fileList);
-					mv.setViewName("cashboard/1stage");
-					break;
-				case 2:
-					String userNick = "";
-					if(session.getAttribute("loginUser") != null) {
-						Member m = (Member)session.getAttribute("loginUser");
-						userNick = m.getNickName();
-					}
-					
-					if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
+			if(b.getBoGroup().equals("4")) {
+				
+				
+				
+				mv.setViewName("redirect:index.me");
+			} else {
+				switch(b.getCbStep()) {
+					case 1: 
+						ArrayList<Request> list = cBoardService.reqList(boNum);
+						mv.addObject("list", list);
+						mv.addObject("cBoard", b);
+						mv.addObject("fileList", fileList);
+						mv.setViewName("cashboard/1stage");
+						break;
+					case 2:
+						String userNick = "";
+						if(session.getAttribute("loginUser") != null) {
+							Member m = (Member)session.getAttribute("loginUser");
+							userNick = m.getNickName();
+						}
+						
+						if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
+							Board reqB = cBoardService.cBoardReqView(boNum);
+							ArrayList<Contents> reqFileList = new ArrayList<>();
+							if(reqB != null) {
+								reqFileList = cBoardService.fileList(reqB.getBoNum());
+							}
+							ArrayList<Chat> chatList = cBoardService.chatList(boNum);
+							
+							mv.addObject("reqB", reqB);
+							mv.addObject("reqFileList", reqFileList);
+							mv.addObject("chatList", chatList);
+							mv.addObject("cBoard", b);
+							mv.addObject("fileList", fileList);
+							mv.setViewName("cashboard/2stage");
+						} else {
+							String url = (String)request.getHeader("REFERER");
+							int urlNum = url.lastIndexOf("/");
+							String urlName = url.substring(urlNum + 1);
+							if(urlName.equals("")) {
+								urlName = "index.me";
+							}
+							mv.addObject("sysMsg", "1");
+							mv.setViewName("redirect:" + urlName);
+						}
+						break;
+					case 3: 
 						Board reqB = cBoardService.cBoardReqView(boNum);
 						ArrayList<Contents> reqFileList = new ArrayList<>();
 						if(reqB != null) {
 							reqFileList = cBoardService.fileList(reqB.getBoNum());
 						}
-						ArrayList<Chat> chatList = cBoardService.chatList(boNum);
 						
 						mv.addObject("reqB", reqB);
 						mv.addObject("reqFileList", reqFileList);
-						mv.addObject("chatList", chatList);
 						mv.addObject("cBoard", b);
 						mv.addObject("fileList", fileList);
-						mv.setViewName("cashboard/2stage");
-					} else {
-						String url = (String)request.getHeader("REFERER");
-						int urlNum = url.lastIndexOf("/");
-						String urlName = url.substring(urlNum + 1);
-						if(urlName.equals("")) {
-							urlName = "index.me";
-						}
-						mv.addObject("error", "1");
-						mv.setViewName("redirect:" + urlName);
-					}
-					break;
-				case 3: 
-					mv.addObject("cBoard", b);
-					mv.addObject("fileList", fileList);
-					mv.setViewName("cashboard/3stage"); 
-					break;
+						mv.setViewName("cashboard/3stage"); 
+						break;
+				}
 			}
 		} else {
 			throw new BoardException("게시글 상세 조회에 실패하였습니다.");
@@ -336,23 +349,19 @@ public class CBoardController {
 		return mv;
 	}
 	
-	@RequestMapping("reqList.ch")
-	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+	@RequestMapping("checkTime.ch")
+	public void checkTime(HttpServletResponse response) {
 		response.setContentType("application/json; charset=utf-8");
 		
-		ArrayList<Request> list = cBoardService.reqList(bId);
+		ArrayList<CBoard> list = cBoardService.checkTime();
 		
 		JSONArray jArr = new JSONArray();
-		for(Request req: list) {
-			JSONObject jUser = new JSONObject();
-			jUser.put("reNum", req.getReNum());
-			jUser.put("reId", req.getReId());
-			jUser.put("reCash", req.getReCash());
-			jUser.put("rePlz", req.getRePlz());
-			jUser.put("reRefNum", req.getReRefNum());
-			jUser.put("reDate", req.getReDate());
+		for(CBoard b: list) {
+			JSONObject jBoard = new JSONObject();
+			jBoard.put("boNum", b.getBoNum());
+			jBoard.put("cbDate", b.getCbDate());
 			
-			jArr.add(jUser);
+			jArr.add(jBoard);
 		}
 		
 		JSONObject sendJson = new JSONObject();
@@ -366,6 +375,14 @@ public class CBoardController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping("timeOut.ch")
+	public void timeOut(@RequestParam("boNum") int boNum, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		int result = cBoardService.timeOut(boNum);
+		
 	}
 	
 	@RequestMapping("doRequest.ch")
@@ -410,12 +427,55 @@ public class CBoardController {
 		}
 	}
 	
+	@RequestMapping("reqList.ch")
+	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		ArrayList<Request> list = cBoardService.reqList(bId);
+		
+		JSONArray jArr = new JSONArray();
+		for(Request req: list) {
+			JSONObject jUser = new JSONObject();
+			jUser.put("reNum", req.getReNum());
+			jUser.put("reId", req.getReId());
+			jUser.put("reCash", req.getReCash());
+			jUser.put("rePlz", req.getRePlz());
+			jUser.put("reRefNum", req.getReRefNum());
+			jUser.put("reDate", req.getReDate());
+			
+			jArr.add(jUser);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+		
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@RequestMapping("go2stage.ch")
 	public String go2stage(@ModelAttribute Request r) {
 		int result = cBoardService.go2stage(r);
 		
 		if(result != 0) {
-			return "redirect:detailView.ch?boNum=" + r.getReNum();
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("go3stage.ch")
+	public String go3stage(@RequestParam("boNum") int boNum) {
+		int result = cBoardService.go3stage(boNum);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + boNum;
 		} else {
 			throw new CBoardException("에디터 선택에 실패하였습니다.");
 		}
@@ -443,21 +503,6 @@ public class CBoardController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	@RequestMapping("stage1.ch")
-	public String stage1() {
-		return "cashboard/1stage";
-	}
-	
-	@RequestMapping("stage2.ch")
-	public String stage2() {
-		return "cashboard/2stage";
-	}
-	
-	@RequestMapping("stage3.ch")
-	public String stage3() {
-		return "cashboard/3stage";
 	}
 	
   @RequestMapping("workList.my")
