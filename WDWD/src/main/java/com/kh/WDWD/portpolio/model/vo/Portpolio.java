@@ -11,11 +11,12 @@ public class Portpolio {
 	private String poUseYn;
 	private int poFee;
 	private int poCount;
+	private String poStatus;
 	
 	public Portpolio() {}
-	
+
 	public Portpolio(int poNum, String poTitle, String poWriter, String poDesc, String poCategory, String poEnrollDate,
-			String poModifyDate, String poUseYn, int poFee, int poCount) {
+			String poModifyDate, String poUseYn, int poFee, int poCount, String poStatus) {
 		super();
 		this.poNum = poNum;
 		this.poTitle = poTitle;
@@ -27,6 +28,7 @@ public class Portpolio {
 		this.poUseYn = poUseYn;
 		this.poFee = poFee;
 		this.poCount = poCount;
+		this.poStatus = poStatus;
 	}
 
 	public int getPoNum() {
@@ -109,14 +111,19 @@ public class Portpolio {
 		this.poCount = poCount;
 	}
 
+	public String getPoStatus() {
+		return poStatus;
+	}
+
+	public void setPoStatus(String poStatus) {
+		this.poStatus = poStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "Portpolio [poNum=" + poNum + ", poTitle=" + poTitle + ", poWriter=" + poWriter + ", poDesc=" + poDesc
 				+ ", poCategory=" + poCategory + ", poEnrollDate=" + poEnrollDate + ", poModifyDate=" + poModifyDate
-				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + "]";
+				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + ", poStatus=" + poStatus + "]";
 	}
-	
-	
-	
 	
 }

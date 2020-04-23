@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
 	.portpolioEnroll{
 		border: 1px solid lightgray;
@@ -144,67 +145,80 @@
 					<div id="portpolioEnrollText">포트폴리오 등록</div>
 				</div>
 				<div id="portpolioEnrollContent">
-					<form action="enrollPort.my" method="post" encType="multipart/form-data" id="EnrollPortForm">
 						<div id="porThumbnail">
 							<img id="portThumbnailImage" width="100%" height="100%" style="display: none;">
 							<div id="thumbnailEnrollArea">
-								<br><br>썸네일 이미지 등록<br><br>
+								<br><br><br>썸네일 이미지 등록<br><br>
 								<img id="thumbnailImage" src="${ contextPath }/resources/images/Add_File_icon.png" width="50" height="50">
 							</div>
 						</div>
 						<div id="porFormArea">
-							<table id="portEnrollTable">
-								<tr>
-									<td style="width: 30%;">포트폴리오 제목</td>
-									<td style="width: 40%;"><input type="text" id="poTitle" name="poTitle" class="inputText" style="width: 94%;"></td>
-								</tr>
-								<tr>
-									<td>포트폴리오 유형</td>
-									<td>
-										<select class="inputText" name="poCategory" id="poCategory">
-											<option value="이미지 편집">이미지 편집</option>
-											<option value="이미지 제작">이미지 제작</option>
-											<option value="동영상 편집">동영상 편집</option>
-											<option value="동영상 제작">동영상 제작</option>											
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>본 사이트 이용 여부</td>
-									<td>
-										<input type="radio" id="usingSiteY" name="poUseYn" class="usingSite" value="Y"><label for="usingSiteY">Yes</label>
-										<input type="radio" id="usingSiteN" name="poUseYn" class="usingSite" value="N"><label for="usingSiteN">No</label>
-									</td>
-								</tr>
-								<tr>
-									<td>포트폴리오 설명</td>
-									<td>
-										<textarea name="poDesc" id="poDesc" rows="10" cols="45" style="resize: none;"></textarea>
-									</td>
-								</tr>
-								<tr>
-									<td>파일 첨부</td>
-									<td>
-										<form></form>
-										<div id="fileList"></div>
-										<div id="fileAdd">
-											<img src="${ contextPath }/resources/images/add.png">
-											<span>파일 추가</span>
-										</div>
-									</td>
-								</tr>
-							</table>
+							<form action="enrollPort.my" method="post" id="EnrollPortForm">
+								<table id="portEnrollTable">
+									<tr>
+										<td style="width: 30%;">포트폴리오 제목</td>
+										<td style="width: 40%;"><input type="text" id="poTitle" name="poTitle" class="inputText" style="width: 94%;"></td>
+									</tr>
+									<tr>
+										<td>포트폴리오 유형</td>
+										<td>
+											<select class="inputText" name="poCategory" id="poCategory">
+												<option value="이미지 편집">이미지 편집</option>
+												<option value="이미지 제작">이미지 제작</option>
+												<option value="동영상 편집">동영상 편집</option>
+												<option value="동영상 제작">동영상 제작</option>											
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>본 사이트 이용 여부</td>
+										<td>
+											<input type="radio" id="usingSiteY" name="poUseYn" class="poUseYn" value="Y"><label for="usingSiteY">Yes</label>
+											<input type="radio" id="usingSiteN" name="poUseYn" class="poUseYn" value="N"><label for="usingSiteN">No</label>
+										</td>
+									</tr>
+									<tr>
+										<td>포트폴리오 설명</td>
+										<td>
+											<textarea name="poDesc" id="poDesc" rows="10" cols="45" style="resize: none;"></textarea>
+										</td>
+									</tr>
+								</table>
+							</form>
+							
+							<form method="post" encType="multipart/form-data" id="EnrollPortThumbForm">
+								<div id="thumbnailFileArea" class="thumbnailFileArea">
+									<input type="file" hidden="" id="thumbnailImg" class="thumbnailImg" multiple="multiple" name="pFile" onchange="LoadImg(this)">
+									<span id="thumbnailOriginName" style="display: none;"></span>
+									<span id="thumbnailModifyName" style="display: none;"></span>
+								</div>
+							</form>
+							<form method="post" encType="multipart/form-data" id="EnrollPortImgForm">
+								<table id="attachFileTable">	
+									<tr>
+										<td width="165">파일 첨부</td>
+										<td>
+											<div id="fileList"></div>
+											<div id="fileAdd">
+												<img src="${ contextPath }/resources/images/add.png">
+												<span>파일 추가</span>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td height="50">
+											<div id="fileCountArea"><span id="fileCount">0</span>개의 파일이 첨부되었습니다.</div>
+										</td>
+									</tr>
+								</table>	
+							</form>
 						</div>
 						<div style="clear: both;"></div>
-						
-						<div id="thumbnailFileArea" class="thumbnailFileArea">
-							<input type="file" hidden="" id="thumbnailImg1" class="thumbnailImg1" multiple="multiple" name="thumbnailImg1" onchange="LoadImg(this)">
-						</div>						
 						<div class="btnArea">
 							<div id="portCompleteBtn" class="button">완료</div>
 							<div id="portCancelBtn" class="button" onclick="history.back(-1)">취소</div>
 						</div>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -214,8 +228,8 @@
 	</section>
 	<jsp:include page="../common/footer.jsp"/>
 	
-	<!-- 완료/취소 버튼 스크립트 -->
 	<script>
+	    /* 완료&취소 버튼 css적용 스크립트 */
 		$('#portCompleteBtn').hover(function(){
 			$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
 		}, function(){
@@ -234,24 +248,67 @@
 			$('#thumbnailFileArea').hide();
 			
 			$('#porThumbnail').click(function(){
-    			$('#thumbnailImg1').click();
+    			$('#thumbnailImg').click();
     		});
 		});
 		
-		/* 썸네일이미지 미리보기를 위한 함수 */
+		/* 썸네일이미지 미리보기&파일저장을 위한 함수 */
 		var titleImgChecked = false;
 		function LoadImg(value){
-			if(value.files && value.files[0]){
-				var reader = new FileReader();
-				
-				reader.onload = function(e){								
-    				$('#portThumbnailImage').attr("src", e.target.result).css("display", "block");
-    				$('#thumbnailEnrollArea').css("display", "none");
+			
+			if(confirm("썸네일 등록을 하시겠습니까?")){
+				if(value.files && value.files[0]){
+					var fileValue = value.value;
+					var fileUrl = fileValue.lastIndexOf("\\") + 1;
+					var fileName = fileValue.substring(fileUrl);
+					
+					var reader = new FileReader();
+					
+					reader.onload = function(e){								
+	    				$('#portThumbnailImage').attr("src", e.target.result).css("display", "block");
+	    				$('#thumbnailEnrollArea').css("display", "none");
+					}
+					
+					titleImgChecked = true;
+	    			reader.readAsDataURL(value.files[0]);
 				}
 				
-				titleImgChecked = true;
-    			reader.readAsDataURL(value.files[0]);
+				var formData = new FormData($('#EnrollPortThumbForm')[0]);
+				
+				$.ajax({ 
+					type: "POST", 
+					enctype: 'multipart/form-data', // 필수 
+					url: 'portThumbEnroll.my', 
+					data: formData, // 필수 
+					processData: false, // 필수 
+					contentType: false, // 필수 
+					cache: false, 
+					success: function(data){ 
+						$('#thumbnailOriginName').text(fileName);
+						$('#thumbnailModifyName').text(data);
+						
+						swal({
+						    title: "포트폴리오 썸네일",
+						    text: "이미지 등록 성공!",
+						    icon: "success" //"info,success,warning,error" 중 택1
+						});
+					}, 
+					error: function(e){ 
+						swal({
+						    title: "포트폴리오 썸네일",
+						    text: "이미지 등록 실패!",
+						    icon: "warning" //"info,success,warning,error" 중 택1
+						});
+					} 
+				});
+			} else{
+				swal({
+				    title: "포트폴리오 썸네일",
+				    text: "이미지 등록을 하지 않았습니다.",
+				    icon: "info" //"info,success,warning,error" 중 택1
+				});
 			}
+			
 		}		
 	</script>
 	
@@ -260,11 +317,27 @@
 		<!-- 파일add 버튼을 클릭했을 때 파일첨부 원도우 창이 뜨게 하는 함수 -->
 		var fileNum = 0;
 		$('#fileAdd').click(function(){
-			$('#fileList').append("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='fileNum" + fileNum + "' multiple>");
+			var $fileList = $('#fileList');
+			$fileForm = $('<form enctype="multipart/form-data" style="display: inline;" method="post">');
+			$inputFile = $("<input type='file' hidden='' onchange='changeFile(this)' id='fileNum" + fileNum + "' name='pFile' multiple>");
+			
+			$fileForm.append($inputFile);
+			$fileList.append($fileForm);
+			
+			$pocOrigin = $('<span class="pocOrigin" name="pocOrigin" id="pocOrigin" style="display: none;">');
+			$pocModify = $('<span class="pocModify" name="pocModify" id="pocModify" style="display: none;">');
+			$imageNameArea = $('<div class="imageNameArea" style="display: inline;">');
+			
+			$imageNameArea.append($pocOrigin);
+			$imageNameArea.append($pocModify);
+			
+			$fileList.append($imageNameArea)
+			
 			$('#fileNum' + fileNum).click();
 			fileNum++;
 		});
 		
+		var fileCount = 0;
 		function changeFile(file) {
 			var fileValue = file.value;
 			var fileUrl = fileValue.lastIndexOf("\\") + 1;
@@ -294,12 +367,84 @@
 				
 				$('#fileList').append($div);
 			}
+			
+			var formData = new FormData($(file).parent()[0]);
+			console.log($(file).parent().next().children('span[name="pocOrigin"]')[0]);
+			console.log($(file).parent().next().children('span[name="pocModify"]')[0]);
+			
+			$.ajax({ 
+				type: "POST", 
+				enctype: 'multipart/form-data', // 필수 
+				url: 'portImgEnroll.my', 
+				data: formData, // 필수 
+				processData: false, // 필수 
+				contentType: false, // 필수 
+				cache: false, 
+				success: function(data){ 
+					fileCount++;
+					$('#fileCount').text(fileCount);
+					$(file).parent().next().children('span[name="pocOrigin"]').text(fileName);
+					console.log(fileName);
+					$(file).parent().next().children('span[name="pocModify"]').text(data);
+					console.log(data);
+				}, 
+				error: function(e){ 
+					swal({
+					    title: "포트폴리오 첨부파일",
+					    text: "등록 실패!",
+					    icon: "error" //"info,success,warning,error" 중 택1
+					});
+				} 
+			});
 		}
 		
 		/* x버튼을 눌렀을 때 input파일태그가 사라지는 함수 */
 		$(document).on("click", ".fileAreaRemove", function(){
+			fileCount--;
+			$('#fileCount').text(fileCount);
+			($(this).parent().prev()).remove();
+			
 			this.parentNode.remove();
 		});
+		
+		$('#portCompleteBtn').click(function(){
+			
+			if($('#poTitle').val() == "") {
+				alert('제목을 입력해주세요.');
+			} else if($('#poCategory').val() == "") {
+				alert('포트폴리오 유형을 선택해주세요.');
+			} else if($(':radio[name="poUseYn"]:checked').length < 1) {
+				alert('사이트 이용 여부를 체크해주세요.');
+			} else if($('#poDesc').val() == "") {
+				alert('포트폴리오 상세 설명을 입력해주세요.')	;
+			} else if(confirm("포트폴리오를 등록하시겠습니까?")) {
+				
+				$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + $('#thumbnailOriginName').text() + '">');				
+				$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + $('#thumbnailModifyName').text() + '">');
+				
+				var pocOrigins = new Array();
+
+				$('.pocOrigin').each(function () {
+					pocOrigins.push($(this).text());
+				});
+				
+				for(var i in pocOrigins){
+					$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + pocOrigins[i] + '">');
+				}
+				
+				var pocModifys = new Array();
+				
+				$('.pocModify').each(function () {
+					pocModifys.push($(this).text());
+				});
+				
+				for(var i in pocModifys){
+					$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + pocModifys[i] + '">');
+				}
+				
+				$('#EnrollPortForm').submit();	
+			}
+		})
 		
 	</script>	
 		

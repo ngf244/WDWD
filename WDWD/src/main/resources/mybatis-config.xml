@@ -17,6 +17,8 @@
 		<typeAlias type="com.kh.WDWD.contents.model.vo.Contents" alias="Contents"/>
 		<typeAlias type="com.kh.WDWD.cBoard.model.vo.Chat" alias="Chat"/>
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.Portpolio" alias="Portpolio"/>
+		<typeAlias type="com.kh.WDWD.portpolio.model.vo.PortpolioContents" alias="PortpolioContents"/>
+		<typeAlias type="com.kh.WDWD.portpolio.model.vo.PortpolioReply" alias="PortpolioReply"/>
 	</typeAliases>
 	
 	<mappers>
