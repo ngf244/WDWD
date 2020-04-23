@@ -190,33 +190,34 @@
       border-bottom: 1px solid black;
    }
    .pagingCenter{
-      vertical-align: middle;
+      position: relative;
+      text-align: center;
    }
    
    .pagination{
-   	  margin-left:33%;
-      /* display: inline-block; */
+   	margin: 0 auto;
+      min-width: 0px;
+      display: inline-block;
+      text-align: center;
        
    }
    .pagination a {
      display: inline-block;
      color: black;
-     float: left;
      padding: 8px 16px;
      text-decoration: none;
      transition: background-color .3s;
      border: 1px solid #ddd;
    }
    
-   
-
-   
    .pagination a:hover:not(.currentP) {background-color: #ddd;}
+   
    .writingBtnArea{
-      display: inline-block;
+      position: absolute;
       width: 10%;
       height: 40px;
-      margin-left: 5%;
+      right: 3%;
+      top: 2%;
    }
    
      .pagination .currentP{
@@ -226,7 +227,7 @@
    }
 
    .writingBtn{
-      display: inline-block;
+      display: block;
       width: 100%;
       height: 100%;
    }
@@ -281,7 +282,7 @@
       border-radius: 90px 90px 0 0;
       border: 2px solid white;
       box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-       transition: 0.5s ease;
+       -webkit-transition: 0.5s ease;
       text-align: center;
       line-height: 100px;
    }
@@ -293,16 +294,21 @@
       margin-top: 20px;
       border: 2px solid white;
       box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-       transition: 0.5s ease;
+       -webkit-transition: 0.5s ease;
       text-align: center;
       line-height: 80px;
    }
-   #sideTop:hover, #sideBottom:hover{
+   #sideTop.open, #sideBottom.open{
       background-color: rgb(52, 152, 219);
         box-shadow: 0px 15px 20px rgba(116, 148, 197, 0.4);
         color: #fff;
         transform: perspective(100px) translateZ(10px);
       border: outset;
+   }
+   
+   .boReNum{
+   		color: orange;
+   		font-size: small;
    }
    
    
@@ -318,6 +324,26 @@
             <div id="sideBottom">매칭</div>
          </div>
       </div>
+      
+      <script>
+      $('#sideTop').hover(function(){
+          $('#sideTop').css('-webkit-transition', 'none')
+          $("#sideTop").removeClass("open");
+          $('#sideTop').css('-webkit-transition', '0.5s ease')
+          $("#sideTop").addClass("open");
+       }, function(){
+          $("#sideTop").removeClass("open");
+       })
+       $('#sideBottom').hover(function(){
+          $('#sideBottom').css('-webkit-transition', 'none')
+          $("#sideBottom").removeClass("open");
+          $('#sideBottom').css('-webkit-transition', '0.5s ease')
+          $("#sideBottom").addClass("open");
+       }, function(){
+          $("#sideBottom").removeClass("open");
+       })
+      </script>
+      
       <div id="main" style="background: white">
          <div class="freeBackground">
               <div id="oneHeader">
@@ -330,9 +356,11 @@
             <div id="freeDropCategory">
                <div id="freebuttonselect">&nbsp;전체 카테고리</div>
                <div class="freedropdown-category">
-                  <a href="#">제작 디자인</a> 
-                  <a href="#">편집 디자인</a> 
-                  <a href="#">기타 디자인</a>
+                  <a href="#">공통</a> 
+                  <a href="#">짤방</a> 
+                  <a href="#">아무말</a>
+                  <a href="#">요청</a>
+                  <a href="#">질문</a>
                </div>
             </div>
             <form>
@@ -369,9 +397,9 @@
          	<input type="hidden" value="${ b.boNum }">
          
             <div class="input box1">${ b.boCategory }</div><!-- 카테고리 -->
-            <div class="input box2">${ b.boTitle }</div><!-- 제목 -->
-            <div class="input box3"><span class="smallOption"> ${ b.boWriter } </span></div><!-- 작성자 -->
-            <div class="input box4"> ${ b.boReNum } </div>  <!-- 파일 -->
+            <div class="input box2">${ b.boTitle }<span class="boReNum">(${ b.boReNum })</span></div><!-- 제목 -->
+            <div class="input box3"><span class="smallOption"> ${ b.boWriterNick } </span></div><!-- 작성자 -->
+            <div class="input box4"> ${ b.boFileExist } </div>  <!-- 파일 -->
             <div class="input box5"> ${ b.boView  }</div> <!-- 조회수 -->
             <div class="input box6"> ${ b.boGood }</div> <!-- 추천수 -->
          </div>

@@ -11,9 +11,14 @@
 	
 	<select id="selectBoardList" resultMap="boardResultSet">
 	
-		select *
-		from board
-		where bo_del='N'and bo_group=#{ boGroup1 }
+		select b.*, m.me_nick, count(c.con_ref)
+		from board b
+		    join member m on (bo_writer = me_id)
+		    left join contents c on (bo_num = con_ref)
+		where bo_del='N'and bo_group= 1 
+		group by b.bo_num, b.bo_group, b.bo_title, b.bo_con, b.bo_view, b.bo_date,
+		        b.bo_update, b.bo_del, b.bo_writer, b.bo_good, b.bo_category,
+		        b.bo_renum, m.me_nick
 		order by bo_num desc
 		
 	</select>
@@ -31,6 +36,8 @@
 		<result property="boGood" column="BO_GOOD"/>
 		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
+		<result property="boWriterNick" column="ME_NICK"/>
+		<result property="boFileExist" column="count(c.con_ref)"/>
 	</resultMap>
    
    <resultMap type="CBoard" id="CBoardResultSet">

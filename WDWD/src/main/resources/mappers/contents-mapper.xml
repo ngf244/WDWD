@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="contentsMapper">
-	<select id="getContents" parameterType="_int" resultMap="ContentsMapper">
+	<select id="getContents" parameterType="_int" resultMap="ContentsResultSet">
 		select *
 		from contents
 		where con_ref = #{boNum}
 	</select>
 	
-	<resultMap type="Contents" id="ContentsMapper">
+	<resultMap type="Contents" id="ContentsResultSet">
 		<id property="conNum" column="CON_NUM"/>
 		<result property="conOri" column="CON_ORI"/>
 		<result property="conCop" column="CON_COP"/>
@@ -16,5 +16,16 @@
 		<result property="conStatus" column="CON_STATUS"/>
 		<result property="conRef" column="CON_REF"/>
 	</resultMap>
+	
+	<select id="getReplyContents" resultMap="ContentsResultSet">
+		select *
+		from contents
+		where con_num = #{rpConNum}
+	</select>
+	
+	<insert id="insertOneContent" parameterType="Contents">
+		insert into contents
+		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, null)
+	</insert>
 	
 </mapper>
