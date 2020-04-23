@@ -96,6 +96,12 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public ArrayList<PointNCash> selectRecentlyCashChange(String userId) {
 		return mDAO.selectRecentlyCashChange(sqlSession, userId);
-	}	
+	}
 
+	@Override
+	public int checkIdDup(String id) {
+//		return mDAO.checkIdDup(sqlSession, id);
+		return 0;
+	}
 }
+	

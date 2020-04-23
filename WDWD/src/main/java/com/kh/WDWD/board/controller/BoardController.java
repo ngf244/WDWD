@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,7 +89,7 @@ public class BoardController {
 	
 	
 	@RequestMapping(value = "imgUpload.bo", method = RequestMethod.POST) 
-	public @ResponseBody void multipartUpload(MultipartHttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception { 
+	public void multipartUpload(MultipartHttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception { 
 		MultipartFile uploadFile = request.getFile("file");
 		String renameFileName = "";
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
@@ -134,30 +135,22 @@ public class BoardController {
 //	@RequestMapping(value = "freeWriting.bo", method = "POST")
 	@RequestMapping("freeWriting.bo")
 	public String boardWriting(HttpSession session, @RequestParam("freeBoardCategory") String category, @RequestParam("freeBoardTitle") String title,
-								@RequestParam("fileRename") String[] reNamesArr, @RequestParam("fileOriginName") String[] originNamesArr,
+								@RequestParam(value = "fileRename", required = false) String[] reNamesArr, 
+								@RequestParam(value = "fileOriginName", required = false) String[] originNamesArr,
 								@RequestParam("writingContent") String wrtingConent, HttpServletRequest request) {
 		
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
 		
+		ArrayList<String> reNames = new ArrayList<String>();
+		ArrayList<String> originNames = new ArrayList<String>();
 		
-		ArrayList<String> reNames = new ArrayList<>(Arrays.asList(reNamesArr));
-		
-		for(int i = 0; i < reNames.size(); i++) {
-			if(reNames.get(i).equals("")) {
-				reNames.remove("");
-			}
+		if(reNamesArr != null) {
+			reNames = new ArrayList<>(Arrays.asList(reNamesArr));
+			while(reNames.remove(""));
 		}
-		// test ----------------
-		for(int i = 0; i < reNames.size(); i++) {
-			System.out.println(reNames.get(i));
-		}
-		// -------------------------
-		ArrayList<String> originNames = new ArrayList<>(Arrays.asList(originNamesArr));
-		
-		for(int i = 0; i < originNames.size(); i++) {
-			if(originNames.get(i).equals("")) {
-				originNames.remove("");
-			}
+		if(originNamesArr != null) {
+			originNames = new ArrayList<>(Arrays.asList(originNamesArr));
+			while(originNames.remove(""));
 		}
 		
 		String check = FileMove(reNames, userId, request);
@@ -314,14 +307,43 @@ public class BoardController {
 		
 		ArrayList<Reply> ReplyArr = bService.getReplyList(boNum);
 		ArrayList<Reply> ReplyArr2 = bService.getReplyList2(boNum);
-		System.out.println(ReplyArr);
-		System.out.println(ReplyArr2);
+		
+		ArrayList<Contents> ReplyContents = bService.getReplyContents(ReplyArr);
+		ArrayList<Contents> Reply2Contents = bService.getReply2Contents(ReplyArr2);
+		
+		
+		while (ReplyContents.remove(null));
+		
+		while (Reply2Contents.remove(null));
+		
+		
+		for(int i = 0; i < ReplyContents.size(); i++) {
+			String conUrl = ReplyContents.get(i).getConUrl();
+			String dir = conUrl.substring(conUrl.length()-8, conUrl.length());
+			String entir = dir + "/" + ReplyContents.get(i).getConCop();
+			ReplyContents.get(i).setConUrl(entir);
+		}
+		
+		for(int i = 0; i < Reply2Contents.size(); i++) {
+			String conUrl = Reply2Contents.get(i).getConUrl();
+			String dir = conUrl.substring(conUrl.length()-8, conUrl.length());
+			String entir = dir + "/" + Reply2Contents.get(i).getConCop();
+			Reply2Contents.get(i).setConUrl(entir);
+		}
+		
+		int plusViewCount = bService.plusViewCount(boNum);
+		
+		if(plusViewCount < 1) {
+			throw new BoardException("조회수 증가에 실패했슴..");
+		}
 		
 		mv.addObject("b", b);
 		mv.addObject("contentsArr", contentsArr);
 		mv.addObject("entirDir", entirDir);
 		mv.addObject("ReplyArr", ReplyArr);
 		mv.addObject("ReplyArr2", ReplyArr2);
+		mv.addObject("ReplyContents", ReplyContents);
+		mv.addObject("Reply2Contents", Reply2Contents);
 		
 		mv.setViewName("board/boardDetail");
 		
@@ -397,6 +419,98 @@ public class BoardController {
 			out.flush();
 			out.close();
 		}
+	}
+	
+	@RequestMapping(value = "insertReply.bo", method = RequestMethod.POST)
+	public void insertReply(MultipartHttpServletRequest request,
+		      					String userId, String replyContent, int boNum, int rprp, HttpServletResponse response) {
+		MultipartFile uploadFile = request.getFile("file");
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		int result = 0;
+		int result2 = 0;
+		
+		if(uploadFile != null && !uploadFile.isEmpty()) {
+			map = saveReplyFile(uploadFile, request);
+			Contents c = new Contents();
+			c.setConOri(map.get("originFileName"));
+			c.setConCop(map.get("renameFileName"));
+			c.setConUrl(map.get("savePath"));
+			
+			result = bService.insertOneContent(c);
+			
+			if(result < 1) {
+				throw new BoardException("댓글 이미지 넣기 실패");
+			}
+		}
+		
+		Reply r = new Reply();
+		r.setRpContent(replyContent);
+		r.setRefNum(boNum);
+		r.setRpWriter(userId);
+		r.setRpConNum(result);
+		r.setRpRp(rprp);
+		
+		result2 = bService.insertReply(r);
+		
+		int plusReplyCount = bService.plusReplyCount(boNum);
+		
+		if(plusReplyCount < 1) {
+			throw new BoardException("댓글 갯수 업데이트 실패..");
+		}
+		
+		if(result2 < 1) {
+			throw new BoardException("댓글 넣기 실패");
+		} else {
+			try {
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().println("성공");
+				
+				response.getWriter().flush();
+				response.getWriter().close();;
+			} catch (IOException e) {
+				throw new BoardException("여기까지와서 댓글 입력 아작스가 실패라고??\n" + e.getMessage());
+			}
+		}
+	}
+	
+	public HashMap<String, String> saveReplyFile(MultipartFile file, HttpServletRequest request) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		String savePath = root + "/free_photo_upload/" + strToday;
+		
+		File folder = new File(savePath);
+		
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		
+		SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmss");
+		String originFileName = file.getOriginalFilename();
+		String renameFileName 
+			= SDF.format(new Date(System.currentTimeMillis())) 
+			+ "." + originFileName.substring(originFileName.lastIndexOf(".") + 1);
+		
+		String renamePath = folder + "\\" + renameFileName;
+		
+		try {
+			file.transferTo(new File(renamePath));
+		} catch (Exception e) {
+			System.out.println("파일 전송 에러 : " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("savePath", savePath);
+		map.put("renameFileName",renameFileName);
+		map.put("originFileName", originFileName);
+		
+		return map;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.kh.WDWD.member.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,7 +41,7 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mService;
-
+	
 	@RequestMapping(value="login.me",method=RequestMethod.POST)
 	public String memberLogin(@ModelAttribute Member m, Model model) {
 		System.out.println(m);
@@ -108,11 +109,6 @@ public class MemberController {
 		return mv;
 	}
 	
-	@RequestMapping("portpolioList.my")
-	public String portpolioListView() {
-		return "portpolioList";
-	}
-	
 	@RequestMapping("directReq.my")
 	public String directRequestForm() {
 		return "directRequestForm";
@@ -120,17 +116,19 @@ public class MemberController {
 	
 	// 회원가입  controller
 	@RequestMapping("signUp.me")
-	public String memberInsert(@ModelAttribute Member m, @RequestParam("post") String post, @RequestParam("address1") String address1, @RequestParam("address2") String address2) {
+	public String memberInsert(@ModelAttribute Member m) {
 		
 //		String encPwd = bcryptPasswordEncoder.encode(m.getUserPwd());
 //		m.setUserPwd(encPwd);
 		
 //		System.out.print(m);
 		
+		
+		
 		int result = mService.insertMember(m);
 		
 		if(result > 0) {
-			return "redirect:home.do";
+			return "redirect:index.me";
 		}else {
 			throw new MemberException("회원가입에 실패하셨습니다.");
 		}
@@ -197,9 +195,8 @@ public class MemberController {
 	    } else {
 	    	throw new MemberException("프로필 이미지 DB저장에 실패하셨습니다.");
 	    }
-	    
-	    
 	}
-
-
 }
+	
+	
+	

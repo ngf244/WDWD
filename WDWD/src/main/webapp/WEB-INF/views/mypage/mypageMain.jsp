@@ -615,7 +615,7 @@
 	#cashChange{height: 700px; margin-top: 30px;}
 	.cashChangeText{text-indent: 10px; height: 70px; border: 1px solid lightgray; font-size: 18pt; font-weight: bolder; line-height: 60px; background: #D5D5D5;}
 	.cashChangeArea{height: 600px; border: 1px solid lightgray; margin-top: 30px; border-radius: 10px;}
-	.monthArea{width: 18%; height: 65px; border: 1px solid lightgray; border-radius: 100px; margin: 15px; margin-left: 440px; text-align: center; line-height: 62px;}
+	.monthArea{width: 18%; height: 65px; border: 1px solid lightgray; border-radius: 100px; margin: 15px; margin-left: 430px; text-align: center; line-height: 62px;}
 	.changeList{width: 90%; height: 125px; margin-left: 60px; margin-top: 20px; border-bottom: 1px solid silver; font-size: 11pt;}
 	.changeClass1{height: 65%; width: 11%; border: 1px solid red; margin: 8px; border-radius: 100px; line-height: 80px; color: red; float: left;}
 	.changeClass2{height: 65%; width: 11%; border: 1px solid green; margin: 8px; border-radius: 100px; line-height: 80px; color: green; float: left;}
@@ -625,7 +625,13 @@
 	/* 공통 플러스 아이콘 */
 	.plusIcon{cursor: pointer; padding-top: 5px;}
 	
-
+	/* sweetAlert */
+	.swal-button{
+		width: 30px;
+		font-weight: normal;
+		text-align: center;
+		padding-right: 36px;
+	}
 </style>
 <title>마이 페이지</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
@@ -883,7 +889,7 @@
 				<div id="portpolio">
 					<div class="portpolioText">
 						포트폴리오
-						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="location.href='portpolioList.my'"/>
+						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyPortpolioList();"/>
 						<div id="smallReqBtn">의뢰 요청</div>
 					</div>
 					<div class="portpolioArea">
@@ -955,7 +961,7 @@
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty ccList }">
-									<div class="ccList">- 캐쉬 변동 내역이 없습니다.</div>
+									<div class="ccList" style="text-align: center; color: red;">※ 캐쉬 변동 내역이 없습니다.</div>
 								</c:if>
 						</div>
 					</div>
@@ -1143,6 +1149,15 @@
 			var cbStep = e;
 			location.href="workList.my?reId=" + userId + "&cbStep=" + cbStep;
 		}
+		
+		function goToMyPortpolioList(){
+			var poWriter = userId;
+			location.href="portpolioList.my?poWriter=" + poWriter
+		}
+		
+		$(function(){
+			
+		});
 	</script>
 	<script>
 		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수
@@ -1175,10 +1190,18 @@
 				contentType: false, // 필수 
 				cache: false, 
 				success: function(data){ 
-					alert("프로필 이미지가 저장되었습니다.");
+					swal({
+					    title: "프로필 사진",
+					    text: "등록 성공!",
+					    icon: "info" //"info,success,warning,error" 중 택1
+					});
 				}, 
 				error: function(e){ 
-					alert("프로필 이미지 저장에 실패하였습니다.");
+					swal({
+					    title: "프로필 사진",
+					    text: "등록 실패!",
+					    icon: "error" //"info,success,warning,error" 중 택1
+					});
 				} 
 			});
 		});

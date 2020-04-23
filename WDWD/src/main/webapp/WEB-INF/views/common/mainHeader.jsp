@@ -2,12 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 	header {
@@ -67,7 +69,7 @@
 		vertical-align: middle;
 		margin-left: 30px;
 	}
-	#loginView, #signupBtn, #welcomeName #logout{
+	#loginView, #signupBtn, #welcomeName, #logout{
 		padding: 10px;
 		background-color : rgb(52, 152, 219);
 		color : white;
@@ -170,6 +172,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		cursor: pointer;
 	}
 	
 	#menuHeaderWrap {
@@ -361,7 +364,7 @@
 				</c:if>
 			</c:if>
 				<c:if test="${ !empty sessionScope.loginUser }">
-          <div id="welcomeName">김대호님 환영합니다</div>
+          <div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
           <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
           <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
             <div id="noticeArea" class="notice">
@@ -372,19 +375,19 @@
                 <div style="height: 60px;"></div>
                 <div id="profile_wrap">
                   <div id="profile_img"><img src=''></div>
-                  <b>김대호 님</b>
+                  <b>${ sessionScope.loginUser.nickName } 님</b>
                 </div>
 
                 <div style="height: 30px;"></div>
 
                 <div class="smallMenu yellow">
                   <img src="${ contextPath }/resources/images/point.png">
-                  <br><b>100 POINT</b>
+                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.point }" type="number" groupingUsed="true"/> POINT</b>
                 </div>
 
                 <div class="smallMenu yellow">
                   <img src="${ contextPath }/resources/images/cash.png">
-                  <br><b>100 CASH</b>
+                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.cash }" type="number" groupingUsed="true"/> CASH</b>
                 </div>
 
                 <div class="smallMenu blue" onclick="goMyPage();">
@@ -519,7 +522,7 @@
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
 				<div class="menubar">공지사항</div>
-				<div class="menubar" onclick="guide.jsp">가이드</div>
+				<div class="menubar" onclick="location.href='guidemain.jsp';">가이드</div>
 				<div class="menubar">사진</div>
 				<div class="menubar">미디어</div>
 				<div class="menubar">HIT 갤러리</div>
@@ -556,20 +559,58 @@
 					}
 					
 					
-					if('${param.error}' == "1") {
-						alert('작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.');
+					function checkTime(board) {
+						var timer = setInterval(function() {
+							if(new Date().getTime() >= new Date(board.cbDate).getTime()) {
+								$.ajax({
+									url: 'timeOut.ch',
+									data: {boNum: board.boNum},
+									type: 'post',
+									success: function(data){
+										clearInterval(timer);
+									}
+								});
+								clearInterval(timer);
+							}
+						}, 1000);
+					}
+					
+					if("${sessionScope.loginUser.nickName}" == '운영자') {
+						$.ajax({
+							url: 'checkTime.ch',
+							type: 'post',
+							success: function(data){
+								for(var i = 0; i < data.list.length; i++) {
+									checkTime(data.list[i]);
+								}
+							}
+						});
+					}
+					
+					if('${param.sysMsg}' == "1") {
+						swal({
+							title: "작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.",
+							icon: "error"
+						});
+					} else if('${param.sysMsg}' == "2") {
+						swal({
+							title: "선택 완료되었습니다.",
+							icon: "success"
+						});
+					} else if('${param.sysMsg}' == "3") {
+						swal({
+							title: "작성 완료되었습니다.",
+							icon: "success"
+						});
 					}
 				</script>
 			</div>
 		</div>
 	</header>
-	
 	<br>
 	<div>
 		<jsp:include page="../login/login.jsp"/>
 		<jsp:include page="../login/signup.jsp"/>
 	</div>
-
-	
 </body>
 </html>

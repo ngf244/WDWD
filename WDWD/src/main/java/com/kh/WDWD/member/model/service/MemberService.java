@@ -41,5 +41,7 @@ public interface MemberService {
 
 	ArrayList<PointNCash> selectRecentlyCashChange(String userId);
 
+	int checkIdDup(String id);
+
 }
 

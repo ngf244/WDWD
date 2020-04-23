@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,7 @@
 	
 	.portpolioList{
 		border: 1px solid lightgray;
-		height: 1190px;
+		height: 1340px;
 		width: 80%;
 		margin: auto;
 	}
@@ -37,7 +38,7 @@
 	
 	
 	#portpolioListContent{
-		height: 1120px;
+		height: 1240px;
 		margin-top: 30px;
 	}
 	
@@ -86,20 +87,41 @@
 	} */
 	
 	.portpolioBoard{
-		height: 830px;
+		height: 990px;
 		margin: 30px;
 		margin-top: 30px;
-		border-top: 1px solid lightgray;		 
+		border-top: 1px solid lightgray;
+		border-bottom: 1px solid lightgray;		 
+	}
+	
+	.portArea{
+		width: 18%;
+		height: 180px;
+		border: 1px solid gray;
+		float: left;
+		margin: 2%;
+		margin-left: 2.5%;
+		padding: 10px;
 	}
 	
 	.portpolioThumb{
-		width: 18%;
-		height: 160px;
+		width: 100%;
+		height: 150px;
 		border: 1px solid lightgrey;
 		float: left;
-		margin: 2%;
-		margin-left: 4%;
-		
+		display: line-block;
+	}
+	
+	.portDate{
+		margin-top: 10px;
+		float: left;
+		font-size: 9pt;
+	}
+	
+	.portCount{
+		margin-top: 10px;
+		float: right;
+		font-size: 9pt;
 	}
 	
 	/* 페이징 처리 css */
@@ -385,39 +407,71 @@
 				</div>
 				<div id="portpolioListContent">
 					<div class="editCate">
-						<button class="imageEditTap">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="totalEditTap">T O T A L</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="imageEditTap">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button class="videoEditTap">V I D E O</button>
 					</div>
 					<div class="portpolioBoard">
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
-						<div class="portpolioThumb"><img src=""></div>
+						<c:forEach var="port" items="${ list }">
+							<div class="portArea">
+								<div class="portpolioThumb"><img src="${ contextPath }/resources/portpolio_upload/20200423/${ port.pocModify }" width="100%" height="100%"></div>
+								<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
+								<div class="portCount">조회수 : ${ port.poCount }</div>
+							</div>
+						</c:forEach>
 					</div>
+					<!-- 페이징 처리 -->
+					
+					<!-- [이전] -->
 					<div class="pagingCenter">
 						<div class="pagination">
-						<a href=""> &laquo; </a>
-						<a href="" class="active"> 1 </a>
-						<a href=""> 2 </a>
-						<a href=""> 3 </a>
-						<a href=""> 4 </a>
-						<a href=""> 5 </a>
-						<a href=""> 6 </a>
-						<a href=""> 7 </a>
-						<a href=""> 8 </a>
+						<c:if test="${ pi.currentPage <= 1 }">
+							<a href=""> &laquo; </a>
+						</c:if>
+						<c:if test="${ pi.currentPage > 1 }">
+							<c:url var="before" value="portpolioList.my">
+								<c:param name="page" value="${ pi.currentPage - 1 }"/>
+								<c:param name="poWriter" value="${ portpolio.poWriter }"/>
+								<c:if test="${ portpolio.poCategory ne null }">
+									<c:param name="poCategory" value="${ portpolio.poCategory }"/>
+								</c:if>
+							</c:url>
+							<a href="${ before }"> &laquo; </a>
+						</c:if>
+					
+					<!-- 페이지 -->	
+					<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+						<c:if test="${ p eq pi.currentPage }">
+							<a href="" class="active"> ${ p } </a>
+						</c:if>
+						
+						<c:if test="${ p ne pi.currentPage }">
+							<c:url var="pagination" value="portpolioList.my">
+								<c:param name="page" value="${ p }"/>
+								<c:param name="poWriter" value="${ portpolio.poWriter }"/>
+								<c:if test="${ portpolio.poCategory ne null }">
+									<c:param name="poCategory" value="${ portpolio.poCategory }"/>
+								</c:if>
+							</c:url>
+							<a href="${ pagination }">${ p }</a> &nbsp;
+						</c:if>
+					</c:forEach>	
+					
+					<!-- [다음] -->
+					<c:if test="${ pi.currentPage >= pi.maxPage }">
 						<a href=""> &raquo; </a>
+					</c:if>
+					<c:if test="${ pi.currentPage < pi.maxPage }">
+						<c:url var="after" value="portpolioList.my">
+							<c:param name="page" value="${ pi.currentPage + 1 }"/>
+							<c:param name="poWriter" value="${ portpolio.poWriter }"/>
+								<c:if test="${ portpolio.poCategory ne null }">
+									<c:param name="poCategory" value="${ portpolio.poCategory }"/>
+								</c:if>
+						</c:url> 
+						<a href="${ after }"> &raquo; </a>
+					</c:if>		
+						
 						</div>
 					</div>
 					<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
