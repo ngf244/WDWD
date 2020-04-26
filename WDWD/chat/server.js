@@ -15,6 +15,11 @@ io.on('connection', function (socket) {
     socket.on('chatArr', function (chatArr) {
         io.emit('chatArr', chatArr);
     });
+    
+    socket.on('addCount', function (board) {
+        io.emit('addCount', board);
+        console.log('success');
+    });
 });
  
 http.listen(82, function () {

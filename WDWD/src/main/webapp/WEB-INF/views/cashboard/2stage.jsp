@@ -205,7 +205,6 @@
 						참여 에디터 : <span>${ cBoard.reId }</span>
 					</div>
 					
-					
 					<div id="registWrap">
 						<div id="buyerInfo">
 							<div class="leftLine">
@@ -452,7 +451,6 @@
 						    });
 						</script>
 						
-						<script src="http://localhost:82/socket.io/socket.io.js"></script>
 				        <script>
 				        	$('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
 				        	

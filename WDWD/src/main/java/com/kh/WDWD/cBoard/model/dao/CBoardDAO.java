@@ -31,16 +31,16 @@ public class CBoardDAO {
 	
 
 
-	public int cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
+	public CBoard cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
 		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
 		int result2 = sqlSession.insert("cBoardMapper.cBoardInsert2", b);
 		
-		int boNum = sqlSession.selectOne("cBoardMapper.cBoardSelect");
+		CBoard board = sqlSession.selectOne("cBoardMapper.cBoardSelect");
 		
 		if(result1 > 0 && result2 > 0) {
-			return boNum;
+			return board;
 		} else {
-			return 0;
+			return null;
 		}
 	}
 
@@ -117,6 +117,10 @@ public class CBoardDAO {
 	public Board cBoardReqView(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.cBoardReqView", boNum);
 	}
+	
+	public Board cBoardReqView(SqlSessionTemplate sqlSession, Request r) {
+		return sqlSession.selectOne("cBoardMapper.cBoardReqView2", r);
+	}  
 
 
 	public int registWrite(SqlSessionTemplate sqlSession, Board b, int boardNum) {
@@ -191,6 +195,12 @@ public class CBoardDAO {
 		}
 		
 		return 0;
-	}  
+	}
+
+	public ArrayList<Board> reqBList(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.reqBList", boNum);
+	}
+
+	
 
 }

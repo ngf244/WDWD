@@ -88,9 +88,11 @@
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
 	</insert>
 	
-	<select id="cBoardSelect" resultType="_int">
-		select max(bo_num)
+	<select id="cBoardSelect" resultMap="CBoardResultSet">
+		select *
 		from board
+		join cash_board on (board.bo_num = cash_board.cb_num)
+		where bo_num = (select max(bo_num) from board)
 	</select>
 	
 	<insert id="contentsInsert" parameterType="Contents">
@@ -224,6 +226,20 @@
 	</update>
  	
  	<select id="cBoardReqView" resultMap="boardResultSet" parameterType="_int">
+ 		select * 
+ 		from board
+ 		join request on (board.bo_num = request.re_refnum)
+ 		where re_num = #{boNum}
+ 	</select>
+ 	
+ 	<select id="cBoardReqView2" resultMap="boardResultSet" parameterType="Request">
+ 		select * 
+ 		from board
+ 		join request on (board.bo_num = request.re_refnum)
+ 		where re_num = #{reNum} and re_id = #{reId}
+ 	</select>
+ 	
+ 	<select id="reqBList" resultMap="boardResultSet" parameterType="_int">
  		select * 
  		from board
  		join request on (board.bo_num = request.re_refnum)

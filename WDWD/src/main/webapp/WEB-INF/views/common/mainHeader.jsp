@@ -7,6 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="http://localhost:82/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -585,6 +586,11 @@
 								}
 							}
 						});
+						
+						var socket = io("http://localhost:82");
+						socket.on('addCount', function (board) {
+							checkTime(board);
+					    });
 					}
 					
 					if('${param.sysMsg}' == "1") {
@@ -600,6 +606,11 @@
 					} else if('${param.sysMsg}' == "3") {
 						swal({
 							title: "작성 완료되었습니다.",
+							icon: "success"
+						});
+					} else if('${param.sysMsg}' == "4") {
+						swal({
+							title: "신청 완료되었습니다.",
 							icon: "success"
 						});
 					}

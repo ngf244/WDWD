@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
@@ -200,9 +201,9 @@ public class CBoardController {
 			b.setCbDate("0");
 		}
 		
-		int boNum = cBoardService.cBoardInsert(b);
+		CBoard board = cBoardService.cBoardInsert(b);
 		
-		if(boNum != 0) {
+		if(board != null) {
 			if(conUrl != null) {
 				ArrayList<Contents> contentArr = new ArrayList<Contents>();
 
@@ -213,15 +214,7 @@ public class CBoardController {
 					int result = cBoardService.contentsInsert(c);
 				}
 			}
-			
-			try {
-				Socket socket = IO.socket("http://localhost:82");
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			return "redirect:detailView.ch?sysMsg=3&boNum=" + boNum;
+			return "redirect:detailView.ch?sysMsg=3&boNum=" + board.getBoNum();
 		} else {
 			throw new CBoardException("캐쉬게시글 작성에 실패하였습니다.");
 		}
@@ -290,16 +283,43 @@ public class CBoardController {
 		ArrayList<Contents> fileList = cBoardService.fileList(boNum);
 		
 		if(b != null) {
+			mv.addObject("cBoard", b);
+			mv.addObject("fileList", fileList);
+			
 			if(b.getBoGroup().equals("4")) {
-				// 콘테스트는 아직
-				mv.setViewName("redirect:index.me");
+				ArrayList<Request> reqMList = cBoardService.reqList(boNum);
+				ArrayList<Board> reqBList = cBoardService.reqBList(boNum);
+				mv.addObject("reqMList", reqMList);
+				mv.addObject("reqBList", reqBList);
+				
+				if(b.getCbStep() != 3) {
+					mv.setViewName("cashboard/contest_1stage");
+					
+					Member m = (Member)session.getAttribute("loginUser");
+					for(int i = 0; i < reqMList.size(); i++) {
+						if(m != null) {
+							if(reqMList.get(i).getReId().equals(m.getNickName())) {
+								Request r = new Request();
+								r.setReNum(boNum);
+								r.setReId(m.getUserId());
+								
+								Board reqB = cBoardService.cBoardReqView(r);
+								mv.addObject("reqB", reqB);
+								mv.setViewName("cashboard/contest_2stage");
+								break;
+							}
+						}
+					}
+					
+				} else {
+					// 마감되었을 때
+					mv.setViewName("cashboard/contest_3stage");
+				}
 			} else {
 				switch(b.getCbStep()) {
 					case 1: 
 						ArrayList<Request> list = cBoardService.reqList(boNum);
 						mv.addObject("list", list);
-						mv.addObject("cBoard", b);
-						mv.addObject("fileList", fileList);
 						mv.setViewName("cashboard/1stage");
 						break;
 					case 2:
@@ -320,8 +340,6 @@ public class CBoardController {
 							mv.addObject("reqB", reqB);
 							mv.addObject("reqFileList", reqFileList);
 							mv.addObject("chatList", chatList);
-							mv.addObject("cBoard", b);
-							mv.addObject("fileList", fileList);
 							mv.setViewName("cashboard/2stage");
 						} else {
 							String url = (String)request.getHeader("REFERER");
@@ -340,20 +358,15 @@ public class CBoardController {
 						if(reqB != null) {
 							reqFileList = cBoardService.fileList(reqB.getBoNum());
 						}
-						
 						mv.addObject("reqB", reqB);
 						mv.addObject("reqFileList", reqFileList);
-						mv.addObject("cBoard", b);
-						mv.addObject("fileList", fileList);
 						mv.setViewName("cashboard/3stage"); 
 						break;
 				}
-
 			}
 		} else {
 			throw new BoardException("게시글 상세 조회에 실패하였습니다.");
 		}
-
 		return mv;
 	}
 	
@@ -432,6 +445,17 @@ public class CBoardController {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("doReqContest.ch")
+	public String doReqContest(@ModelAttribute Request r) {
+		int result = cBoardService.doRequest(r);
+		
+		if(result > 0) {
+			return "redirect:detailView.ch?sysMsg=4&boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 등록에 실패하였습니다.");
 		}
 	}
 	

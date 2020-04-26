@@ -428,7 +428,14 @@
 		<div class="br"></div>
 	</div>
 	
+	<script src="http://localhost:82/socket.io/socket.io.js"></script>
 	<script>
+		if('${param.sysMsg}' == "3" && "${sessionScope.loginUser.nickName}" == "${ cBoard.boWriter }" && "${ cBoard.boGroup }" != 2) {
+			var socket = io("http://localhost:82");
+			var data = {"boNum":"${cBoard.boNum}", "cbDate":"${cBoard.cbDate}"};
+			socket.emit("addCount", data);
+		}
+	
 		$(document).on("contextmenu dragstart selectstart", '#boardcontent img', function(e){
             swal({
 				title: "불법 이미지 다운을 막고 있습니다.",

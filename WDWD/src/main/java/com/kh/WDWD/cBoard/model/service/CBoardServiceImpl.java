@@ -35,7 +35,7 @@ public class CBoardServiceImpl implements CBoardService {
 	
 	
 	@Override
-	public int cBoardInsert(CBoard b) {
+	public CBoard cBoardInsert(CBoard b) {
 		return cBoardDAO.cBoardInsert(sqlSession, b);
 	}
 
@@ -98,6 +98,11 @@ public class CBoardServiceImpl implements CBoardService {
 	public Board cBoardReqView(int boNum) {
 		return cBoardDAO.cBoardReqView(sqlSession, boNum);
 	}
+	
+	@Override
+	public Board cBoardReqView(Request r) {
+		return cBoardDAO.cBoardReqView(sqlSession, r);
+	}
 
 	@Override
 	public int registWrite(Board b, int boardNum) {
@@ -154,4 +159,10 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.timeOut(sqlSession, boNum);
 	}
 
+	@Override
+	public ArrayList<Board> reqBList(int boNum) {
+		return cBoardDAO.reqBList(sqlSession, boNum);
+	}
+
+	
 }
