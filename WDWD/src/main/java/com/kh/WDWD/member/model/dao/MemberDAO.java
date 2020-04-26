@@ -2,15 +2,18 @@ package com.kh.WDWD.member.model.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.WDWD.board.model.vo.Board;
+import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
+import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 
 @Repository("uDAO")
 public class MemberDAO {
@@ -73,6 +76,18 @@ public class MemberDAO {
 
 	public ArrayList<PointNCash> selectRecentlyCashChange(SqlSessionTemplate sqlSession, String userId) {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyCashChange", userId);
+	}
+
+	public int getMyPagePortCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("portpolioMapper.getMyPagePortCount", userId);
+	}
+
+	public ArrayList<PortpolioContents> selectMyPagePortList(SqlSessionTemplate sqlSession, PageInfo pi,
+			String userId) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("portpolioMapper.selectMyPagePortList", userId, rowBounds);
 	}
 
 	}

@@ -1,11 +1,11 @@
 package com.kh.WDWD.member.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,13 +26,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.kh.WDWD.board.model.vo.Board;
+import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
+import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
+import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 
 
 @SessionAttributes("loginUser")
@@ -70,12 +73,23 @@ public class MemberController {
 	}
 	
 	@RequestMapping("main.my")
-	public ModelAndView myPageView(@RequestParam("userId") String userId, ModelAndView mv) {
+	public ModelAndView myPageView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
 		Member member = mService.selectMember(userId);
 		ArrayList<Reply> rList = mService.selectRecentlyReply(userId);		
 		ArrayList<Board> pList = mService.selectRecentlyPBoard(userId);
 		ArrayList<CBoard> cList = mService.selectRecentlyCBoard(userId);
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = mService.getMyPagePortCount(userId);
+		PageInfo pi = Pagination.getMypageMainPortListPageInfo(currentPage, listCount);
+		
+		ArrayList<PortpolioContents> pcList = mService.selectMyPagePortList(pi, userId);
+		
 		ArrayList<PointNCash> ccList = mService.selectRecentlyCashChange(userId);		
 		
 		int rCount1 = mService.selectReqOneStepCount(userId);
@@ -99,9 +113,12 @@ public class MemberController {
 			  .addObject("rwCount", rwCount)
 			  .addObject("pList", pList)
 			  .addObject("cList", cList)
+			  .addObject("pi", pi)
+			  .addObject("pcList", pcList)
 			  .addObject("nowDay", nowDay)
 			  .addObject("ccList", ccList)
 			  .setViewName("mypageMain");
+			
 		} else {
 			throw new MemberException("마이페이지 조회에 실패하였습니다.");
 		}
@@ -195,6 +212,28 @@ public class MemberController {
 	    } else {
 	    	throw new MemberException("프로필 이미지 DB저장에 실패하셨습니다.");
 	    }
+	}
+	
+	@RequestMapping("mainPortPaging.my")
+	public @ResponseBody void myPageMainPortPaging(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv, HttpServletResponse response) throws Exception{
+		
+		response.setContentType("application/json; charset=utf-8");
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = mService.getMyPagePortCount(userId);
+		PageInfo pi = Pagination.getMypageMainPortListPageInfo(currentPage, listCount);
+		
+		ArrayList<PortpolioContents> pcList = mService.selectMyPagePortList(pi, userId);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();				
+		map.put("pcList", pcList);
+		map.put("pi", pi);
+		
+		new Gson().toJson(map, response.getWriter());
 	}
 }
 	

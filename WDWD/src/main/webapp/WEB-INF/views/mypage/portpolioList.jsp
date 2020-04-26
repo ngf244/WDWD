@@ -171,7 +171,7 @@
 		width: 60%;
 	}
 	
-	#modalCloseBtn{
+	.modalCloseBtn{
 		width: 4%;
 		height: 40px;
 		float: right;
@@ -191,8 +191,6 @@
 		height: 120px;
 		font-size: 20pt;
 		line-height: 110px;
-		color: white;
-		background: black;
 		font-weight: bolder;
 	}
 	
@@ -206,7 +204,7 @@
 	
 	.userId{
 		height: 50px;
-		background: black;
+		background: rgb(52, 152, 219);
 		color: white;
 		font-size: 15pt;
 		font-weight: bolder;
@@ -239,11 +237,11 @@
 		margin: 10px;
 	}
 	
-	#updateBtn{
+	.updateBtn{
 		margin: 10px;
 		width: 9%;
 		height: 40px;
-		background: black;
+		background: rgb(52, 152, 219);
 		color: white;
 		display: inline-block;
 		cursor: pointer;
@@ -252,16 +250,16 @@
 		border-radius: 10px;
 	}
 	
-	#updateBtn:hover{
-		background: rgb(52, 152, 219);
+	.updateBtn:hover{
+		background: #4374D9;
 	}
 	
 	
-	#deleteBtn{
+	.deleteBtn{
 		margin: 8px;
 		width: 9%;
 		height: 40px;
-		background: black;
+		background: rgb(52, 152, 219);
 		color: white;
 		display: inline-block;
 		cursor: pointer;
@@ -270,8 +268,8 @@
 		border-radius: 10px;		
 	}
 	
-	#deleteBtn:hover{
-		background: rgb(52, 152, 219);
+	.deleteBtn:hover{
+		background: #4374D9;
 	}	
 	
 	.replyArea{
@@ -295,6 +293,7 @@
 		border-radius: 50px;
 		margin: 10px;
 		float: left;
+		overflow: hidden;
 	}
 	
 	.repIdDateCon{
@@ -310,23 +309,13 @@
 	}
 	
 	.repEnrollArea{
-		width: 777px;
+		width: 70%;
 	}
 	
-	.repMeImg{
-		width: 65px;
-		border: 1px solid black;
-		height: 65px;
-		border-radius: 50px;
-		margin: 10px;
-		float: left;
-	}	
-	
-	#repEnrollBtn{
-		margin: 8px;
-		width: 9%;
+	.repEnrollBtn{
+		width: 13%;
 		height: 40px;
-		background: black;
+		background: rgb(52, 152, 219);
 		color: white;
 		display: inline-block;
 		cursor: pointer;
@@ -335,20 +324,21 @@
 		border-radius: 10px;			
 	}
 	
-	#repEnrollBtn:hover{
-		background: rgb(52, 152, 219);
+	.repEnrollBtn:hover{
+		background: #4374D9;
 	}		
 	
 	/* 포트폴리오 디테일 뷰 사이드 메뉴 */
-	#portScroll{
+	.portScroll{
 		font-size: 15pt;
 		color: white;
 		font-weight: bolder;
 		border-radius: 5px;
 	}
 	
-	#backToTop{
+	.backToTop{
 		margin-left: 25%;
+		cursor: pointer;
 	}
 	
 	/* 버튼 css 가져온 것*/
@@ -407,19 +397,89 @@
 				</div>
 				<div id="portpolioListContent">
 					<div class="editCate">
-					${ portpolio.poWriter }
 						<button class="totalEditTap" onclick="goToTotal();">T O T A L</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button class="imageEditTap" onclick="goToImage();">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button class="videoEditTap" onclick="goToVideo();">V I D E O</button>
 					</div>
 					<div class="portpolioBoard">
-						<c:forEach var="port" items="${ list }">
+						<c:if test="${ empty list }">
+							<div style="color: red; text-align: center; text-weight: bold; margin: 50px;">※ 등록한 포트폴리오가 없습니다.</div>
+						</c:if>
+						<c:if test="${ !empty list }">
+							<c:forEach var="port" items="${ list }">
 							<div class="portArea">
-								<div class="portpolioThumb"><img src="${ contextPath }/resources/portpolio_upload/20200423/${ port.pocModify }" width="100%" height="100%"></div>
+								<div class="portpolioThumb" onclick="detailView(this);"><img src="${ contextPath }/${ port.pocPath }/${ port.pocModify }" width="100%" height="100%"></div>
 								<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
 								<div class="portCount">조회수 : ${ port.poCount }</div>
 							</div>
+							
+							<!-- 모달 디테일 영역 -->
+							<div class="portDetailModalArea">
+								<div class="portDetailModalContent">
+									<div class="modalCloseBtn" onclick="closeDetail(this);"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
+									<div style="clear: both;"></div>
+									
+									<div class="portpolioNameContents">
+										<div class="portpolioName" style="text-indent: 20px;">
+											${ port.poTitle }
+										</div>
+										<div class="portpolioContents">
+											<img style="width: 100%;" name="portImage" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
+										</div>
+									</div>
+									<div class="portpolioDesc">
+										<div class="userId">${ port.poWriter }</div>
+										<div class="portClass">${ port.poCategory }</div>
+										<c:if test="${ port.poUseYn eq 'Y' }">
+											<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인입니다.</div>
+										</c:if>
+										<c:if test="${ port.poUseYn ne 'Y' }">
+											<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인은 아닙니다.</div>
+										</c:if>
+										<div class="portDescription">
+											<span style="font-weight: bold;">디자인 설명</span><br>
+											<span>${ port.poDesc }<!-- 인테리어 디자인 및 용품 판매 업체인 "끄끄흐"만의 재미있고 독창성을 보여주며, 이용하는 고객들이 직관적으로 이해할 수 있는 텍스트형 로고로 제작하였습니다. 색상변경 가능합니다. 감사합니다:) --></span>
+										</div>						
+									</div>
+									<div class="BtnArea">
+										<div class="updateBtn">수정</div>
+										<div class="deleteBtn">삭제</div>
+									</div>					
+									<div style="clear: both;"></div>
+									<div class="replyArea">
+										<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
+										<div class="repWriterImg">
+											<img src="${ contextPath }/${ port.poStatus }/${ port.pocStatus }" width="100%" height="100%">
+										</div>
+										<div class="repIdDateCon">
+											<div class="idDate">
+												<span>user02</span>
+												<span>2020.03.28.</span>
+											</div>
+											<div class="repContents">
+												와 정말 감탄이 절로 나오네요.. 
+											</div>
+										</div>
+										<div style="clear: both;"></div>
+										<div class="repEnrollArea">
+											<form name="repEnrollForm" method="post" action="enrollPoReply.my" class="repEnrollForm">
+												<input type="hidden" name="porRef" value="${ port.poNum }">
+												<input type="hidden" name="porWriter" value="${ loginUser.userId }">
+												<textarea class="porContent" name="porContent" rows="5" cols="110" style="resize: none; margin: 1%;"></textarea><br>
+												<div class="repEnrollBtn" style="float: right;">등록</div>
+												<div style="clear: both;"></div>								
+											</form>
+										</div>
+									</div>
+								</div>
+				
+								<div class="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
+									<img class="backToTop" onclick="backToTop(this);" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%">								
+								</div>
+							</div>
+							
 						</c:forEach>
+						</c:if>
 					</div>
 					<!-- 페이징 처리 -->
 					
@@ -479,7 +539,76 @@
 				</div>
 			</div>
 			
-			<!-- 포트폴리오 디테일 모달창 -->
+			<%-- <!-- 포트폴리오 디테일 모달창 -->
+			<c:if test="${ !empty list }">
+				<c:forEach var="moPort" items="${ list }">
+					<div id="portDetailModal" class="portDetailModalArea">
+						<div class="portDetailModalContent">
+							<div id="modalCloseBtn" onclick="closeDetail();"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
+							<div style="clear: both;"></div>
+							
+							<div class="portpolioNameContents">
+								<div class="portpolioName" style="text-indent: 20px;">
+									${ moPort.poTitle }
+								</div>
+								<div class="portpolioContents">
+									<img style="width: 100%;" name="portImage" src="${ contextPath }/${ moPort.pocPath }/${ moPort.pocModify }">
+								</div>
+							</div>
+							<div class="portpolioDesc">
+								<div class="userId">${ moPort.poWriter }</div>
+								<div class="portClass">${ moPort.poCategory }</div>
+								<c:if test="${ moPort.poUseYn eq 'Y' }">
+									<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인입니다.</div>
+								</c:if>
+								<c:if test="${ moPort.poUseYn ne 'Y' }">
+									<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인은 아닙니다.</div>
+								</c:if>
+								<div class="portDescription">
+									<span style="font-weight: bold;">디자인 설명</span><br>
+									<span>${ moPort.poDesc }<!-- 인테리어 디자인 및 용품 판매 업체인 "끄끄흐"만의 재미있고 독창성을 보여주며, 이용하는 고객들이 직관적으로 이해할 수 있는 텍스트형 로고로 제작하였습니다. 색상변경 가능합니다. 감사합니다:) --></span>
+								</div>						
+							</div>
+							<div class="BtnArea">
+								<div id="updateBtn">수정</div>
+								<div id="deleteBtn">삭제</div>
+							</div>					
+							<div style="clear: both;"></div>
+							<div class="replyArea">
+								<div class="replayText">댓글(0건)</div>
+								<div class="repWriterImg">
+									<img src="">
+								</div>
+								<div class="repIdDateCon">
+									<div class="idDate">
+										<span>user02</span>
+										<span>2020.03.28.</span>
+									</div>
+									<div class="repContents">
+										와 정말 감탄이 절로 나오네요.. 
+									</div>
+								</div>
+								<div style="clear: both;"></div>
+								<div class="repEnrollArea">
+									<div class="repMeImg">
+										<img src="">
+									</div>
+									<form>
+										<textarea id="repEnrollCon" name="repEnrollCon" rows="5" cols="95" style="resize: none;"></textarea><br>
+										<input id="repEnrollBtn" type="submit" style="float: right;" value="등록">								
+									</form>
+								</div>
+							</div>
+						</div>
+				
+						<div id="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
+							<a href="#modalCloseBtn"><img id="backToTop" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%"></a>									
+						</div>
+					</div>
+				</c:forEach>
+			</c:if> --%>
+			
+			<%-- <!-- 포트폴리오 모달 영역 -->
 			<div id="portDetailModal" class="portDetailModalArea">
 				<div class="portDetailModalContent">
 					<div id="modalCloseBtn" onclick="closeDetail();"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
@@ -537,7 +666,7 @@
 				<div id="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
 					<a href="#modalCloseBtn"><img id="backToTop" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%"></a>									
 				</div>
-			</div>			
+			</div> --%>			
 			
 		</div>
 		<div id="right-side">
@@ -547,12 +676,34 @@
 	<jsp:include page="../common/footer.jsp"/>
 	
 	<script>
-		$('.portpolioThumb').click(function(){
-			$('#portDetailModal').show();
-		});
+	
+		//썸네일 클릭시 해당 포트폴리오 모달창 열기
+		function detailView(e){
+			console.log(e);
+			console.log($(e).parent().next()[0]);
+			$(e).parent().next().show();
 		
-		function closeDetail(){
-			$('#portDetailModal').hide();
+			//스크롤이 움직일때마다 이벤트 발생
+			$(e).parent().next().scroll(function(){  
+	      			var position = $(e).parent().next().scrollTop(); // 현재 스크롤바의 위치값을 반환
+	      			$(e).parent().next().children().last().stop().animate({top:800+position+"px"}, 200); //해당 오브젝트 위치값 재설정
+			});
+		}
+		
+		// top이미지 클릭시 상단으로 이동
+		function backToTop(b){
+			$(b).parent().parent().animate({
+				scrollTop: 250
+			}, 100);
+		
+		}
+		
+		/* $('.portpolioThumb').click(function(){
+			$('#portDetailModal').show();
+		}); */
+		
+		function closeDetail(c){
+			$(c).parent().parent().hide();
 		}
 		
 		/* 포트폴리오 카테고리(전체, 이미지, 동영상) */
@@ -583,11 +734,30 @@
 		}
  			scroll_follow("#portScroll"); */
  			
- 	  			$('#portDetailModal').scroll(function(){  //스크롤이 움직일때마다 이벤트 발생
- 	      			var position = $('#portDetailModal').scrollTop(); // 현재 스크롤바의 위치값을 반환
- 	      			$('#portScroll').stop().animate({top:800+position+"px"}, 200); //해당 오브젝트 위치값 재설정
- 	   			});
 	</script> 	
+	
+	<script>
+		$('.repEnrollBtn').on('click', function(){
+			var porContent = $(this).prevAll().eq(1).val();
+			var porWriter = $(this).prevAll().eq(2).val();
+			var porRef = $(this).prevAll().eq(3).val();
+			
+			$.ajax({
+				type	: "POST",
+				url	    : 'enrollPoReply.my',
+				data	: {'porRef':porRef, 'porWriter': porWriter, 'porContent': porContent},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("ajax댓글입력 성공!");
+					$('.replyCount').text(data.length);
+				},
+				error : function(e) {
+					console.log("안되네...");
+				}
+			});
+			
+		});
+	</script>
 	
 </body>
 </html>

@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.WDWD.board.model.vo.Board;
+import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.dao.MemberDAO;
 import com.kh.WDWD.member.model.vo.Member;
+import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 
 @Service("mService")
 public class MemberServiceImpl implements MemberService {
@@ -102,6 +104,16 @@ public class MemberServiceImpl implements MemberService {
 	public int checkIdDup(String id) {
 //		return mDAO.checkIdDup(sqlSession, id);
 		return 0;
+	}
+
+	@Override
+	public int getMyPagePortCount(String userId) {
+		return mDAO.getMyPagePortCount(sqlSession, userId);
+	}
+
+	@Override
+	public ArrayList<PortpolioContents> selectMyPagePortList(PageInfo pi, String userId) {
+		return mDAO.selectMyPagePortList(sqlSession, pi, userId);
 	}
 }
 	

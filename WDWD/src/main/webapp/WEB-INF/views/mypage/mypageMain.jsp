@@ -364,9 +364,40 @@
 
 	
 	/* 포트폴리오 */
-	#portpolio{height: 725px; margin-top: 30px;}
+	#portpolio{margin-top: 30px;}
 	.portpolioText{text-indent: 10px; height: 70px; font-size: 18pt; font-weight: bolder; line-height: 65px; background: lightgray;}
-	.portpolioArea{height: 625px; border: 1px solid lightgray; margin-top: 30px; border-radius: 10px;}
+	.portpolioArea{border: 1px solid lightgray; margin-top: 30px; border-radius: 10px;}
+	
+	.portArea{
+		width: 18%;
+		height: 180px;
+		border: 1px solid gray;
+		float: left;
+		margin: 2%;
+		margin-left: 2.5%;
+		padding: 10px;
+	}
+	
+	.portpolioThumb{
+		width: 100%;
+		height: 150px;
+		border: 1px solid lightgrey;
+		float: left;
+		display: line-block;
+	}
+	
+	.portDate{
+		margin-top: 10px;
+		float: left;
+		font-size: 9pt;
+	}
+	
+	.portCount{
+		margin-top: 10px;
+		float: right;
+		font-size: 9pt;
+	}
+	
 	#smallReqBtn{
 		font-size: 12pt; 
 		color: white; 
@@ -627,10 +658,10 @@
 	
 	/* sweetAlert */
 	.swal-button{
-		width: 30px;
+		width: 90px;
 		font-weight: normal;
 		text-align: center;
-		padding-right: 36px;
+		font-family: 'Malgun Gothic';
 	}
 </style>
 <title>마이 페이지</title>
@@ -676,7 +707,6 @@
 							</form>
 						</div>
 						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
-						<button id="profileEditBtn" class="profileImgUploadBtn" style="width: 120px; margin-left: 320px;">이미지 저장</button>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
@@ -890,32 +920,41 @@
 					<div class="portpolioText">
 						포트폴리오
 						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyPortpolioList();"/>
-						<div id="smallReqBtn">의뢰 요청</div>
+						<div id="smallReqBtn" onclick="location.href='directReq.my'">의뢰 요청</div>
 					</div>
 					<div class="portpolioArea">
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div class="portpolioList"></div>
-						<div style="clear: both;"></div>
-						<div class="pagingCenter">
-							<div class="pagination">
-							<a href=""> &laquo; </a>
-							<a href="" class="active"> 1 </a>
-							<a href=""> 2 </a>
-							<a href=""> 3 </a>
-							<a href=""> 4 </a>
-							<a href=""> 5 </a>
-							<a href=""> 6 </a>
-							<a href=""> 7 </a>
-							<a href=""> 8 </a>
-							<a href=""> &raquo; </a>
+						<c:if test="${ empty pcList }">
+							<div style="color: red; text-align: center; text-weight: bold; margin: 50px;">※ 등록한 포트폴리오가 없습니다.</div>
+						</c:if>
+						<c:if test="${ !empty pcList }">
+							<c:forEach var="port" items="${ pcList }">
+							<div class="portArea">
+								<div class="portpolioThumb"><img class="portImgTag" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }" width="100%" height="100%"></div>
+								<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
+								<div class="portCount">조회수 : ${ port.poCount }</div>
 							</div>
+							</c:forEach>
+						</c:if>
+						<div style="clear: both;"></div>
+					
+					<!-- 페이징 처리 -->
+					
+					<div class="pagingCenter">
+						<div class="pagination">
+					<!-- 페이지 -->	
+					<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+						<c:if test="${ p eq pi.currentPage }">
+							<a href='javascript:void(0);' onclick="pageMove(this,${ p });"> ${ p } </a>
+						</c:if>
+						
+						<c:if test="${ p ne pi.currentPage }">
+							<a href='javascript:void(0);' onclick="pageMove(this,${ p });"> ${ p } </a> &nbsp;
+						</c:if>
+					</c:forEach>	
+					
+						
 						</div>
+					</div>
 						<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
 						<div style="clear: both;"></div>						
 					</div>
@@ -1114,7 +1153,7 @@
 			$('.editModalArea').hide();
 		};
 		
-		$('.portpolioList').click(function(){
+		$('.portArea').click(function(){
 			$('#portDetailModal').show();
 		});
 		
@@ -1165,7 +1204,7 @@
 			$('#profileImg').click();
 		});
 		
-		// 각각의 영역에 파일을 첨부 했을 경우 미리 보기가 가능하도록 하는 함수
+		// 파일을 첨부 했을 경우 미리 보기가 가능하도록 하는 함수
 		function LoadImg(value){
 			if(value.files && value.files[0]){
 				var reader = new FileReader();
@@ -1176,36 +1215,92 @@
 				
 				reader.readAsDataURL(value.files[0]);
 			}
-		}
-		
-		// 파일 업로드
-		$('.profileImgUploadBtn').on('click', function(){
-			var formData = new FormData($('#profileImgForm')[0]);
-			$.ajax({ 
-				type: "POST", 
-				enctype: 'multipart/form-data', // 필수 
-				url: 'uProfileImg.my', 
-				data: formData, // 필수 
-				processData: false, // 필수 
-				contentType: false, // 필수 
-				cache: false, 
-				success: function(data){ 
-					swal({
-					    title: "프로필 사진",
-					    text: "등록 성공!",
-					    icon: "info" //"info,success,warning,error" 중 택1
-					});
-				}, 
-				error: function(e){ 
-					swal({
+			
+			// 파일 업로드
+			swal({
+                title: "프로필 사진을 등록하시겠습니까?",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '등록',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+                	var formData = new FormData($('#profileImgForm')[0]);
+        			$.ajax({ 
+        				type: "POST", 
+        				enctype: 'multipart/form-data', // 필수 
+        				url: 'uProfileImg.my', 
+        				data: formData, // 필수 
+        				processData: false, // 필수 
+        				contentType: false, // 필수 
+        				cache: false, 
+        				success: function(data){ 
+        					swal({
+        					    title: "프로필 사진",
+        					    text: "등록 성공!",
+        					    icon: "info" //"info,success,warning,error" 중 택1
+        					});
+        				}, 
+        				error: function(e){ 
+        					swal({
+        					    title: "프로필 사진",
+        					    text: "등록 실패!",
+        					    icon: "error" //"info,success,warning,error" 중 택1
+        					});
+        				} 
+        			});
+                } else {
+                	swal({
 					    title: "프로필 사진",
 					    text: "등록 실패!",
 					    icon: "error" //"info,success,warning,error" 중 택1
 					});
-				} 
-			});
-		});
+                }
+             });
+		}
 		
+		// 포트폴리오 리스트 페이징 ajax로 구현
+		function pageMove(active, page){
+			var userId = '${ member.userId }';
+			
+			console.log("page : " + page);
+			console.log("userId : " + userId);
+			
+			console.log("active : " + active);
+			
+			
+			$.ajax({
+				type	: "POST",
+				url	    : 'mainPortPaging.my',
+				data	: {'page':page, 'userId': userId},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("페이지 이동 성공!");
+					data.pi
+					
+					for(var i in data.pcList){
+						console.log("data[i].pocModify : " + data.pcList[i].pocModify);
+						var test = $('.portImgTag').eq(i);
+						console.log(test);
+						var contextPath = "<c:out value='${ contextPath }' />";
+						console.log(contextPath);
+						var src = contextPath + '/' + data.pcList[i].pocPath + '/' + data.pcList[i].pocModify;
+						console.log(src);
+						test.attr("src", src);
+					}
+				},
+				error : function(e) {
+					console.log("안되네...");
+				}
+			});
+		};
 		
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>

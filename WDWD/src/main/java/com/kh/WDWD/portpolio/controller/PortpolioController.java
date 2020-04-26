@@ -1,6 +1,7 @@
 package com.kh.WDWD.portpolio.controller;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import com.kh.WDWD.portpolio.model.exception.PortpolioException;
 import com.kh.WDWD.portpolio.model.service.PortpolioService;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 @Controller
 public class PortpolioController {
@@ -245,18 +247,17 @@ public class PortpolioController {
 										  @RequestParam(value="page", required=false) Integer page, 
 										  ModelAndView mv) {
 		
-		System.out.println("콘트롤러에서 p 찍어보기 : " + p);
-		
 		int currentPage = 1;
 		if(page != null) {
 			currentPage = page;
 		}
 		
 		int listCount = pService.getPortpolioCount(p);
-		System.out.println("listCount : " + listCount);
 		PageInfo pi = Pagination.getPortpolioListPageInfo(currentPage, listCount);
 		
-		ArrayList<Portpolio> list = pService.selectPortpolioList(pi, p);
+		ArrayList<PortpolioContents> list = pService.selectPortpolioList(pi, p);
+		
+		System.out.println("plist" + list);
 		
 		if(list != null) {
 			mv.addObject("list", list)
@@ -269,6 +270,26 @@ public class PortpolioController {
 		}
 		
 		return mv;
+		
+	}
+	
+	@RequestMapping("enrollPoReply.my")
+	public void enrollPoReply(@ModelAttribute PortpolioReply pr, HttpServletResponse response) throws Exception {
+		System.out.println("pr : " + pr);
+		
+		int result = pService.enrollPoReply(pr);
+		
+		if(result > 0) {
+			ArrayList<PortpolioReply> prList = pService.selectPoReply(pr);
+		
+			if(prList != null) {
+				response.setCharacterEncoding("UTF-8");
+				
+				System.out.println("prList : " + prList);
+				
+				new Gson().toJson(prList, response.getWriter());
+			}
+		}
 		
 	}
 	

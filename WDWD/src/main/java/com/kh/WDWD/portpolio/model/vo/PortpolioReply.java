@@ -1,6 +1,8 @@
 package com.kh.WDWD.portpolio.model.vo;
 
-public class PortpolioReply {
+import com.kh.WDWD.contents.model.vo.Contents;
+
+public class PortpolioReply extends Contents {
 	private int porNum;
 	private int porRef;
 	private String porWriter;

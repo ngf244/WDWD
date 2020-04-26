@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 public interface PortpolioService {
 
@@ -14,6 +15,10 @@ public interface PortpolioService {
 
 	int getPortpolioCount(Portpolio p);
 
-	ArrayList<Portpolio> selectPortpolioList(PageInfo pi, Portpolio p);
+	ArrayList<PortpolioContents> selectPortpolioList(PageInfo pi, Portpolio p);
+
+	int enrollPoReply(PortpolioReply pr);
+
+	ArrayList<PortpolioReply> selectPoReply(PortpolioReply pr);
 
 }

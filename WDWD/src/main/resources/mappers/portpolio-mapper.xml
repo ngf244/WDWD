@@ -32,11 +32,11 @@
 			po_writer = #{poWriter}
 			and po_status = 'Y'
 			<if test="poCategory != null">
-				<if test="poCategory == 'image'">
+				<if test="poCategory.equals('image')">
 					and po_category in ('이미지 편집', '이미지 제작')
 				</if>
-				<if test="poCategory == 'video'">
-					and po_category in ('동영상 편집', '이미지 제작') 				
+				<if test="poCategory.equals('video')">
+					and po_category in ('동영상 편집', '동영상 제작') 				
 				</if>
 			</if>
 		</where>
@@ -45,40 +45,86 @@
 	<resultMap type="PortpolioContents" id="pcResultSet">
 		<id property="poNum" column="PO_NUM"/>
 		<result property="poTitle" column="PO_TITLE"/>
-		<result property="poWriter" column="PO_WRITER"/>
+		<result property="poWriter" column="ME_NICK"/>
 		<result property="poDesc" column="PO_DESC"/>
 		<result property="poCategory" column="PO_CATEGORY"/>
 		<result property="poEnrollDate" column="PO_ENROLLDATE"/>
 		<result property="poModifyDate" column="PO_MODIFYDATE"/>
 		<result property="poUseYn" column="PO_USE_YN"/>
-		<result property="poFee" column="PO_FEE"/>
+		<result property="poFee" column="count(r.por_ref)"/>
 		<result property="poCount" column="PO_COUNT"/>
-		<result property="poStatus" column="PO_STATUS"/>
+		<result property="poStatus" column="SUBSTR(con.con_url,-23)"/>
 		<result property="pocNum" column="POC_NUM"/>
 		<result property="pocRef" column="POC_REF"/>
 		<result property="pocOrigin" column="POC_ORGIN"/>
 		<result property="pocModify" column="POC_MODIFY"/>
-		<result property="pocPath" column="POC_PATH"/>
-		<result property="pocStatus" column="POC_STATUS"/>
+		<result property="pocPath" column="SUBSTR(c.poc_path,-35)"/>
+		<result property="pocStatus" column="con_cop"/>
 		<result property="pocLevel" column="POC_LEVEL"/>
 	</resultMap>
 	
 	<select id="selectPortpolioList" parameterType="Portpolio" resultMap="pcResultSet">
-		select *
-		from portpolio
-     		 join po_contents on (PO_NUM = POC_REF)
+		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, count(r.por_ref), SUBSTR(con.con_url,-23), con.con_cop
+		from portpolio p
+     		 left join po_contents c on (PO_NUM = POC_REF)
+     		 left join member m on (po_writer = m.me_id)
+     		 left join po_reply r on (po_num = por_ref)
+     		 left join member rm on (por_writer = rm.me_id)
+     		 left join contents con on (rm.me_con_num = con_num)
 		<where>
 			po_writer = #{poWriter} and poc_level = 0 and po_status = 'Y'
 			<if test="poCategory != null">
-				<if test="poCategory == image">
+				<if test="poCategory.equals('image')">
 					and po_category in ('이미지 편집', '이미지 제작')
 				</if>
-				<if test="poCategory == video">
-					and po_category in ('동영상 편집', '이미지 제작') 				
+				<if test="poCategory.equals('video')">
+					and po_category in ('동영상 편집', '동영상 제작') 				
 				</if>
 			</if>
 		</where>
+		group by p.po_num, p.po_title, p.po_writer, p.po_desc, p.po_category, p.po_enrolldate, p.po_modifydate, p.po_use_yn, p.po_fee, p.po_count, p.po_status, 
+         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick,
+         		 SUBSTR(con.con_url,-23), con.con_cop
 		order by po_enrolldate desc, poc_modify desc
+	</select>
+	
+	<select id="getMyPagePortCount" parameterType="string" resultType="_int">
+		select count(*)
+		from portpolio
+		where po_writer = #{userId} and po_status = 'Y'
+	</select>
+	
+	<select id="selectMyPagePortList" parameterType="string" resultMap="pcResultSet">
+		select p.*, c.*, SUBSTR(c.poc_path,-35)
+		from portpolio p
+			 left join po_contents c on (po_num = poc_ref)
+		where po_writer = #{userId} and poc_level = 0 and po_status = 'Y'
+		order by po_enrolldate desc, poc_modify desc
+	</select>
+	
+	<insert id="enrollPoReply" parameterType="PortpolioReply">
+		insert into po_reply
+		values(por_seq.nextval, #{porRef}, #{porWriter}, #{porContent}, SYSDATE, DEFAULT)
+	</insert>
+	
+	<resultMap type="PortpolioReply" id="prResultSet">
+		<id property="porNum" column="por_num"/>
+		<result property="porWriter" column="me_nick"/>
+		<result property="porRef" column="por_ref"/>
+		<result property="porContent" column="por_content"/>
+		<result property="porEnrollDate" column="por_enrolldate"/>
+		<result property="conCop" column="con_cop"/>
+		<result property="conUrl" column="SUBSTR(pc.con_url, -23)"/>		
+	</resultMap>
+	
+	<select id="selectPoReply" parameterType="PortpolioReply" resultMap="prResultSet">
+		select p.*, pr.*, rm.*, pc.*, SUBSTR(pc.con_url, -23)
+		from portpolio p 
+     	     left join po_reply pr on (po_num = por_ref)
+    		 left join member rm on (por_writer = rm.me_id)
+     		 join contents pc on (me_con_num = con_num)
+		where po_num = #{porRef}
+		order by por_num desc
 	</select>
 		  
 </mapper>
