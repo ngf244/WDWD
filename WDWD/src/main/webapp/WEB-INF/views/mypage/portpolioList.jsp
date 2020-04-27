@@ -424,8 +424,25 @@
 											${ port.poTitle }
 										</div>
 										<div class="portpolioContents">
-											<img style="width: 100%;" name="portImage" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
+											<img style="width: 100%;" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
 										</div>
+										
+										<c:if test="${ port.poCategory eq '이미지 제작' or port.poCategory eq '이미지 편집' }">
+											<c:forEach var="attach" items="${ port.portContents }">
+												<div class="portpolioContents">
+													<img style="width: 100%;" name="portImage" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }">
+												</div>										
+											</c:forEach>											
+										</c:if>
+										
+										<c:if test="${ port.poCategory eq '동영상 제작' or port.poCategory eq '동영상 편집' }">
+											<c:forEach var="attach" items="${ port.portContents }">
+												<div class="portpolioContents">
+													<video class="portVideo" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }" controls></video>
+												</div>										
+											</c:forEach>											
+										</c:if>
+										
 									</div>
 									<div class="portpolioDesc">
 										<div class="userId">${ port.poWriter }</div>
@@ -459,7 +476,7 @@
 													</div>
 													<div class="repIdDateCon">
 														<div class="idDate">
-															<span>${ ppr.porWriter }</span>
+															<span class="smallOption">${ ppr.porWriter }</span>
 															<span>20${ ppr.porEnrollDate }</span>
 														</div>
 														<div class="repContents">

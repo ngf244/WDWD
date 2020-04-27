@@ -60,4 +60,8 @@ public class PortpolioDAO {
 		return sqlSession.update("portpolioMapper.updatePortCount", p);
 	}
 
+	public ArrayList<PortpolioContents> selectAttachFile(SqlSessionTemplate sqlSession, int poNum) {
+		return (ArrayList)sqlSession.selectList("portpolioMapper.selectAttachFile", poNum);
+	}
+
 }

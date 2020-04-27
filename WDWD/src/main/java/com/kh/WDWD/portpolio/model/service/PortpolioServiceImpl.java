@@ -66,4 +66,9 @@ public class PortpolioServiceImpl implements PortpolioService {
 		return pDAO.updatePortCount(sqlSession, p);
 	}
 
+	@Override
+	public ArrayList<PortpolioContents> selectAttachFile(int poNum) {
+		return pDAO.selectAttachFile(sqlSession, poNum);
+	}
+
 }

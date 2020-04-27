@@ -27,4 +27,6 @@ public interface PortpolioService {
 
 	int updatePortCount(Portpolio p);
 
+	ArrayList<PortpolioContents> selectAttachFile(int poNum);
+
 }

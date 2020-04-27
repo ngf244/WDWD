@@ -124,7 +124,7 @@
     		 left join member rm on (por_writer = rm.me_id)
      		 join contents pc on (me_con_num = con_num)
 		where po_num = #{porRef}
-		order by por_num desc
+		order by por_num asc
 	</select>
 	
 	<select id="selectPoReplyFirst" parameterType="_int" resultMap="prResultSet">
@@ -134,7 +134,7 @@
     		 left join member rm on (por_writer = rm.me_id)
      		 join contents pc on (me_con_num = con_num)
 		where po_num = #{poNum}
-		order by por_num desc
+		order by por_num asc
 	</select>
 	
 	<update id="deletePortpolio" parameterType="Portpolio">
@@ -148,5 +148,11 @@
 		set po_count = po_count + 1
 		where po_num = #{poNum}
 	</update>
+	
+	<select id="selectAttachFile" parameterType="_int" resultMap="pcResultSet">
+		select c.*, SUBSTR(c.poc_path,-35)
+		from po_contents c
+		where poc_ref = #{poNum} and poc_level > 0
+	</select>
 		  
 </mapper>

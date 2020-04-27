@@ -259,6 +259,9 @@ public class PortpolioController {
 		for(PortpolioContents pc : list) {
 			ArrayList<PortpolioReply> portReply = pService.selectPoReply(pc.getPoNum());
 			pc.setPortReply(portReply);
+			
+			ArrayList<PortpolioContents> portContents = pService.selectAttachFile(pc.getPoNum());
+			pc.setPortContents(portContents);
 		}
 		
 		if(list != null) {
