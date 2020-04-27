@@ -65,7 +65,8 @@
       <result property="cbDate" column="CB_DATE"/>
       <result property="cbPrimium" column="CB_PRIMIUM"/>  
       <result property="boWriter" column="ME_NICK"/>      
-      <result property="reId" column="RE_ID"/>      
+      <result property="reId" column="RE_ID"/>
+      <result property="thumbnail" column="CON_COP"/>
    </resultMap>
    
    <resultMap type="Contents" id="ContentsResultSet">
@@ -239,11 +240,13 @@
  		where re_num = #{reNum} and re_id = #{reId}
  	</select>
  	
- 	<select id="reqBList" resultMap="boardResultSet" parameterType="_int">
+ 	<select id="reqBList" resultMap="CBoardResultSet" parameterType="_int">
  		select * 
  		from board
  		join request on (board.bo_num = request.re_refnum)
- 		where re_num = #{boNum}
+ 		join member on (board.bo_writer = member.me_id)
+        left join contents on (contents.con_ref = board.bo_num)
+ 		where re_num = #{boNum} and (con_level is null or con_level = 0)
  	</select>
  	
  	<insert id="registWrite1" parameterType="Board">
@@ -251,26 +254,26 @@
  		values (bo_seq.nextval, 5, '에디터 등록글입니다.', #{boContent}, default, default, default, default, #{boWriter}, default, null, default)
  	</insert>
  	
- 	<update id="registWrite2" parameterType="_int">
+ 	<update id="registWrite2" parameterType="Request">
  		update request
  		set re_refnum = bo_seq.currval
- 		where re_num = #{boardNum} and re_plz = 'Y'
+ 		where re_num = #{reNum} and re_id = #{reId}
  	</update>
  	
- 	<update id="registDelete1">
+ 	<update id="registDelete1" parameterType="Request">
  		update request
  		set re_refnum = null
- 		where re_refnum = #{boNum} and re_plz = 'Y'
+ 		where re_refnum = #{reRefNum} and re_id = #{reId}
  	</update>
  	
- 	<delete id="registDelete2">
+ 	<delete id="registDelete2" parameterType="Request">
  		delete from contents
- 		where con_ref = #{boNum}
+ 		where con_ref = #{reRefNum}
  	</delete>
  	
- 	<delete id="registDelete3">
+ 	<delete id="registDelete3" parameterType="Request">
  		delete from board
- 		where bo_num = #{boNum}
+ 		where bo_num = #{reRefNum}
  	</delete>
  	
 	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">

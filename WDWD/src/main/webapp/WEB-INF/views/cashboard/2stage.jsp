@@ -374,15 +374,18 @@
 									});
 								}
 							})
-						
-							for(var i = 0; i < $('#boardcontent img').length; i++) {
-								var $watermark = $('<img>');
-								$watermark.attr('class', 'watermark_free');
-								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
-								
-								$('header').append($watermark);
-								setWaterMark($('#boardcontent img').eq(i), $watermark);
+							
+							function showWaterMark() {
+								for(var i = 0; i < $('#boardcontent img').length; i++) {
+									var $watermark = $('<img>');
+									$watermark.attr('class', 'watermark_free');
+									$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+									
+									$('header').append($watermark);
+									setWaterMark($('#boardcontent img').eq(i), $watermark);
+								}	
 							}
+							showWaterMark();
 						
 							function loadChat(chatCon, chatDate, position) {
 								var date = new Date(chatDate);
@@ -606,6 +609,7 @@
 						
 						function registUpdate(){
 							$('#registViewWrap').empty();
+							$('.watermark_free').remove();
 							
 							var $form = $('<form action="registWrite.ch" method="post" id="registWriteForm">');
 							var $div = $('<div id="contentWrap">');

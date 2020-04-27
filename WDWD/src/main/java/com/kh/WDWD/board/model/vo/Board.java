@@ -16,11 +16,13 @@ public class Board {
 	private int boReNum;
 	private String boWriterNick;
 	private int boFileExist;
-	
+	private String thumbnail;
+
 	public Board() {}
 
 	public Board(int boNum, String boGroup, String boTitle, String boContent, int boView, String boDate,
-			String boUpdate, String boDel, String boWriter, int boGood, String boCategory, int boReNum, String boWriterNick, int boFileExist) {
+			String boUpdate, String boDel, String boWriter, int boGood, String boCategory, int boReNum,
+			String boWriterNick, int boFileExist, String thumbnail) {
 		super();
 		this.boNum = boNum;
 		this.boGroup = boGroup;
@@ -36,6 +38,7 @@ public class Board {
 		this.boReNum = boReNum;
 		this.boWriterNick = boWriterNick;
 		this.boFileExist = boFileExist;
+		this.thumbnail = thumbnail;
 	}
 
 	public Board(String boGroup, String boCategory) {
@@ -156,12 +159,20 @@ public class Board {
 		this.boFileExist = boFileExist;
 	}
 
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
 	@Override
 	public String toString() {
 		return "Board [boNum=" + boNum + ", boGroup=" + boGroup + ", boTitle=" + boTitle + ", boContent=" + boContent
 				+ ", boView=" + boView + ", boDate=" + boDate + ", boUpdate=" + boUpdate + ", boDel=" + boDel
 				+ ", boWriter=" + boWriter + ", boGood=" + boGood + ", boCategory=" + boCategory + ", boReNum="
-				+ boReNum + ", boWriterNick=" + boWriterNick + ", boFileExist=" + boFileExist + "]";
+				+ boReNum + ", boWriterNick=" + boWriterNick + ", boFileExist=" + boFileExist + ", thumbnail="
+				+ thumbnail + "]";
 	}
-	
 }

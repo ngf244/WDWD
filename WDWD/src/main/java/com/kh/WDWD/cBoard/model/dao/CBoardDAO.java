@@ -123,10 +123,10 @@ public class CBoardDAO {
 	}  
 
 
-	public int registWrite(SqlSessionTemplate sqlSession, Board b, int boardNum) {
+	public int registWrite(SqlSessionTemplate sqlSession, Board b, Request r) {
 		int result = sqlSession.insert("cBoardMapper.registWrite1", b);
 		if(result > 0) {
-			result = sqlSession.update("cBoardMapper.registWrite2", boardNum);
+			result = sqlSession.update("cBoardMapper.registWrite2", r);
 		}
 		
 		return result;
@@ -162,12 +162,12 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.chatList", boNum);
 	}
 
-	public int registDelete(SqlSessionTemplate sqlSession, int boNum) {
-		int result = sqlSession.update("cBoardMapper.registDelete1", boNum);
+	public int registDelete(SqlSessionTemplate sqlSession, Request r) {
+		int result = sqlSession.update("cBoardMapper.registDelete1", r);
 		
 		if(result > 0) {
-			result = sqlSession.delete("cBoardMapper.registDelete2", boNum);
-			result =  sqlSession.delete("cBoardMapper.registDelete3", boNum);
+			result = sqlSession.delete("cBoardMapper.registDelete2", r);
+			result =  sqlSession.delete("cBoardMapper.registDelete3", r);
 			return 1;
 		}
 		return 0;

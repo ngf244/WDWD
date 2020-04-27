@@ -44,7 +44,7 @@ public interface CBoardService {
 	
 	Board cBoardReqView(Request r);
 
-	int registWrite(Board b, int boardNum);
+	int registWrite(Board b, Request r);
 
 	int getListCount2(CBoard cBoard);
 
@@ -58,7 +58,7 @@ public interface CBoardService {
 
 	ArrayList<Chat> chatList(int boNum);
 	
-	int registDelete(int boNum);
+	int registDelete(Request r);
 	
 	int go3stage(int boNum);
 	

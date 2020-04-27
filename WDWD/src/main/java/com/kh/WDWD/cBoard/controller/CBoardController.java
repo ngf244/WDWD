@@ -250,13 +250,18 @@ public class CBoardController {
 		b.setBoWriter(m.getUserId());
 		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/",
 				"<img src=\"/WDWD/resources/real_photo/"));
+		
+		Request r = new Request();
+		r.setReNum(boardNum);
+		r.setReRefNum(b.getBoNum());
+		r.setReId(m.getUserId());
 
 		int result = 0;
 	
 		if(updateCheck == 1) {
-			result = cBoardService.registDelete(b.getBoNum());
+			result = cBoardService.registDelete(r);
 		}
-		result = cBoardService.registWrite(b, boardNum);
+		result = cBoardService.registWrite(b, r);
 		
 		if(result != 0) {
 			if(conUrl != null) {

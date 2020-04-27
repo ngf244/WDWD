@@ -24,7 +24,47 @@
 		height: 20px;
 		font-size: 12pt;
 	}
-	
+	.modal {
+		display: none; /* Hidden by default */
+		position: fixed; /* Stay in place */
+		z-index: 2; /* Sit on top */
+		left: 0;
+		top: 0;
+		width: 100%; /* Full width */
+		height: 100%; /* Full height */
+		overflow: auto; /* Enable scroll if needed */
+		background-color: rgb(0,0,0); /* Fallback color */
+		background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+	}
+	.modal-content {
+		background-color: #fefefe;
+		margin: 5% auto; /* 15% from the top and centered */
+		padding: 20px;
+		width: 65%; /* Could be more or less, depending on screen size */                          
+	}
+	.modal-left {
+		width: 75%;
+		display: inline-table;
+		margin-right: 3%;
+	}
+	.modal-right {
+		width: 20%;
+		display: inline-table;
+		text-align: center;
+	}
+	.modal-title {
+		text-align: center;
+		font-size: 16pt;
+		font-weight: bold;
+		margin-bottom: 30px;
+	}
+	.modal-text {
+		min-height: 400px;
+		border: 1px solid black;
+	}
+	.modal-text img {
+		max-width: 100%;
+	}
 	#btnList {
 		text-align: center;
 		margin-top: 30px;
@@ -75,20 +115,74 @@
 						
 						<c:if test="${ cBoard.boReNum ne 0 }">
 							<c:forEach var="r" items="${ reqMList }">
-								<div class="editorView">
-									
-									<!-- 이미지 경로는 추후 수정 -->
-									<!-- 글 등록한 사람 우선으로 보이도록 추후 수정 -->
-									<img class="editorPhoto" src="${ contextPath }/resources/images/drawing.jpg">
-									
-									<div class="editorId">
-										${ r.reId }
+								<c:set var="bCheck" value="false" />
+								<c:forEach var="b" items="${ reqBList }">
+									<c:if test="${r.reId eq b.boWriter}">
+										<c:set var="bCheck" value="true" />
+										<div class="editorView" onclick="createModal(this);">
+											<c:if test="${ !empty b.thumbnail }">
+												<img class="editorPhoto" src="${ contextPath }/resources/real_photo/${ b.thumbnail }">
+											</c:if>
+											
+											<c:if test="${ empty b.thumbnail }">
+												<img class="editorPhoto" src="${ contextPath }/resources/images/emptyImage.png">
+											</c:if>
+											
+											<div class="editorId">
+												${ r.reId }
+											</div>
+											
+											<div class="modal">
+										    	<div class="modal-content">
+										    		<div class="modal-left">
+										    			<div class="modal-title">
+										    				${ cBoard.boTitle }
+										    			</div>
+										    			<div class="modal-text">
+										    				${ b.boContent }
+										    			</div>
+										    		</div>
+										    		<div class="modal-right">
+										    			<div id="profile_wrap">
+										    				<div id="profile_img"><img src=''></div>
+										    				<b>${ b.boWriter }</b>
+										    			</div>	
+														<p>마이페이지</p>
+														<p>작성 글 보기</p>
+														<p>작성 댓글 보기</p>
+										    		</div>
+										    	</div>
+										    </div>
+										</div>
+									</c:if>
+								</c:forEach>
+								
+								<c:if test="${ bCheck eq false }">
+									<div class="editorView" onclick="waitAlert();">
+										<img class="editorPhoto" src="${ contextPath }/resources/images/drawing.jpg">
+										<div class="editorId">
+											${ r.reId }
+										</div>
 									</div>
-								</div>
+								</c:if>
 							</c:forEach>
 						</c:if>
-					
 					</div>
+					
+					<script>
+				    	function createModal(e) {
+				    		$(e).children().eq(2).show()
+				    	}
+				    	
+						window.onclick = function(event) {
+				    		for(var i = 0; i < $(".modal").length; i++) {
+				    			if (event.target == $(".modal")[i]) {
+									$('.modal').hide();
+									
+								}
+				    		}
+						}
+				    </script>
 					
 					<br><br>
 					
@@ -110,6 +204,13 @@
 					</div>
 					
 					<script>
+						function waitAlert() {
+							swal({
+								title: "에디터가 아직 글을 등록하지 않았습니다.",
+								icon: "info"
+							});
+						} 
+						
 						$('#doIt').click(function(){
 							swal({
 								title: "에디터 등록을 하시겠습니까?",

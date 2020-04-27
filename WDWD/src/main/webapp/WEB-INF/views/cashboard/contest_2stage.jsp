@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script type="text/javascript" src="${ contextPath }/resources/naver_editor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <style>
 	#editorDetail {
 		background-color: rgba(255, 245, 230, 0.8); 
@@ -21,6 +22,61 @@
 		margin-bottom: 30px;
 		
 		border: 1px solid black;
+	}
+	#contentWrap {
+		width: 80%;
+		margin: 0 auto;
+	}
+	#content {
+		width: 98%;
+		height: 300px;
+	}
+	.fileArea {
+		position: relative;
+		display: inline-table;
+		width: 150px;
+		margin: 5px;
+		font-size: 11pt;
+		line-height: 25px;
+		color: white;
+		background: rgba(44, 62, 80, 0.5);
+		text-align: center;
+		font-weight: bold;
+		margin-bottom: 15px;
+		border-radius: 5px;
+	}
+	.fileArea p {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 140px;
+		height: 25px;
+		margin:0px;
+		display:inline-block;
+		font-size:15px;
+		font-weight:bold;
+	}
+	.fileAreaImg {
+		width: 140px;
+		height: 140px;
+		margin: 3px;
+	}
+	#btnList {
+		text-align: center;
+		margin-top: 30px;
+	}
+	.button {
+		display: inline-table;
+		width: 150px;
+		height: 50px;
+		margin: 10px;
+		line-height: 50px;
+		font-size: 14pt;
+		text-align: center;
+		background-color: rgba(161, 206, 244, 0.55);
+		border-radius: 5px;
+		cursor: pointer;
+		font-weight: bold;
 	}
 </style>
 <title>Insert title here</title>
@@ -170,22 +226,124 @@
 						</div>
 						
 						<script>
-							for(var i = 0; i < $('#boardcontent img').length; i++) {
-								var $watermark = $('<img>');
-								$watermark.attr('class', 'watermark_free');
-								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
-								
-								$('header').append($watermark);
-								setWaterMark($('#boardcontent img').eq(i), $watermark);
+							function showWaterMark() {
+								for(var i = 0; i < $('#boardcontent img').length; i++) {
+									var $watermark = $('<img>');
+									$watermark.attr('class', 'watermark_free');
+									$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+									
+									$('header').append($watermark);
+									setWaterMark($('#boardcontent img').eq(i), $watermark);
+								}
 							}
+							showWaterMark();
 						</script>
 					</div> <br>
 					
 					<div id="btnList">
-						<div id="submit" class="button">수락하기</div>
+						<div id="submit" class="button" onclick="registWrite();">작성하기</div>
 						<div id="cancle" class="button">돌아가기</div>
 					</div>
 					
+					<c:if test="${ !empty reqB }">
+						<script>
+							$('#submit').text('수정하기');
+							$('#submit').attr('onclick', 'registUpdate();');
+							$('#submit').attr('id', 'registUpdate');
+						</script>
+					</c:if>
+					
+					<script>
+						function registWrite(){
+							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+				
+							swal({
+								title: "글을 등록하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '작성하기',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									$('#registWriteForm').submit();	
+								}
+							});
+						}
+						
+						function registUpdate(){
+							$('#registViewWrap').empty();
+							$('.watermark_free').remove();
+							
+							var $form = $('<form action="registWrite.ch" method="post" id="registWriteForm">');
+							var $div = $('<div id="contentWrap">');
+							var $input1 = $('<input type="hidden" value="${ reqB.boNum }" name="boNum">');
+							var $input2 = $('<input type="hidden" value="${ cBoard.boNum }" name="boardNum">');
+							var $input3 = $('<input type="hidden" value=1 name="updateCheck">');
+							var $textarea = $('<textarea name="boContent" id="content">');
+							var $div2 = $('<div id="fileList">');
+							
+							$div.append($input1);
+							$div.append($input2);
+							$div.append($input3);
+							$div.append($textarea);
+							$div.append($div2);
+							$form.append($div);
+							$('#registViewWrap').append($form);
+							
+							editorLoad();
+							
+							setTimeout(function() {
+								editor_object.getById["content"].exec("SET_IR", [""]); //내용초기화
+
+								var reqContent = '${ reqB.boContent }'.replace(/\"/gi, "'");
+								editor_object.getById["content"].exec("PASTE_HTML", [reqContent]);
+								
+								!function imgCheck(){
+									setTimeout(function() {
+										editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+										
+										contentValue = $('#content').val();
+										imgTempCount = (contentValue.match(/<img src=/g) || []).length;
+										
+										if(imgTempCount != imgCount) {
+											$('#fileList').empty();
+											imgCount = imgTempCount;
+											imgSrc = new Array;
+											imgName = new Array;
+											
+											for(var i = 0; i < imgCount; i++) {
+												imgIndexStart = contentValue.indexOf('<img src=', imgIndexEnd) + 10;
+												imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
+												
+												imgSrc.push(contentValue.substring(imgIndexStart, imgIndexEnd));
+												
+												imgIndexStart = contentValue.indexOf('title=', imgIndexEnd) + 7;
+												imgIndexEnd = contentValue.indexOf('"', imgIndexStart);
+												
+												imgName.push(contentValue.substring(imgIndexStart, imgIndexEnd));
+												
+												changeFile(imgSrc[i], imgName[i]);
+											}
+											
+											imgIndexStart = 0;
+											imgIndexEnd = 0;
+										}
+										
+										imgCheck();
+									}, 500)
+								}()
+							}, 500);
+							
+							$('#registUpdate').attr('id', 'registWrite').attr('onclick', 'registWrite();');
+						}
+					</script>
 					
 				</div>
 			</div>
