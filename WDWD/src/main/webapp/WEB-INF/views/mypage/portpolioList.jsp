@@ -180,7 +180,7 @@
 	
 	.portpolioNameContents{
 		width: 70%;
-		border: 1px solid lightgray;
+		border: 5px solid lightgray;
 		float: left;
 		margin-left: 2%;
 		margin-right: 4%;
@@ -197,7 +197,7 @@
 	.portpolioDesc{
 		width: 21%;
 		height: 620px;
-		border: 1px solid lightgray;
+		border: 5px solid lightgray;
 		float: left;
 		border-radius: 5px;
 	}
@@ -274,7 +274,6 @@
 	
 	.replyArea{
 		width: 95.1%;
-		height: 300px;
 		margin: 22px;
 	}
 	
@@ -342,7 +341,7 @@
 	}
 	
 	/* 버튼 css 가져온 것*/
-	button{
+	.tap{
 	  background:rgba(52, 152, 219);
 	  color:#fff;
 	  border:none;
@@ -355,11 +354,11 @@
 	  outline:none;
 	  font-weight: bold;
 	}
-	button:hover{
+	.tap:hover{
 	  background:#fff;
 	  color:rgba(52, 152, 219);
 	}
-	button:before,button:after{
+	.tap:before,.tap:after{
 	  content:'';
 	  position:absolute;
 	  top:0;
@@ -369,13 +368,13 @@
 	  background: rgba(52, 152, 219);
 	  transition:400ms ease all;
 	}
-	button:after{
+	.tap:after{
 	  right:inherit;
 	  top:inherit;
 	  left:0;
 	  bottom:0;
 	}
-	button:hover:before,button:hover:after{
+	.tap:hover:before,.tap:hover:after{
 	  width:100%;
 	  transition:800ms ease all;
 	}
@@ -397,9 +396,9 @@
 				</div>
 				<div id="portpolioListContent">
 					<div class="editCate">
-						<button class="totalEditTap" onclick="goToTotal();">T O T A L</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button class="imageEditTap" onclick="goToImage();">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button class="videoEditTap" onclick="goToVideo();">V I D E O</button>
+						<button class="totalEditTap tap" onclick="goToTotal();">T O T A L</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="imageEditTap tap" onclick="goToImage();">I M A G E</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="videoEditTap tap" onclick="goToVideo();">V I D E O</button>
 					</div>
 					<div class="portpolioBoard">
 						<c:if test="${ empty list }">
@@ -411,6 +410,7 @@
 								<div class="portpolioThumb" onclick="detailView(this);"><img src="${ contextPath }/${ port.pocPath }/${ port.pocModify }" width="100%" height="100%"></div>
 								<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
 								<div class="portCount">조회수 : ${ port.poCount }</div>
+								<div style="display: none;">${ port.poNum }</div>
 							</div>
 							
 							<!-- 모달 디테일 영역 -->
@@ -442,25 +442,33 @@
 										</div>						
 									</div>
 									<div class="BtnArea">
+										<form action="deletePort.my" name="deletePortForm" method="post">
+											<input type="hidden" name="poNum" value="${ port.poNum }">
+											<input type="hidden" name="poWriter" value="${ port.poStatus }">
+										</form>
 										<div class="updateBtn">수정</div>
 										<div class="deleteBtn">삭제</div>
 									</div>					
 									<div style="clear: both;"></div>
 									<div class="replyArea">
 										<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
-										<div class="repWriterImg">
-											<img src="${ contextPath }/${ port.poStatus }/${ port.pocStatus }" width="100%" height="100%">
+										<div class="replyBoard">
+											<c:forEach var="ppr" items="${ port.portReply }">
+													<div class="repWriterImg">
+														<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+													</div>
+													<div class="repIdDateCon">
+														<div class="idDate">
+															<span>${ ppr.porWriter }</span>
+															<span>20${ ppr.porEnrollDate }</span>
+														</div>
+														<div class="repContents">
+															${ ppr.porContent } 
+														</div>
+													</div>
+													<div style="clear: both;"></div>
+											</c:forEach>
 										</div>
-										<div class="repIdDateCon">
-											<div class="idDate">
-												<span>user02</span>
-												<span>2020.03.28.</span>
-											</div>
-											<div class="repContents">
-												와 정말 감탄이 절로 나오네요.. 
-											</div>
-										</div>
-										<div style="clear: both;"></div>
 										<div class="repEnrollArea">
 											<form name="repEnrollForm" method="post" action="enrollPoReply.my" class="repEnrollForm">
 												<input type="hidden" name="porRef" value="${ port.poNum }">
@@ -682,7 +690,23 @@
 			console.log(e);
 			console.log($(e).parent().next()[0]);
 			$(e).parent().next().show();
-		
+			
+			// 포트폴리오 조회수 업데이트 기능
+			var poNum = $(e).nextAll().eq(2).text();
+			
+			$.ajax({
+				type	: "POST",
+				url	    : 'uPortCount.my',
+				data	: {'poNum':poNum},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("ajax 조회수 업데이트 성공!");
+				},
+				error : function(e) {
+					console.log("안되네...");
+				}
+			});			
+			
 			//스크롤이 움직일때마다 이벤트 발생
 			$(e).parent().next().scroll(function(){  
 	      			var position = $(e).parent().next().scrollTop(); // 현재 스크롤바의 위치값을 반환
@@ -702,8 +726,9 @@
 			$('#portDetailModal').show();
 		}); */
 		
+		// x버튼 클릭시 새로고침
 		function closeDetail(c){
-			$(c).parent().parent().hide();
+			location.reload();
 		}
 		
 		/* 포트폴리오 카테고리(전체, 이미지, 동영상) */
@@ -737,6 +762,7 @@
 	</script> 	
 	
 	<script>
+		// 댓글 입력 기능
 		$('.repEnrollBtn').on('click', function(){
 			var porContent = $(this).prevAll().eq(1).val();
 			var porWriter = $(this).prevAll().eq(2).val();
@@ -750,6 +776,36 @@
 				success : function(data) {
 					console.log("ajax댓글입력 성공!");
 					$('.replyCount').text(data.length);
+					var replyBoard = $('.replyBoard')
+					
+					replyBoard.children().remove();
+					
+					for(var i = 0; i < data.length; i++) {
+						var $repWriterImg = $('<div class="repWriterImg" style="width: 6%; border: 1px solid black; height: 65px; border-radius: 50px; float: left; overflow: hidden; margin: 10px;">');
+						var $writerImgTag = $('<img src="${ contextPath }/' + data[i].conUrl + "/" + data[i].conCop + '" width="100%" height="100%">');
+						var $repIdDateCon = $('<div class="repIdDateCon" style="float: left;">');
+						var $idDate = $('<div class="idDate" style="margin: 10px;">');
+						var $spanId = $('<span style="margin-right: 6px;">'+ data[i].porWriter + '</span>&nbsp;');
+						var $spanDate = $('<span>20' +  data[i].porEnrollDate + '</span>');
+						var $repContents = $('<div style="margin: 10px;">' + data[i].porContent + '</div>');
+						var $clear = $('<div style="clear: both;">');
+						
+						$idDate.append($spanId);
+						$idDate.append($spanDate);
+						
+						$repIdDateCon.append($idDate);
+						$repIdDateCon.append($repContents);
+						
+						$repWriterImg.append($writerImgTag);
+						
+						replyBoard.append($repWriterImg);
+						replyBoard.append($repIdDateCon);
+						replyBoard.append($clear);
+						
+						
+					}
+					
+					$('.porContent').val("");
 				},
 				error : function(e) {
 					console.log("안되네...");
@@ -757,6 +813,40 @@
 			});
 			
 		});
+		
+		// 포트폴리오 삭제 기능
+		$('.deleteBtn').on('click', function(){
+			swal({
+                title: "포트폴리오를 삭제 하시겠습니까?",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '삭제',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+                	$(this).prevAll().eq(1).submit();
+                } else {
+                	swal({
+    				    title: "포트폴리오",
+    				    text: "포트폴리오 삭제에 실패하였습니다.",
+    				    icon: "error" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
+		});
+		
+		// 포트폴리오 댓글 리스트 조회 ajax
+		function selectReplyList(poNum){
+			
+		};
+		
 	</script>
 	
 </body>

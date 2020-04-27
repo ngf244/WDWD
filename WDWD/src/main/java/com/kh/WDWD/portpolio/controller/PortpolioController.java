@@ -1,7 +1,6 @@
 package com.kh.WDWD.portpolio.controller;
 
 import java.io.File;
-import java.net.URLEncoder;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -256,8 +255,11 @@ public class PortpolioController {
 		PageInfo pi = Pagination.getPortpolioListPageInfo(currentPage, listCount);
 		
 		ArrayList<PortpolioContents> list = pService.selectPortpolioList(pi, p);
-		
 		System.out.println("plist" + list);
+		for(PortpolioContents pc : list) {
+			ArrayList<PortpolioReply> portReply = pService.selectPoReply(pc.getPoNum());
+			pc.setPortReply(portReply);
+		}
 		
 		if(list != null) {
 			mv.addObject("list", list)
@@ -293,6 +295,33 @@ public class PortpolioController {
 		
 	}
 	
+	@RequestMapping("deletePort.my")
+	public String deletePortpolio(@ModelAttribute Portpolio p) {
+		
+		System.out.println("delete p : " + p);
+		
+		int result = pService.deletePortpolio(p);
+		
+		if(result > 0) {
+			return "redirect:portpolioList.my?poWriter=" + p.getPoWriter();
+		} else {
+			throw new PortpolioException("포트폴리오 삭제에 실패하였습니다.");
+		}
+		
+	}
+	
+	@RequestMapping("uPortCount.my")
+	public void updatePortCount(@ModelAttribute Portpolio p, HttpServletResponse response) throws Exception {
+		System.out.println("uPortCount p : " + p);
+		
+		int result = pService.updatePortCount(p);
+		
+		if(result > 0) {
+			new Gson().toJson(p, response.getWriter());
+		} else {
+			throw new PortpolioException("포트폴리오 조회수 업데이트에 실패하였습니다.");
+		}
+	}
 	
 	
 }

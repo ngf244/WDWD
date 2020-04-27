@@ -21,4 +21,10 @@ public interface PortpolioService {
 
 	ArrayList<PortpolioReply> selectPoReply(PortpolioReply pr);
 
+	ArrayList<PortpolioReply> selectPoReply(int poNum);
+
+	int deletePortpolio(Portpolio p);
+
+	int updatePortCount(Portpolio p);
+
 }

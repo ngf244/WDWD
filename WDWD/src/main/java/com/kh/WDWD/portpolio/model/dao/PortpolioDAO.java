@@ -48,4 +48,16 @@ public class PortpolioDAO {
 		return (ArrayList)sqlSession.selectList("portpolioMapper.selectPoReply", pr);
 	}
 
+	public ArrayList<PortpolioReply> selectPoReply(SqlSessionTemplate sqlSession, int poNum) {
+		return (ArrayList)sqlSession.selectList("portpolioMapper.selectPoReplyFirst", poNum);
+	}
+
+	public int deletePortpolio(SqlSessionTemplate sqlSession, Portpolio p) {
+		return sqlSession.update("portpolioMapper.deletePortpolio", p);
+	}
+
+	public int updatePortCount(SqlSessionTemplate sqlSession, Portpolio p) {
+		return sqlSession.update("portpolioMapper.updatePortCount", p);
+	}
+
 }

@@ -51,4 +51,19 @@ public class PortpolioServiceImpl implements PortpolioService {
 		return pDAO.selectPoReply(sqlSession, pr);
 	}
 
+	@Override
+	public ArrayList<PortpolioReply> selectPoReply(int poNum) {
+		return pDAO.selectPoReply(sqlSession, poNum);
+	}
+
+	@Override
+	public int deletePortpolio(Portpolio p) {
+		return pDAO.deletePortpolio(sqlSession, p);
+	}
+
+	@Override
+	public int updatePortCount(Portpolio p) {
+		return pDAO.updatePortCount(sqlSession, p);
+	}
+
 }

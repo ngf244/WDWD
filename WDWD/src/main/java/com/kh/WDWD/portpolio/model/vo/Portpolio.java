@@ -1,5 +1,7 @@
 package com.kh.WDWD.portpolio.model.vo;
 
+import java.util.ArrayList;
+
 public class Portpolio {
 	private int poNum;
 	private String poTitle;
@@ -12,11 +14,13 @@ public class Portpolio {
 	private int poFee;
 	private int poCount;
 	private String poStatus;
+	private ArrayList<PortpolioReply> portReply;
 	
 	public Portpolio() {}
 
 	public Portpolio(int poNum, String poTitle, String poWriter, String poDesc, String poCategory, String poEnrollDate,
-			String poModifyDate, String poUseYn, int poFee, int poCount, String poStatus) {
+			String poModifyDate, String poUseYn, int poFee, int poCount, String poStatus,
+			ArrayList<PortpolioReply> portReply) {
 		super();
 		this.poNum = poNum;
 		this.poTitle = poTitle;
@@ -29,6 +33,7 @@ public class Portpolio {
 		this.poFee = poFee;
 		this.poCount = poCount;
 		this.poStatus = poStatus;
+		this.portReply = portReply;
 	}
 
 	public int getPoNum() {
@@ -119,13 +124,23 @@ public class Portpolio {
 		this.poStatus = poStatus;
 	}
 
+	public ArrayList<PortpolioReply> getPortReply() {
+		return portReply;
+	}
+
+	public void setPortReply(ArrayList<PortpolioReply> portReply) {
+		this.portReply = portReply;
+	}
+
 	@Override
 	public String toString() {
 		return "Portpolio [poNum=" + poNum + ", poTitle=" + poTitle + ", poWriter=" + poWriter + ", poDesc=" + poDesc
 				+ ", poCategory=" + poCategory + ", poEnrollDate=" + poEnrollDate + ", poModifyDate=" + poModifyDate
-				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + ", poStatus=" + poStatus + "]";
+				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + ", poStatus=" + poStatus
+				+ ", portReply=" + portReply + "]";
 	}
 
+	
 	
 	
 }

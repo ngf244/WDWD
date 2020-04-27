@@ -53,7 +53,7 @@
 		<result property="poUseYn" column="PO_USE_YN"/>
 		<result property="poFee" column="count(r.por_ref)"/>
 		<result property="poCount" column="PO_COUNT"/>
-		<result property="poStatus" column="SUBSTR(con.con_url,-23)"/>
+		<result property="poStatus" column="ME_ID"/>
 		<result property="pocNum" column="POC_NUM"/>
 		<result property="pocRef" column="POC_REF"/>
 		<result property="pocOrigin" column="POC_ORGIN"/>
@@ -64,7 +64,7 @@
 	</resultMap>
 	
 	<select id="selectPortpolioList" parameterType="Portpolio" resultMap="pcResultSet">
-		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, count(r.por_ref), SUBSTR(con.con_url,-23), con.con_cop
+		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id, count(r.por_ref), SUBSTR(con.con_url,-23), con.con_cop
 		from portpolio p
      		 left join po_contents c on (PO_NUM = POC_REF)
      		 left join member m on (po_writer = m.me_id)
@@ -83,7 +83,7 @@
 			</if>
 		</where>
 		group by p.po_num, p.po_title, p.po_writer, p.po_desc, p.po_category, p.po_enrolldate, p.po_modifydate, p.po_use_yn, p.po_fee, p.po_count, p.po_status, 
-         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick,
+         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id,
          		 SUBSTR(con.con_url,-23), con.con_cop
 		order by po_enrolldate desc, poc_modify desc
 	</select>
@@ -114,11 +114,11 @@
 		<result property="porContent" column="por_content"/>
 		<result property="porEnrollDate" column="por_enrolldate"/>
 		<result property="conCop" column="con_cop"/>
-		<result property="conUrl" column="SUBSTR(pc.con_url, -23)"/>		
+		<result property="conUrl" column="SUBSTR(pc.con_url,-23)"/>		
 	</resultMap>
 	
 	<select id="selectPoReply" parameterType="PortpolioReply" resultMap="prResultSet">
-		select p.*, pr.*, rm.*, pc.*, SUBSTR(pc.con_url, -23)
+		select p.*, pr.*, rm.*, pc.*, SUBSTR(pc.con_url,-23)
 		from portpolio p 
      	     left join po_reply pr on (po_num = por_ref)
     		 left join member rm on (por_writer = rm.me_id)
@@ -126,5 +126,27 @@
 		where po_num = #{porRef}
 		order by por_num desc
 	</select>
+	
+	<select id="selectPoReplyFirst" parameterType="_int" resultMap="prResultSet">
+		select p.*, pr.*, rm.*, pc.*, SUBSTR(pc.con_url,-23)
+		from portpolio p 
+     	     left join po_reply pr on (po_num = por_ref)
+    		 left join member rm on (por_writer = rm.me_id)
+     		 join contents pc on (me_con_num = con_num)
+		where po_num = #{poNum}
+		order by por_num desc
+	</select>
+	
+	<update id="deletePortpolio" parameterType="Portpolio">
+		update portpolio
+		set po_status = 'N'
+		where po_num = #{poNum}
+	</update>
+	
+	<update id="updatePortCount" parameterType="Portpolio">
+		update portpolio
+		set po_count = po_count + 1
+		where po_num = #{poNum}
+	</update>
 		  
 </mapper>
