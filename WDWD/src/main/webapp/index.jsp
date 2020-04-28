@@ -24,6 +24,9 @@
 			<button onclick="goToBoardList();">자유게시판&1:1</button>
 			
 			
+			<c:if test="${ loginUser != null }">
+				<button class = "messageList">쪽지</button>
+			</c:if>
 			<button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=4';">콘테스트 글쓰기</button>
@@ -54,6 +57,14 @@
 			location.href="actionList.ch";
 			
 		}
+	
+	</script>
+	
+	
+	<script>
+		$('.messageList').on('click', function(){
+			window.open("messageList.ms", "_blank", "toolbar=no, menubar=no, width=500, height=600");	
+		});
 	
 	</script>
 </body>

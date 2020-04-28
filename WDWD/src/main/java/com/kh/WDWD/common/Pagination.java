@@ -4,7 +4,7 @@ import com.kh.WDWD.board.model.vo.PageInfo;
 
 public class Pagination {
 
-	public static PageInfo getPageInfo(int currentPage, int listCount, String boGroup) {
+	public static PageInfo getPageInfo(int currentPage, int listCount) {
 		
 		PageInfo pi = null;
 		
@@ -21,7 +21,7 @@ public class Pagination {
 			endPage = maxPage;
 		}
 		
-		pi = new PageInfo(currentPage, listCount, pageLimit, maxPage, startPage, endPage, boardLimit, boGroup);
+		pi = new PageInfo(currentPage, listCount, pageLimit, maxPage, startPage, endPage, boardLimit);
 		
 		return pi;
 	}

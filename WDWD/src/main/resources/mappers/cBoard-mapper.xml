@@ -472,6 +472,7 @@
 		from board
 			join cash_board on (bo_num = cb_num)
 		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
+		order by BO_DATE desc
 		
 	</select>
 	
@@ -484,51 +485,85 @@
 			JOIN BOARD ON (BO_NUM = CB_NUM)
 			JOIN MEMBER ON(ME_ID = BO_WRITER)
 		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
+		order by BO_DATE desc
 	</select>
 	
 		
 		
 		
-   	<select id="getCateListCount2" resultType="_int">
+   	<select id="getCateListCount2"  resultType="_int">
 		select count(*)
 		from board
 			join cash_board on (bo_num = cb_num)
 		<where>
-				<if test= "boGroup != null">
-					BO_GROUP = #{ boGroup }
+				<if test= "cBoard.boGroup != null">
+					BO_GROUP = #{ cBoard.boGroup }
 				</if>
-				<if test="boCategory != ''"> 
-					and BO_CATEGORY = #{ boCategory }
+				<if test="cBoard.boCategory != ''"> 
+					and BO_CATEGORY = #{ cBoard.boCategory }
 				</if>
-				<if test="cbStep != 0">		
-					and cb_step = #{ cbStep }
+				<if test="cBoard.cbStep != 0">		
+					and cb_step = #{ cBoard.cbStep }
 				</if>
 					and bo_del = 'N'
+				<if test='searchText != null and searchCate != null'>
+						<choose>
+							<when test='searchCate == "제목"'>
+								and bo_title like upper('%' || #{searchText}|| '%') 
+								or  bo_title like lower('%' || #{searchText}|| '%') 
+							</when>
+							<when test='searchCate == "내용"'>
+								and bo_con like upper('%' || #{searchText} || '%')
+								or bo_con like lower('%' || #{searchText} || '%')
+							</when>
+							<when test='searchCate == "의뢰인"'>
+								and me_nick like upper('%' || #{searchText} || '%')
+								or  me_nick like lower('%' || #{searchText} || '%')
+							</when>
+						</choose>
+				</if>
 		</where>
-		
+		order by BO_DATE desc
 	</select>
 	
 	
 		
-	<select id="selectCashOneCateList" parameterType="Board" resultMap="CBoardResultSet">
+	<select id="selectCashOneCateList" parameterType="hashmap" resultMap="CBoardResultSet">
 	
         SELECT *
 		FROM CASH_BOARD  
 		JOIN BOARD ON (BO_NUM = CB_NUM)
 		JOIN MEMBER ON(ME_ID = BO_WRITER)
 		<where>
-				<if test= "boGroup != null">
-					BO_GROUP = #{ boGroup }
+				bo_del = 'N'
+				<if test= "cBoard.boGroup != null">
+					and BO_GROUP = #{ cBoard.boGroup }
 				</if>
-				<if test="boCategory != ''"> 
-					and BO_CATEGORY = #{ boCategory }
+				<if test="cBoard.boCategory != ''"> 
+					and BO_CATEGORY = #{ cBoard.boCategory }
 				</if>
-				<if test="cbStep != 0">		
-					and cb_step = #{ cbStep }
+				<if test="cBoard.cbStep != 0">		
+					and cb_step = #{ cBoard.cbStep }
 				</if>
-					and bo_del = 'N'
+				<if test='searchText != null and searchCate != null'>
+						<choose>
+							<when test='searchCate == "제목"'>
+								and (bo_title like upper('%' || #{searchText}|| '%') 
+								or  bo_title like lower('%' || #{searchText}|| '%'))
+							</when>
+							<when test='searchCate == "내용"'>
+								and (bo_con like upper('%' || #{searchText} || '%')
+								or bo_con like lower('%' || #{searchText} || '%'))
+							</when>
+							<when test='searchCate == "의뢰인"'>
+								and (me_nick like upper('%' || #{searchText} || '%')
+								or  me_nick like lower('%' || #{searchText} || '%'))
+							</when>
+						</choose>
+				</if>	
+					
 		</where>
-		
+		order by BO_DATE desc
 		
 		
 	</select>	

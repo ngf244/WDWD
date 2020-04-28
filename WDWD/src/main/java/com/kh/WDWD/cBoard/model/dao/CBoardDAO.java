@@ -132,18 +132,29 @@ public class CBoardDAO {
 		return sqlSession.selectOne("cBoardMapper.getListCount2", cBoard);
 	}
 
-	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession, Board b) {
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", b);
+	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession,  CBoard cBoard) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", cBoard);
 	}
 
-	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
-		return sqlSession.selectOne("cBoardMapper.getCateListCount2", cBoard);
+	public int getCateListCount2(SqlSessionTemplate sqlSession, HashMap searchMap) {
+		return sqlSession.selectOne("cBoardMapper.getCateListCount2", searchMap);
 	}
-
-	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard) {
-		System.out.println(cBoard);
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard);
+	
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, HashMap searchMap) {
+		System.out.println("searchMap? " + ((CBoard)searchMap.get("cBoard")).getBoGroup());
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", searchMap);
 	}
+	
+//	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard, String searchCate, String searchText) {
+//		return sqlSession.selectOne("cBoardMapper.getCateListCount2", cBoard, searchCate, searchText);
+//	}
+//
+//	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard, String searchCate, String searchText) {
+//		System.out.println(cBoard);
+//		
+//		
+//		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard, searchCate, searchText);
+//	}
 
 	public Chat sendChat(SqlSessionTemplate sqlSession, Chat c) {
 		int result = sqlSession.insert("cBoardMapper.sendChat", c);
