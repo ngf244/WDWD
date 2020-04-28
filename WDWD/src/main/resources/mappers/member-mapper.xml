@@ -43,7 +43,7 @@
 	<!-- 회원가입 쿼리문 -->
 	<insert id="insertMember" parameterType="Member">
 		INSERT INTO MEMBER
-		VALUES(#{userId}, #{userPwd}, #{userName}, #{phone}, #{nickName}, #{email}, #{intro}, sysdate, 'N', default, default, 
+		VALUES(#{userId}, #{userPwd}, #{userName}, #{phone}, #{nickName}, #{email}, #{intro}, sysdate, 'N', #{account}, #{bank}, 
 		default, default, default, default, default, default, default, default, default, default)
 	</insert>
 	

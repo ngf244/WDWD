@@ -150,6 +150,8 @@
 	      <param-value>/WEB-INF/spring/appServlet/guideboard-context.xml</param-value>
 	    </init-param>
 	  </servlet>
+	  
+	  <!-- 가이드 게시판 관련  -->
 	  <servlet-mapping>
 	    <servlet-name>guideServlet</servlet-name>
 	    <url-pattern>*.guide</url-pattern>

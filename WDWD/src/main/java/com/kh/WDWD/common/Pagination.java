@@ -1,6 +1,7 @@
 package com.kh.WDWD.common;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
+import com.kh.WDWD.guideboard.model.dao.GuideDAO;
 
 public class Pagination {
 
@@ -117,5 +118,5 @@ public class Pagination {
 		pi = new PageInfo(currentPage, listCount, pageLimit, maxPage, startPage, endPage, boardLimit);
 		
 		return pi;
-	}	
+	}
 }

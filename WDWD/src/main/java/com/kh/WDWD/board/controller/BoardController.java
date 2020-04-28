@@ -207,6 +207,7 @@ public class BoardController {
 				throw new BoardException("콘텐츠 테이블 입력에 실패하였습니다.");
 			}
 			
+		
 		} else {
 			throw new BoardException("게시판 테이블 입력에 실패하였습니다");
 		}
