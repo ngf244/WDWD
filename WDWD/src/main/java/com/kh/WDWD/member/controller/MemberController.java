@@ -57,11 +57,11 @@ public class MemberController {
 		if(loginUser != null) {
 			// 로그인 성공 시 세션에 정보를 담아야 하기 때문에 세션이 필요
 			model.addAttribute("loginUser", loginUser);
-			return "index";
+			return "redirect:/";
 		}else {
 			model.addAttribute("msg","로그인 실패하셨습니다!");
+			return "common/errorPage";
 		}
-		return "common/errorPage";
 	}
 
 	// 로그아웃 컨트롤
@@ -225,6 +225,25 @@ public class MemberController {
 	    	throw new MemberException("프로필 이미지 DB저장에 실패하셨습니다.");
 	    }
 	}
+
+	 // 로그인 버튼 클릭시 새로운창에 로그인창 뜨기
+	 @RequestMapping("gologin.me")
+	 public String loginview() {
+		 return "login/loginform";
+	 }
+
+	// 회원가입 클릭시 새로운창에 회원가입창 뜨기
+	@RequestMapping("gosignUp.me")
+	public String signupview() {
+		return "login/signup";
+
+		}
+	
+	// 회원가입에서 취소 클릭시 메인페이지로 이동
+	@RequestMapping("gomain.me")
+	public String gomainview() {
+		return "common/mainHeader";
+  }
 	
 	@RequestMapping("mainPortPaging.my")
 	public @ResponseBody void myPageMainPortPaging(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv, HttpServletResponse response) throws Exception{

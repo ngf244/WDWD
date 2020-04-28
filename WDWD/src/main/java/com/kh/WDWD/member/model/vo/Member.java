@@ -1,7 +1,5 @@
 package com.kh.WDWD.member.model.vo;
 
-import com.kh.WDWD.contents.model.vo.Contents;
-
 public class Member {
 	private String userId;
 	private String userPwd;

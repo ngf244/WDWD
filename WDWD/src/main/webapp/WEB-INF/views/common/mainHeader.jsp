@@ -69,7 +69,7 @@
 		vertical-align: middle;
 		margin-left: 30px;
 	}
-	#loginView, #signupBtn, #welcomeName, #logout{
+	#signupBtn, #welcomeName{
 		padding: 10px;
 		background-color : rgb(52, 152, 219);
 		color : white;
@@ -78,7 +78,23 @@
 		/* line-height: 40px; */
 		font-weight: bold;
 		cursor: pointer;
+		
+		
 	}
+	
+	#loginView{
+		padding: 10px;
+		background-color : rgb(52, 152, 219);
+		color : white;
+		border-radius: 5px;
+		margin: 10px;
+		/* line-height: 40px; */
+		font-weight: bold;
+		display: inline-block;
+		cursor: pointer;
+		width: 60%;
+	}
+	
 	#notice, #modalMenu {
 		width: 40px;
 		height: 40px;
@@ -346,29 +362,16 @@
 				<img src="${ contextPath }/resources/images/search.png">
 			</div>
 			<div id="basicForm">
-				<c:if test="${ empty sessionScope.loginUser }">
-				<c:if test="${ empty sessionScope.signup }">
-					<div id="loginView">login</div>
-					<div id="signupBtn">sign up</div>
-					
-					<script>
-						$('#loginView').click(function(){
-							$('#loginWrap').show();
-						})
-						
-						$('#signupBtn').click(function(){
-							$('#signupWrap').show();
-						})
-					</script>
-				</c:if>
+			<c:if test="${ empty sessionScope.loginUser }">
+					<div id="loginView" onclick="location.href='gologin.me';">login</div>
 			</c:if>
 				<c:if test="${ !empty sessionScope.loginUser }">
           <div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
           <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
           <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
+          
             <div id="noticeArea" class="notice">
             </div>
-
             <div id="smallInfo">
               <div id="smallInfoContent">
                 <div style="height: 60px;"></div>
@@ -605,7 +608,7 @@
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
 				<div class="menubar">공지사항</div>
-				<div class="menubar" onclick="location.href='guidemain.jsp';">가이드</div>
+				<div class="menubar" onclick="location.href='guide.guide';">가이드</div>
 				<div class="menubar">사진</div>
 				<div class="menubar">미디어</div>
 				<div class="menubar">HIT 갤러리</div>
@@ -691,12 +694,5 @@
 		</div>
 	</header>
 	<br>
-	<div>
-		<jsp:include page="../login/login.jsp"/>
-		<jsp:include page="../login/signup.jsp"/>
-	</div>
-	
-	
-
 </body>
 </html>
