@@ -567,9 +567,15 @@
 		right: 0;
 	}
 
+	.writingtitle{
+		position: relative;
+	}
+
 	#writerMenu{
+		position: absolute;
 		display: inline-block;
-		margin-left: 75%;
+		right: 3%;
+		top: 65%;
 	}
 </style>
 </head>
@@ -585,8 +591,8 @@
 				</div>
 				
 				<div class="writingtitle">
-					<h3 style="display: inline-block;">${ b.boTitle }</h3>
-					<c:if test="${ loginUser.userId == b.boWriter }">
+					<h3 style="display: inline-block; vertical-align: middle;">${ b.boTitle }</h3>
+					<c:if test="${ loginUser.userId == b.boWriter or loginUser.userId == 'admin'}">
 						<div id="writerMenu">
 							<button class="rewrite"><span>수정 </span></button><button class="delete"><span>삭제 </span></button>
 						</div>
@@ -627,6 +633,13 @@
 						<div>신고하기</div>
 					</div>
 				</div>
+				
+				<c:url var="deleteBoardUrl" value="delete.bo">
+					<c:param name="boNum" value="${ b.boNum }"/>
+				</c:url>
+				<c:url var="reviseBoardUrl" value="revise.bo">
+					<c:param name="boNum" value="${ b.boNum }"/>
+				</c:url>
 
 				<script>
 					$('.recommendArea').click(function () {
@@ -655,27 +668,66 @@
 						}
 					})
 						
-						$('.scrapBtnArea').click(function () {
-							var boNum = $('input[name=boardNum]').val();
-							var userId = "${loginUser.userId}";
-							// var condition = $('#scrapCondition').text();
-							if(userId == ""){
-								swal("You need Login", "로그인 후 사용 가능합니다.", "error");
-							} else {
-								$.ajax({
-									url : "scrapToggle.bo",
-									data : {boNum : boNum, userId : userId},
-									type : "get",
-									success : function (data) {
-										if(data.trim() == "insert"){
-											$('#scrapCondition').text('스크랩 해제');
-										} else {
-											$('#scrapCondition').text('게시물 스크랩');
-										}
+					$('.scrapBtnArea').click(function () {
+						var boNum = $('input[name=boardNum]').val();
+						var userId = "${loginUser.userId}";
+						// var condition = $('#scrapCondition').text();
+						if(userId == ""){
+							swal("You need Login", "로그인 후 사용 가능합니다.", "error");
+						} else {
+							$.ajax({
+								url : "scrapToggle.bo",
+								data : {boNum : boNum, userId : userId},
+								type : "get",
+								success : function (data) {
+									if(data.trim() == "insert"){
+										$('#scrapCondition').text('스크랩 해제');
+									} else {
+										$('#scrapCondition').text('게시물 스크랩');
 									}
-								})
-							}
+								}
+							})
+						}
+					})
+
+					$('.delete').click(function () {
+						swal({
+							title: "Are you sure?",
+							text: "삭제 후 복구하실 수 없습니다",
+							icon: "warning",
+							buttons: true,
+							dangerMode: true,
 						})
+						.then((willDelete) => {
+							if (willDelete) {
+								location.href = "${deleteBoardUrl}";
+							} else {
+								return false;
+							}
+							});
+					})
+
+					$('.rewrite').click(function () {
+						swal({
+                           title: "글을 수정하시겠습니까?",
+                           icon: "info",
+                           buttons : {
+                              	cancle : {
+                                 	text : '취소',
+                                 	value : false
+                             	},
+                              	confirm : {
+                                 	text : '수정하기',
+                                 	value : true
+                              	}
+                           	}
+                        }).then((result) => {
+                           if(result) {
+								location.href = "${reviseBoardUrl}";
+                           	} else {
+                           	}
+                        });
+					})
 				</script>
 			</div>
 
@@ -697,42 +749,12 @@
 				<!-- 댓글 리스트 뿌리기 -->
 				<c:forEach var="reply" items="${ ReplyArr }" varStatus="i">
 					<div class="re num${i.count}">
-					<div class = replies>
-					<input type="hidden" value="${ reply.rpNum }">
-						<div>
-							<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
-							<c:if test="${ reply.rpWriter == loginUser.userId }">
-								<span class="deleteReply">[삭 제]</span>
-							</c:if>
-						</div>
-						<div>
-							<span class="reportReply">신고하기</span>
-						</div>
-						<div class="replyWriting">
-							<div class="replyPicture">
-							<c:forEach var="reCon" items="${ ReplyContents }">
-								<c:if test="${ reply.rpConNum == reCon.conNum }">
-									<img src="${contextPath}/resources/free_photo_upload/${ reCon.conUrl }">
-								</c:if>
-							</c:forEach>
-							</div>
-							<div class="replyWriteArea">${ reply.rpContent }
-							</div>
-							<div class="reply2Btn">
-								<span> [ 댓 글 ] </span>
-							</div>
-						</div>
-					</div>
-					
-					<!-- 대댓글 리스트 뿌리기 -->
-					<c:forEach var="reply2" items="${ ReplyArr2 }">
-						<c:if test="${ reply2.rpRp == reply.rpNum }">
-							<div class = replies2>
-								<input type="hidden" value="${ reply2.rpNum }">
-								<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
+						<div class = replies>
+							<input type="hidden" value="${ reply.rpNum }">
+							<c:if test="${ reply.rpStatus == 'N' }">
 								<div>
-									<span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
-									<c:if test="${ reply2.rpWriter == loginUser.userId }">
+									<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
+									<c:if test="${ reply.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
 										<span class="deleteReply">[삭 제]</span>
 									</c:if>
 								</div>
@@ -741,21 +763,58 @@
 								</div>
 								<div class="replyWriting">
 									<div class="replyPicture">
-									<c:forEach var="re2Con" items="${ Reply2Contents }">
-										<c:if test="${ reply2.rpConNum == re2Con.conNum }">
-											<img src="${contextPath}/resources/free_photo_upload/${ re2Con.conUrl }">
+									<c:forEach var="reCon" items="${ ReplyContents }">
+										<c:if test="${ reply.rpConNum == reCon.conNum }">
+											<img src="${contextPath}/resources/free_photo_upload/${ reCon.conUrl }">
 										</c:if>
 									</c:forEach>
 									</div>
-									<div class="replyWriteArea">${ reply2.rpContent }
+									<div class="replyWriteArea">${ reply.rpContent }
 									</div>
-									<!-- <div class="reply2Btn">
-										<span> 댓글 </span>
-									</div> -->
 								</div>
+							</c:if>
+							<c:if test="${ reply.rpStatus == 'Y' }">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;삭제된 댓글입니다.
+							</c:if>
+							<div class="reply2Btn">
+								<span> [ 댓 글 ] </span>
 							</div>
-						</c:if>
-					</c:forEach>
+						</div>
+					
+					<!-- 대댓글 리스트 뿌리기 -->
+						<c:forEach var="reply2" items="${ ReplyArr2 }">
+							<c:if test="${ reply2.rpRp == reply.rpNum }">
+								<div class = replies2>
+									<input type="hidden" value="${ reply2.rpNum }">
+									<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
+									<c:if test="${reply2.rpStatus == 'N' }">
+										<div>
+											<span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
+											<c:if test="${ reply2.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
+												<span class="deleteReply">[삭 제]</span>
+											</c:if>
+										</div>
+										<div>
+											<span class="reportReply">신고하기</span>
+										</div>
+										<div class="replyWriting">
+											<div class="replyPicture">
+											<c:forEach var="re2Con" items="${ Reply2Contents }">
+												<c:if test="${ reply2.rpConNum == re2Con.conNum }">
+													<img src="${contextPath}/resources/free_photo_upload/${ re2Con.conUrl }">
+												</c:if>
+											</c:forEach>
+											</div>
+											<div class="replyWriteArea">${ reply2.rpContent }
+											</div>
+										</div>
+									</c:if>
+									<c:if test="${ reply2.rpStatus == 'Y' }">
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;삭제된 댓글입니다.
+									</c:if>
+								</div>
+							</c:if>
+						</c:forEach>
 					</div>
 				</c:forEach>
 
@@ -865,18 +924,35 @@
 				})
 
 				$('.inputimgX').click(function () {
-					if(confirm('첨부 파일 삭제하시겠습니까?')){
-						$('input[name=attachFile]').val('');
-						$('.inputimg').attr('src', '');
-						$('.inputimgX').css("display", "none");
-					}
+					swal({
+						title: "Are you sure?",
+						text: "삭제 후 복구하실 수 없습니다",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+					.then((willDelete) => {
+						if (willDelete) {
+							$('input[name=attachFile]').val('');
+							$('.inputimg').attr('src', '');
+							$('.inputimgX').css("display", "none");
+						} else {
+							return false;
+						}
+						});
+						
+					// if(confirm('첨부 파일 삭제하시겠습니까?')){
+					// 	$('input[name=attachFile]').val('');
+					// 	$('.inputimg').attr('src', '');
+					// 	$('.inputimgX').css("display", "none");
+					// }
 				})
 
 				$('.reply2Btn').click(function () {
 					$('.replyinput').css({"margin-left":"5%","width":"95%","height":"auto"});
-   					$(this).parent().parent().after($('.replyinput'));
+   					$(this).parent().after($('.replyinput'));
 					$('.writeReplyAgain').css({"display":"flex"});
-					var replyNum = $(this).parent().parent().children('input').val();
+					var replyNum = $(this).parent().children('input').val();
 					console.log(replyNum);
 					$('input[name=replyPosition]').val(replyNum);
 				})
@@ -896,11 +972,10 @@
 					}
 
 					var boardNo = $('input[name=boardNum]').val();
-					console.log(boardNo);
 					var reported = $(this).parent().prev().children()[0].innerText;
-					console.log(reported);
+					var category = 9;
 
-					reportForm(boardNo, reported);
+					reportForm(boardNo, reported, 2);
 				})
 				$('.reportBtnArea').click(function () {
 					var userId = "${loginUser.userId}";
@@ -910,11 +985,9 @@
 					}
 
 					var boardNo = $('input[name=boardNum]').val();
-					console.log(boardNo);
 					var reported = $(this).closest('.forbackcolor').find('.smallOption').text();
-					console.log(reported);
 
-					reportForm(boardNo, reported);
+					reportForm(boardNo, reported, 1);
 				})
 
 				function changeReplyOrder(option) {
@@ -934,7 +1007,9 @@
 
 					var userId = '${loginUser.userId}';
 					var replyContentbefore = $('.replyLetter textarea').val();
+					//textarea 내 줄바꿈 값을 <br>로 치환해줌
 					var replyContent = replyContentbefore.replace(/(?:\r\n|\r|\n)/g, '<br />');
+					
 					var file = $('input[name=attachFile]')[0].files[0];
 					var fileValue = $('input[name=attachFile]').val();
 					var fileName = fileValue.substring(fileValue.lastIndexOf("\\") + 1);
@@ -973,7 +1048,65 @@
 					})
 				})
 
+				$('.deleteReply').click(function () {
+					swal({
+						title: "Are you sure?",
+						text: "삭제 후 복구하실 수 없습니다",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+					.then((willDelete) => {
+						if (willDelete) {
+							var reNum = $(this).parent().parent().children('input').val()
+							var src = $(this).parent().parent().find('.replyWriting').find('img').attr('src');
+							var conCop = "";
 
+							if(typeof src != "undefined"){
+								conCop = src.substring(src.lastIndexOf("/")+1);
+							}
+							
+							$.ajax({
+								type: 'POST',
+								url: 'deleteReply.bo', 
+								data: {reNum : reNum, conCop : conCop},
+								success: function(data) {
+									if(data.trim() == "성공"){
+										location.reload();
+									}
+								}
+							})
+
+						} else {
+							return false;
+						}
+						});
+
+
+
+					// if(!confirm('정말 삭제하겠슴??')){
+					// 	return false;
+					// }
+					
+					// var reNum = $(this).parent().parent().children('input').val()
+					// var src = $(this).parent().parent().find('.replyWriting').find('img').attr('src');
+					// var conCop = "";
+
+					// if(typeof src != "undefined"){
+					// 	conCop = src.substring(src.lastIndexOf("/")+1);
+					// }
+					
+					// $.ajax({
+					// 	type: 'POST',
+					// 	url: 'deleteReply.bo', 
+					// 	data: {reNum : reNum, conCop : conCop},
+					// 	success: function(data) {
+					// 		if(data.trim() == "성공"){
+					// 			location.reload();
+					// 		}
+					// 	}
+					// })
+				})
 				
 			</script>
   																				

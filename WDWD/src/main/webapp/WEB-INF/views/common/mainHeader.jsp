@@ -77,7 +77,6 @@
 		margin: 10px;
 		/* line-height: 40px; */
 		font-weight: bold;
-		display: inline-block;
 		cursor: pointer;
 	}
 	#notice, #modalMenu {
@@ -453,69 +452,153 @@
 			<div>마이페이지</div>
 			<div>게시글 보기</div>
 			<div>작성 댓글 보기</div>
-			<div id="restrictBtn">제재</div>
+			<c:if test="${loginUser.userId == 'admin'}">
+				<div id="restrictBtn">제재</div>
+			</c:if>
 			<input type="hidden" name="userId">
 		</div>
 
 		<div id="restrictForm">
-			<form>
-				아이디 : <input type="text" name="resUserId" readonly>
+			<form method="POST" id="banForm">
+				닉네임 : <input type="text" name="banUserNick" readonly>
 				<br><br>
 				제재 사유 :
 				<br>
-				<textarea></textarea>
+				<textarea name="banContentBefore" class="banContentBefore1"></textarea>
+				<input type="hidden" name="banContent" class="banContent1">
 				<br><br>
 				제재 기간 : <br>
-				<input type="date" id="restrictToday"> ~ <input type="date" id="restrictTerm">
+				<input type="date" id="banToday"> ~ <input type="date" name="banTerm">
 				<br>
 				<div>
-					<button type="button" class="registRes">등록</button>
+					<button type="button" class="regisBan">등록</button>
 					<button type="button" class="cancelRes">취소</button>
 				</div>
 			</form>
 		</div>
 
 		<div id="reportForm">
-			<form>
-				글 번호 : <input type="text" name="boardNo" readonly>
+			<form method="POST" id="reportingForm">
+				글 번호 : <input type="text" name="boNum" readonly>
+				<input type="hidden" name="deCate" readonly>
 				<br><br>
-				신고 대상 : <input type="text" name="reported" readonly>
+				신고 대상 : <input type="text" name="deReportedNick" readonly>
 				<br><br>
-				신고자 : <input type="text" name="reporter" readonly>
+				신고자 : <input type="text" name="deReporterNick" readonly>
+				<input type="hidden" name="deReporterId" readonly>
 				<br><br> 
 				신고 사유 : 
 				<br>
-				<textarea></textarea>
+				<textarea name="deContent"></textarea>
 				<br><br>
 				
 				<div>
-					<button type="button" class="registRes">등록</button>
+					<button type="button" class="regisReport">등록</button>
 					<button type="button" class="cancelRes">취소</button>
 				</div>
 			</form>
 		</div>
+
 		<script>
 			$('#restrictBtn').click(function () {
 				$('#restrictForm').css('display','block');
 				var targetId = $(this).parent().children('input[name=userId]').val();
-				console.log(targetId);
-				$('#restrictForm input[name=resUserId]').val(targetId);
+				$('#restrictForm input[name=banUserNick]').val(targetId.trim());
 				// var now = new Date();
 				// var date = now.getDate();
 				// var month = now.getMonth()+1;
 				// var year = now.getFullYear();
 				// var com = year + " - " + month + " - " + date;
-				document.getElementById("restrictToday").valueAsDate = new Date();
+				document.getElementById("banToday").valueAsDate = new Date();
 			})
 
 			$('.cancelRes').click(function () {
 				$('#restrictForm').css('display','none');
 				$('#reportForm').css('display','none');
-
-				console.log($('#restrictToday').val());
-				console.log($('#restrictTerm').val());
 			})
 
+			$('.regisReport').click(function () {
+				var formData = $('#reportingForm').serialize();
+
+				$.ajax({
+					cache : false,
+					url : "insertReport.au",
+					type : 'POST', 
+					data : formData, 
+					success : function(data) {
+						if(data.trim() == "전송완료"){
+							swal("Send Complete", "신고 완료", "success");
+							$('.cancelRes').trigger('click');
+						}
+					}
+				});
+			})
+
+			$('.regisBan').click(function () {
+				var banContentBefore = $('.banContentBefore1').val();
+				if(banContentBefore.length < 5){
+                    swal("error", "사유 5자 이상 입력해야함", "error");
+					return false;
+                }
+
+				var checkend = $('input[name=banTerm]').eq(0).val();
+                var checkstart = $('#banToday').val();
+				
+				// console.log(checkstart);
+                // console.log(checkend);
+                if(checkend == ""){
+                    swal("error", "해제 예정일 넣어라", "error");
+                    return false;
+                }
+
+                // 날짜 비교 모듈
+                var startDateArr = checkstart.split('-');
+                var endDateArr = checkend.split('-');
+                        
+                var startDateCompare = new Date(startDateArr[0], parseInt(startDateArr[1])-1, startDateArr[2]);
+                var endDateCompare = new Date(endDateArr[0], parseInt(endDateArr[1])-1, endDateArr[2]);
+                
+                // console.log(startDateArr);
+                // console.log(endDateArr);
+                // console.log(startDateCompare);
+                // console.log(startDateCompare.getTime());
+                // console.log(endDateCompare);
+                // console.log(endDateCompare.getTime());
+
+                if(startDateCompare.getTime() > endDateCompare.getTime()) {
+                    swal("error", "어떻게 종료일이 시작일보다 빠르냐 멍청아", "error");
+                    return false;
+                }
+				swal({
+                    title: "Confirm",
+                    text: "정말 제재하시겠습니까?",
+                    icon: "warning",
+                    buttons: ["NO", "YES"],
+                    dangerMode: true,
+                }).then((YES) => {
+                    if (YES) {
+						var banContentAfter = banContentBefore.replace(/(?:\r\n|\r|\n)/g, '<br />');
+						$('.banContent1').val(banContentAfter);
+
+						var formData = $('#banForm').serialize();
+
+						$.ajax({
+							cache : false,
+							url : "insertBan.au",
+							type : 'POST', 
+							data : formData, 
+							success : function(data) {
+								if(data.trim() == 1){
+									swal("Restrict Complete", "제재 완료", "success");
+									$('.cancelRes').trigger('click');
+								}
+							}
+						});
+					}else{
+                        return false;
+                    }
+				})
+			})
 		</script>
 					
 		
@@ -612,5 +695,8 @@
 		<jsp:include page="../login/login.jsp"/>
 		<jsp:include page="../login/signup.jsp"/>
 	</div>
+	
+	
+
 </body>
 </html>

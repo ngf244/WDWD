@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -82,21 +81,32 @@ public class CBoardController {
 
 	// 자유게시판 조회 컨트롤러
 	@RequestMapping("actionList.ch")
-	public ModelAndView actionList(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv) {
-		String boGroup1 = "1"; // 자유게시판
-
+	public ModelAndView actionList(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv,
+									@RequestParam(value = "searchCate", required = false) String searchCate,
+									@RequestParam(value = "searchWord", required = false) String searchWord) {
+		
+		String boGroup1 = "1";
+		
+		System.out.println(searchCate);
+		System.out.println(searchWord);
+		
+		HashMap<String, String> searchMap = new HashMap<String, String>();
+		
+		searchMap.put("searchCate", searchCate);
+		searchMap.put("searchWord", searchWord);
+		
 		// 자유게시판 페이징
 		int currentPage = 1;
 		if (page != null) {
 			currentPage = page;
 		}
 
-		int listCount = cBoardService.getListCount(boGroup1);
+		int listCount = cBoardService.getListCount(searchMap);
 
 		// 자유게시판 페이징
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, boGroup1);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount);
 
-		ArrayList<CBoard> list = cBoardService.selectBoardList(boGroup1, pi);
+		ArrayList<CBoard> list = cBoardService.selectBoardList(searchMap, pi);
 		
 		CBoard CBoard = new CBoard();
 		CBoard.setBoGroup("2");
@@ -143,19 +153,32 @@ public class CBoardController {
 
 	// 1:1 조회 컨트롤러
 	@RequestMapping("actionCateList.ch")
-	public void actionCateList(@ModelAttribute CBoard cBoard,
-			@RequestParam(value = "page", required = false) Integer page, HttpServletResponse response) {
+	public void actionCateList(@ModelAttribute CBoard cBoard, @RequestParam(value="searchText", required = false) String searchText,
+			@RequestParam(value="searchCate", required = false) String searchCate, @RequestParam(value = "page", required = false) Integer page, HttpServletResponse response) {
 
 		System.out.println("boGroup 넘어온값은? : " + cBoard.getBoGroup()); // 1:1게시판
-//		System.out.println("cbStep 넘어온값은? : " + cBoard.getCbStep()); // 1:1게시판
-//		System.out.println("boCategory 넘어온값은? : " + cBoard.getBoCategory()); // 1:1게시판
+		System.out.println("cbStep 넘어온값은? : " + cBoard.getCbStep()); // 1:1게시판
+		System.out.println("boCategory 넘어온값은? : " + cBoard.getBoCategory()); // 1:1게시판
+		System.out.println("검색 기능은? " + searchText);
+		System.out.println("검색 기능은??? " + searchCate);
 
 		String boGroup = cBoard.getBoGroup();
 		int cbStep = cBoard.getCbStep();
 		String boCategory = cBoard.getBoCategory();
+		
+		HashMap searchMap = new HashMap();  
+		searchMap.put("cBoard", cBoard);
+		searchMap.put("searchCate", searchCate);
+		searchMap.put("searchText", searchText);
+		
+		int listCount2 = cBoardService.getCateListCount2(searchMap);
+		System.out.println("listCount2 : " + listCount2);
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(searchMap);
+		System.out.println("list2 : " + list2);
 
-		int listCount2 = cBoardService.getCateListCount2(cBoard);
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard);
+		
+		//int listCount2 = cBoardService.getCateListCount2(cBoard, searchCate, searchText);
+		//ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard, searchCate, searchText);
 
 		//System.out.println("list2" + list2);
 

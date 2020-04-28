@@ -116,4 +116,34 @@ public class BoardServiceImpl implements BoardService {
 		return bDAO.plusReplyCount(sqlSession, boNum);
 	}
 
+	@Override
+	public int deleteReply(int reNum) {
+		return bDAO.deleteReply(sqlSession, reNum);
+	}
+
+	@Override
+	public int deleteContent(String conCop) {
+		return bDAO.deleteContent(sqlSession, conCop);
+	}
+
+	@Override
+	public int deleteBoard(int boNum) {
+		return bDAO.deleteBoard(sqlSession, boNum);
+	}
+
+	@Override
+	public int deleteContents(int boNum) {
+		return bDAO.deleteContents(sqlSession, boNum);
+	}
+
+	@Override
+	public int deleteBoardContents(int boNum) {
+		return bDAO.deleteBoardContents(sqlSession, boNum);
+	}
+
+	@Override
+	public int boardUpdate(Board b) {
+		return bDAO.boardUpdate(sqlSession, b);
+	}
+
 }

@@ -104,8 +104,8 @@
       vertical-align: top;
       display: inline-block;
    }
-   select[name="searchOption"]{
-        display: inline-block;
+   select[name="searchCate"]{
+      display: inline-block;
       height: 48px;
       width: 120px;
       background-color: rgba(161, 206, 244, 0.55);
@@ -365,7 +365,7 @@
 				</div>
             <form>
                <div id="searchArea">
-                  <select name="searchOption">
+                  <select name="searchCate">
                      <option value="title">제목</option>
                      <option value="content">내용</option>
                      <option value="writer">작성자</option>
@@ -374,6 +374,9 @@
                   <input name="searchWord" type="text" placeholder="검색어 입력">
                   <div>돋보기 submit</div>
                </div>
+               <script>
+                  
+               </script>
             </form>
          </div>
 
@@ -426,7 +429,6 @@
 
 						<c:if test="${ p ne pi.currentPage }">
 							<c:url var="pagination" value="actionList.ch">
-								<c:param name="boGroup" value="${ pi.boGroup }" />
 								<c:param name="page" value="${ p }" />
 							</c:url>
 							<a href="${ pagination }">${ p }</a> &nbsp;
@@ -452,6 +454,16 @@
 					<button class="writingBtn">글쓰기</button>
 				</div>
 			</div>
+			<script>
+				$('.writingBtn').click(function () {
+               var userId = "${loginUser.userId}";
+					if(userId==""){
+						swal("You need Login", "로그인 후 사용 가능합니다.", "error");
+						return false;
+               }
+               location.href = "writing.bo";
+            });
+			</script>
 			<br> <br> <br> <br> <br> <br> <br>
 
 			<hr>
@@ -469,15 +481,75 @@
 				</div>
 			</div>
 			<hr>
+			
+			<!-- 공용영역 -->
+			<div style="background: white;">
+				<div class="mainBackground">
+					<div id="randomThumbnailForm">
+						1:1에 참여하세요
+						<div id="randomThumbnail">랜덤 사진값</div>
+					</div>
 
-			<div class="onBoarListView"><jsp:include
-					page="../cashboard/oneBoardList.jsp" /></div>
+					<!-- 게시판 리스트 상단 -->
+					<div id="oneHeader">
+						<div class="mainHeaderBar">1:1 매칭</div>
+							<div id="mainBar">
+								한 명의 디자이너에게 의뢰하고 싶을 때는 1:1 프로젝트를 이용하세요.<br> 프로젝트 내용을 등록하면 관심있는 디자이너가 지원합니다.
+						</div>
+					</div>
+				</div>
+
+				<div id="manyProjectForm">총 <input type="text" id="manyProject" name="manyContestProject"
+					value="000" readonly="readonly">개의 프로젝트가 선정되었습니다.
+				</div>	
+
+				<div id="buttonSelectNSerch">
+					<div id="dropCategory">
+						<div id="buttonSelect">&nbsp;전체 카테고리</div>
+						<div class="dropdown-category" >
+							<span onclick="selectCate('');">전체 보기</span> 
+							<span onclick="selectCate(1);">제작 디자인</span> 
+							<span onclick="selectCate(2);">편집 디자인</span> 
+							<span onclick="selectCate(3);">기타 디자인</span>
+						</div>
+					</div>
+					<div id="dropProgress">
+						<button class="buttonDrop" onclick="buttonDrop(0)">전체</button>
+						<button class="buttonDrop" onclick="buttonDrop(1)">진행</button>
+						<button class="buttonDrop" onclick="buttonDrop(3)">마감</button>
+					</div>
+					<!-- <div id="guideBtn">이용 가이드</div> -->
+					
+					
+						<div id="searchCategory">
+							<div id="searchSelect" >검색 ▼</div>
+							<div class="searchDropdown-category">
+								<span name="제목" onclick="searchCate('제목');">제목</span>
+								<span name="내용" onclick="searchCate('내용');">내용</span>
+								<span name="의뢰인" onclick="searchCate('의뢰인');">의뢰인</span>
+							</div>
+						</div>
+					<div id=searchBtn>
+						<input type="text" class="buttonSearch" placeholder="&nbsp;게시글 검색"> 
+						<div class="imgSearchBtn">
+							<img id="imgSearch" src="${ contextPath }/resources/images/imgSearch1.png" alt="go" onclick="searchGo();">
+						</div>
+               </div>
+                  <div class="requestBtn">
+                     <a>의뢰하기</a>
+                  </div>
+				</div>   
+			
+
+			<div class="onBoarListView"><jsp:include page="../cashboard/oneBoardList.jsp" /></div>
 			<div class="auctionListView" style="display: none;">
 				<%-- <jsp:include page="../cashboard/auctionBoardList.jsp"/> --%>
 			</div>
 			<div class="contestListView" style="display: none;">
 				<%-- <jsp:include page="../cashboard/contestBoardList.jsp"/> --%>
 			</div>
+			
+			
 		</div>
 		<div id="right-side"></div>
 	</section>
@@ -498,8 +570,7 @@
 		})
 		$('#sideBottom').click(
 				function() {
-					var cashCategorySelectAreaPosition = $(
-							'#cashCategorySelectArea').offset();
+					var cashCategorySelectAreaPosition = $('#cashCategorySelectArea').offset();
 					$('html').stop().animate({
 						scrollTop : cashCategorySelectAreaPosition.top
 					}, 300);
@@ -535,6 +606,7 @@
 
 	<script>
 		$(function() {
+			
 			var boCategory = "";
 
 			var cbStep = 0;
@@ -552,7 +624,9 @@
 			}); */
 
 			$('.categories:nth-of-type(1)').click(function() {
-				var boGroup = "2";
+				boGroup = "2";
+				
+
 				//$('.onBoarListView').show();
 				//$('.auctionListView').hide();
 				//$('.contestListView').hide(); 
@@ -584,12 +658,12 @@
 
 							$('.boardBoNum').eq(i).val(data[i].boNum);
 							$('.boardTitles').eq(i).html(data[i].boTitle);
-							$('.boardReq').eq(i).html(data[i].boWriter);
+							$('.boardReqs').eq(i).html(data[i].boWriter);
 							$('.boardContents').eq(i).html(data[i].boContent);
 							$('.rightBtns').eq(i).html(data[i].boReNum);
 							$('.cbDate').eq(i).html(data[i].cbDate);
 							$('.cbCash').eq(i).html(data[i].cbCash);
-
+	
 						}
 
 					},
@@ -597,6 +671,7 @@
 						alert("1:1 카테고리 실패");
 					}
 				});
+				
 			});
 		});
 
@@ -610,7 +685,7 @@
 				//$('.auctionListView').css('display', 'block');
 				//$('.contestListView').css('display', 'none');
 
-				var boGroup = "3";
+				boGroup = "3";
 
 				$.ajax({
 
@@ -637,7 +712,7 @@
 
 							$('.boardBoNum').eq(i).val(data[i].boNum);
 							$('.boardTitles').eq(i).html(data[i].boTitle);
-							$('.boardReq').eq(i).html(data[i].boWriter);
+							$('.boardReqs').eq(i).html(data[i].boWriter);
 							$('.boardContents').eq(i).html(data[i].boContent);
 							$('.rightBtns').eq(i).html(data[i].boReNum);
 							$('.cbDate').eq(i).html(data[i].cbDate);
@@ -661,7 +736,7 @@
 				//$('.onBoarListView').css('display', 'none');
 				//$('.auctionListView').css('display', 'none');
 				//$('.contestListView').css('display', 'block');
-				var boGroup = "4";
+				boGroup = "4";
 
 				$.ajax({
 
@@ -687,7 +762,7 @@
 
 							$('.boardBoNum').eq(i).val(data[i].boNum);
 							$('.boardTitles').eq(i).html(data[i].boTitle);
-							$('.boardReq').eq(i).html(data[i].boWriter);
+							$('.boardReqs').eq(i).html(data[i].boWriter);
 							$('.boardContents').eq(i).html(data[i].boContent);
 							$('.rightBtns').eq(i).html(data[i].boReNum);
 							$('.cbDate').eq(i).html(data[i].cbDate);
@@ -710,7 +785,117 @@
 			console.log(boNum);
 			location.href = "detail.bo?boNum=" + boNum;
 		});
-	</script>
+   </script>
+   
+   <!-- 1:1 검색 카테고리 -->
+   <script>
+      function searchCate(searchCate){
+         $('#searchSelect').text(searchCate);
+         
+         //console.log(searchCate);
+      }
+   </script>
+
+   <!-- 1:1 검색 -->
+   <script>
+      function searchGo(){
+         var searchText = $('.buttonSearch').val();
+         console.log(searchText);
+
+         var searchCate = $('#searchSelect').text();
+         console.log("searchCate : ",searchCate); 
+         console.log("searchCate : ",searchCate.length); 
+
+         if(searchCate == '검색 ▼') {
+            swal("내용 확인", "검색 카테고리를 선택하세요.", "error");
+						return false;
+            if(searchText.length < 2 || searchCate.length < 2){
+                     swal("내용 확인", "검색은 두 글자 이상 입력해주세요.", "error");
+                     return false;
+                  }
+         }
+
+
+
+         $.ajax({
+            url : "actionCateList.ch",
+					type : "GET",
+					data : {
+						"boCategory" : boCategory,
+						"boGroup" : boGroup,
+						"cbStep" : cbStep,
+                  "searchCate" : searchCate,
+                  "searchText" : searchText
+					},
+					success : function(data) {
+
+                  console.log("data???? ", data);
+
+                  if(data == 0){
+                     swal("검색 결과가 없습니다.");
+						return false;
+                  }
+
+
+
+                  $('#attachFromHere').empty();
+						//console.log("3 : ",$boardList);
+						for ( var i in data) {
+
+							//console.log("검색한 i가 몇개? ", data.length);
+
+							//console.log("검색한 data는?", data);
+
+							var $newboardList = boardList.clone();
+							$('#attachFromHere').append($newboardList);
+
+							$('.boardBoNum').eq(i).val(data[i].boNum);
+							$('.boardTitles').eq(i).html(data[i].boTitle);
+							$('.boardReqs').eq(i).html(data[i].boWriter);
+							$('.boardContents').eq(i).html(data[i].boContent);
+							$('.rightBtns').eq(i).html(data[i].boReNum);
+							$('.cbDate').eq(i).html(data[i].cbDate);
+							$('.cbCash').eq(i).html(data[i].cbCash);
+                  }
+               }, 
+               error : function() {
+						alert("검색 실패");
+               }
+         });   
+      }
+
+
+   </script>
+
+	<script>
+	   var swal;
+	   var flag;
+	      $('.requestBtn').off('click').on('click', function () {
+	         var userId = "${loginUser.userId}";
+						if(userId==""){
+							swal({
+	                     title: "로그인 후 사용 가능합니다.",
+	                     text: "YES를 누르면 로그인 페이지로 이동합니다.",
+	                     icon: "info",
+	                     buttons: ["NO", "YES"]
+	                      }).then((YES) => {
+	                     if (YES) {
+	                        flag = true;
+	                        console.log("flag", flag);
+	                        $('#loginWrap').show();        
+	                     }else{
+	                        flag = false;
+	                     }
+	                  });
+	                  Promise.all([swal]).then(function(){
+	                     console.log(flag);
+	                  });
+						} else {
+	                  location.href="writeView.ch?boardType=2";
+	
+	               }
+	      });
+   </script> 
 
 
 </body>

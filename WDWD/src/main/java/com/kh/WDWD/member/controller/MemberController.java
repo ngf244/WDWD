@@ -77,6 +77,7 @@ public class MemberController {
 	public ModelAndView myPageView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
 		Member member = mService.selectMember(userId);
+		System.out.println(member);
 		ArrayList<Reply> rList = mService.selectRecentlyReply(userId);		
 		ArrayList<Board> pList = mService.selectRecentlyPBoard(userId);
 		ArrayList<CBoard> cList = mService.selectRecentlyCBoard(userId);
