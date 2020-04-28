@@ -256,58 +256,73 @@
 		var titleImgChecked = false;
 		function LoadImg(value){
 			
-			if(confirm("썸네일 등록을 하시겠습니까?")){
-				if(value.files && value.files[0]){
-					var fileValue = value.value;
-					var fileUrl = fileValue.lastIndexOf("\\") + 1;
-					var fileName = fileValue.substring(fileUrl);
-					
-					var reader = new FileReader();
-					
-					reader.onload = function(e){								
-	    				$('#portThumbnailImage').attr("src", e.target.result).css("display", "block");
-	    				$('#thumbnailEnrollArea').css("display", "none");
-					}
-					
-					titleImgChecked = true;
-	    			reader.readAsDataURL(value.files[0]);
-				}
-				
-				var formData = new FormData($('#EnrollPortThumbForm')[0]);
-				
-				$.ajax({ 
-					type: "POST", 
-					enctype: 'multipart/form-data', // 필수 
-					url: 'portThumbEnroll.my', 
-					data: formData, // 필수 
-					processData: false, // 필수 
-					contentType: false, // 필수 
-					cache: false, 
-					success: function(data){ 
-						$('#thumbnailOriginName').text(fileName);
-						$('#thumbnailModifyName').text(data);
-						
-						swal({
-						    title: "포트폴리오 썸네일",
-						    text: "이미지 등록 성공!",
-						    icon: "success" //"info,success,warning,error" 중 택1
-						});
-					}, 
-					error: function(e){ 
-						swal({
-						    title: "포트폴리오 썸네일",
-						    text: "이미지 등록 실패!",
-						    icon: "warning" //"info,success,warning,error" 중 택1
-						});
-					} 
-				});
-			} else{
-				swal({
-				    title: "포트폴리오 썸네일",
-				    text: "이미지 등록을 하지 않았습니다.",
-				    icon: "info" //"info,success,warning,error" 중 택1
-				});
-			}
+			swal({
+                title: "썸네일 등록을 하시겠습니까?",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '등록',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+                	if(value.files && value.files[0]){
+    					var fileValue = value.value;
+    					var fileUrl = fileValue.lastIndexOf("\\") + 1;
+    					var fileName = fileValue.substring(fileUrl);
+    					
+    					var reader = new FileReader();
+    					
+    					reader.onload = function(e){								
+    	    				$('#portThumbnailImage').attr("src", e.target.result).css("display", "block");
+    	    				$('#thumbnailEnrollArea').css("display", "none");
+    					}
+    					
+    					titleImgChecked = true;
+    	    			reader.readAsDataURL(value.files[0]);
+    				}
+    				
+    				var formData = new FormData($('#EnrollPortThumbForm')[0]);
+    				
+    				$.ajax({ 
+    					type: "POST", 
+    					enctype: 'multipart/form-data', // 필수 
+    					url: 'portThumbEnroll.my', 
+    					data: formData, // 필수 
+    					processData: false, // 필수 
+    					contentType: false, // 필수 
+    					cache: false, 
+    					success: function(data){ 
+    						$('#thumbnailOriginName').text(fileName);
+    						$('#thumbnailModifyName').text(data);
+    						
+    						swal({
+    						    title: "포트폴리오 썸네일",
+    						    text: "이미지 등록 성공!",
+    						    icon: "success" //"info,success,warning,error" 중 택1
+    						});
+    					}, 
+    					error: function(e){ 
+    						swal({
+    						    title: "포트폴리오 썸네일",
+    						    text: "이미지 등록 실패!",
+    						    icon: "warning" //"info,success,warning,error" 중 택1
+    						});
+    					} 
+    				});
+                } else {
+                	swal({
+    				    title: "포트폴리오 썸네일",
+    				    text: "이미지 등록을 하지 않았습니다.",
+    				    icon: "info" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
 			
 		}		
 	</script>
@@ -410,39 +425,81 @@
 		$('#portCompleteBtn').click(function(){
 			
 			if($('#poTitle').val() == "") {
-				alert('제목을 입력해주세요.');
+				swal({
+				    title: "포트폴리오",
+				    text: "제목을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
 			} else if($('#poCategory').val() == "") {
-				alert('포트폴리오 유형을 선택해주세요.');
+				swal({
+				    title: "포트폴리오",
+				    text: "포트폴리오 유형을 선택해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
 			} else if($(':radio[name="poUseYn"]:checked').length < 1) {
-				alert('사이트 이용 여부를 체크해주세요.');
+				swal({
+				    title: "포트폴리오",
+				    text: "사이트 이용 여부를 체크해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
 			} else if($('#poDesc').val() == "") {
-				alert('포트폴리오 상세 설명을 입력해주세요.')	;
-			} else if(confirm("포트폴리오를 등록하시겠습니까?")) {
+				swal({
+				    title: "포트폴리오",
+				    text: "포트폴리오 상세 설명을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else {
 				
-				$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + $('#thumbnailOriginName').text() + '">');				
-				$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + $('#thumbnailModifyName').text() + '">');
-				
-				var pocOrigins = new Array();
+				swal({
+                    title: "포트폴리오를 등록하시겠습니까?",
+                    icon: "info",
+                    buttons : {
+                       cancle : {
+                          text : '취소',
+                          value : false
+                       },
+                       confirm : {
+                          text : '완료',
+                          value : true
+                       }
+                    }
+                 }).then((result) => {
+                    if(result) {
+                    	$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + $('#thumbnailOriginName').text() + '">');				
+        				$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + $('#thumbnailModifyName').text() + '">');
+        				
+        				var pocOrigins = new Array();
 
-				$('.pocOrigin').each(function () {
-					pocOrigins.push($(this).text());
-				});
+        				$('.pocOrigin').each(function () {
+        					pocOrigins.push($(this).text());
+        				});
+        				
+        				for(var i in pocOrigins){
+        					$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + pocOrigins[i] + '">');
+        				}
+        				
+        				var pocModifys = new Array();
+        				
+        				$('.pocModify').each(function () {
+        					pocModifys.push($(this).text());
+        				});
+        				
+        				for(var i in pocModifys){
+        					$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + pocModifys[i] + '">');
+        				}
+        				
+        				$('#EnrollPortForm').submit();
+                    } else {
+                    	swal({
+        				    title: "포트폴리오",
+        				    text: "포트폴리오 등록에 실패하였습니다.",
+        				    icon: "error" //"info,success,warning,error" 중 택1
+        				});
+                    }
+                 });
 				
-				for(var i in pocOrigins){
-					$('#EnrollPortForm').append('<input type="hidden" name="pocOriginArr" value="' + pocOrigins[i] + '">');
-				}
 				
-				var pocModifys = new Array();
-				
-				$('.pocModify').each(function () {
-					pocModifys.push($(this).text());
-				});
-				
-				for(var i in pocModifys){
-					$('#EnrollPortForm').append('<input type="hidden" name="pocModifyArr" value="' + pocModifys[i] + '">');
-				}
-				
-				$('#EnrollPortForm').submit();	
+					
 			}
 		})
 		

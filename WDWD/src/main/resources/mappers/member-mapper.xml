@@ -4,7 +4,7 @@
 	<select id="selectMember" parameterType="string" resultMap="memberResultSet">
 		select *
 		from member
-			 join contents on (me_con_num = con_num)
+		     left join contents on (me_con_num = con_num)
 		where me_id=#{userId}
 	</select>
 	
@@ -43,7 +43,7 @@
 	<!-- 회원가입 쿼리문 -->
 	<insert id="insertMember" parameterType="Member">
 		INSERT INTO MEMBER
-		VALUES(#{userId}, #{userPwd}, #{userName}, #{phone}, #{nickName}, #{email}, #{intro}, sysdate, 'N', default, default, 
+		VALUES(#{userId}, #{userPwd}, #{userName}, #{phone}, #{nickName}, #{email}, #{intro}, sysdate, 'N', #{account}, #{bank}, 
 		default, default, default, default, default, default, default, default, default, default)
 	</insert>
 	

@@ -30,6 +30,7 @@ import com.kh.WDWD.portpolio.model.exception.PortpolioException;
 import com.kh.WDWD.portpolio.model.service.PortpolioService;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 @Controller
 public class PortpolioController {
@@ -253,7 +254,15 @@ public class PortpolioController {
 		int listCount = pService.getPortpolioCount(p);
 		PageInfo pi = Pagination.getPortpolioListPageInfo(currentPage, listCount);
 		
-		ArrayList<Portpolio> list = pService.selectPortpolioList(pi, p);
+		ArrayList<PortpolioContents> list = pService.selectPortpolioList(pi, p);
+		System.out.println("plist" + list);
+		for(PortpolioContents pc : list) {
+			ArrayList<PortpolioReply> portReply = pService.selectPoReply(pc.getPoNum());
+			pc.setPortReply(portReply);
+			
+			ArrayList<PortpolioContents> portContents = pService.selectAttachFile(pc.getPoNum());
+			pc.setPortContents(portContents);
+		}
 		
 		if(list != null) {
 			mv.addObject("list", list)
@@ -269,6 +278,53 @@ public class PortpolioController {
 		
 	}
 	
+	@RequestMapping("enrollPoReply.my")
+	public void enrollPoReply(@ModelAttribute PortpolioReply pr, HttpServletResponse response) throws Exception {
+		System.out.println("pr : " + pr);
+		
+		int result = pService.enrollPoReply(pr);
+		
+		if(result > 0) {
+			ArrayList<PortpolioReply> prList = pService.selectPoReply(pr);
+		
+			if(prList != null) {
+				response.setCharacterEncoding("UTF-8");
+				
+				System.out.println("prList : " + prList);
+				
+				new Gson().toJson(prList, response.getWriter());
+			}
+		}
+		
+	}
+	
+	@RequestMapping("deletePort.my")
+	public String deletePortpolio(@ModelAttribute Portpolio p) {
+		
+		System.out.println("delete p : " + p);
+		
+		int result = pService.deletePortpolio(p);
+		
+		if(result > 0) {
+			return "redirect:portpolioList.my?poWriter=" + p.getPoWriter();
+		} else {
+			throw new PortpolioException("포트폴리오 삭제에 실패하였습니다.");
+		}
+		
+	}
+	
+	@RequestMapping("uPortCount.my")
+	public void updatePortCount(@ModelAttribute Portpolio p, HttpServletResponse response) throws Exception {
+		System.out.println("uPortCount p : " + p);
+		
+		int result = pService.updatePortCount(p);
+		
+		if(result > 0) {
+			new Gson().toJson(p, response.getWriter());
+		} else {
+			throw new PortpolioException("포트폴리오 조회수 업데이트에 실패하였습니다.");
+		}
+	}
 	
 	
 }
