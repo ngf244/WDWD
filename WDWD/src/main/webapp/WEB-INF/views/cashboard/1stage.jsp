@@ -56,6 +56,10 @@
 		cursor: pointer;
 		font-weight: bold;
 	}
+	.button:hover {
+		background-color: rgb(52, 152, 219);
+		color: white;
+	}
 </style>
 <title>Insert title here</title>
 </head>
@@ -354,11 +358,6 @@
 							});
 						}
 						
-						$('#selectEdit').hover(function(){
-							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
-						}, function(){
-							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
-						});
 						$('#selectEdit').click(function(){
 							swal({
 								title: "선택한 에디터에게 작업을 맡기시겠습니까?",
@@ -381,11 +380,6 @@
 									$('#selectForm').submit();	
 								}
 							});
-						})
-						$('#cancle').hover(function(){
-							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
-						}, function(){
-							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						})
 						
 						$('.downloadBtn').click(function(e){

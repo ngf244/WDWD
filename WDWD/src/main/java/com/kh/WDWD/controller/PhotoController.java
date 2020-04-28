@@ -77,9 +77,6 @@ public class PhotoController {
 				String dftFilePath = request.getSession().getServletContext().getRealPath("/");
 				// 파일 기본경로 _ 상세경로
 				
-				System.out.println(dftFilePath);
-				System.out.println("Ajax : " + filename);
-				
 				String filePath = dftFilePath + "resources" + File.separator + "photo_upload" + File.separator;
 				
 				File file = new File(filePath);

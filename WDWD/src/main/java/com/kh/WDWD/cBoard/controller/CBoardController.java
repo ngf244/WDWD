@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
@@ -36,6 +37,9 @@ import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.request.model.vo.Request;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 @Controller
 public class CBoardController {
@@ -221,9 +225,9 @@ public class CBoardController {
 			b.setCbDate("0");
 		}
 		
-		int boNum = cBoardService.cBoardInsert(b);
+		CBoard board = cBoardService.cBoardInsert(b);
 		
-		if(boNum != 0) {
+		if(board != null) {
 			if(conUrl != null) {
 				ArrayList<Contents> contentArr = new ArrayList<Contents>();
 
@@ -234,7 +238,7 @@ public class CBoardController {
 					int result = cBoardService.contentsInsert(c);
 				}
 			}
-			return "redirect:detailView.ch?sysMsg=3&boNum=" + boNum;
+			return "redirect:detailView.ch?sysMsg=3&boNum=" + board.getBoNum();
 		} else {
 			throw new CBoardException("캐쉬게시글 작성에 실패하였습니다.");
 		}
@@ -270,13 +274,18 @@ public class CBoardController {
 		b.setBoWriter(m.getUserId());
 		b.setBoContent(b.getBoContent().replace("<img src=\"/WDWD/resources/photo_upload/",
 				"<img src=\"/WDWD/resources/real_photo/"));
+		
+		Request r = new Request();
+		r.setReNum(boardNum);
+		r.setReRefNum(b.getBoNum());
+		r.setReId(m.getUserId());
 
 		int result = 0;
 	
 		if(updateCheck == 1) {
-			result = cBoardService.registDelete(b.getBoNum());
+			result = cBoardService.registDelete(r);
 		}
-		result = cBoardService.registWrite(b, boardNum);
+		result = cBoardService.registWrite(b, r);
 		
 		if(result != 0) {
 			if(conUrl != null) {
@@ -303,18 +312,49 @@ public class CBoardController {
 		ArrayList<Contents> fileList = cBoardService.fileList(boNum);
 		
 		if(b != null) {
+			mv.addObject("cBoard", b);
+			mv.addObject("fileList", fileList);
+			
 			if(b.getBoGroup().equals("4")) {
+				ArrayList<Request> reqMList = cBoardService.reqList(boNum);
+				ArrayList<Board> reqBList = cBoardService.reqBList(boNum);
+				mv.addObject("reqMList", reqMList);
+				mv.addObject("reqBList", reqBList);
 				
-				
-				
-				mv.setViewName("redirect:index.me");
+				if(b.getCbStep() != 3) {
+					mv.setViewName("cashboard/contest_1stage");
+					
+					Member m = (Member)session.getAttribute("loginUser");
+					for(int i = 0; i < reqMList.size(); i++) {
+						if(m != null) {
+							if(reqMList.get(i).getReId().equals(m.getNickName())) {
+								Request r = new Request();
+								r.setReNum(boNum);
+								r.setReId(m.getUserId());
+								
+								Board reqB = cBoardService.cBoardReqView(r);
+								
+								ArrayList<Contents> reqFileList = new ArrayList<>();
+								if(reqB != null) {
+									reqFileList = cBoardService.fileList(reqB.getBoNum());
+								}
+								
+								mv.addObject("reqB", reqB);
+								mv.addObject("reqFileList", reqFileList);
+								mv.setViewName("cashboard/contest_2stage");
+								break;
+							}
+						}
+					}
+				} else {
+					// 마감되었을 때
+					mv.setViewName("cashboard/contest_3stage");
+				}
 			} else {
 				switch(b.getCbStep()) {
 					case 1: 
 						ArrayList<Request> list = cBoardService.reqList(boNum);
 						mv.addObject("list", list);
-						mv.addObject("cBoard", b);
-						mv.addObject("fileList", fileList);
 						mv.setViewName("cashboard/1stage");
 						break;
 					case 2:
@@ -335,8 +375,6 @@ public class CBoardController {
 							mv.addObject("reqB", reqB);
 							mv.addObject("reqFileList", reqFileList);
 							mv.addObject("chatList", chatList);
-							mv.addObject("cBoard", b);
-							mv.addObject("fileList", fileList);
 							mv.setViewName("cashboard/2stage");
 						} else {
 							String url = (String)request.getHeader("REFERER");
@@ -355,20 +393,15 @@ public class CBoardController {
 						if(reqB != null) {
 							reqFileList = cBoardService.fileList(reqB.getBoNum());
 						}
-						
 						mv.addObject("reqB", reqB);
 						mv.addObject("reqFileList", reqFileList);
-						mv.addObject("cBoard", b);
-						mv.addObject("fileList", fileList);
 						mv.setViewName("cashboard/3stage"); 
 						break;
 				}
-
 			}
 		} else {
 			throw new BoardException("게시글 상세 조회에 실패하였습니다.");
 		}
-
 		return mv;
 	}
 	
@@ -450,6 +483,17 @@ public class CBoardController {
 		}
 	}
 	
+	@RequestMapping("doReqContest.ch")
+	public String doReqContest(@ModelAttribute Request r) {
+		int result = cBoardService.doRequest(r);
+		
+		if(result > 0) {
+			return "redirect:detailView.ch?sysMsg=4&boNum=" + r.getReNum();
+		} else {
+			throw new CBoardException("에디터 등록에 실패하였습니다.");
+		}
+	}
+	
 	@RequestMapping("reqList.ch")
 	public void reqList(@RequestParam("bId") int bId, HttpServletResponse response) {
 		response.setContentType("application/json; charset=utf-8");
@@ -499,6 +543,17 @@ public class CBoardController {
 		
 		if(result != 0) {
 			return "redirect:detailView.ch?sysMsg=2&boNum=" + boNum;
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("go3stageContest.ch")
+	public String go3stageContest(@ModelAttribute Request r) {
+		int result = cBoardService.go3stageContest(r);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + r.getReNum();
 		} else {
 			throw new CBoardException("에디터 선택에 실패하였습니다.");
 		}

@@ -580,46 +580,48 @@
 							4. 세부사항을 선택해주세요.
 						</div>
 						<div class="rightLine">
+							<input type="hidden" value="Y" name="cbSecret" id="cbSecret">
 							
-							<div class='detailWrap'>
-								<input type="hidden" value="Y" name="cbSecret" id="cbSecret">
-								<b>공개여부</b><br>
-								<label class="switch">
-								<input id="detailOpen" type="checkbox">
-								<span class="slider round"></span>
-								</label>
-								<p class="detailOpenSwitch">&nbsp;공개</p><p style="display:none;" class="detailOpenSwitch">&nbsp;비공개</p>
-								
-								<div id="detailOpenText" class="miniInfo" hidden="">
-									비공개로 글을 등록할 시<br>
-									첨부된 사진은 의뢰인만<br>
-									확인할 수 있습니다.
-								</div>
-								
-								<script>
-									var check = $("#detailOpen");
-									check.click(function(){
-										$(".detailOpenSwitch").toggle();
-										
-										if($('#cbSecret').val() == "Y") {
-											$('#cbSecret').val('N');
-										} else {
-											$('#cbSecret').val('Y');
-										}
-									});
+							<c:if test="${ boardType ne 4 }">
+								<div class='detailWrap'>
+									<b>공개여부</b><br>
+									<label class="switch">
+									<input id="detailOpen" type="checkbox">
+									<span class="slider round"></span>
+									</label>
+									<p class="detailOpenSwitch">&nbsp;공개</p><p style="display:none;" class="detailOpenSwitch">&nbsp;비공개</p>
 									
-									$(document).mousemove(function(e){
-										if($('#detailOpen').is(":hover")) {
-											$('#detailOpenText').show();
-											$('#detailOpenText').css("top", e.pageY - 80);
-											$('#detailOpenText').css("cursor", "pointer");
-											$('#detailOpenText').css("left", e.pageX - $('#detailOpenText').width() / 2);
-										} else {
-											$('#detailOpenText').hide();
-										}
-									});
-								</script>
-							</div>
+									<div id="detailOpenText" class="miniInfo" hidden="">
+										비공개로 글을 등록할 시<br>
+										첨부된 사진은 의뢰인만<br>
+										확인할 수 있습니다.
+									</div>
+									
+									<script>
+										var check = $("#detailOpen");
+										check.click(function(){
+											$(".detailOpenSwitch").toggle();
+											
+											if($('#cbSecret').val() == "Y") {
+												$('#cbSecret').val('N');
+											} else {
+												$('#cbSecret').val('Y');
+											}
+										});
+										
+										$(document).mousemove(function(e){
+											if($('#detailOpen').is(":hover")) {
+												$('#detailOpenText').show();
+												$('#detailOpenText').css("top", e.pageY - 80);
+												$('#detailOpenText').css("cursor", "pointer");
+												$('#detailOpenText').css("left", e.pageX - $('#detailOpenText').width() / 2);
+											} else {
+												$('#detailOpenText').hide();
+											}
+										});
+									</script>
+								</div>
+							</c:if>
 							
 							<div class='detailWrap'>
 								<input type="hidden" value="N" name="cbPrimium" id="cbPrimium">
@@ -725,11 +727,6 @@
 									}
 								}).then((result) => {
 									if(result) {
-										if('${boardType}' != 2) {
-											var socket = io("http://localhost:82");
-											socket.emit("chatArr", data);
-										}
-										
 										$('#insertForm').submit();
 									}
 								});

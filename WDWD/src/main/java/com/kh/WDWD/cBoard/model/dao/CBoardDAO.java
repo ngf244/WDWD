@@ -31,16 +31,16 @@ public class CBoardDAO {
 	
 
 
-	public int cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
+	public CBoard cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
 		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
 		int result2 = sqlSession.insert("cBoardMapper.cBoardInsert2", b);
 		
-		int boNum = sqlSession.selectOne("cBoardMapper.cBoardSelect");
+		CBoard board = sqlSession.selectOne("cBoardMapper.cBoardSelect");
 		
 		if(result1 > 0 && result2 > 0) {
-			return boNum;
+			return board;
 		} else {
-			return 0;
+			return null;
 		}
 	}
 
@@ -117,12 +117,16 @@ public class CBoardDAO {
 	public Board cBoardReqView(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.cBoardReqView", boNum);
 	}
+	
+	public Board cBoardReqView(SqlSessionTemplate sqlSession, Request r) {
+		return sqlSession.selectOne("cBoardMapper.cBoardReqView2", r);
+	}  
 
 
-	public int registWrite(SqlSessionTemplate sqlSession, Board b, int boardNum) {
+	public int registWrite(SqlSessionTemplate sqlSession, Board b, Request r) {
 		int result = sqlSession.insert("cBoardMapper.registWrite1", b);
 		if(result > 0) {
-			result = sqlSession.update("cBoardMapper.registWrite2", boardNum);
+			result = sqlSession.update("cBoardMapper.registWrite2", r);
 		}
 		
 		return result;
@@ -169,12 +173,12 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.chatList", boNum);
 	}
 
-	public int registDelete(SqlSessionTemplate sqlSession, int boNum) {
-		int result = sqlSession.update("cBoardMapper.registDelete1", boNum);
+	public int registDelete(SqlSessionTemplate sqlSession, Request r) {
+		int result = sqlSession.update("cBoardMapper.registDelete1", r);
 		
 		if(result > 0) {
-			result = sqlSession.delete("cBoardMapper.registDelete2", boNum);
-			result =  sqlSession.delete("cBoardMapper.registDelete3", boNum);
+			result = sqlSession.delete("cBoardMapper.registDelete2", r);
+			result =  sqlSession.delete("cBoardMapper.registDelete3", r);
 			return 1;
 		}
 		return 0;
@@ -191,8 +195,6 @@ public class CBoardDAO {
 	public int timeOut(SqlSessionTemplate sqlSession, int boNum) {
 		Request r = sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
 		
-		System.out.println(boNum + ":" +  r);
-		
 		if(r == null) {
 			sqlSession.update("cBoardMapper.endTime", boNum);
 		} else {
@@ -202,6 +204,16 @@ public class CBoardDAO {
 		}
 		
 		return 0;
-	}  
+	}
 
+	public ArrayList<Board> reqBList(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.reqBList", boNum);
+	}
+
+	public int go3stageContest(SqlSessionTemplate sqlSession, Request r) {
+		int result1 = sqlSession.update("cBoardMapper.go3stageContest1", r);
+		int result2 = sqlSession.update("cBoardMapper.go3stageContest2", r);
+		
+		return (result1 >= result2) ? result2 : result1;
+	}
 }

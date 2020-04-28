@@ -17,7 +17,7 @@ public interface CBoardService {
 	//자유게시판 page와 함께 갖고오기
 	ArrayList<CBoard> selectBoardList(HashMap<String, String> searchMap, PageInfo pi);
 
-	int cBoardInsert(CBoard b);
+	CBoard cBoardInsert(CBoard b);
 
 	CBoard cBoardDetailView(int boNum);
 
@@ -42,8 +42,10 @@ public interface CBoardService {
 	ArrayList<Contents> fileList(int boNum);
 
 	Board cBoardReqView(int boNum);
+	
+	Board cBoardReqView(Request r);
 
-	int registWrite(Board b, int boardNum);
+	int registWrite(Board b, Request r);
 
 	int getListCount2(CBoard cBoard);
 
@@ -61,13 +63,18 @@ public interface CBoardService {
 
 	ArrayList<Chat> chatList(int boNum);
 	
-	int registDelete(int boNum);
+	int registDelete(Request r);
 	
 	int go3stage(int boNum);
 	
 	ArrayList<CBoard> checkTime();
 	
 	int timeOut(int boNum);
+	
+	ArrayList<Board> reqBList(int boNum);
+	
+	int go3stageContest(Request r);
+	
 
 	
 

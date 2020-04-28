@@ -130,6 +130,11 @@
 	a:visited {text-decoration: none;}
 	a:hover {text-decoration: none;}
 	
+	.watermark_contest {
+		position: absolute;
+		opacity: 0.3;
+		z-index: 5;
+	}
 	.watermark_free {
 		position: absolute;
 		opacity: 0.3;
@@ -267,7 +272,7 @@
 			${ cBoard.boWriter }
 		</div>
 		
-		<c:if test="${ cBoard.boGroup ne 2 && cBoard.cbStep eq 1 }">
+		<c:if test="${ cBoard.boGroup ne 2 }">
 			<div class="leftLine">
 				<span class="redColor">＞ </span>마감일
 			</div>
@@ -429,6 +434,12 @@
 	</div>
 	
 	<script>
+		if('${param.sysMsg}' == "3" && "${sessionScope.loginUser.nickName}" == "${ cBoard.boWriter }" && "${ cBoard.boGroup }" != 2) {
+			var socket = io("http://localhost:82");
+			var data = {"boNum":"${cBoard.boNum}", "cbDate":"${cBoard.cbDate}"};
+			socket.emit("addCount", data);
+		}
+	
 		$(document).on("contextmenu dragstart selectstart", '#boardcontent img', function(e){
             swal({
 				title: "불법 이미지 다운을 막고 있습니다.",

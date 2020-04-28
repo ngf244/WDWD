@@ -36,7 +36,7 @@ public class CBoardServiceImpl implements CBoardService {
 	
 	
 	@Override
-	public int cBoardInsert(CBoard b) {
+	public CBoard cBoardInsert(CBoard b) {
 		return cBoardDAO.cBoardInsert(sqlSession, b);
 	}
 
@@ -99,10 +99,15 @@ public class CBoardServiceImpl implements CBoardService {
 	public Board cBoardReqView(int boNum) {
 		return cBoardDAO.cBoardReqView(sqlSession, boNum);
 	}
+	
+	@Override
+	public Board cBoardReqView(Request r) {
+		return cBoardDAO.cBoardReqView(sqlSession, r);
+	}
 
 	@Override
-	public int registWrite(Board b, int boardNum) {
-		return cBoardDAO.registWrite(sqlSession, b, boardNum);
+	public int registWrite(Board b, Request r) {
+		return cBoardDAO.registWrite(sqlSession, b, r);
 	}
 	
 	@Override
@@ -145,8 +150,8 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public int registDelete(int boNum) {
-		return cBoardDAO.registDelete(sqlSession, boNum);
+	public int registDelete(Request r) {
+		return cBoardDAO.registDelete(sqlSession, r);
 	}
 
 	@Override
@@ -164,4 +169,15 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.timeOut(sqlSession, boNum);
 	}
 
+	@Override
+	public ArrayList<Board> reqBList(int boNum) {
+		return cBoardDAO.reqBList(sqlSession, boNum);
+	}
+
+	@Override
+	public int go3stageContest(Request r) {
+		return cBoardDAO.go3stageContest(sqlSession, r);
+	}
+
+	
 }
