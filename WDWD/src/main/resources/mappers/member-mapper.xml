@@ -218,6 +218,53 @@
 			where ROWNUM <= 3
 		]]>	
 	</select>
+	
+	<select id="getMyScrapCount" parameterType="string" resultType="_int">
+		select count(*)
+		from scrap s
+     		 left join member m on (s.me_id = m.me_id)
+     		 left join board b on (s.bo_num = b.bo_num)
+		where s.me_id = #{userId} and bo_del = 'N'
+	</select>
+	
+	<resultMap type="Scrap" id="scrapResultSet">
+		<result property="userId" column="ME_ID"/>
+		<result property="boNum" column="BO_NUM"/>
+		<result property="scrapDate" column="SCRAP_DATE"/>
+		<result property="boGroup" column="BO_GROUP"/>
+		<result property="boTitle" column="BO_TITLE"/>
+		<result property="boContent" column="BO_CON"/>
+		<result property="boView" column="BO_VIEW"/>
+		<result property="boDate" column="BO_DATE"/>
+		<result property="boUpdate" column="BO_UPDATE"/>
+		<result property="boDel" column="BO_DEL"/>
+		<result property="boWriter" column="BO_WRITER"/>
+		<result property="boGood" column="BO_GOOD"/>
+		<result property="boCategory" column="BO_CATEGORY"/>
+		<result property="boReNum" column="BO_RENUM"/>
+		<result property="boWriterNick" column="ME_NICK"/>
+	</resultMap>
+	
+	<select id="selectMyScrapList" parameterType="string" resultMap="scrapResultSet">
+		select *
+		from scrap s
+     		 left join member m on (s.me_id = m.me_id)
+     		 left join board b on (s.bo_num = b.bo_num)
+		where s.me_id = #{userId} and bo_del = 'N'
+	</select>
+	
+	<select id="selectRecentlyScrap" parameterType="string" resultMap="scrapResultSet">
+		<![CDATA[
+			select *
+			from (select *
+			      from scrap s
+			           left join board b on (s.bo_num = b.bo_num)
+			           left join member m on (s.me_id = m.me_id)
+			      where s.me_id = #{userId} and bo_del = 'N'
+			      order by scrap_date DESC) 
+			where ROWNUM <= 5
+		]]>
+	</select>
 	  
 </mapper>
 

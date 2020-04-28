@@ -669,6 +669,12 @@
 		text-align: center;
 		font-family: 'Malgun Gothic';
 	}
+	
+	/* a태그 관련 css 초기화*/
+	a:link { color: black; text-decoration: none;}
+	a:visited { color: black; text-decoration: none;}
+ 	a:hover { color: black; text-decoration: underline;}
+	
 </style>
 <title>마이 페이지</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
@@ -712,7 +718,7 @@
 								<input type="file" hidden="" name="profileImg" id="profileImg" multiple="multiple" onchange="LoadImg(this)">
 							</form>
 						</div>
-						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
+						<c:if test="${ member.userId eq loginUser.userId }"><button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button></c:if>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
@@ -764,29 +770,31 @@
 					</div>
 				</div>
 				
-				<div class="point-cash-area">
-					<div class="point">
-						<table id="pointStatusTable">
-							<tr>
-								<td>Point</td>
-								<td style="text-align: right; color: rgb(52, 152, 219);"><fmt:formatNumber value="${ member.point }"/></td>
-							</tr>
-						</table>
-						<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 포인트샵으로 이동</a></span>
-						<div style="clear: both;"></div>
+				<c:if test="${ member.userId eq loginUser.userId }">
+					<div class="point-cash-area">
+						<div class="point">
+							<table id="pointStatusTable">
+								<tr>
+									<td>Point</td>
+									<td style="text-align: right; color: rgb(52, 152, 219);"><fmt:formatNumber value="${ member.point }"/></td>
+								</tr>
+							</table>
+							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 포인트샵으로 이동</a></span>
+							<div style="clear: both;"></div>
+						</div>
+						<div class="cash" style="float: right;">
+							<table id="cashStatusTable">
+								<tr>
+									<td>Cash</td>
+									<td style="text-align: right; color: rgb(231, 76, 60);"><fmt:formatNumber value="${ member.cash }"/></td>
+								</tr>
+							</table>
+							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 캐쉬 충전 페이지로 이동</a></span>
+							<div style="clear: both;"></div>					
+						</div>
+						<div style="clear:both;"></div>
 					</div>
-					<div class="cash" style="float: right;">
-						<table id="cashStatusTable">
-							<tr>
-								<td>Cash</td>
-								<td style="text-align: right; color: rgb(231, 76, 60);"><fmt:formatNumber value="${ member.cash }"/></td>
-							</tr>
-						</table>
-						<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 캐쉬 충전 페이지로 이동</a></span>
-						<div style="clear: both;"></div>					
-					</div>
-					<div style="clear:both;"></div>
-				</div>
+				</c:if>
 				
 				<!-- 내 글 관리 -->
 				<div id="mypostManagement">
@@ -797,11 +805,17 @@
 					<div class="mypostArea">
 						<div class="pointArea">
 							<span style="display: inline-block;">자유 게시판</span>
-							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/>
+							<c:url var="fbl" value="actionList.ch">
+								<c:param name="searchWord" value="${ member.nickName }"/>
+							</c:url>
+							<a href="${ fbl }"><img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/></a>
 							<div class="postList">
 								<c:if test="${ !empty pList}">
 									<c:forEach var="p" items="${ pList }">
-										<div class="pList">- ${ p.boTitle }</div>
+										<c:url var="bd" value="detail.bo">
+											<c:param name="boNum" value="${ p.boNum }"/>
+										</c:url>
+										<div class="pList"><a href="${ bd }"> - ${ p.boTitle }</a></div>
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty pList }">
@@ -829,7 +843,10 @@
 							<div class="replayList">
 								<c:if test="${ !empty rList}">
 									<c:forEach var="r" items="${ rList }">
-										<div class="rList">- ${ r.rpContent }</div>
+										<c:url var="bdr" value="detail.bo">
+											<c:param name="boNum" value="${ r.refNum }"/>
+										</c:url>
+										<div class="rList"><a href="${ bdr }">- ${ r.rpContent }</a></div>
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty rList }">
@@ -840,87 +857,97 @@
 						<div class="scrapArea">
 							<div id="ScrapText">스크랩&nbsp;<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyScrap();"/></div>
 							<div class="scrapList">
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
+								<c:if test="${ !empty scList}">
+									<c:forEach var="scl" items="${ scList }">
+										<c:url var="sclb" value="detail.bo">
+											<c:param name="boNum" value="${ scl.boNum }"/>
+										</c:url>
+										<div class="sList"><a href="${ sclb }">- ${ scl.boTitle }</a></div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty scList }">
+									<div class="sList">- 작성한 댓글이 없습니다.</div>
+								</c:if>
 							</div>
 						</div>
 						<div style="clear: both;"></div>					
 					</div>
 				</div>
-				<!-- 내 의뢰/작업 현황 -->
-				<div id="myReqWorkState">
-					<div class="myReqWorkStateText">
-						나의 의뢰/작업 현황
-						<!-- <div id="allReqListBtn">전체 의뢰 요청 리스트 보기</div> -->
-						<div style="clear: both;"></div>						
-					</div>
-					<div class="myReqWorkStateArea">
-						<div class="myReqState">
-							<div id="myReqStateText">의뢰 현황</div>
-							<div class="recruit">
-								<span class="stepText">STEP 1. 지원자 모집 중</span>
-								<div class="innerArea" onclick="goToMyReqList(1);">
-									<div class="innerAreaText">${ rwCount[0] } </div>건
-								</div>
-								<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="working1">
-								<span class="stepText">STEP 2. 작업 진행 중</span>
-								<div class="innerArea" onclick="goToMyReqList(2);">
-									<div class="innerAreaText">${ rwCount[1] } </div>건
-								</div>
-								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="complete1">
-								<span class="stepText">STEP 3. 거래 완료</span>
-								<div class="innerArea" onclick="goToMyReqList(3);">
-									<div class="innerAreaText">${ rwCount[2] } </div>건
-								</div>
-								<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
-							</div>						
+				
+				<c:if test="${ member.userId eq loginUser.userId }">
+					<!-- 내 의뢰/작업 현황 -->
+					<div id="myReqWorkState">
+						<div class="myReqWorkStateText">
+							나의 의뢰/작업 현황
+							<!-- <div id="allReqListBtn">전체 의뢰 요청 리스트 보기</div> -->
+							<div style="clear: both;"></div>						
 						</div>
-						<div class="myWorkState">
-							<div id="myWorkStateText">작업 현황</div>
-							<div class="participate">
-								<span class="stepText">STEP 1. 참가 지원 중</span>
-								<div class="innerArea" onclick="goToMyWorkList(1)">
-									<div class="innerAreaText">${ rwCount[3] } </div>건
+						<div class="myReqWorkStateArea">
+							<div class="myReqState">
+								<div id="myReqStateText">의뢰 현황</div>
+								<div class="recruit">
+									<span class="stepText">STEP 1. 지원자 모집 중</span>
+									<div class="innerArea" onclick="goToMyReqList(1);">
+										<div class="innerAreaText">${ rwCount[0] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
 								</div>
-								<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="working2">
-								<span class="stepText">STEP 2. 작업 진행 중</span>
-								<div class="innerArea" onclick="goToMyWorkList(2)">
-									<div class="innerAreaText">${ rwCount[4] } </div>건
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
 								</div>
-								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="complete2">
-								<span class="stepText">STEP 3. 거래 완료</span>
-								<div class="innerArea" onclick="goToMyWorkList(3)">
-									<div class="innerAreaText">${ rwCount[5] } </div>건
+								<div class="working1">
+									<span class="stepText">STEP 2. 작업 진행 중</span>
+									<div class="innerArea" onclick="goToMyReqList(2);">
+										<div class="innerAreaText">${ rwCount[1] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
 								</div>
-								<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
+								</div>
+								<div class="complete1">
+									<span class="stepText">STEP 3. 거래 완료</span>
+									<div class="innerArea" onclick="goToMyReqList(3);">
+										<div class="innerAreaText">${ rwCount[2] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
+								</div>						
 							</div>
-							<div style="clear: both;"></div>					
+							<div class="myWorkState">
+								<div id="myWorkStateText">작업 현황</div>
+								<div class="participate">
+									<span class="stepText">STEP 1. 참가 지원 중</span>
+									<div class="innerArea" onclick="goToMyWorkList(1)">
+										<div class="innerAreaText">${ rwCount[3] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
+								</div>
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
+								</div>
+								<div class="working2">
+									<span class="stepText">STEP 2. 작업 진행 중</span>
+									<div class="innerArea" onclick="goToMyWorkList(2)">
+										<div class="innerAreaText">${ rwCount[4] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
+								</div>
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
+								</div>
+								<div class="complete2">
+									<span class="stepText">STEP 3. 거래 완료</span>
+									<div class="innerArea" onclick="goToMyWorkList(3)">
+										<div class="innerAreaText">${ rwCount[5] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
+								</div>
+								<div style="clear: both;"></div>					
+							</div>
 						</div>
 					</div>
-				</div>
+				</c:if>
+
 				<!-- 포트폴리오 -->
 				<div id="portpolio">
 					<div class="portpolioText">
@@ -1055,56 +1082,60 @@
 						
 						</div>
 					</div>
-						<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
+						<c:if test="${ member.userId eq loginUser.userId }"><div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div></c:if>
 						<div style="clear: both;"></div>						
 					</div>
 				</div>
-				<!-- 캐쉬 변동 내역 -->
-				<div id="cashChange">
-					<div class="cashChangeText">
-						Cash 변동내역
-						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyCashChangeList();"/>
-					</div>
-					<div class="cashChangeArea">
-						<div class="dateArea">
-							<div class="monthArea">${ nowDay }</div>
-							<c:if test="${ !empty ccList}">
-									<c:forEach var="cc" items="${ ccList }">
-										<c:if test="${ cc.pcContent eq '캐쉬 충전' }">
-											<div class="changeList">
-											<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
-											<div class="chageDesc">
-												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<fmt:formatNumber value="${ cc.pcAmount }"/>충전
+				
+				<c:if test="${ member.userId eq loginUser.userId }">
+					<!-- 캐쉬 변동 내역 -->
+					<div id="cashChange">
+						<div class="cashChangeText">
+							Cash 변동내역
+							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyCashChangeList();"/>
+						</div>
+						<div class="cashChangeArea">
+							<div class="dateArea">
+								<div class="monthArea">${ nowDay }</div>
+								<c:if test="${ !empty ccList}">
+										<c:forEach var="cc" items="${ ccList }">
+											<c:if test="${ cc.pcContent eq '캐쉬 충전' }">
+												<div class="changeList">
+												<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
+												<div class="chageDesc">
+													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>충전
+												</div>
 											</div>
-										</div>
-										</c:if>
-										<c:if test="${ cc.pcContent eq '의뢰 비용' }">
-											<div class="changeList">
-											<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
-											<div class="chageDesc">
-												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<fmt:formatNumber value="${ cc.pcAmount }"/>지출
+											</c:if>
+											<c:if test="${ cc.pcContent eq '의뢰 비용' }">
+												<div class="changeList">
+												<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
+												<div class="chageDesc">
+													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>지출
+												</div>
 											</div>
-										</div>
-										</c:if>
-										<c:if test="${ cc.pcContent eq '의뢰 수주' }">
-											<div class="changeList">
-											<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
-											<div class="chageDesc">
-												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+											</c:if>
+											<c:if test="${ cc.pcContent eq '의뢰 수주' }">
+												<div class="changeList">
+												<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
+												<div class="chageDesc">
+													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+												</div>
 											</div>
-										</div>
-										</c:if>
-									</c:forEach>
-								</c:if>
-								<c:if test="${ empty ccList }">
-									<div class="ccList" style="text-align: center; color: red;">※ 캐쉬 변동 내역이 없습니다.</div>
-								</c:if>
+											</c:if>
+										</c:forEach>
+									</c:if>
+									<c:if test="${ empty ccList }">
+										<div class="ccList" style="text-align: center; color: red;">※ 캐쉬 변동 내역이 없습니다.</div>
+									</c:if>
+							</div>
 						</div>
 					</div>
-				</div>
+				</c:if>
+
 			</div>
 			
 			<!-- 회원 정보 수정 모달창 -->
@@ -1302,10 +1333,14 @@
 	</script>
 	
 	<script>
-		var userId = '${ loginUser.userId }';
+		var userId = '${ member.userId }';
 		
 		function goToMyReply(){
 			location.href="myReplyList.my?userId=" + userId;
+		}
+		
+		function goToMyScrap(){
+			location.href="scrapList.my?userId=" + userId;
 		}
 		
 		function goToMyCashChangeList(){
@@ -1331,7 +1366,13 @@
 	<script>
 		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수
 		$('#profileImage').on('click', function(){
-			$('#profileImg').click();
+			var mypageHost = '${ member.userId }';
+			var mypageVisitor = '${ loginUser.userId }';
+			console.log(mypageHost);
+			console.log(mypageVisitor);
+			if(mypageHost==mypageVisitor){
+				$('#profileImg').click();
+			}
 		});
 		
 		// 파일을 첨부 했을 경우 미리 보기가 가능하도록 하는 함수
@@ -1421,7 +1462,7 @@
 					
 					var portpolioArea = $('.portpolioArea');
 					
-					for(var i = 0; i < data.pcList.length; i++) {
+					for(var i = data.pcList.length - 1; i >= 0; i--) {
 						/* console.log("data[i].pocModify : " + data.pcList[i].pocModify);
 						var test = $('.portImgTag').eq(i);
 						console.log(test);
@@ -1445,8 +1486,8 @@
 						$portArea.append($portCount);
 						$portArea.append($poNum);
 						
-						portpolioArea.append($portArea);
-						
+						portpolioArea.prepend($portArea);
+					
 					}
 				},
 				error : function(e) {

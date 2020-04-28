@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.board.model.vo.Scrap;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
@@ -97,6 +98,21 @@ public class MemberDAO {
 
 	public ArrayList<PortpolioContents> selectAttachFile(SqlSessionTemplate sqlSession, int poNum) {
 		return (ArrayList)sqlSession.selectList("portpolioMapper.selectAttachFile", poNum);
+	}
+
+	public int getMyScrapCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("memberMapper.getMyScrapCount", userId);
+	}
+
+	public ArrayList<Scrap> selectMyScrapList(SqlSessionTemplate sqlSession, String userId, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMyScrapList", userId, rowBounds);
+	}
+
+	public ArrayList<Scrap> selectRecentlyScrap(SqlSessionTemplate sqlSession, String userId) {
+		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyScrap", userId);
 	}
 
 }
