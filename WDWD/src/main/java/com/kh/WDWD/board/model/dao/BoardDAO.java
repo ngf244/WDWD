@@ -108,5 +108,29 @@ public class BoardDAO {
 		return sqlSession.update("boardMapper.plusReplyCount", boNum);
 	}
 
+	public int deleteReply(SqlSessionTemplate sqlSession, int reNum) {
+		return sqlSession.update("replyMapper.deleteReply", reNum);
+	}
+
+	public int deleteContent(SqlSessionTemplate sqlSession, String conCop) {
+		return sqlSession.update("contentsMapper.deleteContent", conCop);
+	}
+
+	public int deleteBoard(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("boardMapper.deleteBoard", boNum);
+	}
+
+	public int deleteContents(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("contentsMapper.deleteContents", boNum);
+	}
+
+	public int deleteBoardContents(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.delete("contentsMapper.deleteBoardContents", boNum);
+	}
+
+	public int boardUpdate(SqlSessionTemplate sqlSession, Board b) {
+		return sqlSession.update("boardMapper.boardUpdate", b);
+	}
+
 
 }

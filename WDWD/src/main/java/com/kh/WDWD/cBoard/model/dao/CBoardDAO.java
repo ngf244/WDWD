@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -18,15 +19,14 @@ public class CBoardDAO {
 	
 	
 	
-	public int getListCount(SqlSessionTemplate sqlSession, String boGroup) {
-		return sqlSession.selectOne("cBoardMapper.getListCount", boGroup);
+	public int getListCount(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap) {
+		return sqlSession.selectOne("cBoardMapper.getListCount", searchMap);
 	}
 	
-	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, String boGroup1, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectBoardList", boGroup1, rowBounds);
+	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit(); // 몇번째 게시글부터 불러오는지
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit()); // 몇번째부터 몇번째까지인지 가져가는것
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectBoardList", searchMap, rowBounds);
 	}
 	
 

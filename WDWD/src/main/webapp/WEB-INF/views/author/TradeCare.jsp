@@ -35,18 +35,28 @@
         overflow: auto;
     }
 
-    table{
-        width: 100%;
+   .table {
+      border-collapse: collapse;
+      border-top: 3px solid #168;
+      width: 100%;
+    }  
+    .table th {
+      color: #168;
+      background: #f0f6f9;
+      text-align: center;
     }
-
-    /* tr{
-        border: 1px solid black;
-        color: red;
-    } */
-
-    tr:first-child{
-        border: 1px solid black;
-        color: red;
+    .table th, .table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .table th:first-child, .table td:first-child {
+      border-left: 0;
+    }
+    .table th:last-child, .table td:last-child {
+      border-right: 0;
+    }
+    .table tr td:first-child{
+      text-align: center;
     }
 </style>
 <title>Insert title here</title>

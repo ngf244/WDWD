@@ -47,4 +47,16 @@ public interface BoardService {
 	int plusViewCount(int boNum);
 
 	int plusReplyCount(int boNum);
+
+	int deleteReply(int reNum);
+
+	int deleteContent(String conCop);
+
+	int deleteBoard(int boNum);
+
+	int deleteContents(int boNum);
+
+	int deleteBoardContents(int boNum);
+
+	int boardUpdate(Board b);
 }

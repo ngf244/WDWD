@@ -82,21 +82,32 @@ public class CBoardController {
 
 	// 자유게시판 조회 컨트롤러
 	@RequestMapping("actionList.ch")
-	public ModelAndView actionList(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv) {
-		String boGroup1 = "1"; // 자유게시판
-
+	public ModelAndView actionList(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv,
+									@RequestParam(value = "searchCate", required = false) String searchCate,
+									@RequestParam(value = "searchWord", required = false) String searchWord) {
+		
+		String boGroup1 = "1";
+		
+		System.out.println(searchCate);
+		System.out.println(searchWord);
+		
+		HashMap<String, String> searchMap = new HashMap<String, String>();
+		
+		searchMap.put("searchCate", searchCate);
+		searchMap.put("searchWord", searchWord);
+		
 		// 자유게시판 페이징
 		int currentPage = 1;
 		if (page != null) {
 			currentPage = page;
 		}
 
-		int listCount = cBoardService.getListCount(boGroup1);
+		int listCount = cBoardService.getListCount(searchMap);
 
 		// 자유게시판 페이징
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, boGroup1);
 
-		ArrayList<CBoard> list = cBoardService.selectBoardList(boGroup1, pi);
+		ArrayList<CBoard> list = cBoardService.selectBoardList(searchMap, pi);
 		
 		CBoard CBoard = new CBoard();
 		CBoard.setBoGroup("2");

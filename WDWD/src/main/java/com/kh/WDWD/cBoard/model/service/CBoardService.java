@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
@@ -12,9 +13,9 @@ import com.kh.WDWD.request.model.vo.Request;
 public interface CBoardService {
 
 		//자유게시판 개수
-	int getListCount(String boGroup1);
+	int getListCount(HashMap<String, String> searchMap);
 	//자유게시판 page와 함께 갖고오기
-	ArrayList<CBoard> selectBoardList(String boGroup1, PageInfo pi);
+	ArrayList<CBoard> selectBoardList(HashMap<String, String> searchMap, PageInfo pi);
 
 	int cBoardInsert(CBoard b);
 

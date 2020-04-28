@@ -4,7 +4,7 @@
 	<select id="selectMember" parameterType="string" resultMap="memberResultSet">
 		select *
 		from member
-			 join contents on (me_con_num = con_num)
+			left join contents on (me_con_num = con_num)
 		where me_id=#{userId}
 	</select>
 	

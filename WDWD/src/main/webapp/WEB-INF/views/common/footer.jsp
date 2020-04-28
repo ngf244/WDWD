@@ -92,12 +92,12 @@
 			}
 		})
 
-		function reportForm(boardNo, reported) {
-			$('input[name=boardNo]').val(boardNo);
-			$('input[name=reported]').val(reported);
-			$('input[name=reporter]').val('${loginUser.userId}');
-			console.log(boardNo);
-			console.log(reported);
+		function reportForm(boardNo, reported, cate) {
+			$('input[name=boNum]').val(boardNo);
+			$('input[name=deCate]').val(cate);
+			$('input[name=deReportedNick]').val(reported);
+			$('input[name=deReporterId]').val('${loginUser.userId}');
+			$('input[name=deReporterNick]').val('${loginUser.nickName}');
 			$('#reportForm').css('display','block');
 		}
 	</script>

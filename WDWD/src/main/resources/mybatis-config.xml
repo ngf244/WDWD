@@ -19,6 +19,10 @@
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.Portpolio" alias="Portpolio"/>
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.PortpolioContents" alias="PortpolioContents"/>
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.PortpolioReply" alias="PortpolioReply"/>
+		<typeAlias type="com.kh.WDWD.author.model.vo.Declaration" alias="Declaration"/>
+		<typeAlias type="com.kh.WDWD.author.model.vo.BanList" alias="BanList"/>
+		<typeAlias type="com.kh.WDWD.author.model.vo.BanPageUserList" alias="BanPageUserList"/>
+		<typeAlias type="com.kh.WDWD.author.model.vo.Ban" alias="Ban"/>
 	</typeAliases>
 	
 	<mappers>
@@ -30,6 +34,7 @@
 	   	<mapper resource="mappers/contents-mapper.xml"/>
 	   	<mapper resource="mappers/reply-mapper.xml"/>
 	    <mapper resource="mappers/guideboard-mapper.xml"/>
+	    <mapper resource="mappers/author-mapper.xml"/>
 	</mappers>
 	
 </configuration>
