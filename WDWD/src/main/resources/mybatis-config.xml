@@ -19,6 +19,7 @@
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.Portpolio" alias="Portpolio"/>
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.PortpolioContents" alias="PortpolioContents"/>
 		<typeAlias type="com.kh.WDWD.portpolio.model.vo.PortpolioReply" alias="PortpolioReply"/>
+		<typeAlias type="com.kh.WDWD.message.model.vo.Message" alias="Message"/>
 	</typeAliases>
 	
 	<mappers>
@@ -30,6 +31,7 @@
 	   	<mapper resource="mappers/contents-mapper.xml"/>
 	   	<mapper resource="mappers/reply-mapper.xml"/>
 	    <mapper resource="mappers/guideboard-mapper.xml"/>
+	    <mapper resource="mappers/message-mapper.xml"/>
 	</mappers>
 	
 </configuration>

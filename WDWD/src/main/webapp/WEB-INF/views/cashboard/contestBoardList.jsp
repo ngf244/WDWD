@@ -165,7 +165,7 @@
 
 	<script>
 		var boCategory = "";
-		var boGroup = "2";
+		var boGroup = "4";
 		var cbStep =0;
 	
 	    /* 리스트로 글 넘기기 */

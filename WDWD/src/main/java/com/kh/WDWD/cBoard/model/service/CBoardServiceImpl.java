@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,14 +116,23 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public int getCateListCount2(CBoard cBoard) {
-		return cBoardDAO.getCateListCount2(sqlSession, cBoard);
+	public int getCateListCount2(HashMap searchMap) {
+		return cBoardDAO.getCateListCount2(sqlSession, searchMap);
 	}
-
+	
 	@Override
-	public ArrayList<CBoard> selectCashOneCateList(CBoard cBoard) {
-		return cBoardDAO.selectCashOneCateList(sqlSession, cBoard);
+	public ArrayList<CBoard> selectCashOneCateList(HashMap searchMap) {
+		return cBoardDAO.selectCashOneCateList(sqlSession, searchMap);
 	}
+//	@Override
+//	public int getCateListCount2(CBoard cBoard, String searchCate, String searchText) {
+//		return cBoardDAO.getCateListCount2(sqlSession, cBoard, searchCate, searchText);
+//	}
+//
+//	@Override
+//	public ArrayList<CBoard> selectCashOneCateList(CBoard cBoard, String searchCate, String searchText) {
+//		return cBoardDAO.selectCashOneCateList(sqlSession, cBoard, searchCate, searchText);
+//	}
 
 	@Override
 	public Chat sendChat(Chat c) {

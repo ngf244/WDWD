@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
@@ -48,9 +49,13 @@ public interface CBoardService {
 
 	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
 	
-	int getCateListCount2(CBoard cBoard);
+	int getCateListCount2(HashMap searchMap);
+	
+	ArrayList<CBoard> selectCashOneCateList(HashMap searchMap);
+	
+	//int getCateListCount2(CBoard cBoard, String searchCate, String searchText);
 
-	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
+	//ArrayList<CBoard> selectCashOneCateList(CBoard cBoard, String searchCate, String searchText);
 	
 	Chat sendChat(Chat c);
 

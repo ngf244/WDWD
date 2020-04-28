@@ -7,7 +7,6 @@ public class PageInfo {
 	private int maxPage;
 	private int startPage;
 	private int endPage;
-	private String boGroup;
 	
 	private int boardLimit;
 	
@@ -25,18 +24,7 @@ public class PageInfo {
 		this.endPage = endPage;
 		this.boardLimit = boardLimit;
 	}
-	public PageInfo(int currentPage, int listCount, int pageLimit, int maxPage, int startPage, int endPage, int boardLimit, String boGroup) {
-		super();
-		this.currentPage = currentPage;
-		this.listCount = listCount;
-		this.pageLimit = pageLimit;
-		this.maxPage = maxPage;
-		this.startPage = startPage;
-		this.endPage = endPage;
-		this.boardLimit = boardLimit;
-		this.boGroup = boGroup;
-	}
-
+	
 
 	public int getCurrentPage() {
 		return currentPage;
@@ -94,19 +82,12 @@ public class PageInfo {
 		this.boardLimit = boardLimit;
 	}
 	
-	public String getBoGroup() {
-		return boGroup;
-	}
-
-	public void setBoGroup(String boGroup) {
-		this.boGroup = boGroup;
-	}
 
 	@Override
 	public String toString() {
 		return "PageInfo [currentPage=" + currentPage + ", listCount=" + listCount + ", pageLimit=" + pageLimit
 				+ ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage=" + endPage + ", boardLimit="
-				+ boardLimit + ", boGroup = " + boGroup + "]";
+				+ boardLimit + "]";
 	}
 	
 	

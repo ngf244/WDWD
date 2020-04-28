@@ -612,5 +612,8 @@
 		<jsp:include page="../login/login.jsp"/>
 		<jsp:include page="../login/signup.jsp"/>
 	</div>
+	
+	
+
 </body>
 </html>
