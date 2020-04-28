@@ -130,6 +130,11 @@
 	a:visited {text-decoration: none;}
 	a:hover {text-decoration: none;}
 	
+	.watermark_contest {
+		position: absolute;
+		opacity: 0.3;
+		z-index: 5;
+	}
 	.watermark_free {
 		position: absolute;
 		opacity: 0.3;
@@ -267,7 +272,7 @@
 			${ cBoard.boWriter }
 		</div>
 		
-		<c:if test="${ cBoard.boGroup ne 2 && cBoard.cbStep eq 1 }">
+		<c:if test="${ cBoard.boGroup ne 2 }">
 			<div class="leftLine">
 				<span class="redColor">＞ </span>마감일
 			</div>
@@ -428,7 +433,6 @@
 		<div class="br"></div>
 	</div>
 	
-	<script src="http://localhost:82/socket.io/socket.io.js"></script>
 	<script>
 		if('${param.sysMsg}' == "3" && "${sessionScope.loginUser.nickName}" == "${ cBoard.boWriter }" && "${ cBoard.boGroup }" != 2) {
 			var socket = io("http://localhost:82");

@@ -309,13 +309,19 @@ public class CBoardController {
 								r.setReId(m.getUserId());
 								
 								Board reqB = cBoardService.cBoardReqView(r);
+								
+								ArrayList<Contents> reqFileList = new ArrayList<>();
+								if(reqB != null) {
+									reqFileList = cBoardService.fileList(reqB.getBoNum());
+								}
+								
 								mv.addObject("reqB", reqB);
+								mv.addObject("reqFileList", reqFileList);
 								mv.setViewName("cashboard/contest_2stage");
 								break;
 							}
 						}
 					}
-					
 				} else {
 					// 마감되었을 때
 					mv.setViewName("cashboard/contest_3stage");
@@ -513,6 +519,17 @@ public class CBoardController {
 		
 		if(result != 0) {
 			return "redirect:detailView.ch?sysMsg=2&boNum=" + boNum;
+		} else {
+			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("go3stageContest.ch")
+	public String go3stageContest(@ModelAttribute Request r) {
+		int result = cBoardService.go3stageContest(r);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + r.getReNum();
 		} else {
 			throw new CBoardException("에디터 선택에 실패하였습니다.");
 		}

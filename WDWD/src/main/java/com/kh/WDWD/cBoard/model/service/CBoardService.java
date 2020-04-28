@@ -68,6 +68,8 @@ public interface CBoardService {
 	
 	ArrayList<Board> reqBList(int boNum);
 	
+	int go3stageContest(Request r);
+	
 
 	
 

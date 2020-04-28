@@ -177,7 +177,7 @@
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
 		join member on (board.bo_writer = member.me_id)
-		where bo_group = 3 and cb_date != '마감'
+		where bo_group in (3, 4) and cb_date != '마감'
 	</select>
 	
 	<select id="getCbCash" resultMap="requestResultSet2">
@@ -224,6 +224,18 @@
 		update cash_board
 		set cb_step = 3
 		where cb_num = #{boNum}
+	</update>
+	
+	<update id="go3stageContest1" parameterType="Request">
+		update request
+		set re_plz = 'Y'
+		where re_num = #{reNum} and re_refnum = #{reRefNum}
+	</update>
+	
+	<update id="go3stageContest2" parameterType="Request">
+		update cash_board
+		set cb_step = 3
+		where cb_num = #{reNum}
 	</update>
  	
  	<select id="cBoardReqView" resultMap="boardResultSet" parameterType="_int">

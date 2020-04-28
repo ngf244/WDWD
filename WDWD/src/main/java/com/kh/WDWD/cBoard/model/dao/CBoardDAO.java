@@ -184,8 +184,6 @@ public class CBoardDAO {
 	public int timeOut(SqlSessionTemplate sqlSession, int boNum) {
 		Request r = sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
 		
-		System.out.println(boNum + ":" +  r);
-		
 		if(r == null) {
 			sqlSession.update("cBoardMapper.endTime", boNum);
 		} else {
@@ -201,6 +199,10 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.reqBList", boNum);
 	}
 
-	
-
+	public int go3stageContest(SqlSessionTemplate sqlSession, Request r) {
+		int result1 = sqlSession.update("cBoardMapper.go3stageContest1", r);
+		int result2 = sqlSession.update("cBoardMapper.go3stageContest2", r);
+		
+		return (result1 >= result2) ? result2 : result1;
+	}
 }

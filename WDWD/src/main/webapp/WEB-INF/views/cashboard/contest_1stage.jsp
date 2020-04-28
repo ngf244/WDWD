@@ -113,12 +113,11 @@
 							<p style="font-size: 14pt; text-align: center;">참여중인 에디터가 없습니다.</p>
 						</c:if>
 						
+						<!-- 등록된 작품 우선 -->
 						<c:if test="${ cBoard.boReNum ne 0 }">
 							<c:forEach var="r" items="${ reqMList }">
-								<c:set var="bCheck" value="false" />
 								<c:forEach var="b" items="${ reqBList }">
 									<c:if test="${r.reId eq b.boWriter}">
-										<c:set var="bCheck" value="true" />
 										<div class="editorView" onclick="createModal(this);">
 											<c:if test="${ !empty b.thumbnail }">
 												<img class="editorPhoto" src="${ contextPath }/resources/real_photo/${ b.thumbnail }">
@@ -151,12 +150,31 @@
 														<p>작성 글 보기</p>
 														<p>작성 댓글 보기</p>
 										    		</div>
+										    		
+										    		<div id="btnList">
+										    			<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName && cBoard.cbDate eq '마감' }">
+										    				<form action="go3stageContest.ch" method="post">
+										    					<input type="hidden" name="reNum" value="${ cBoard.boNum }">
+										    					<input type="hidden" name="reRefNum" value="${ b.boNum }">
+										    					<div class="button" onclick="go3stageContest(this);">선택하기</div>
+										    				</form>
+										    			</c:if>
+										    		</div>
 										    	</div>
 										    </div>
 										</div>
 									</c:if>
 								</c:forEach>
-								
+							</c:forEach>
+							
+							<!-- 미등록 작품 -->
+							<c:forEach var="r" items="${ reqMList }">
+								<c:set var="bCheck" value="false" />
+								<c:forEach var="b" items="${ reqBList }">
+									<c:if test="${r.reId eq b.boWriter}">
+										<c:set var="bCheck" value="true" />
+									</c:if>
+								</c:forEach>
 								<c:if test="${ bCheck eq false }">
 									<div class="editorView" onclick="waitAlert();">
 										<img class="editorPhoto" src="${ contextPath }/resources/images/drawing.jpg">
@@ -170,15 +188,68 @@
 					</div>
 					
 					<script>
+						$(document).on("contextmenu dragstart selectstart", '.modal-text img', function(e){
+				            swal({
+								title: "불법 이미지 다운을 막고 있습니다.",
+								icon: "error"
+							});
+							return false;
+				        });
+					
+						function go3stageContest(e) {
+							swal({
+								title: "해당 작업물을 채택하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '선택하기',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									$(e).parent().submit();
+								}
+							});
+						}
+					
 				    	function createModal(e) {
-				    		$(e).children().eq(2).show()
+				    		$('.editorView').attr('onclick', '')
+				    		$(e).children().eq(2).show();
+				    		$(e).children().eq(2).scrollTop(0);
+				    		
+				    		var modalImg = $(e).children().eq(2).children().children().children().eq(1).find('img');
+				    		
+			    			for(var i = 0; i < modalImg.length; i++) {
+								var $watermark = $('<img>');
+								$watermark.attr('class', 'watermark_contest');
+								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+								
+								$(e).children().eq(2).children().children().children().eq(1).append($watermark);
+								setWaterMarkContest(modalImg.eq(i), $watermark);
+							}
 				    	}
+				    	
+				    	function setWaterMarkContest(img, watermark) {
+							var image_box = $("#mainIcon");
+							var water_mark = $(".water_mark");
+							
+							watermark.css("left", img.position().left + "px");
+							watermark.css("top", img.position().top + "px");
+							watermark.css("width", img.innerWidth());
+							watermark.css("height", img.innerHeight());
+						}
 				    	
 						window.onclick = function(event) {
 				    		for(var i = 0; i < $(".modal").length; i++) {
 				    			if (event.target == $(".modal")[i]) {
 									$('.modal').hide();
-									
+									$('.watermark_contest').remove();
+									$('.editorView').attr('onclick', 'createModal(this);')
 								}
 				    		}
 						}
@@ -204,6 +275,16 @@
 					</div>
 					
 					<script>
+						$('.downloadBtn').click(function(e){
+							if("${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
+								e.preventDefault();
+								swal({
+									title: "원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.",
+									icon: "error"
+								});
+							}
+						})
+					
 						function waitAlert() {
 							swal({
 								title: "에디터가 아직 글을 등록하지 않았습니다.",

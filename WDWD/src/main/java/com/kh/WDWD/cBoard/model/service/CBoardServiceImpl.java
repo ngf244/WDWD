@@ -164,5 +164,10 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.reqBList(sqlSession, boNum);
 	}
 
+	@Override
+	public int go3stageContest(Request r) {
+		return cBoardDAO.go3stageContest(sqlSession, r);
+	}
+
 	
 }
