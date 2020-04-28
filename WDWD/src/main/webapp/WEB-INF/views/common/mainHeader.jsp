@@ -357,7 +357,7 @@
 	<c:set var="contextPath" value="${ pageContext.servletContext.contextPath }" scope="application"/>
 	<header>
 		<div id="titleHeader">
-			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.me'">
+			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.home'">
 			<div id="mainSearch">
 				<input type="text">
 				<img src="${ contextPath }/resources/images/search.png">
