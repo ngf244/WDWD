@@ -23,16 +23,19 @@
 
 		.titleform {
 			margin-top: 10px;
-			width: 60%;
+			width: 88%;
 			height: 50px;
 			font-size: 15px;
+			font-size: large;
+			text-align: center;
 		}
 
 		.catecory {
 			margin-top: 15px;
-			width: 30%;
+			width: 10%;
 			height: 55.5px;
-			font-size: 15px;
+			font-size: larger;
+			font-weight: bolder;
 		}
 
 		.boardnotice {
@@ -261,21 +264,21 @@
 		<div id="left-side">
 		</div>
 		<div id="main">
-			<form id="writingForm" action="freeWriting.bo" method="GET" onsubmit="return TransferToForm();">
+			<form id="writingForm" action="freeWriting.bo" method="POST" onsubmit="return TransferToForm();">
 				<div class="boardtitle">
 					자유갤러리
 				</div>
 				<div class="nick">
 					아이디(닉네임)
-					<span class="smallOption" name="userNick">김대호</span>
+					<span class="smallOption" name="userNick">${loginUser.nickName}</span>
 				</div>
 				<div class="writingtitle">
 					<select class="catecory" name = "freeBoardCategory">
-						<option value="choese">게시글 선택</option>
-						<option value="information">정보</option>
-						<option value="jjalbbang">짤방</option>
-						<option value="conceptual">개념글</option>
-						<option value="anyting">아무말</option>
+						<option value="공통">공통</option>
+						<option value="짤방">짤방</option>
+						<option value="아무말">아무말</option>
+						<option value="요청">요청</option>
+						<option value="질문">질문</option>
 					</select>
 
 					<input type="text" class="titleform" placeholder="제목을 입력해주세요" name="freeBoardTitle">
@@ -322,14 +325,12 @@
 				<div class="writingbutton">
 					<button type="button" id="uploadFileBtn">파일 올리기</button>
 					<button type="button" class="cancell" onclick="history.back();">취소</button>
-					<button type="submit" class="writing" onclick="return confirm('이대로 등록하시겠습니까')">등록</button>
+					<button type="button" class="writing" onclick="return writeCheck();">등록</button>
 				</div>
 
 			</form>
 			
 			<script>
-				var countData = 1;
-				
 				$('#uploadFileBtn').click(function () {
 					var filearea = $('#imageInputArea');
 
@@ -343,7 +344,7 @@
 					$spanRename = $('<span class="rename" name="fileReName">');
 					$fileArea=$('<div class=fileArea>');
 					$fileForm=$('<form enctype="multipart/form-data" method="post">');
-					$inputFile=$('<input type=file multiple name=file>');
+					$inputFile=$('<input type=file name=file>');
 					
 					// $insertImage.append($img);
 					$insertImage.append($imgplus);
@@ -360,8 +361,6 @@
 					$eachImage.append($fileArea);
 
 					$('#imageInputArea').append($eachImage);
-
-					countData++;
 				})
 
 
@@ -443,7 +442,6 @@
 // ---------------------------------------------------------------------------------
 
 				$('#writingPlace').keyup(function () {
-					var text = $(this).html();
 					deleteimg();
 				})
 
@@ -515,11 +513,73 @@
 					}
 				}
 
+				function writeCheck() {
+					var title = $('input[name=freeBoardTitle]').val();
+					var writingContent = $('#writingPlace').html();
+
+					if(writingContent.length<1 || title.length < 5){
+						console.log(title);
+						console.log(title.length);
+						swal("내용 확인", "5글자 이상의 제목과 1글자 이상의 내용을 입력해야 합니다.", "error");
+						return false;
+					}
+
+					// swal({
+                    //        title: "글을 작성하시겠습니까?",
+                    //        icon: "info",
+                    //        buttons : ["아니오", "웅"],
+                    //     }).then((result) => {
+                    //        if(result) {
+                    //           	$('#writingForm').submit();
+                    //        	} else {
+					// 			swal("Keep", "작성글 게시 유보하였습니다", "info");
+                    //        	}
+                    //     });
+					swal({
+                           title: "글을 작성하시겠습니까?",
+                           icon: "info",
+                           buttons : {
+                              	cancle : {
+                                 	text : '취소',
+                                 	value : false
+                             	},
+                              	confirm : {
+                                 	text : '작성하기',
+                                 	value : true
+                              	}
+                           	}
+                        }).then((result) => {
+                           if(result) {
+                              	$('#writingForm').submit();
+                           	} else {
+								swal("Keep", "작성글 게시 유보하였습니다", "info");
+                           	}
+                        });
+
+				}
+
+				function sweetCheck() {
+					swal({
+						title: "Confirm",
+						text: "이대로 작성하시겠습니까?",
+						icon: "warning",
+						buttons: ["NO", "YES"],
+						dangerMode: true,
+					}).then((YES) => {
+						if (YES) {
+							return true;
+						}else{
+							return false;
+						}
+					});
+				}
+
 				function TransferToForm() {
 					var writingContent = $('#writingPlace').html();
 					var originNames = new Array();
 					var reNames = new Array();
 					
+
 					$('#writingForm').prepend('<input type="hidden" name="writingContent">');
 					$('input[name=writingContent]').val(writingContent);
 					
@@ -542,14 +602,8 @@
 					for(var i in reNames){
 						$('#writingForm').append('<input type="hidden" name="fileRename" value="'+reNames[i]+'">');
 					}
-					
-					console.log(writingContent);
-					console.log(originNames);
-					console.log(reNames);
 
-					return true;
 				}
-			
 			</script>
 		</div>
 		<div id="right-side">

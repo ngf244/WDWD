@@ -672,6 +672,7 @@
 						<div id="cancle" class="button">돌아가기</div>
 					</div>
 					
+					<script src="http://localhost:82/socket.io/socket.io.js"></script>
 					<script>
 						$('#submit').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
@@ -686,17 +687,52 @@
 						
 						$('#submit').click(function(){
 							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-							
+
 							if($('#boTitle').val() == "") {
-								alert('제목을 입력해주세요.');
+								swal({
+									title: "제목을 입력해주세요.",
+									icon: "error"
+								});
 							} else if($('#cbDate').val() == "") {
-								alert('마감일을 입력해주세요.');
+								swal({
+									title: "마감일을 입력해주세요.",
+									icon: "error"
+								});
 							} else if($('#cbCash').val() == "") {
-								alert('의뢰비를 입력해주세요.');
+								swal({
+									title: "의뢰비를 입력해주세요.",
+									icon: "error"
+								});
 							} else if($('#content').val() == "") {
-								alert('글 내용을 입력해주세요.');
-							} else if(confirm("글을 작성하시겠습니까?")) {
-								$('#insertForm').submit();	
+								// 현재 미작동
+								swal({
+									title: "내용을 입력해주세요.",
+									icon: "error"
+								});
+							} else {
+								swal({
+									title: "글을 작성하시겠습니까?",
+									icon: "info",
+									buttons : {
+										cancle : {
+											text : '취소',
+											value : false,
+										},
+										confirm : {
+											text : '작성하기',
+											value : true
+										}
+									}
+								}).then((result) => {
+									if(result) {
+										if('${boardType}' != 2) {
+											var socket = io("http://localhost:82");
+											socket.emit("chatArr", data);
+										}
+										
+										$('#insertForm').submit();
+									}
+								});
 							}
 						})
 					</script>

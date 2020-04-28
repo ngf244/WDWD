@@ -1,5 +1,7 @@
 package com.kh.WDWD.portpolio.model.vo;
 
+import java.util.ArrayList;
+
 public class Portpolio {
 	private int poNum;
 	private String poTitle;
@@ -11,11 +13,15 @@ public class Portpolio {
 	private String poUseYn;
 	private int poFee;
 	private int poCount;
+	private String poStatus;
+	private ArrayList<PortpolioReply> portReply;
+	private ArrayList<PortpolioContents> portContents;
 	
 	public Portpolio() {}
-	
+
 	public Portpolio(int poNum, String poTitle, String poWriter, String poDesc, String poCategory, String poEnrollDate,
-			String poModifyDate, String poUseYn, int poFee, int poCount) {
+			String poModifyDate, String poUseYn, int poFee, int poCount, String poStatus,
+			ArrayList<PortpolioReply> portReply, ArrayList<PortpolioContents> portContents) {
 		super();
 		this.poNum = poNum;
 		this.poTitle = poTitle;
@@ -27,6 +33,9 @@ public class Portpolio {
 		this.poUseYn = poUseYn;
 		this.poFee = poFee;
 		this.poCount = poCount;
+		this.poStatus = poStatus;
+		this.portReply = portReply;
+		this.portContents = portContents;
 	}
 
 	public int getPoNum() {
@@ -109,14 +118,37 @@ public class Portpolio {
 		this.poCount = poCount;
 	}
 
+	public String getPoStatus() {
+		return poStatus;
+	}
+
+	public void setPoStatus(String poStatus) {
+		this.poStatus = poStatus;
+	}
+
+	public ArrayList<PortpolioReply> getPortReply() {
+		return portReply;
+	}
+
+	public void setPortReply(ArrayList<PortpolioReply> portReply) {
+		this.portReply = portReply;
+	}
+
+	public ArrayList<PortpolioContents> getPortContents() {
+		return portContents;
+	}
+
+	public void setPortContents(ArrayList<PortpolioContents> portContents) {
+		this.portContents = portContents;
+	}
+
 	@Override
 	public String toString() {
 		return "Portpolio [poNum=" + poNum + ", poTitle=" + poTitle + ", poWriter=" + poWriter + ", poDesc=" + poDesc
 				+ ", poCategory=" + poCategory + ", poEnrollDate=" + poEnrollDate + ", poModifyDate=" + poModifyDate
-				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + "]";
+				+ ", poUseYn=" + poUseYn + ", poFee=" + poFee + ", poCount=" + poCount + ", poStatus=" + poStatus
+				+ ", portReply=" + portReply + ", portContents=" + portContents + "]";
 	}
-	
-	
-	
+
 	
 }

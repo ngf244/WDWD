@@ -35,4 +35,28 @@ public interface BoardService {
 	ArrayList<Reply> getReplyList(int boNum);
 
 	ArrayList<Reply> getReplyList2(int boNum);
+
+	ArrayList<Contents> getReplyContents(ArrayList<Reply> replyArr);
+
+	ArrayList<Contents> getReply2Contents(ArrayList<Reply> replyArr);
+
+	int insertOneContent(Contents c);
+
+	int insertReply(Reply r);
+
+	int plusViewCount(int boNum);
+
+	int plusReplyCount(int boNum);
+
+	int deleteReply(int reNum);
+
+	int deleteContent(String conCop);
+
+	int deleteBoard(int boNum);
+
+	int deleteContents(int boNum);
+
+	int deleteBoardContents(int boNum);
+
+	int boardUpdate(Board b);
 }

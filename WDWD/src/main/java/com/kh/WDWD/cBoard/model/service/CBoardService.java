@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
@@ -12,9 +13,9 @@ import com.kh.WDWD.request.model.vo.Request;
 public interface CBoardService {
 
 		//자유게시판 개수
-	int getListCount(String boGroup1);
+	int getListCount(HashMap<String, String> searchMap);
 	//자유게시판 page와 함께 갖고오기
-	ArrayList<CBoard> selectBoardList(String boGroup1, PageInfo pi);
+	ArrayList<CBoard> selectBoardList(HashMap<String, String> searchMap, PageInfo pi);
 
 	int cBoardInsert(CBoard b);
 
@@ -42,21 +43,31 @@ public interface CBoardService {
 
 	Board cBoardReqView(int boNum);
 
-	int registWrite(Board b);
+	int registWrite(Board b, int boardNum);
 
 	int getListCount2(CBoard cBoard);
 
 	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
 	
-	int getCateListCount2(CBoard cBoard);
-
-	ArrayList<CBoard> selectCashOneCateList(CBoard cBoard);
+	int getCateListCount2(HashMap searchMap);
 	
-  Chat sendChat(Chat c);
+	ArrayList<CBoard> selectCashOneCateList(HashMap searchMap);
+	
+	//int getCateListCount2(CBoard cBoard, String searchCate, String searchText);
+
+	//ArrayList<CBoard> selectCashOneCateList(CBoard cBoard, String searchCate, String searchText);
+	
+	Chat sendChat(Chat c);
 
 	ArrayList<Chat> chatList(int boNum);
 	
 	int registDelete(int boNum);
+	
+	int go3stage(int boNum);
+	
+	ArrayList<CBoard> checkTime();
+	
+	int timeOut(int boNum);
 
 	
 

@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
-import com.kh.WDWD.cBoard.model.vo.Chat;  
+import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -18,15 +19,14 @@ public class CBoardDAO {
 	
 	
 	
-	public int getListCount(SqlSessionTemplate sqlSession, String boGroup) {
-		return sqlSession.selectOne("cBoardMapper.getListCount", boGroup);
+	public int getListCount(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap) {
+		return sqlSession.selectOne("cBoardMapper.getListCount", searchMap);
 	}
 	
-	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, String boGroup1, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectBoardList", boGroup1, rowBounds);
+	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit(); // 몇번째 게시글부터 불러오는지
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit()); // 몇번째부터 몇번째까지인지 가져가는것
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectBoardList", searchMap, rowBounds);
 	}
 	
 
@@ -35,10 +35,12 @@ public class CBoardDAO {
 		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
 		int result2 = sqlSession.insert("cBoardMapper.cBoardInsert2", b);
 		
-		if(result1 > result2) {
-			return result2;
+		int boNum = sqlSession.selectOne("cBoardMapper.cBoardSelect");
+		
+		if(result1 > 0 && result2 > 0) {
+			return boNum;
 		} else {
-			return result1;
+			return 0;
 		}
 	}
 
@@ -117,10 +119,10 @@ public class CBoardDAO {
 	}
 
 
-	public int registWrite(SqlSessionTemplate sqlSession, Board b) {
+	public int registWrite(SqlSessionTemplate sqlSession, Board b, int boardNum) {
 		int result = sqlSession.insert("cBoardMapper.registWrite1", b);
 		if(result > 0) {
-			result = sqlSession.update("cBoardMapper.registWrite2", b);
+			result = sqlSession.update("cBoardMapper.registWrite2", boardNum);
 		}
 		
 		return result;
@@ -130,18 +132,29 @@ public class CBoardDAO {
 		return sqlSession.selectOne("cBoardMapper.getListCount2", cBoard);
 	}
 
-	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession, Board b) {
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", b);
+	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession,  CBoard cBoard) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", cBoard);
 	}
 
-	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
-		return sqlSession.selectOne("cBoardMapper.getCateListCount2", cBoard);
+	public int getCateListCount2(SqlSessionTemplate sqlSession, HashMap searchMap) {
+		return sqlSession.selectOne("cBoardMapper.getCateListCount2", searchMap);
 	}
-
-	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard) {
-		System.out.println(cBoard);
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard);
+	
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, HashMap searchMap) {
+		System.out.println("searchMap? " + ((CBoard)searchMap.get("cBoard")).getBoGroup());
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", searchMap);
 	}
+	
+//	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard, String searchCate, String searchText) {
+//		return sqlSession.selectOne("cBoardMapper.getCateListCount2", cBoard, searchCate, searchText);
+//	}
+//
+//	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, CBoard cBoard, String searchCate, String searchText) {
+//		System.out.println(cBoard);
+//		
+//		
+//		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList",  cBoard, searchCate, searchText);
+//	}
 
 	public Chat sendChat(SqlSessionTemplate sqlSession, Chat c) {
 		int result = sqlSession.insert("cBoardMapper.sendChat", c);
@@ -158,10 +171,33 @@ public class CBoardDAO {
 
 	public int registDelete(SqlSessionTemplate sqlSession, int boNum) {
 		int result = sqlSession.update("cBoardMapper.registDelete1", boNum);
+		
 		if(result > 0) {
 			result = sqlSession.delete("cBoardMapper.registDelete2", boNum);
-			if(result > 0) {
-				return sqlSession.delete("cBoardMapper.registDelete3", boNum);  
+			result =  sqlSession.delete("cBoardMapper.registDelete3", boNum);
+			return 1;
+		}
+		return 0;
+	}
+
+	public int go3stage(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("cBoardMapper.go3stage", boNum);
+	}
+
+	public ArrayList<CBoard> checkTime(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.checkTime");
+	}
+
+	public int timeOut(SqlSessionTemplate sqlSession, int boNum) {
+		Request r = sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
+		
+		System.out.println(boNum + ":" +  r);
+		
+		if(r == null) {
+			sqlSession.update("cBoardMapper.endTime", boNum);
+		} else {
+			if(sqlSession.update("cBoardMapper.okCash1", r) <= 0 || sqlSession.update("cBoardMapper.okCash2", r) <= 0) {
+				return 0;
 			}
 		}
 		

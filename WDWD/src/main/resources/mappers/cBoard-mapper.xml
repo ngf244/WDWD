@@ -2,18 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cBoardMapper">
 
-  <select id="getListCount" resultType="_int">
+ 	<select id="getListCount" resultType="_int">
 		select count(*)
-		from board
-		where bo_del='N' and bo_group=#{ boGroup1 }
+		from board b
+		    join member m on (bo_writer = me_id)
+		    left join contents c on (bo_num = con_ref)
+		where bo_del='N'and bo_group= 1
+		<if test='searchWord != "" and searchWord != null'>
+			<choose>
+				<when test='searchCate == "title"'>
+					and (bo_title like upper('%' || #{searchWord} || '%')
+					or bo_title like lower('%' || #{searchWord} || '%'))
+				</when>
+				<when test='searchCate == "content"'>
+					and (bo_con like upper('%' || #{searchWord} || '%')
+					or bo_con like lower('%' || #{searchWord} || '%'))
+				</when>
+				<when test='searchCate == "writer"'>
+					and (m.me_nick like upper('%' || #{searchWord} || '%')
+					or m.me_nick like lower('%' || #{searchWord} || '%'))
+				</when>
+				<when test='searchCate == "All"'>
+					<!-- and (bo_title like '%' || #{searchWord} || '%' or bo_con like '%' || #{searchWord} || '%') -->
+					and ((bo_title like upper('%' || #{searchWord} || '%') or bo_con like upper('%' || #{searchWord} || '%'))
+    				or (bo_title like lower('%' || #{searchWord} || '%') or bo_con like lower('%' || #{searchWord} || '%')))
+				</when>
+			</choose>
+		</if>
+		order by bo_num desc
 	</select>
 
 	
 	<select id="selectBoardList" resultMap="boardResultSet">
 	
-		select *
-		from board
-		where bo_del='N'and bo_group=#{ boGroup1 }
+		select b.*, m.me_nick, count(c.con_ref)
+		from board b
+		    join member m on (bo_writer = me_id)
+		    left join contents c on (bo_num = con_ref)
+		where bo_del='N'and bo_group= 1
+		<if test='searchWord != "" and searchWord != null'>
+			<choose>
+				<when test='searchCate == "title"'>
+					and bo_title like upper('%' || #{searchWord} || '%')
+					or bo_title like lower('%' || #{searchWord} || '%')
+				</when>
+				<when test='searchCate == "content"'>
+					and bo_con like upper('%' || #{searchWord} || '%')
+					or bo_con like lower('%' || #{searchWord} || '%')
+				</when>
+				<when test='searchCate == "writer"'>
+					and m.me_nick like upper('%' || #{searchWord} || '%')
+					or m.me_nick like lower('%' || #{searchWord} || '%')
+				</when>
+				<when test='searchCate == "All"'>
+					<!-- and (bo_title like '%' || #{searchWord} || '%' or bo_con like '%' || #{searchWord} || '%') -->
+					and (bo_title like upper('%' || #{searchWord} || '%') or bo_con like upper('%' || #{searchWord} || '%'))
+    				or (bo_title like lower('%' || #{searchWord} || '%') or bo_con like lower('%' || #{searchWord} || '%'))
+				</when>
+			</choose>
+		</if>
+		group by b.bo_num, b.bo_group, b.bo_title, b.bo_con, b.bo_view, b.bo_date,
+		        b.bo_update, b.bo_del, b.bo_writer, b.bo_good, b.bo_category,
+		        b.bo_renum, m.me_nick
 		order by bo_num desc
 		
 	</select>
@@ -31,6 +81,8 @@
 		<result property="boGood" column="BO_GOOD"/>
 		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
+		<result property="boWriterNick" column="ME_NICK"/>
+		<result property="boFileExist" column="count(c.con_ref)"/>
 	</resultMap>
    
    <resultMap type="CBoard" id="CBoardResultSet">
@@ -80,6 +132,11 @@
 		insert into cash_board
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
 	</insert>
+	
+	<select id="cBoardSelect" resultType="_int">
+		select max(bo_num)
+		from board
+	</select>
 	
 	<insert id="contentsInsert" parameterType="Contents">
 		insert into contents
@@ -140,13 +197,58 @@
 		<result property="reId" column="ME_NICK"/>
 	</resultMap>
 	
+	<resultMap type="Request" id="requestResultSet2">
+		<id property="reNum" column="RE_NUM"/>
+		<result property="reId" column="RE_ID"/>
+		<result property="reCash" column="RE_CASH"/>
+		<result property="rePlz" column="RE_PLZ"/>
+		<result property="reRefNum" column="RE_REFNUM"/>
+		<result property="reDate" column="RE_DATE"/>
+	</resultMap>
+	
 	<select id="reqList" resultMap="requestResultSet">
 		select *
 		from request
 		join member on (request.re_id = member.me_id)
 		where re_num = #{bId}
-		order by re_date, me_nick
+		order by re_cash, re_date, me_nick
 	</select>
+	
+	<select id="checkTime" resultMap="CBoardResultSet">
+		select *
+		from board
+		join cash_board on (board.bo_num = cash_board.cb_num)
+		join member on (board.bo_writer = member.me_id)
+		where bo_group = 3 and cb_date != '마감'
+	</select>
+	
+	<select id="getCbCash" resultMap="requestResultSet2">
+		select *
+		from (select *
+			from request
+			where re_num = #{boNum} and re_cash = 
+    			(select min(re_cash) from request where re_num = #{boNum})
+			order by re_date)
+		where rownum = 1
+	</select>
+	
+	<update id="endTime" parameterType="_int">
+		update cash_board
+		set cb_date = '마감'
+		where cb_num = #{boNum}
+	</update>
+	
+	<update id="okCash1" parameterType="Request">
+		update cash_board
+		set cb_cash = #{reCash}, cb_step = 2, cb_date = '마감'
+		where cb_num = #{reNum}
+	</update>
+	
+	<update id="okCash2" parameterType="Request">
+		update request
+		set re_plz = 'Y'
+		where re_num = #{reNum} and re_cash = #{reCash} and re_id = #{reId}
+	</update>
 	
 	<update id="go2stage1" parameterType="Request">
 		update (select * from request, member where me_id = re_id)
@@ -158,6 +260,12 @@
 		update cash_board
 		set cb_step = 2
 		where cb_num = #{reNum}
+	</update>
+	
+	<update id="go3stage" parameterType="_int">
+		update cash_board
+		set cb_step = 3
+		where cb_num = #{boNum}
 	</update>
  	
  	<select id="cBoardReqView" resultMap="boardResultSet" parameterType="_int">
@@ -172,16 +280,16 @@
  		values (bo_seq.nextval, 5, '에디터 등록글입니다.', #{boContent}, default, default, default, default, #{boWriter}, default, null, default)
  	</insert>
  	
- 	<update id="registWrite2" parameterType="Board">
+ 	<update id="registWrite2" parameterType="_int">
  		update request
  		set re_refnum = bo_seq.currval
- 		where re_num = #{boNum} and re_plz = 'Y'
+ 		where re_num = #{boardNum} and re_plz = 'Y'
  	</update>
  	
  	<update id="registDelete1">
  		update request
  		set re_refnum = null
- 		where re_num = #{boNum} and re_plz = 'Y'
+ 		where re_refnum = #{boNum} and re_plz = 'Y'
  	</update>
  	
  	<delete id="registDelete2">
@@ -364,6 +472,7 @@
 		from board
 			join cash_board on (bo_num = cb_num)
 		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
+		order by BO_DATE desc
 		
 	</select>
 	
@@ -375,52 +484,86 @@
 		FROM CASH_BOARD  
 			JOIN BOARD ON (BO_NUM = CB_NUM)
 			JOIN MEMBER ON(ME_ID = BO_WRITER)
-		where BO_GROUP = #{ boGroup } and bo_del = 'N'
+		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
+		order by BO_DATE desc
 	</select>
 	
 		
 		
 		
-   	<select id="getCateListCount2" resultType="_int">
+   	<select id="getCateListCount2"  resultType="_int">
 		select count(*)
 		from board
 			join cash_board on (bo_num = cb_num)
 		<where>
-				<if test= "boGroup != null">
-					BO_GROUP = #{ boGroup }
+				<if test= "cBoard.boGroup != null">
+					BO_GROUP = #{ cBoard.boGroup }
 				</if>
-				<if test="boCategory != null"> 
-					and BO_CATEGORY = #{ boCategory }
+				<if test="cBoard.boCategory != ''"> 
+					and BO_CATEGORY = #{ cBoard.boCategory }
 				</if>
-				<if test="cbStep != 0">		
-					and cb_step = #{ cbStep }
+				<if test="cBoard.cbStep != 0">		
+					and cb_step = #{ cBoard.cbStep }
 				</if>
 					and bo_del = 'N'
+				<if test='searchText != null and searchCate != null'>
+						<choose>
+							<when test='searchCate == "제목"'>
+								and bo_title like upper('%' || #{searchText}|| '%') 
+								or  bo_title like lower('%' || #{searchText}|| '%') 
+							</when>
+							<when test='searchCate == "내용"'>
+								and bo_con like upper('%' || #{searchText} || '%')
+								or bo_con like lower('%' || #{searchText} || '%')
+							</when>
+							<when test='searchCate == "의뢰인"'>
+								and me_nick like upper('%' || #{searchText} || '%')
+								or  me_nick like lower('%' || #{searchText} || '%')
+							</when>
+						</choose>
+				</if>
 		</where>
-		
+		order by BO_DATE desc
 	</select>
 	
 	
 		
-	<select id="selectCashOneCateList" parameterType="Board" resultMap="CBoardResultSet">
+	<select id="selectCashOneCateList" parameterType="hashmap" resultMap="CBoardResultSet">
 	
         SELECT *
 		FROM CASH_BOARD  
 		JOIN BOARD ON (BO_NUM = CB_NUM)
 		JOIN MEMBER ON(ME_ID = BO_WRITER)
 		<where>
-				<if test= "boGroup != null">
-					BO_GROUP = #{ boGroup }
+				bo_del = 'N'
+				<if test= "cBoard.boGroup != null">
+					and BO_GROUP = #{ cBoard.boGroup }
 				</if>
-				<if test="boCategory != null">
-					and BO_CATEGORY = #{ boCategory }
+				<if test="cBoard.boCategory != ''"> 
+					and BO_CATEGORY = #{ cBoard.boCategory }
 				</if>
-				<if test="cbStep != 0">
-					and cb_step = #{ cbStep }
+				<if test="cBoard.cbStep != 0">		
+					and cb_step = #{ cBoard.cbStep }
 				</if>
-					and bo_del = 'N'
+				<if test='searchText != null and searchCate != null'>
+						<choose>
+							<when test='searchCate == "제목"'>
+								and (bo_title like upper('%' || #{searchText}|| '%') 
+								or  bo_title like lower('%' || #{searchText}|| '%'))
+							</when>
+							<when test='searchCate == "내용"'>
+								and (bo_con like upper('%' || #{searchText} || '%')
+								or bo_con like lower('%' || #{searchText} || '%'))
+							</when>
+							<when test='searchCate == "의뢰인"'>
+								and (me_nick like upper('%' || #{searchText} || '%')
+								or  me_nick like lower('%' || #{searchText} || '%'))
+							</when>
+						</choose>
+				</if>	
+					
 		</where>
-		
+		order by BO_DATE desc
 		
 		
 	</select>	

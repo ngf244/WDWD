@@ -24,21 +24,21 @@
 			<button onclick="goToBoardList();">자유게시판&1:1</button>
 			
 			
+			<c:if test="${ loginUser != null }">
+				<button class = "messageList">쪽지</button>
+			</c:if>
 			<button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=4';">콘테스트 글쓰기</button>
-			<button onclick="javascript:location.href='detailView.ch?boNum=141';">stage1</button>
-			<button onclick="javascript:location.href='stage2.ch';">stage2</button>
-			<button onclick="javascript:location.href='stage3.ch';">stage3</button>
 			
 			
 			<button onclick="javascript:location.href='list.bo';">boardlist</button>
 			<button onclick="javascript:location.href='freeDetail.bo';">boardDetail</button>
 			<button onclick="javascript:location.href='writing.bo';">boardwriting</button>
 			<button onclick="javascript:location.href='revis.bo';">boardrevis</button>
-			<button onclick="javascript:location.href='ban.au';">authorBan</button>
+			<button onclick="javascript:location.href='aban.au';">authorBan</button>
 			<button onclick="javascript:location.href='trade.au';">authorTrade</button>
-			<button onclick="javascript:location.href='unban.au';">authorUnban</button>
+			<button onclick="javascript:location.href='aunban.au';">authorUnban</button>
 			
 		</div>
         <div id="right-side" style="background: blue">
@@ -57,6 +57,14 @@
 			location.href="actionList.ch";
 			
 		}
+	
+	</script>
+	
+	
+	<script>
+		$('.messageList').on('click', function(){
+			window.open("messageList.ms", "_blank", "toolbar=no, menubar=no, width=500, height=600");	
+		});
 	
 	</script>
 </body>

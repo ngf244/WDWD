@@ -2,12 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 	header {
@@ -75,7 +77,6 @@
 		margin: 10px;
 		/* line-height: 40px; */
 		font-weight: bold;
-		display: inline-block;
 		cursor: pointer;
 		
 		
@@ -186,6 +187,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		cursor: pointer;
 	}
 	
 	#menuHeaderWrap {
@@ -364,7 +366,7 @@
 					<div id="loginView" onclick="location.href='gologin.me';">login</div>
 			</c:if>
 				<c:if test="${ !empty sessionScope.loginUser }">
-          <div id="welcomeName">김대호님 환영합니다!</div>
+          <div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
           <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
           <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
           
@@ -375,19 +377,19 @@
                 <div style="height: 60px;"></div>
                 <div id="profile_wrap">
                   <div id="profile_img"><img src=''></div>
-                  <b>김대호 님</b>
+                  <b>${ sessionScope.loginUser.nickName } 님</b>
                 </div>
 
                 <div style="height: 30px;"></div>
 
                 <div class="smallMenu yellow">
                   <img src="${ contextPath }/resources/images/point.png">
-                  <br><b>100 POINT</b>
+                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.point }" type="number" groupingUsed="true"/> POINT</b>
                 </div>
 
                 <div class="smallMenu yellow">
                   <img src="${ contextPath }/resources/images/cash.png">
-                  <br><b>100 CASH</b>
+                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.cash }" type="number" groupingUsed="true"/> CASH</b>
                 </div>
 
                 <div class="smallMenu blue" onclick="goMyPage();">
@@ -453,69 +455,153 @@
 			<div>마이페이지</div>
 			<div>게시글 보기</div>
 			<div>작성 댓글 보기</div>
-			<div id="restrictBtn">제재</div>
+			<c:if test="${loginUser.userId == 'admin'}">
+				<div id="restrictBtn">제재</div>
+			</c:if>
 			<input type="hidden" name="userId">
 		</div>
 
 		<div id="restrictForm">
-			<form>
-				아이디 : <input type="text" name="resUserId" readonly>
+			<form method="POST" id="banForm">
+				닉네임 : <input type="text" name="banUserNick" readonly>
 				<br><br>
 				제재 사유 :
 				<br>
-				<textarea></textarea>
+				<textarea name="banContentBefore" class="banContentBefore1"></textarea>
+				<input type="hidden" name="banContent" class="banContent1">
 				<br><br>
 				제재 기간 : <br>
-				<input type="date" id="restrictToday"> ~ <input type="date" id="restrictTerm">
+				<input type="date" id="banToday"> ~ <input type="date" name="banTerm">
 				<br>
 				<div>
-					<button type="button" class="registRes">등록</button>
+					<button type="button" class="regisBan">등록</button>
 					<button type="button" class="cancelRes">취소</button>
 				</div>
 			</form>
 		</div>
 
 		<div id="reportForm">
-			<form>
-				글 번호 : <input type="text" name="boardNo" readonly>
+			<form method="POST" id="reportingForm">
+				글 번호 : <input type="text" name="boNum" readonly>
+				<input type="hidden" name="deCate" readonly>
 				<br><br>
-				신고 대상 : <input type="text" name="reported" readonly>
+				신고 대상 : <input type="text" name="deReportedNick" readonly>
 				<br><br>
-				신고자 : <input type="text" name="reporter" readonly>
+				신고자 : <input type="text" name="deReporterNick" readonly>
+				<input type="hidden" name="deReporterId" readonly>
 				<br><br> 
 				신고 사유 : 
 				<br>
-				<textarea></textarea>
+				<textarea name="deContent"></textarea>
 				<br><br>
 				
 				<div>
-					<button type="button" class="registRes">등록</button>
+					<button type="button" class="regisReport">등록</button>
 					<button type="button" class="cancelRes">취소</button>
 				</div>
 			</form>
 		</div>
+
 		<script>
 			$('#restrictBtn').click(function () {
 				$('#restrictForm').css('display','block');
 				var targetId = $(this).parent().children('input[name=userId]').val();
-				console.log(targetId);
-				$('#restrictForm input[name=resUserId]').val(targetId);
+				$('#restrictForm input[name=banUserNick]').val(targetId.trim());
 				// var now = new Date();
 				// var date = now.getDate();
 				// var month = now.getMonth()+1;
 				// var year = now.getFullYear();
 				// var com = year + " - " + month + " - " + date;
-				document.getElementById("restrictToday").valueAsDate = new Date();
+				document.getElementById("banToday").valueAsDate = new Date();
 			})
 
 			$('.cancelRes').click(function () {
 				$('#restrictForm').css('display','none');
 				$('#reportForm').css('display','none');
-
-				console.log($('#restrictToday').val());
-				console.log($('#restrictTerm').val());
 			})
 
+			$('.regisReport').click(function () {
+				var formData = $('#reportingForm').serialize();
+
+				$.ajax({
+					cache : false,
+					url : "insertReport.au",
+					type : 'POST', 
+					data : formData, 
+					success : function(data) {
+						if(data.trim() == "전송완료"){
+							swal("Send Complete", "신고 완료", "success");
+							$('.cancelRes').trigger('click');
+						}
+					}
+				});
+			})
+
+			$('.regisBan').click(function () {
+				var banContentBefore = $('.banContentBefore1').val();
+				if(banContentBefore.length < 5){
+                    swal("error", "사유 5자 이상 입력해야함", "error");
+					return false;
+                }
+
+				var checkend = $('input[name=banTerm]').eq(0).val();
+                var checkstart = $('#banToday').val();
+				
+				// console.log(checkstart);
+                // console.log(checkend);
+                if(checkend == ""){
+                    swal("error", "해제 예정일 넣어라", "error");
+                    return false;
+                }
+
+                // 날짜 비교 모듈
+                var startDateArr = checkstart.split('-');
+                var endDateArr = checkend.split('-');
+                        
+                var startDateCompare = new Date(startDateArr[0], parseInt(startDateArr[1])-1, startDateArr[2]);
+                var endDateCompare = new Date(endDateArr[0], parseInt(endDateArr[1])-1, endDateArr[2]);
+                
+                // console.log(startDateArr);
+                // console.log(endDateArr);
+                // console.log(startDateCompare);
+                // console.log(startDateCompare.getTime());
+                // console.log(endDateCompare);
+                // console.log(endDateCompare.getTime());
+
+                if(startDateCompare.getTime() > endDateCompare.getTime()) {
+                    swal("error", "어떻게 종료일이 시작일보다 빠르냐 멍청아", "error");
+                    return false;
+                }
+				swal({
+                    title: "Confirm",
+                    text: "정말 제재하시겠습니까?",
+                    icon: "warning",
+                    buttons: ["NO", "YES"],
+                    dangerMode: true,
+                }).then((YES) => {
+                    if (YES) {
+						var banContentAfter = banContentBefore.replace(/(?:\r\n|\r|\n)/g, '<br />');
+						$('.banContent1').val(banContentAfter);
+
+						var formData = $('#banForm').serialize();
+
+						$.ajax({
+							cache : false,
+							url : "insertBan.au",
+							type : 'POST', 
+							data : formData, 
+							success : function(data) {
+								if(data.trim() == 1){
+									swal("Restrict Complete", "제재 완료", "success");
+									$('.cancelRes').trigger('click');
+								}
+							}
+						});
+					}else{
+                        return false;
+                    }
+				})
+			})
 		</script>
 					
 		
@@ -559,8 +645,49 @@
 					}
 					
 					
-					if('${param.error}' == "1") {
-						alert('작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.');
+					function checkTime(board) {
+						var timer = setInterval(function() {
+							if(new Date().getTime() >= new Date(board.cbDate).getTime()) {
+								$.ajax({
+									url: 'timeOut.ch',
+									data: {boNum: board.boNum},
+									type: 'post',
+									success: function(data){
+										clearInterval(timer);
+									}
+								});
+								clearInterval(timer);
+							}
+						}, 1000);
+					}
+					
+					if("${sessionScope.loginUser.nickName}" == '운영자') {
+						$.ajax({
+							url: 'checkTime.ch',
+							type: 'post',
+							success: function(data){
+								for(var i = 0; i < data.list.length; i++) {
+									checkTime(data.list[i]);
+								}
+							}
+						});
+					}
+					
+					if('${param.sysMsg}' == "1") {
+						swal({
+							title: "작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.",
+							icon: "error"
+						});
+					} else if('${param.sysMsg}' == "2") {
+						swal({
+							title: "선택 완료되었습니다.",
+							icon: "success"
+						});
+					} else if('${param.sysMsg}' == "3") {
+						swal({
+							title: "작성 완료되었습니다.",
+							icon: "success"
+						});
 					}
 				</script>
 			</div>

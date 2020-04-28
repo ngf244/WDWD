@@ -32,17 +32,32 @@
 			default, default, default, #{boWriter}, default, #{boCategory}, default)
 	</insert>
 	
-	<insert id="insertContents" parameterType="arraylist">
+	<insert id="insertContents" parameterType="Contents">
 		insert into contents
-		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, bo_seq.currval)
+		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, 
+		<choose>
+			<when test="conRef == 0">
+			bo_seq.currval)
+			</when>
+			<otherwise>
+			#{conRef})
+			</otherwise>
+		</choose>
 	</insert>
+	
 	
 	<select id="freeDetail" parameterType="_int" resultMap="boardResultSet">
 		select b.*, m.me_nick
 		from board b
     		join member m on (bo_writer = me_id)
-		where bo_num = #{boNum}
+		where bo_num = #{boNum} and bo_del = 'N'
 	</select>
+	
+	<update id="plusViewCount">
+		update board
+		set bo_view = bo_view + 1
+		where bo_num = #{boNum}
+	</update>
 	
 	<resultMap type="Board" id="boardResultSet">
 		<id property="boNum" column="BO_NUM"/>
@@ -92,4 +107,22 @@
 		delete from scrap
 		where me_id = #{userId} and bo_num = #{boNum}
 	</delete>
+	
+	<update id="plusReplyCount">
+		update board
+		set bo_renum = bo_renum + 1
+		where bo_num = #{boNum}
+	</update>
+	
+	<update id="deleteBoard">
+		update board
+		set bo_del = 'Y'
+		where bo_num = #{boNum}
+	</update>
+	
+	<update id="boardUpdate">
+		update board
+		set bo_title = #{boTitle}, bo_con = #{boContent}, bo_update = sysdate, bo_category = #{boCategory}
+		where bo_num = #{boNum}
+	</update>
 </mapper>

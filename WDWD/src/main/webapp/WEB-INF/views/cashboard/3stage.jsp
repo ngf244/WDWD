@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,26 +15,13 @@
 		min-height: 500px;
 		height: auto;
 	}
-	#registContent {
-		width: 60%;
-		height: 500px;
-		float: left;
-	}
 	#buyerInfo {
-		width: 98%;
-		height: 150px;
+		width: 80%;
+		margin: 0 auto;
+		margin-bottom: 30px;
+		
+		border: 1px solid black;
 	}
-	#content {
-		width: 98%;
-		height: 300px;
-	}
-	#downloadArea {
-		width: 35%;
-		height: 500px;
-		float: right;
-	}
-	
-	
 	#btnList {
 		text-align: center;
 		margin-top: 30px;
@@ -69,64 +57,74 @@
 					</div>
 					
 					<div id="mainTitle">
-						참여 에디터 : <span>user01</span>
+						참여 에디터 : <span>${ cBoard.reId }</span>
 					</div>
 					
 					<div id="registWrap">
-						<div id="registContent">
-							<div id="buyerInfo">
-								<div class="leftLine">
-									의뢰인 정보
-								</div>
-								<div class="rightLine">
-									정문종 하나 284-891239-76707 <br>
-									010-5217-5324
-								</div>
+						<div id="buyerInfo">
+							<div class="leftLine">
+								의뢰인 정보
 							</div>
-							
-							<textarea name="content" id="content"></textarea>
+							<div class="rightLine">
+								정문종 하나 284-891239-76707 <br>
+								010-5217-5324
+							</div>
 						</div>
 						
-						<script type="text/javascript">
-							var oEditors = [];
-							nhn.husky.EZCreator.createInIFrame({
-							 oAppRef: oEditors,
-							 elPlaceHolder: "content",
-							 sSkinURI: "../../se2/SmartEditor2Skin.html",
-							 fCreator: "createSEditor2"
-							});
-						</script>
+						<div id="boardcontent">
+							${ reqB.boContent }
+						</div>
 						
-						<div id="downloadArea">
-							<div id="mainTitle">
-								자료 첨부파일
-							</div>
+						<div class="leftLine">
+							<span class="redColor">＞ </span>첨부파일
+						</div>
+						<div class="rightLine">
+							<c:if test="${ empty reqFileList}">
+								첨부된 파일이 없습니다.
+							</c:if>
 							
-							<br>
-							
-							logo.jpg <div class="download">download</div><br>
-							logo.jpg <div class="download">download</div><br>
-							logo.jpg <div class="download">download</div><br>
-							logo.jpg <div class="download">download</div><br>
+							<c:if test="${ !empty reqFileList }">
+								<c:forEach var="file" items="${ reqFileList }">
+									<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
+								</c:forEach>
+							</c:if>
 						</div>
 					</div> <br>
 					
 					<div id="btnList">
-						<div id="submit" class="button">작성완료</div>
 						<div id="cancle" class="button">돌아가기</div>
 					</div>
 					
 					<script>
-						$('#submit').hover(function(){
-							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
-						}, function(){
-							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
-						});
 						$('#cancle').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
 						}, function(){
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						})
+						
+						$('.downloadBtn').click(function(e){
+							if("${reqB.boWriter}" != "${sessionScope.loginUser.userId}" && "${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
+								e.preventDefault();
+								swal({
+									title: "원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.",
+									icon: "error"
+								});
+							}
+						})
+						
+						for(var i = 0; i < $('#boardcontent img').length; i++) {
+							var $watermark = $('<img>');
+							if('${ cBoard.cbSecret }' == 'Y') {
+								$watermark.attr('class', 'watermark_free');
+								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+							} else {
+								$watermark.attr('class', 'watermark_lock');
+								$watermark.attr('src', '${ contextPath }/resources/images/watermark_lock.jpg');
+							}
+							
+							$('header').append($watermark);
+							setWaterMark($('#boardcontent img').eq(i), $watermark);
+						}
 					</script>
 				</div>	
 			</div>

@@ -47,6 +47,10 @@ public class BoardDAO {
 	public ArrayList<Contents> getContents(SqlSessionTemplate sqlSession, int boNum) {
 		return (ArrayList)sqlSession.selectList("contentsMapper.getContents", boNum);
 	}
+	
+	public int plusViewCount(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("boardMapper.plusViewCount", boNum);
+	}
 
 	// 추천 관련 DAO
 	public int checkRecommendExist(SqlSessionTemplate sqlSession, HashMap recommendRequest) {
@@ -77,6 +81,56 @@ public class BoardDAO {
 		return (ArrayList)sqlSession.selectList("replyMapper.getReplyList2", boNum);
 	}
 
+	public ArrayList<Contents> getReplyContents(SqlSessionTemplate sqlSession, ArrayList<Reply> replyArr) {
+		ArrayList<Contents> replyContents = new ArrayList<Contents>();
+		for(Reply r : replyArr) {
+			replyContents.add((Contents)sqlSession.selectOne("contentsMapper.getReplyContents", r));
+		}
+		return replyContents;
+	}
+	public ArrayList<Contents> getReply2Contents(SqlSessionTemplate sqlSession, ArrayList<Reply> replyArr) {
+		ArrayList<Contents> reply2Contents = new ArrayList<Contents>();
+		for(Reply r : replyArr) {
+			reply2Contents.add((Contents)sqlSession.selectOne("contentsMapper.getReplyContents", r));
+		}
+		return reply2Contents;
+	}
+
+	public int insertOneContent(SqlSessionTemplate sqlSession, Contents c) {
+		return sqlSession.insert("contentsMapper.insertOneContent", c);
+	}
+
+	public int insertReply(SqlSessionTemplate sqlSession, Reply r) {
+		return sqlSession.insert("replyMapper.insertReply", r);
+	}
+
+	public int plusReplyCount(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("boardMapper.plusReplyCount", boNum);
+	}
+
+	public int deleteReply(SqlSessionTemplate sqlSession, int reNum) {
+		return sqlSession.update("replyMapper.deleteReply", reNum);
+	}
+
+	public int deleteContent(SqlSessionTemplate sqlSession, String conCop) {
+		return sqlSession.update("contentsMapper.deleteContent", conCop);
+	}
+
+	public int deleteBoard(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("boardMapper.deleteBoard", boNum);
+	}
+
+	public int deleteContents(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.update("contentsMapper.deleteContents", boNum);
+	}
+
+	public int deleteBoardContents(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.delete("contentsMapper.deleteBoardContents", boNum);
+	}
+
+	public int boardUpdate(SqlSessionTemplate sqlSession, Board b) {
+		return sqlSession.update("boardMapper.boardUpdate", b);
+	}
 
 
 }

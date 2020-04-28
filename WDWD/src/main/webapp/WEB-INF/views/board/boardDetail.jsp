@@ -127,12 +127,12 @@
 	
 	.replyline{
 		min-height: 100px;
-		background-color: aliceblue;
 		margin: auto;
 		width: 90%;
 	}
 	
 	.replycommand{
+		background-color: aliceblue;
 		height: 30px;
 		border-bottom: 1px solid gray;
 	}
@@ -163,6 +163,7 @@
 	}
 
 	.replyinput{
+		margin-top: 20px;
 		background-color: rgba(215, 220, 223, 0.151);
 		display: flex;
 		padding-top: 20px;
@@ -381,22 +382,32 @@
 		padding-top: 20px;
 	}
 
-	.replies>div:first-child{
-		margin-left: 4%;
-		padding-top: 10px;
+	.replies>div:nth-of-type(1){
+		margin-left: 2%;
+		padding-top: 5px;
 		padding-bottom: 10px;
+		width: 40%;
 	}
 
 	.replies>div:nth-of-type(2){
-		padding-top: 10px;
-		margin-left: 77%;
-		width: 7%;
+		position: absolute;
+		padding-top: 5px;
+		right: 2%;
+		width: 8%;
 		height: 20px;
+		text-align: right;
 	}
 
 	.writingDate{
 		color: coral;
 		font-size: small;
+	}
+
+	.deleteReply{
+		color: rgba(255, 57, 57, 0.959);
+		font-size: small;
+		cursor: pointer;
+		font-weight: bold;
 	}
 
 	.reportReply{
@@ -411,8 +422,8 @@
 	}
 
 	.replyWriting{
-		margin-left: 5%;
-		width: 95%;
+		margin-left: 4%;
+		width: 96%;
 	}
 
 	.replyPicture{
@@ -422,6 +433,7 @@
 	.replyPicture img{
 		max-height: 150px;
 		width: auto;
+		margin-top: 10px;
 	}
 
 	.replyWriteArea{
@@ -436,20 +448,21 @@
 		display: inline-block;
 		position: absolute;
 		bottom: 20px;
-		right: 5px;
-		width: 5%;
+		right: 2%;
+		width: 8%;
 		height: 20px;
+		text-align: right;
 	}
 
 	.reply2Btn span{
-		border: 1px solid black;
 		cursor: pointer;
 		transition: 1s ease;
 		width: 5%;
+		color: gray;
 	}
 
 	.reply2Btn span:hover{
-		background-color: black;
+		background-color: gray;
 		color: white;
 	}
 
@@ -460,29 +473,109 @@
 		position: relative;
 		background-color: white;
 		padding-bottom: 20px;
-		padding-left: 100px;
+		padding-left: 5%;
 		padding-top: 20px;
 	}
 
 	.replies2>img{
 		position: absolute;
-		left: 5%;
-		top: 3%;
-		width: 3%;
+		left: 3%;
+		top: 20%;
+		width: 2%;
 		height: auto;
 	}
 
-	.replies2>div:first-child{
-		margin-left: 4%;
-		padding-top: 10px;
+	.replies2>div:nth-of-type(1){
+		margin-left: 2%;
+		padding-top: 5px;
 		padding-bottom: 10px;
+		width: 40%;
 	}
 
 	.replies2>div:nth-of-type(2){
-		padding-top: 10px;
-		margin-left: 75%;
-		width: 7%;
+		position: absolute;
+		padding-top: 5px;
+		right: 2%;
+		width: 8%;
 		height: 20px;
+		text-align: right;
+	}
+
+	.writeReplyAgain{
+		width: 95%;
+		margin: auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 50px;
+		background-color: rgba(56, 79, 209, 0.534);
+		border: outset;
+		display: none;
+		cursor: pointer;
+	}
+
+	.WelcomeLogin{
+		width: 95%;
+		margin: auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 50px;
+		background-color: rgba(56, 79, 209, 0.534);
+		border: outset;
+		cursor: pointer;
+	}
+
+	.rewrite, .delete {
+		display: inline-block;
+		border-radius: 4px;
+		background-color: #f4511e;
+		border: none;
+		color: #FFFFFF;
+		text-align: center;
+		font-size: 14px;
+		padding: 10px;
+		width: 100px;
+		transition: all 0.5s;
+		cursor: pointer;
+		margin-right: 5px;
+		vertical-align: middle;
+		}
+
+	.rewrite span, .delete span {
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		transition: 0.5s;
+	}
+
+	.rewrite span:after, .delete span:after {
+		content: '\00bb';
+		position: absolute;
+		opacity: 0;
+		top: 0;
+		right: -20px;
+		transition: 0.5s;
+	}
+
+	.rewrite:hover span, .delete:hover span {
+		padding-right: 25px;
+	}
+
+	.rewrite:hover span:after, .delete:hover span:after {
+		opacity: 1;
+		right: 0;
+	}
+
+	.writingtitle{
+		position: relative;
+	}
+
+	#writerMenu{
+		position: absolute;
+		display: inline-block;
+		right: 3%;
+		top: 65%;
 	}
 </style>
 </head>
@@ -494,11 +587,16 @@
 		<div id="main" style="background: white">
 			
 			<div class="forbackcolor">
-				<div class="freeboard">자유갤러리
+				<div class="freeboard">${ b.boCategory }
 				</div>
 				
 				<div class="writingtitle">
-					<h3>${ b.boTitle }</h3>
+					<h3 style="display: inline-block; vertical-align: middle;">${ b.boTitle }</h3>
+					<c:if test="${ loginUser.userId == b.boWriter or loginUser.userId == 'admin'}">
+						<div id="writerMenu">
+							<button class="rewrite"><span>수정 </span></button><button class="delete"><span>삭제 </span></button>
+						</div>
+					</c:if>
 					<input type="hidden" name="boardNum" value="${ b.boNum }">
 				</div>
 				
@@ -516,9 +614,6 @@
 						var dir = '${arr}';
 						$('.writinglist img').eq(${ i.count }-1).attr('src','${ contextPath }/resources/free_photo_upload/'+dir);
 					</script>
-					<!-- ${ arr }
-					------
-					${ i.count } -->
 				</c:forEach>
 
 				<div class="wrtingCommendArea">
@@ -538,6 +633,13 @@
 						<div>신고하기</div>
 					</div>
 				</div>
+				
+				<c:url var="deleteBoardUrl" value="delete.bo">
+					<c:param name="boNum" value="${ b.boNum }"/>
+				</c:url>
+				<c:url var="reviseBoardUrl" value="revise.bo">
+					<c:param name="boNum" value="${ b.boNum }"/>
+				</c:url>
 
 				<script>
 					$('.recommendArea').click(function () {
@@ -545,7 +647,7 @@
 						var userId = "${loginUser.userId}";
 
 						if(userId == ""){
-							alert('로그인 후 이용해 주세요');
+							swal("You need Login", "로그인 후 사용 가능합니다.", "error");
 						} else {
 							$.ajax({
 								url : "addRecommend.bo",
@@ -553,7 +655,7 @@
 								type : "get",
 								success : function (data) {
 									if(data.trim() == "already"){
-										alert('게시물은 한번만 추천할 수 있습니다.');
+										swal("can't recommend twice", "게시물은 한번만 추천 가능합니다.", "error");
 									} else {
 										var count = Number($('#recommendCount').text());
 										// count *= 1;
@@ -566,27 +668,66 @@
 						}
 					})
 						
-						$('.scrapBtnArea').click(function () {
-							var boNum = $('input[name=boardNum]').val();
-							var userId = "${loginUser.userId}";
-							// var condition = $('#scrapCondition').text();
-							if(userId == ""){
-								alert('로그인 후 이용해 주세요');
-							} else {
-								$.ajax({
-									url : "scrapToggle.bo",
-									data : {boNum : boNum, userId : userId},
-									type : "get",
-									success : function (data) {
-										if(data.trim() == "insert"){
-											$('#scrapCondition').text('스크랩 해제');
-										} else {
-											$('#scrapCondition').text('게시물 스크랩');
-										}
+					$('.scrapBtnArea').click(function () {
+						var boNum = $('input[name=boardNum]').val();
+						var userId = "${loginUser.userId}";
+						// var condition = $('#scrapCondition').text();
+						if(userId == ""){
+							swal("You need Login", "로그인 후 사용 가능합니다.", "error");
+						} else {
+							$.ajax({
+								url : "scrapToggle.bo",
+								data : {boNum : boNum, userId : userId},
+								type : "get",
+								success : function (data) {
+									if(data.trim() == "insert"){
+										$('#scrapCondition').text('스크랩 해제');
+									} else {
+										$('#scrapCondition').text('게시물 스크랩');
 									}
-								})
-							}
+								}
+							})
+						}
+					})
+
+					$('.delete').click(function () {
+						swal({
+							title: "Are you sure?",
+							text: "삭제 후 복구하실 수 없습니다",
+							icon: "warning",
+							buttons: true,
+							dangerMode: true,
 						})
+						.then((willDelete) => {
+							if (willDelete) {
+								location.href = "${deleteBoardUrl}";
+							} else {
+								return false;
+							}
+							});
+					})
+
+					$('.rewrite').click(function () {
+						swal({
+                           title: "글을 수정하시겠습니까?",
+                           icon: "info",
+                           buttons : {
+                              	cancle : {
+                                 	text : '취소',
+                                 	value : false
+                             	},
+                              	confirm : {
+                                 	text : '수정하기',
+                                 	value : true
+                              	}
+                           	}
+                        }).then((result) => {
+                           if(result) {
+								location.href = "${reviseBoardUrl}";
+                           	} else {
+                           	}
+                        });
+					})
 				</script>
 			</div>
 
@@ -603,32 +744,81 @@
 			<!-- 글쓰기 경계선 -->
 			<div class="replyline">
 				<div class="replycommand">
-					<span>댓글</span><span>(${b.boReNum})</span><span>등록순</span><span>|</span><span>최신순</span>
+					<span>댓글</span><span>(${b.boReNum})</span><span onclick="changeReplyOrder('asc')">등록순</span><span>|</span><span onclick="changeReplyOrder('desc')">최신순</span>
 				</div>
-				
-				<c:forEach var="reply" items="${ ReplyArr }">
-					<div class = replies>
-					<input type="hidden" value="${ reply.rpNum }">
-						<div>
-							<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
-						</div>
-						<div>
-							<span class="reportReply">신고하기</span>
-						</div>
-						<div class="replyWriting">
-							<div class="replyPicture">
-								<img>
-							</div>
-							<div class="replyWriteArea">${ reply.rpContent }
-							</div>
+				<!-- 댓글 리스트 뿌리기 -->
+				<c:forEach var="reply" items="${ ReplyArr }" varStatus="i">
+					<div class="re num${i.count}">
+						<div class = replies>
+							<input type="hidden" value="${ reply.rpNum }">
+							<c:if test="${ reply.rpStatus == 'N' }">
+								<div>
+									<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
+									<c:if test="${ reply.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
+										<span class="deleteReply">[삭 제]</span>
+									</c:if>
+								</div>
+								<div>
+									<span class="reportReply">신고하기</span>
+								</div>
+								<div class="replyWriting">
+									<div class="replyPicture">
+									<c:forEach var="reCon" items="${ ReplyContents }">
+										<c:if test="${ reply.rpConNum == reCon.conNum }">
+											<img src="${contextPath}/resources/free_photo_upload/${ reCon.conUrl }">
+										</c:if>
+									</c:forEach>
+									</div>
+									<div class="replyWriteArea">${ reply.rpContent }
+									</div>
+								</div>
+							</c:if>
+							<c:if test="${ reply.rpStatus == 'Y' }">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;삭제된 댓글입니다.
+							</c:if>
 							<div class="reply2Btn">
-								<span> 댓글 </span>
+								<span> [ 댓 글 ] </span>
 							</div>
 						</div>
+					
+					<!-- 대댓글 리스트 뿌리기 -->
+						<c:forEach var="reply2" items="${ ReplyArr2 }">
+							<c:if test="${ reply2.rpRp == reply.rpNum }">
+								<div class = replies2>
+									<input type="hidden" value="${ reply2.rpNum }">
+									<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
+									<c:if test="${reply2.rpStatus == 'N' }">
+										<div>
+											<span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
+											<c:if test="${ reply2.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
+												<span class="deleteReply">[삭 제]</span>
+											</c:if>
+										</div>
+										<div>
+											<span class="reportReply">신고하기</span>
+										</div>
+										<div class="replyWriting">
+											<div class="replyPicture">
+											<c:forEach var="re2Con" items="${ Reply2Contents }">
+												<c:if test="${ reply2.rpConNum == re2Con.conNum }">
+													<img src="${contextPath}/resources/free_photo_upload/${ re2Con.conUrl }">
+												</c:if>
+											</c:forEach>
+											</div>
+											<div class="replyWriteArea">${ reply2.rpContent }
+											</div>
+										</div>
+									</c:if>
+									<c:if test="${ reply2.rpStatus == 'Y' }">
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;삭제된 댓글입니다.
+									</c:if>
+								</div>
+							</c:if>
+						</c:forEach>
 					</div>
 				</c:forEach>
 
-				<div class = replies>
+				<!-- <div class = replies>
 					<input type="hidden" value="1">
 					<div>
 						<span class="smallOption">아이디1</span><span class="writingDate">(2020-04-13 12:10:50)</span>
@@ -669,88 +859,39 @@
 					</div>
 				</div>
 
-				<div class = replies>
-					<input type="hidden" value="2">
-					<div>
-						<span class="smallOption">아이디1</span><span class="writingDate">(2020-04-13 12:10:50)</span>
-					</div>
-					<div>
-						<span class="reportReply">신고하기</span>
-					</div>
-					<div class="replyWriting">
-						<div class="replyPicture">
-							<img src="${ contextPath }/resources/images/x-button.png">
-						</div>
-						<div class="replyWriteArea">asfdsaf<br>dafadsfsaf<br>많이 구려보이냐<br>응
-						</div>
-						<div class="reply2Btn">
-							<span> 댓글 </span>
-						</div>
-					</div>
-				</div>
-
-				<div class = replies style="display: none;">
-					<input type="hidden" value="3">
-					<div>
-						<span class="smallOption">아이디1</span><span class="writingDate">(2020-04-13 12:10:50)</span>
-					</div>
-					<div>
-						<span class="reportReply">신고하기</span>
-					</div>
-					<div class="replyWriting">
-						<div class="replyPicture">
-							<img src="">
-						</div>
-						<div class="replyWriteArea">댓글 디폴트
-						</div>
-						<div class="reply2Btn">
-							<span> 댓글 </span>
-						</div>
-					</div>
-				</div>
-
-				<div class = replies2 style="display: none;">
-					<input type="hidden" value="3-2">
-					<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
-					<div>
-						<span class="smallOption">아이디1</span><span class="writingDate">(2020-04-13 12:10:50)</span>
-					</div>
-					<div>
-						<span class="reportReply">신고하기</span>
-					</div>
-					<div class="replyWriting">
-						<div class="replyPicture">
-							<img src="${ contextPath }/resources/images/x-button.png">
-						</div>
-						<div class="replyWriteArea">대댓글 디폴트
-						</div>
-						<div class="reply2Btn">
-							<span> 댓글 </span>
-						</div>
-					</div>
-				</div>
 				<!-- --------------------------------------------------- -->
-				<div class="replyinput">
-					<input type="hidden" name="replyPosition">
-					<div class="replyer"><span>김대호</span></div>
-					<div class="replycontent">
-						<div class="replyimgArea">
-							<img class="inputimg">
-							<img class="inputimgX" src="${ contextPath }/resources/images/x-button.png">
-							<input type="file" name="attachFile">
+				<c:if test="${not empty loginUser}">
+					<div class="replyinput">
+						<input type="hidden" name="replyPosition" value="0">
+						<div class="replyer"><span>${loginUser.nickName}</span></div>
+						<div class="replycontent">
+							<div class="replyimgArea">
+								<img class="inputimg">
+								<img class="inputimgX" src="${ contextPath }/resources/images/x-button.png">
+								<input type="file" name="attachFile">
+							</div>
+							<div class="replyLetter">
+								<textarea cols="110" rows="3"></textarea>
+							</div>
 						</div>
-						<div class="replyLetter">
-							<textarea cols="110" rows="3"></textarea>
+						<div class="replyBtns">
+							<div class="replyBtn2">
+								<div class="inputfileBtn">파일 올리기</div>
+								<div class="addReplyBtn"> 등록 </div>
+							</div>
 						</div>
-						
 					</div>
-					<div class="replyBtns">
-						<div class="replyBtn2">
-							<div class="inputfileBtn">파일 올리기</div>
-							<div class="addReplyBtn"> 등록 </div>
-						</div>
+	
+					<div class="writeReplyAgain">
+						다시 돌아와(추후 게시글에 댓글달기로 변경)
 					</div>
-				</div>
+				</c:if>
+				<c:if test="${empty loginUser}">
+					<div class="WelcomeLogin" onclick="$('#loginView').click()">
+						댓글 입력은 로그인 후 가능합니다. 클릭하여 로그인하셍
+					</div>
+				</c:if>
+				
 				<!-- --------------------------------------------------- -->
 			</div>
   																				
@@ -783,37 +924,189 @@
 				})
 
 				$('.inputimgX').click(function () {
-					if(confirm('첨부 파일 삭제하시겠습니까?')){
-						$('input[name=attachFile]').val('');
-						$('.inputimg').attr('src', '');
-						$('.inputimgX').css("display", "none");
-					}
+					swal({
+						title: "Are you sure?",
+						text: "삭제 후 복구하실 수 없습니다",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+					.then((willDelete) => {
+						if (willDelete) {
+							$('input[name=attachFile]').val('');
+							$('.inputimg').attr('src', '');
+							$('.inputimgX').css("display", "none");
+						} else {
+							return false;
+						}
+						});
+						
+					// if(confirm('첨부 파일 삭제하시겠습니까?')){
+					// 	$('input[name=attachFile]').val('');
+					// 	$('.inputimg').attr('src', '');
+					// 	$('.inputimgX').css("display", "none");
+					// }
 				})
 
 				$('.reply2Btn').click(function () {
-   					$(this).parent().parent().after($('.replyinput'));
-					var replyNum = $(this).parent().parent().children('input').val();
+					$('.replyinput').css({"margin-left":"5%","width":"95%","height":"auto"});
+   					$(this).parent().after($('.replyinput'));
+					$('.writeReplyAgain').css({"display":"flex"});
+					var replyNum = $(this).parent().children('input').val();
 					console.log(replyNum);
 					$('input[name=replyPosition]').val(replyNum);
 				})
 
-				$('.reportReply').click(function () {
-					var boardNo = $('input[name=boardNum]').val();
-					console.log(boardNo);
-					var reported = $(this).parent().prev().children()[0].innerText;
-					console.log(reported);
+				$('.writeReplyAgain').click(function () {
+					$(this).before($('.replyinput'));
+					$('.replyinput').css({"margin-left":"0%","width":"100%","height":"auto"});
+					$(this).css('display','none');
+					$('input[name=replyPosition]').val(0);
+				})
 
-					reportForm(boardNo, reported);
+				$('.reportReply').click(function () {
+					var userId = "${loginUser.userId}";
+					if(userId==""){
+						swal("You need Login", "로그인 후 사용 가능합니다.", "error");
+						return false;
+					}
+
+					var boardNo = $('input[name=boardNum]').val();
+					var reported = $(this).parent().prev().children()[0].innerText;
+					var category = 9;
+
+					reportForm(boardNo, reported, 2);
 				})
 				$('.reportBtnArea').click(function () {
-					var boardNo = $('input[name=boardNum]').val();
-					console.log(boardNo);
-					var reported = $(this).closest('.forbackcolor').find('.smallOption').text();
-					console.log(reported);
+					var userId = "${loginUser.userId}";
+					if(userId==""){
+						swal("You need Login", "로그인 후 사용 가능합니다.", "error");
+						return false;
+					}
 
-					reportForm(boardNo, reported);
+					var boardNo = $('input[name=boardNum]').val();
+					var reported = $(this).closest('.forbackcolor').find('.smallOption').text();
+
+					reportForm(boardNo, reported, 1);
 				})
 
+				function changeReplyOrder(option) {
+					var divNum = $('.re').length;
+					if(option == "desc"){
+						for(var i = 1; i <= divNum; i++){
+							$('.replycommand').after($('.num'+i));
+						}
+					} else {
+						for(var i = 0; i < divNum; i++){
+							$('.replycommand').after($('.num'+(divNum-i)));
+						}
+					}
+				}
+
+				$('.addReplyBtn').click(function () {
+
+					var userId = '${loginUser.userId}';
+					var replyContentbefore = $('.replyLetter textarea').val();
+					//textarea 내 줄바꿈 값을 <br>로 치환해줌
+					var replyContent = replyContentbefore.replace(/(?:\r\n|\r|\n)/g, '<br />');
+					
+					var file = $('input[name=attachFile]')[0].files[0];
+					var fileValue = $('input[name=attachFile]').val();
+					var fileName = fileValue.substring(fileValue.lastIndexOf("\\") + 1);
+					var boNum = $('input[name=boardNum]').val();
+					var rprp = $('input[name=replyPosition]').val();
+
+					var formData = new FormData();
+					formData.append("userId", userId);
+					formData.append("replyContent", replyContent);
+					formData.append("file", file);
+					formData.append("boNum", boNum);
+					formData.append("rprp", rprp);
+
+					// console.log(userId);
+					console.log(fileName);
+					console.log(replyContent);
+					// console.log(rprp);
+
+					if(fileName == "" && replyContent == ""){
+						
+						return false;
+					}
+
+					$.ajax({
+						type: 'POST',
+						url: 'insertReply.bo', 
+						processData: false, // 필수 
+						contentType: false, // 필수 
+						data: formData, 
+						success: function(data) {
+							console.log(data.trim() == "성공");
+							if(data.trim() == "성공"){
+								location.reload();
+							}
+						}
+					})
+				})
+
+				$('.deleteReply').click(function () {
+					swal({
+						title: "Are you sure?",
+						text: "삭제 후 복구하실 수 없습니다",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+					.then((willDelete) => {
+						if (willDelete) {
+							var reNum = $(this).parent().parent().children('input').val()
+							var src = $(this).parent().parent().find('.replyWriting').find('img').attr('src');
+							var conCop = "";
+
+							if(typeof src != "undefined"){
+								conCop = src.substring(src.lastIndexOf("/")+1);
+							}
+							
+							$.ajax({
+								type: 'POST',
+								url: 'deleteReply.bo', 
+								data: {reNum : reNum, conCop : conCop},
+								success: function(data) {
+									if(data.trim() == "성공"){
+										location.reload();
+									}
+								}
+							})
+
+						} else {
+							return false;
+						}
+						});
+
+
+
+					// if(!confirm('정말 삭제하겠슴??')){
+					// 	return false;
+					// }
+					
+					// var reNum = $(this).parent().parent().children('input').val()
+					// var src = $(this).parent().parent().find('.replyWriting').find('img').attr('src');
+					// var conCop = "";
+
+					// if(typeof src != "undefined"){
+					// 	conCop = src.substring(src.lastIndexOf("/")+1);
+					// }
+					
+					// $.ajax({
+					// 	type: 'POST',
+					// 	url: 'deleteReply.bo', 
+					// 	data: {reNum : reNum, conCop : conCop},
+					// 	success: function(data) {
+					// 		if(data.trim() == "성공"){
+					// 			location.reload();
+					// 		}
+					// 	}
+					// })
+				})
 				
 			</script>
   																				

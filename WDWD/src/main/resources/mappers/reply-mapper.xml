@@ -5,14 +5,16 @@
 		select r.*, m.me_nick
 		from reply r
     		join member m on(r.rp_writer = m.me_id)
-		where rp_refnum = 101 and rp_rp is null
+		where rp_refnum = #{boNum} and rp_rp is null
+		order by rp_date
 	</select>
 	
 	<select id="getReplyList2" resultMap="replyResultSet">
 		select r.*, m.me_nick
 		from reply r
 		    join member m on(r.rp_writer = m.me_id)
-		where rp_refnum = 101 and rp_rp is not null
+		where rp_refnum = #{boNum} and rp_rp is not null
+		order by rp_date
 	</select>
 	
 	<resultMap type="Reply" id="replyResultSet">
@@ -26,4 +28,38 @@
 		<result property="rpRp" column="RP_RP"/>
 		<result property="rpWriterNick" column="ME_NICK"/>
 	</resultMap>
+	
+	<insert id="insertReply">
+		insert into reply
+		values(
+			rp_seq.nextval
+			, #{rpContent}
+			, to_char(sysdate,'yyyy/mm/dd hh24:mi:ss')
+			, default
+			, #{refNum}
+			, #{rpWriter}
+			<choose>
+				<when test="rpConNum == 1">
+				, con_seq.currval
+				</when>
+				<otherwise>
+				, null
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="rpRp == 0">
+				, null
+				</when>
+				<otherwise>
+				, #{rpRp}
+				</otherwise>
+			</choose>
+		)
+	</insert>
+	
+	<update id="deleteReply">
+		update reply
+		set rp_del = 'Y'
+		where rp_num = #{reNum}
+	</update>
 </mapper>

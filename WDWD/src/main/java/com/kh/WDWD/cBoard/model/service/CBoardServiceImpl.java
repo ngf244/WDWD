@@ -1,6 +1,7 @@
 package com.kh.WDWD.cBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,13 @@ public class CBoardServiceImpl implements CBoardService {
 	private SqlSessionTemplate sqlSession;
 
 		@Override
-	public int getListCount(String boGroup1) {
-		return cBoardDAO.getListCount(sqlSession, boGroup1);
+	public int getListCount(HashMap<String, String> searchMap) {
+		return cBoardDAO.getListCount(sqlSession, searchMap);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectBoardList(String boGroup1, PageInfo pi) {
-		return cBoardDAO.selectBoardList(sqlSession, boGroup1, pi);
+	public ArrayList<CBoard> selectBoardList(HashMap<String, String> searchMap, PageInfo pi) {
+		return cBoardDAO.selectBoardList(sqlSession, searchMap, pi);
 	}
 	
 	
@@ -100,8 +101,8 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public int registWrite(Board b) {
-		return cBoardDAO.registWrite(sqlSession, b);
+	public int registWrite(Board b, int boardNum) {
+		return cBoardDAO.registWrite(sqlSession, b, boardNum);
 	}
 	
 	@Override
@@ -115,14 +116,23 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public int getCateListCount2(CBoard cBoard) {
-		return cBoardDAO.getCateListCount2(sqlSession, cBoard);
+	public int getCateListCount2(HashMap searchMap) {
+		return cBoardDAO.getCateListCount2(sqlSession, searchMap);
 	}
-
+	
 	@Override
-	public ArrayList<CBoard> selectCashOneCateList(CBoard cBoard) {
-		return cBoardDAO.selectCashOneCateList(sqlSession, cBoard);
+	public ArrayList<CBoard> selectCashOneCateList(HashMap searchMap) {
+		return cBoardDAO.selectCashOneCateList(sqlSession, searchMap);
 	}
+//	@Override
+//	public int getCateListCount2(CBoard cBoard, String searchCate, String searchText) {
+//		return cBoardDAO.getCateListCount2(sqlSession, cBoard, searchCate, searchText);
+//	}
+//
+//	@Override
+//	public ArrayList<CBoard> selectCashOneCateList(CBoard cBoard, String searchCate, String searchText) {
+//		return cBoardDAO.selectCashOneCateList(sqlSession, cBoard, searchCate, searchText);
+//	}
 
 	@Override
 	public Chat sendChat(Chat c) {
@@ -137,6 +147,21 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public int registDelete(int boNum) {
 		return cBoardDAO.registDelete(sqlSession, boNum);
+	}
+
+	@Override
+	public int go3stage(int boNum) {
+		return cBoardDAO.go3stage(sqlSession, boNum);
+	}
+
+	@Override
+	public ArrayList<CBoard> checkTime() {
+		return cBoardDAO.checkTime(sqlSession);
+	}
+
+	@Override
+	public int timeOut(int boNum) {
+		return cBoardDAO.timeOut(sqlSession, boNum);
 	}
 
 }

@@ -130,6 +130,15 @@
 	a:visited {text-decoration: none;}
 	a:hover {text-decoration: none;}
 	
+	.watermark_free {
+		position: absolute;
+		opacity: 0.3;
+	}
+	.watermark_lock {
+		position: absolute;
+		opacity: 0.9;
+	}
+	
 	.range-slider__range {
 		-webkit-appearance: none;
 		width: calc(100%);
@@ -258,88 +267,98 @@
 			${ cBoard.boWriter }
 		</div>
 		
-		<c:if test="${ cBoard.boGroup ne 2 }">
+		<c:if test="${ cBoard.boGroup ne 2 && cBoard.cbStep eq 1 }">
 			<div class="leftLine">
 				<span class="redColor">＞ </span>마감일
 			</div>
-			<div class="rightLine">
-				<!-- 기한 : <span id="month">1</span>월 <span id="day">1</span>일 <span id="hour">12</span>시 -->
-				<img id="dateDay1" class="dateImg" src="${ contextPath }/resources/images/num0.PNG">
-				<img id="dateDay2" class="dateImg next1" src="${ contextPath }/resources/images/num0.PNG">
-				<img class="dateImg next2" src="${ contextPath }/resources/images/numday.PNG">
-				<img id="dateHour1" class="dateImg next3" src="${ contextPath }/resources/images/num0.PNG">
-				<img id="dateHour2" class="dateImg next4" src="${ contextPath }/resources/images/num0.PNG">
-				<img class="dateImg next5" src="${ contextPath }/resources/images/numdash.PNG">
-				<img id="dateMin1" class="dateImg next6" src="${ contextPath }/resources/images/num0.PNG">
-				<img id="dateMin2" class="dateImg next7" src="${ contextPath }/resources/images/num0.PNG">
-				<img class="dateImg next8" src="${ contextPath }/resources/images/numdash.PNG">
-				<img id="dateSec1" class="dateImg next9" src="${ contextPath }/resources/images/num0.PNG">
-				<img id="dateSec2" class="dateImg next10" src="${ contextPath }/resources/images/num0.PNG">
-				1<!-- div 위치깨짐 방지용 -->
-				
-				<script>
-					var date = new Date("${cBoard.cbDate}");
-					var dateCur = new Date();
-					var gap = date.getTime() - dateCur.getTime();
+			
+			<c:if test="${ cBoard.cbDate eq '마감' }">
+				<div id="timeCount" class="rightLine">
+					<b>마감되었습니다.</b>
+				</div>
+			</c:if>
+			
+			<c:if test="${ cBoard.cbDate ne '마감' }">
+				<div id="timeCount" class="rightLine">
+					<img id="dateDay1" class="dateImg" src="${ contextPath }/resources/images/num0.PNG">
+					<img id="dateDay2" class="dateImg next1" src="${ contextPath }/resources/images/num0.PNG">
+					<img class="dateImg next2" src="${ contextPath }/resources/images/numday.PNG">
+					<img id="dateHour1" class="dateImg next3" src="${ contextPath }/resources/images/num0.PNG">
+					<img id="dateHour2" class="dateImg next4" src="${ contextPath }/resources/images/num0.PNG">
+					<img class="dateImg next5" src="${ contextPath }/resources/images/numdash.PNG">
+					<img id="dateMin1" class="dateImg next6" src="${ contextPath }/resources/images/num0.PNG">
+					<img id="dateMin2" class="dateImg next7" src="${ contextPath }/resources/images/num0.PNG">
+					<img class="dateImg next8" src="${ contextPath }/resources/images/numdash.PNG">
+					<img id="dateSec1" class="dateImg next9" src="${ contextPath }/resources/images/num0.PNG">
+					<img id="dateSec2" class="dateImg next10" src="${ contextPath }/resources/images/num0.PNG">
+					1<!-- div 위치깨짐 방지용 -->
 					
-					var dateDay = parseInt(gap/1000/60/60/24);
-					var dateHour = parseInt(gap/1000/60/60) % 24;
-					var dateMin = parseInt(gap/1000/60) % 60;
-					var dateSec = parseInt(gap/1000) % 60;
-					
-					$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
-					$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
-					$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
-					$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
-					$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
-					$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
-					$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
-					$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
-					
-					!function timer(){
-						setTimeout(function() {
-							if(dateDay == 0 && dateHour == 0 && dateMin == 0 && dateSec == 0) {
-								/* 마감일 때 */
-							} else {
-								dateSec--;
+					<script>
+						var date = new Date("${cBoard.cbDate}");
+						var dateCur = new Date();
+						var gap = date.getTime() - dateCur.getTime();
+						
+						var dateDay = parseInt(gap/1000/60/60/24);
+						var dateHour = parseInt(gap/1000/60/60) % 24;
+						var dateMin = parseInt(gap/1000/60) % 60;
+						var dateSec = parseInt(gap/1000) % 60;
+						
+						$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
+						$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
+						$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
+						$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
+						$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
+						$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
+						$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
+						$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
+						
+						!function timer(){
+							setTimeout(function() {
+								if(dateDay <= 0 && dateHour <= 0 && dateMin <= 0 && dateSec <= 0) {
+									$('#timeCount').empty();
+									$('#timeCount').html('<b>마감되었습니다.</b>');
+									$('#doIt').hide();
+								} else {
+									dateSec--;
+									
+									if(dateSec == -1){
+										dateSec = 59;
+										dateMin--;
+									}
+									if(dateMin == -1){
+										dateMin = 59;
+										dateHour--;
+									}
+									if(dateHour == -1){
+										dateHour = 23;
+										dateDay--;
+									}
+									
+									$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
+									$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
+									$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
+									$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
+									$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
+									$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
+									$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
+									$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
+								}
 								
-								if(dateSec == -1){
-									dateSec = 59;
-									dateMin--;
-								}
-								if(dateMin == -1){
-									dateMin = 59;
-									dateHour--;
-								}
-								if(dateHour == -1){
-									dateHour = 23;
-									dateDay--;
-								}
-								
-								$('#dateDay1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateDay / 10) + ".PNG");
-								$('#dateDay2').attr('src', "${ contextPath }/resources/images/num" + dateDay % 10 + ".PNG");
-								$('#dateHour1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateHour / 10) + ".PNG");
-								$('#dateHour2').attr('src', "${ contextPath }/resources/images/num" + dateHour % 10 + ".PNG");
-								$('#dateMin1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateMin / 10) + ".PNG");
-								$('#dateMin2').attr('src', "${ contextPath }/resources/images/num" + dateMin % 10 + ".PNG");
-								$('#dateSec1').attr('src', "${ contextPath }/resources/images/num" + parseInt(dateSec / 10) + ".PNG");
-								$('#dateSec2').attr('src', "${ contextPath }/resources/images/num" + dateSec % 10 + ".PNG");
-							}
-							
-							timer();
-						}, 1000)
-					}()
-				</script>
-			</div>
+								timer();
+							}, 1000)
+						}()
+					</script>
+				</div>
+			</c:if>
 		</c:if>
 			
 		
-		<c:if test="${ cBoard.boGroup ne 3 }">
+		<c:if test="${ cBoard.boGroup ne 3 || cBoard.cbStep ne 1}">
 			<div class="leftLine">
 				<span class="redColor">＞ </span>의뢰비
 			</div>
 			<div class="rightLine">
-				<fmt:formatNumber value="${ cBoard.cbCash }" type="number" groupingUsed="true"/> 원
+				<fmt:formatNumber value="${ cBoard.cbCash }" type="number" groupingUsed="true"/> CASH
 			</div>
 		</c:if>
 		
@@ -408,5 +427,58 @@
 		
 		<div class="br"></div>
 	</div>
+	
+	<script>
+		$(document).on("contextmenu dragstart selectstart", '#boardcontent img', function(e){
+            swal({
+				title: "불법 이미지 다운을 막고 있습니다.",
+				icon: "error"
+			});
+			return false;
+        });
+		
+		$(document).on("contextmenu dragstart selectstart", '.watermark_free', function(e){
+			swal({
+				title: "불법 이미지 다운을 막고 있습니다.",
+				icon: "error"
+			});
+			return false;
+        });
+		
+		$(document).on("contextmenu dragstart selectstart", '.watermark_lock', function(e){
+			swal({
+				title: "불법 이미지 다운을 막고 있습니다.",
+				icon: "error"
+			});
+			return false;
+        });
+		
+		
+		function setWaterMark(img, watermark) {
+			var image_box = $("#mainIcon");
+			var water_mark = $(".water_mark");
+			
+			watermark.css("left", img.offset().left + "px");
+			watermark.css("top", img.offset().top + "px");
+			watermark.css("width", img.innerWidth());
+			watermark.css("height", img.innerHeight());
+		}
+		
+		if('${ cBoard.cbStep }' != 2) {
+			for(var i = 0; i < $('#boardcontent img').length; i++) {
+				var $watermark = $('<img>');
+				if('${ cBoard.cbSecret }' == 'Y') {
+					$watermark.attr('class', 'watermark_free');
+					$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
+				} else {
+					$watermark.attr('class', 'watermark_lock');
+					$watermark.attr('src', '${ contextPath }/resources/images/watermark_lock.jpg');
+				}
+				
+				$('header').append($watermark);
+				setWaterMark($('#boardcontent img').eq(i), $watermark);
+			}
+		}
+	</script>
 </body>
 </html>
