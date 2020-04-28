@@ -104,8 +104,8 @@
       vertical-align: top;
       display: inline-block;
    }
-   select[name="searchOption"]{
-        display: inline-block;
+   select[name="searchCate"]{
+      display: inline-block;
       height: 48px;
       width: 120px;
       background-color: rgba(161, 206, 244, 0.55);
@@ -365,7 +365,7 @@
 				</div>
             <form>
                <div id="searchArea">
-                  <select name="searchOption">
+                  <select name="searchCate">
                      <option value="title">제목</option>
                      <option value="content">내용</option>
                      <option value="writer">작성자</option>
@@ -374,6 +374,9 @@
                   <input name="searchWord" type="text" placeholder="검색어 입력">
                   <div>돋보기 submit</div>
                </div>
+               <script>
+                  
+               </script>
             </form>
          </div>
 
@@ -451,6 +454,16 @@
 					<button class="writingBtn">글쓰기</button>
 				</div>
 			</div>
+			<script>
+				$('.writingBtn').click(function () {
+               var userId = "${loginUser.userId}";
+					if(userId==""){
+						swal("You need Login", "로그인 후 사용 가능합니다.", "error");
+						return false;
+               }
+               location.href = "writing.bo";
+            });
+			</script>
 			<br> <br> <br> <br> <br> <br> <br>
 
 			<hr>
@@ -557,8 +570,7 @@
 		})
 		$('#sideBottom').click(
 				function() {
-					var cashCategorySelectAreaPosition = $(
-							'#cashCategorySelectArea').offset();
+					var cashCategorySelectAreaPosition = $('#cashCategorySelectArea').offset();
 					$('html').stop().animate({
 						scrollTop : cashCategorySelectAreaPosition.top
 					}, 300);

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -23,16 +25,19 @@
 
 		.titleform {
 			margin-top: 10px;
-			width: 60%;
+			width: 88%;
 			height: 50px;
 			font-size: 15px;
+			font-size: large;
+			text-align: center;
 		}
 
 		.catecory {
 			margin-top: 15px;
-			width: 30%;
+			width: 10%;
 			height: 55.5px;
-			font-size: 15px;
+			font-size: larger;
+			font-weight: bolder;
 		}
 
 		.boardnotice {
@@ -76,8 +81,14 @@
 			width: 100%;
 			min-height: 300px;
 			border: 1px solid black;
+			border-right: 1px solid black;
 			display: inline-block;
 			vertical-align: top;
+		}
+
+		#writingPlace img{
+			max-width: 80%;
+			height: auto;
 		}
 
 		#imageInputArea {
@@ -140,7 +151,7 @@
 			font-weight: bold;
 		}
 
-		.imageNameArea span {
+		.imageNameArea .origin {
 			width: 100%;
 			height: 10px;
 			margin-top: 10px;
@@ -149,11 +160,20 @@
 			text-align: center;
 		}
 
+		.imageNameArea .rename {
+			width: 100%;
+			height: 10px;
+			margin-top: 10px;
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			display: none;
+		}
+
 		.fileArea {
 			display: none;
 		}
 
-			
 		.slide {
 			margin-top: 10px;
 			margin-bottom: 10px;
@@ -237,7 +257,6 @@
 				opacity: 0;
 			}
 		}
-
 	</style>
 </head>
 
@@ -247,75 +266,123 @@
 		<div id="left-side">
 		</div>
 		<div id="main">
-			<div class="boardtitle">
-				자유갤러리
-			</div>
-			<div class="nick">
-				아이디(닉네임)
-				<span class="smallOption">김대호</span>
-			</div>
-			<div class="writingtitle">
-				<select class="catecory">
-					<option value="choese">게시글 선택</option>
-					<option value="information">정보</option>
-					<option value="jjalbbang">짤방</option>
-					<option value="conceptual">개념글</option>
-					<option value="anyting">아무말</option>
-				</select>
+<!-- 			<form id="writingForm" action="freeRevis.bo" method="POST" onsubmit="return TransferToForm();"> -->
+			<form id="writingForm" action="freeRevis.bo" method="POST">
+				<input type="hidden" name="boNum" value="${b.boNum}">
+				<div class="boardtitle">
+					자유갤러리
+				</div>
+				<div class="nick">
+					아이디(닉네임)
+					<span class="smallOption" name="userNick">${loginUser.nickName}</span>
+				</div>
+				<div class="writingtitle">
+					<select class="catecory" name = "freeBoardCategory">
+						<option value="공통">공통</option>
+						<option value="짤방">짤방</option>
+						<option value="아무말">아무말</option>
+						<option value="요청">요청</option>
+						<option value="질문">질문</option>
+					</select>
+					
+					<script>
+						$(function () {
+							var optionValue = "${b.boCategory}";
+							console.log("optionValue : " + optionValue);
+							switch(optionValue){
+								case "공통" : $('.catecory option[value='+optionValue+']').prop('selected', 'selected').change();
+								case "짤방" : $('.catecory option[value='+optionValue+']').prop('selected', 'selected').change();
+								case "아무말" : $('.catecory option[value='+optionValue+']').prop('selected', 'selected').change();
+								case "요청" : $('.catecory option[value='+optionValue+']').prop('selected', 'selected').change();
+								case "질문" : $('.catecory option[value='+optionValue+']').prop('selected', 'selected').change();
+							}
+						})
+					</script>
 
-				<input type="text" class="titleform" placeholder="제목을 입력해주세요">
-			</div>
-			<div class="boardnotice">
-				※ 음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의 책임을 질 수 있습니다.<br>
-				※ 커뮤니티도 하나의 인격입니다. 글 등록전 서로 존중하는 글을 씁시다.
-			</div>
+					<input type="text" class="titleform" placeholder="제목을 입력해주세요" name="freeBoardTitle" value="${b.boTitle}">
+				</div>
+				<div class="boardnotice">
+					※ 음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의 책임을 질 수 있습니다.<br>
+					※ 커뮤니티도 하나의 인격입니다. 글 등록전 서로 존중하는 글을 씁시다.
+				</div>
 
-			<div class="slide">
-				<ul>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-					<li><a href="#"><img></a></li>
-				</ul>
-			</div>
-			
-			<hr>
-				<div id="writingPlace" contenteditable="true"></div>
-			<hr>
-
-
-
-
-			<div id=imageInputArea>
-				<!-- <div class="eachImage">
-					<div class="insertImage">
-						<img class="inputImg">
-						<img class="plusBtn" src="${ contextPath }/resources/images/add.png">
-						<img class="xBtn" src="${ contextPath }/resources/images/x-button.png">
-					</div>
-					<div class="imageNameArea">
-						<span>ddd</span>
-					</div>
-					<div class="fileArea">
-						<input type="file" multiple>
-					</div>
-				</div> -->
-			</div>
-
-
-			<div class="writingbutton">
-				<button type="button" id="uploadFileBtn">파일 올리기</button>
-				<button type="button" class="cancell">취소</button>
-				<button type="button" class="writing">등록</button>
-			</div>
-
-			<div id="fileArea">
-			</div>
-
-			<script>
-				var countData = 1;
+				<div class="slide">
+					<ul>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+						<li><a href="#"><img></a></li>
+					</ul>
+				</div>
 				
+				<hr>
+					<div id="writingPlace" contenteditable="true" name="writingContent">${b.boContent}</div>
+				<hr>
+
+				<c:forEach var="arr" items="${entirDir}" varStatus="i">
+					<script>
+						var dir = '${arr}';
+						$('#writingPlace img').eq(${ i.count }-1).attr('src','${ contextPath }/resources/free_photo_upload/'+dir);
+					</script>
+				</c:forEach>
+				<script>
+					window.onload = function name(params) {
+						console.log("시작함");
+						var html = $('#writingPlace').html()
+						$('#writingPlace').html(html);
+					}
+
+				</script>
+				<div id=imageInputArea>
+					<!-- <div class="eachImage">
+						<div class="insertImage">
+							<img class="inputImg">
+							<img class="plusBtn" src="${ contextPath }/resources/images/add.png">
+							<img class="xBtn" src="${ contextPath }/resources/images/x-button.png">
+						</div>
+						<div class="imageNameArea">
+							<span class="origin">ddd</span>
+							<span class="rename">ddd</span>
+						</div>
+						<div class="fileArea">
+							<form enctype="multipart/form-data" method="post">
+								<input type="file" multiple>
+							</form>
+						</div>
+					</div> -->
+					<c:if test="${!empty contentsArr}">
+						<c:forEach var="content" items="${ contentsArr }" varStatus="i">
+							<div class="eachImage">
+								<div class="insertImage">
+									<img class="xBtn" src="/WDWD/resources/images/x-button.png">
+									<img class="inputImg" src="${ contextPath }/resources/free_photo_upload/${entirDir[i.count-1]}">
+								</div>
+								<div class="imageNameArea">
+									<span class="origin" name="fileOriginName">${content.conOri}</span>
+									<span class="rename" name="fileReName">${content.conCop}</span>
+								</div>
+								<div class="fileArea">
+									<form enctype="multipart/form-data" method="post">
+										<input type="file" name="file">
+									</form>
+								</div>
+							</div>
+						</c:forEach>
+					</c:if>
+				</div>
+
+
+				<div class="writingbutton">
+					<button type="button" id="uploadFileBtn">파일 올리기</button>
+					<button type="button" class="cancell" onclick="history.back();">취소</button>
+<!-- 					<button type="submit" class="writing" onclick="return writeCheck();">수정완료</button> -->
+					<button type="buttion" class="writing" onclick="writeCheck();">수정완료</button>
+				</div>
+
+			</form>
+			
+			<script>
 				$('#uploadFileBtn').click(function () {
 					var filearea = $('#imageInputArea');
 
@@ -325,73 +392,92 @@
 					$imgplus = $('<img class="plusBtn" src="${ contextPath }/resources/images/add.png">')
 					$ximg = $('<img class="xBtn" src="${ contextPath }/resources/images/x-button.png">');
 					$imageNameArea = $('<div class="imageNameArea">');
-					$span = $('<span>');
+					$spanOrigin = $('<span class="origin" name="fileOriginName">');
+					$spanRename = $('<span class="rename" name="fileReName">');
 					$fileArea=$('<div class=fileArea>');
-					$inputFile=$('<input type=file multiple name=file'+countData+'>');
+					$fileForm=$('<form enctype="multipart/form-data" method="post">');
+					$inputFile=$('<input type=file name=file>');
 					
 					// $insertImage.append($img);
 					$insertImage.append($imgplus);
 					$insertImage.append($ximg);
 
-					$imageNameArea.append($span);
-
-					$fileArea.append($inputFile);
+					$imageNameArea.append($spanOrigin);
+					$imageNameArea.append($spanRename);
+					
+					$fileForm.append($inputFile);
+					$fileArea.append($fileForm);
 
 					$eachImage.append($insertImage);
 					$eachImage.append($imageNameArea);
 					$eachImage.append($fileArea);
 
 					$('#imageInputArea').append($eachImage);
-
-					countData++;
 				})
 
 
 				$(document).on("click", ".xBtn", function () {
 					// $('.eachImage img').click(function () {
-					// console.log(this);
 					$(this).parent().parent().remove();
 					deleteimg();
 				})
 
 				$(document).on("click", ".plusBtn", function () {
-					// console.log(this);
 					var fileBtn = $(this).parent().parent().find("input[type=file]");
 					fileBtn.click();
 				})
+				
+				function ajaxFileUpload(file) {
+					var formData = new FormData(file.parent()[0]);
+
+					var result;
+			
+					$.ajax({ 
+						type: "POST", 
+						enctype: 'multipart/form-data', // 필수 
+						url: 'imgUpload.bo', 
+						data: formData, // 필수
+						processData: false, // 필수 
+						contentType: false, // 필수 
+						success: function (data) {
+							file.closest('.eachImage').find('.rename').text(data);
+							$img.attr('src', '${ contextPath }/resources/free_photo_upload/${loginUser.userId}/'+data);
+							$targetImg.attr('src', '${ contextPath }/resources/free_photo_upload/${loginUser.userId}/'+data);
+						}
+					})
+					return result;
+			    }
 
 				$(document).on("change", ":file", function () {
+					ajaxFileUpload($(this));
+					
 					var fileValue = $(this).val();
 					var fileName = fileValue.substring(fileValue.lastIndexOf("\\") + 1);
-					// console.log(fileName);
 
 					var targetDiv= $('#writingPlace');
 
 					if (fileValue != "") {
-						$insertImage = $(this).parent().parent().find('.insertImage');
+						$insertImage = $(this).parent().parent().parent().find('.insertImage');
 						$img = $('<img class="inputImg">')
 						$insertImage.append($img);
 
-						$img = $(this).parent().parent().find('.inputImg');
-						$plusBtn = $(this).parent().parent().find('.plusBtn');
+						$plusBtn = $(this).parent().parent().parent().find('.plusBtn');
 						$plusBtn.remove();
-						$span = $(this).parent().parent().find('span');
-						$span.text(fileName);
+						var spanOrigin = $(this).parent().parent().parent().find('.origin');
+						spanOrigin.text(fileName);
+						var spanRename = $(this).parent().parent().parent().find('.rename');
 						$br = $('<br>');
-						$br2 = $('<br>');
+						// $br2 = $('<br>');
 						$targetImg = $('<img>');
 
-						var reader = new FileReader();
-						reader.onload = function (e) {
-							$img.attr('src', e.target.result);
-							targetDiv.append($br);
-							targetDiv.append($targetImg);
-							targetDiv.append($br2);
-							$targetImg.attr('src', reader.result);
-						}
-						reader.readAsDataURL(this.files[0]);
+						targetDiv.append($br);
+						targetDiv.append($targetImg);
+						// targetDiv.append($br2);
+						
 					}
 				})
+
+ 
 // ---------------------------------------------------------------------------
 				// contenteditable에 텍스트 복붙 텍스트만 넣기
 				var ele = document.querySelector('#writingPlace'); 
@@ -408,7 +494,6 @@
 // ---------------------------------------------------------------------------------
 
 				$('#writingPlace').keyup(function () {
-					var text = $(this).html();
 					deleteimg();
 				})
 
@@ -418,10 +503,10 @@
 
 					for (var i= 0; i < targetimg.length; i++){
 						var string = targetimg[i].src;
-						var cutString = string.substring(string.length-10, string.length);
+						targetsrcs.push(string);
+						// var cutString = string.substring(string.length-10, string.length);
 						// console.log(cutString);
-						targetsrcs.push(cutString);
-						// targetsrcs.push(targetimg[i].src);
+						// targetsrcs.push(cutString);
 					}
 
 
@@ -430,13 +515,13 @@
 
 					for (var i= 0; i < bottomimg.length; i++){
 						var string = bottomimg[i].src;
-						var cutString = string.substring(string.length-10, string.length);
-						bottomsrcs.push(cutString);
-						// bottomsrcs.push(bottomimg[i].src);
+						bottomsrcs.push(string);
+						// var cutString = string.substring(string.length-10, string.length);
+						// bottomsrcs.push(cutString);
 					}
 
-					console.log("target : " + targetsrcs.length);
-					console.log("bottom : " + bottomsrcs.length);
+					// console.log("target : " + targetsrcs.length);
+					// console.log("bottom : " + bottomsrcs.length);
 
 
 
@@ -479,7 +564,71 @@
 						}
 					}
 				}
-			
+
+				function writeCheck() {
+					var title = $('input[name=freeBoardTitle]').val();
+					var writingContent = $('#writingPlace').html();
+
+					if(writingContent.length<1 || title.length < 5){
+						console.log(title);
+						console.log(title.length);
+						swal("Check", "5글자 이상의 제목과 1글자 이상의 내용을 입력해야 합니다.", "error");
+						return false;
+					}
+
+					swal({
+							title: "이대로 수정할꺼?",
+							icon: "info",
+							buttons : {
+                              	cancle : {
+                                 	text : '취소',
+                                 	value : false
+                             	},
+                              	confirm : {
+                                 	text : '작성하기',
+                                 	value : true
+                              	}
+                           	}
+                        }).then((result) => {
+                           if(result) {
+								TransferToForm();
+						
+								$('#writingForm').submit();
+                           	} else {
+								swal("Keep", "작성글 수정 유보하였습니다", "info");
+                           	}
+                        });
+				}
+
+				function TransferToForm() {
+					var writingContent = $('#writingPlace').html();
+					var originNames = new Array();
+					var reNames = new Array();
+
+					$('#writingForm').prepend('<input type="hidden" name="writingContent">');
+					$('input[name=writingContent]').val(writingContent);
+					
+					$('.origin').each(function () {
+						originNames.push($(this).text());
+					})
+
+					for(var i in originNames){
+						//띄워쓰기로 구분하기 때문에 큰따음표로 다시감싸야함
+						$('#writingForm').append('<input type="hidden" name="fileOriginName" value="'+originNames[i]+'">');
+						// $('#writingForm').append('<input type="hidden" name="fileOriginName">');
+						// var input = $('input[name=fileOriginName]');
+						// input.eq(i).val(originNames[i]);
+					}
+					
+					$('.rename').each(function () {
+						reNames.push($(this).text());
+					});
+					
+					for(var i in reNames){
+						$('#writingForm').append('<input type="hidden" name="fileRename" value="'+reNames[i]+'">');
+					}
+				}
+				
 			</script>
 		</div>
 		<div id="right-side">

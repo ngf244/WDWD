@@ -25,13 +25,13 @@ public class CBoardServiceImpl implements CBoardService {
 	private SqlSessionTemplate sqlSession;
 
 		@Override
-	public int getListCount(String boGroup1) {
-		return cBoardDAO.getListCount(sqlSession, boGroup1);
+	public int getListCount(HashMap<String, String> searchMap) {
+		return cBoardDAO.getListCount(sqlSession, searchMap);
 	}
 
 	@Override
-	public ArrayList<CBoard> selectBoardList(String boGroup1, PageInfo pi) {
-		return cBoardDAO.selectBoardList(sqlSession, boGroup1, pi);
+	public ArrayList<CBoard> selectBoardList(HashMap<String, String> searchMap, PageInfo pi) {
+		return cBoardDAO.selectBoardList(sqlSession, searchMap, pi);
 	}
 	
 	
