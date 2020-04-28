@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="messageMapper">
+		
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from message
+		where RSG_ID = #{ loginUser } and rsg_del = 'N'
+	
+	</select>
+	
+	
+	<select id="selectMessageList" resultMap="MessageListSet">
+	    SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSTATUS, SSTATUS
+		FROM MSGLIST M
+	    JOIN "MEMBER" ON (ME_ID = M.RSG_ID)
+	    where rsg_id= #{ loginUser}
+	    order by msg_num desc
+
+	</select>
+	
+
+	<resultMap type="Message" id="MessageListSet">
+		<id property="msgNum" column="MSG_NUM"/>
+		<result property="ssgId" column="SSG_ID"/>
+		<result property="rsgId" column="RSG_ID"/>
+		<result property="ssgNick" column="SNICK"/>
+		<result property="rsgNick" column="RNICK"/>
+		<result property="msgTitle" column="MSG_TITLE"/>
+		<result property="msgDate" column="MSG_DATE"/>
+		<result property="msgCon" column="MSG_CON"/>
+		<result property="ssgDel" column="SSG_DEL"/>
+		<result property="rsgDel" column="RSG_DEL"/>
+		<result property="ssgStatus" column="SSG_STATUS"/>
+		<result property="rsgStatus" column="RSG_STATUS"/>
+	</resultMap>
+	<resultMap type="Message" id="MessageSet">
+		<id property="msgNum" column="MSG_NUM"/>
+		<result property="ssgId" column="SSG_ID"/>
+		<result property="rsgId" column="RSG_ID"/>
+		<result property="ssgNick" column="SNICK"/>
+		<result property="rsgNick" column="RNICK"/>
+		<result property="msgTitle" column="MSG_TITLE"/>
+		<result property="msgDate" column="MSG_DATE"/>
+		<result property="msgCon" column="MSG_CON"/>
+		<result property="ssgDel" column="SSG_DEL"/>
+		<result property="rsgDel" column="RSG_DEL"/>
+		<result property="ssgStatus" column="SSG_STATUS"/>
+		<result property="rsgStatus" column="RSG_STATUS"/>
+	</resultMap>
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

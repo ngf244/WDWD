@@ -8,15 +8,5 @@ import com.kh.WDWD.guideboard.model.vo.Guideboard;
 
 public interface GuideService {
 
-	int insertBoard(Guideboard g);
-
-	Board selectBoard(int bno);
-
-	int updateBoard(Guideboard g);
-
-	int getListCount();
-
-	ArrayList<Board> selectList(PageInfo pi);
 	
-		
 	}

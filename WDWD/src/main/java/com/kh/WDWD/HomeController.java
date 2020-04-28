@@ -36,7 +36,7 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "index.me")
+	@RequestMapping(value = "index.home")
 	public String index() {
 		return "index";
 	}

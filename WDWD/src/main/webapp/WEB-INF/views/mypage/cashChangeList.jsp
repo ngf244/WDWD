@@ -127,7 +127,7 @@
 								<th style="width: 25%">금액</th>
 								<th style="width: 30%">날짜</th>
 							</tr>
-
+	
 							<c:forEach var="pc" items="${ pcList }">
 							<c:if test="${ pc.pcDiv == 'C' }">
 							<tr>

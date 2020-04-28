@@ -96,7 +96,7 @@
 </head>
 <body>
 	<div id="loginlogo">
-		<img src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.me'">
+		<img src="${ contextPath }/resources/images/logo.png" onclick="location.href='index.home'">
 	     		 </div>
 	     <form id="loginaction" action="login.me" method="post">
 	      <div class="loginform">

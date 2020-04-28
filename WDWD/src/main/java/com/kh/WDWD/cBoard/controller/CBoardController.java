@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
@@ -37,9 +36,6 @@ import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.request.model.vo.Request;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
 
 @Controller
 public class CBoardController {
@@ -381,7 +377,7 @@ public class CBoardController {
 							int urlNum = url.lastIndexOf("/");
 							String urlName = url.substring(urlNum + 1);
 							if(urlName.equals("")) {
-								urlName = "index.me";
+								urlName = "index.home";
 							}
 							mv.addObject("sysMsg", "1");
 							mv.setViewName("redirect:" + urlName);

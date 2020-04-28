@@ -70,7 +70,7 @@ public class MemberController {
 
 		status.setComplete();
 
-		return "redirect:index.jsp";
+		return "redirect:index.home";
 	}
 	
 	@RequestMapping("main.my")
@@ -157,7 +157,7 @@ public class MemberController {
 		int result = mService.insertMember(m);
 		
 		if(result > 0) {
-			return "redirect:index.me";
+			return "redirect:index.home";
 		}else {
 			throw new MemberException("회원가입에 실패하셨습니다.");
 		}
