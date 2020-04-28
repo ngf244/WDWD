@@ -4,7 +4,8 @@
 	<select id="getContents" parameterType="_int" resultMap="ContentsResultSet">
 		select *
 		from contents
-		where con_ref = #{boNum}
+		where con_ref = #{boNum} and con_status = 'Y'
+		order by substr(con_cop, 0, 14)
 	</select>
 	
 	<resultMap type="Contents" id="ContentsResultSet">
@@ -20,12 +21,29 @@
 	<select id="getReplyContents" resultMap="ContentsResultSet">
 		select *
 		from contents
-		where con_num = #{rpConNum}
+		where con_num = #{rpConNum} and con_status = 'Y'
 	</select>
 	
 	<insert id="insertOneContent" parameterType="Contents">
 		insert into contents
 		values(con_seq.nextval, #{conOri}, #{conCop}, #{conUrl}, null, default, null)
 	</insert>
+	
+	<update id="deleteContent">
+		update contents
+		set con_status = 'N'
+		where con_cop = #{conCop}
+	</update>
+	
+	<update id="deleteContents">
+		update contents
+		set con_status = 'N'
+		where con_ref = #{boNum}
+	</update>
+	
+	<delete id="deleteBoardContents">
+		delete from contents
+		where con_ref = #{boNum}
+	</delete>
 	
 </mapper>

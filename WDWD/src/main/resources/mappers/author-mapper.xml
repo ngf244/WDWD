@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="authorMapper">
+	<select id="getId" resultType="string">
+		select me_id
+		from member
+		where me_nick = #{deReportedNick}
+	</select>
+	
+	<insert id="insertReport">
+		insert into declaration
+		values(de_seq.nextval, #{deReporterId}, #{deReportedId}, #{deContent}, 
+				default, #{boNum}, to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'), #{deCate})
+	</insert>
+	
+	<select id="getBanUserList" resultMap="BanListResultSet">
+		select *
+		from ben_list
+	</select>
+	
+	<resultMap type="BanList" id="BanListResultSet">
+		<id property="id" column="BEN_ID"/>
+		<result property="content" column="BEN_CONTENT"/>
+		<result property="date" column="BEN_DATE"/>
+	</resultMap>
+	
+	<select id="getReportList" parameterType="arraylist" resultMap="DeclarationResultSet">
+		select d.*, m1.me_nick as "REPORTERNICK", m2.me_nick as "REPORTEDNICK", b.bo_group
+		from declaration d
+		    join member m1 on (de_id1 = m1.me_id)
+		    join member m2 on (de_id2 = m2.me_id)
+		    join board b on (d.bo_num = b.bo_num)
+		where de_status &lt;&gt; 'D'
+			<if test="collection.size() > 0">
+				and de_id2 not in
+				<foreach collection="collection" item="item" index="i" open="(" close=")" separator=",">
+		            #{item.id}
+		        </foreach>
+			</if>
+		order by de_date
+	</select>
+	
+	<resultMap type="Declaration" id="DeclarationResultSet">
+		<id property="deNum" column="DE_NUM"/>
+		<result property="deReporterNick" column="REPORTERNICK"/>
+		<result property="deReporterId" column="DE_ID1"/>
+		<result property="deReportedNick" column="REPORTEDNICK"/>
+		<result property="deReportedId" column="DE_ID2"/>
+		<result property="deContent" column="DE_CONTENT"/>
+		<result property="deStatus" column="DE_STATUS"/>
+		<result property="boNum" column="BO_NUM"/>
+		<result property="deDate" column="DE_DATE"/>
+		<result property="deCate" column="DE_CATE"/>
+		<result property="boGroup" column="BO_GROUP"/>
+	</resultMap>
+	
+	
+	<select id="getBanPageUserList" parameterType="arraylist" resultMap="MemberResultSet">
+		select m.me_id, m.me_nick, count(*)
+		from member m
+		    join declaration d on(me_id = de_id2)
+		<where>
+			<if test="collection.size() > 0">
+				and me_id not in
+				<foreach collection="collection" item="list"  open="(" close=")" separator=",">
+		            #{list.id}
+		        </foreach>
+			</if>
+		</where>
+		group by m.me_id, m.me_nick
+		order by me_id
+	</select>
+	
+	<resultMap type="Member" id="MemberResultSet">
+		<id property="userId" column="ME_ID"/>
+		<result property="userPwd" column="ME_PW"/>
+		<result property="userName" column="ME_NAME"/>
+		<result property="phone" column="ME_PHONE"/>
+		<result property="nickName" column="ME_NICK"/>
+		<result property="email" column="ME_EMAIL"/>
+		<result property="intro" column="ME_INTRO"/>
+		<result property="enrollDate" column="ME_DATE"/>
+		<result property="easy" column="ME_EASY"/>
+		<result property="account" column="ME_ACOUNT"/>
+		<result property="bank" column="ME_BANK"/>
+		<result property="point" column="ME_POINT"/>
+		<result property="cash" column="ME_CASH"/>
+		<result property="uStatus" column="ME_STATUS"/>
+		<result property="grade" column="COUNT(*)"/>
+		<result property="recent1" column="ME_RECENT1"/>
+		<result property="recent2" column="ME_RECENT2"/>
+		<result property="recent3" column="ME_RECENT3"/>
+		<result property="recent4" column="ME_RECENT4"/>
+		<result property="recent5" column="ME_RECENT5"/>
+		<result property="profileImg" column="CON_COP"/>
+	</resultMap>
+	
+	<update id="updateDeclaration">
+		update declaration
+		set de_status = 
+		<choose>
+			<when test="type == 'N'">
+				'C'
+			</when>
+			<otherwise>
+				'D'
+			</otherwise>
+		</choose>
+		where de_num = #{deNum}
+	</update>
+	
+	<insert id="insertBan">
+		insert into ben_list
+		values(#{banUserId}, #{banContent}, #{banTerm})
+	</insert>
+	
+	<select id="getBanList" resultMap="BanResultMap">
+		select b.*, m.me_nick
+		from ben_list b
+		    join member m on(ben_id = me_id)
+		order by ben_date
+	</select>
+	
+	<resultMap type="Ban" id="BanResultMap">
+		<id property="banUserId" column="BEN_ID"/>
+		<result property="banUserNick" column="ME_NICK"/>
+		<result property="banContent" column="BEN_CONTENT"/>
+		<result property="banTerm" column="BEN_DATE"/>
+	</resultMap>
+	
+	<delete id="deleteBan">
+		delete from ben_list
+		where ben_id = #{userId}
+	</delete>
+	
+</mapper>

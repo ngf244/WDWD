@@ -56,4 +56,10 @@
 			</choose>
 		)
 	</insert>
+	
+	<update id="deleteReply">
+		update reply
+		set rp_del = 'Y'
+		where rp_num = #{reNum}
+	</update>
 </mapper>
