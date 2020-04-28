@@ -192,6 +192,7 @@
 		font-size: 20pt;
 		line-height: 110px;
 		font-weight: bolder;
+		border-bottom: 5px solid lightgray;
 	}
 	
 	.portpolioDesc{
@@ -438,7 +439,7 @@
 										<c:if test="${ port.poCategory eq '동영상 제작' or port.poCategory eq '동영상 편집' }">
 											<c:forEach var="attach" items="${ port.portContents }">
 												<div class="portpolioContents">
-													<video class="portVideo" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }" controls></video>
+													<video class="portVideo" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }" controls width="100%" height="100%"></video>
 												</div>										
 											</c:forEach>											
 										</c:if>
@@ -729,7 +730,7 @@
 	      			var position = $(e).parent().next().scrollTop(); // 현재 스크롤바의 위치값을 반환
 	      			$(e).parent().next().children().last().stop().animate({top:800+position+"px"}, 200); //해당 오브젝트 위치값 재설정
 			});
-		}
+		};
 		
 		// top이미지 클릭시 상단으로 이동
 		function backToTop(b){
@@ -737,7 +738,7 @@
 				scrollTop: 250
 			}, 100);
 		
-		}
+		};
 		
 		/* $('.portpolioThumb').click(function(){
 			$('#portDetailModal').show();
@@ -746,7 +747,7 @@
 		// x버튼 클릭시 새로고침
 		function closeDetail(c){
 			location.reload();
-		}
+		};
 		
 		/* 포트폴리오 카테고리(전체, 이미지, 동영상) */
 		var poWriter = '${ portpolio.poWriter }';
@@ -763,7 +764,7 @@
 		function goToVideo(){
 			var poCategory = "video";
 			location.href="portpolioList.my?poWriter=" + poWriter + "&poCategory=" + poCategory;
-		}		
+		}	
 		
 	</script>
 
@@ -858,11 +859,6 @@
                 }
              });
 		});
-		
-		// 포트폴리오 댓글 리스트 조회 ajax
-		function selectReplyList(poNum){
-			
-		};
 		
 	</script>
 	

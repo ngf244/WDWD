@@ -36,6 +36,7 @@ import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 
 @SessionAttributes("loginUser")
@@ -89,6 +90,16 @@ public class MemberController {
 		PageInfo pi = Pagination.getMypageMainPortListPageInfo(currentPage, listCount);
 		
 		ArrayList<PortpolioContents> pcList = mService.selectMyPagePortList(pi, userId);
+		
+		for(PortpolioContents pc : pcList) {
+			ArrayList<PortpolioReply> portReply = mService.selectPoReply(pc.getPoNum());
+			pc.setPortReply(portReply);
+			
+			ArrayList<PortpolioContents> portContents = mService.selectAttachFile(pc.getPoNum());
+			pc.setPortContents(portContents);
+		}
+		
+		System.out.println("pcList : " + pcList);
 		
 		ArrayList<PointNCash> ccList = mService.selectRecentlyCashChange(userId);		
 		

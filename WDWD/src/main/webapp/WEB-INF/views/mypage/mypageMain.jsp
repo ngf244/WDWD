@@ -291,7 +291,7 @@
 		display: inline-block;
 		border-radius: 10px;		
 	}
-	.replyArea{
+	.replyAreaList{
 		float: left;
 		width: 47%;
 		height: 300px;
@@ -366,7 +366,7 @@
 	/* 포트폴리오 */
 	#portpolio{margin-top: 30px;}
 	.portpolioText{text-indent: 10px; height: 70px; font-size: 18pt; font-weight: bolder; line-height: 65px; background: lightgray;}
-	.portpolioArea{border: 1px solid lightgray; margin-top: 30px; border-radius: 10px;}
+	.portpolioArea{border: 1px solid lightgray; margin-top: 30px; border-radius: 10px; height: 650px;}
 	
 	.portArea{
 		width: 18%;
@@ -457,7 +457,7 @@
 		float: right;
 	}
 
-	/* 포트폴리오 디테일 모달창 */	
+	/* 포트폴리오 디테일 모달창 */
 	.portDetailModalArea{
 		display: none;
 		position: fixed;
@@ -469,16 +469,16 @@
 		overflow: auto;
 		background-color: rgb(0,0,0);
 		background-color: rgba(0,0,0,0.5);
-	}	
-
+	}
+	
 	.portDetailModalContent{
 		background-color: #fefefe;
 		margin: 15% auto;
 		border: 1px solid #888;
 		width: 60%;
 	}
-
-	#modalCloseBtn{
+	
+	.modalCloseBtn{
 		width: 4%;
 		height: 40px;
 		float: right;
@@ -487,7 +487,7 @@
 	
 	.portpolioNameContents{
 		width: 70%;
-		border: 1px solid lightgray;
+		border: 5px solid lightgray;
 		float: left;
 		margin-left: 2%;
 		margin-right: 4%;
@@ -498,18 +498,21 @@
 		height: 120px;
 		font-size: 20pt;
 		line-height: 110px;
+		font-weight: bolder;
+		border-bottom: 5px solid lightgray;
 	}
-
+	
 	.portpolioDesc{
 		width: 21%;
 		height: 620px;
-		border: 1px solid lightgray;
+		border: 5px solid lightgray;
 		float: left;
-	}						
-
+		border-radius: 5px;
+	}
+	
 	.userId{
 		height: 50px;
-		background: #003399;
+		background: rgb(52, 152, 219);
 		color: white;
 		font-size: 15pt;
 		font-weight: bolder;
@@ -533,16 +536,16 @@
 		border-bottom: 1px solid lightgray;
 		margin: 10px;
 	}
-
+	
 	.portDescription{
 		height: 400px;
 		font-size: 12pt;
 		text-align: left;
 		line-height: 38px;
 		margin: 10px;
-	}			
-
-	#updateBtn{
+	}
+	
+	.updateBtn{
 		margin: 10px;
 		width: 9%;
 		height: 40px;
@@ -554,8 +557,13 @@
 		line-height: 40px;
 		border-radius: 10px;
 	}
-
-	#deleteBtn{
+	
+	.updateBtn:hover{
+		background: #4374D9;
+	}
+	
+	
+	.deleteBtn{
 		margin: 8px;
 		width: 9%;
 		height: 40px;
@@ -567,13 +575,16 @@
 		line-height: 40px;
 		border-radius: 10px;		
 	}
-
-	.ModalReplyArea{
-		width: 95.1%;
-		height: 300px;
-		margin: 22px;
+	
+	.deleteBtn:hover{
+		background: #4374D9;
 	}
 
+	.replyArea{
+		width: 95.1%;
+		margin: 22px;
+	}
+	
 	.replayText{
 		font-size: 12pt;
 		text-indent: 30px;
@@ -589,6 +600,7 @@
 		border-radius: 50px;
 		margin: 10px;
 		float: left;
+		overflow: hidden;
 	}
 	
 	.repIdDateCon{
@@ -604,21 +616,11 @@
 	}
 	
 	.repEnrollArea{
-		width: 777px;
+		width: 70%;
 	}
 	
-	.repMeImg{
-		width: 65px;
-		border: 1px solid black;
-		height: 65px;
-		border-radius: 50px;
-		margin: 10px;
-		float: left;
-	}	
-	
-	#repEnrollBtn{
-		margin: 8px;
-		width: 9%;
+	.repEnrollBtn{
+		width: 13%;
 		height: 40px;
 		background: rgb(52, 152, 219);
 		color: white;
@@ -629,18 +631,22 @@
 		border-radius: 10px;			
 	}
 	
+	.repEnrollBtn:hover{
+		background: #4374D9;
+	}	
+	
 	/* 포트폴리오 디테일 뷰 사이드 메뉴 */
-	#portScroll{
+	.portScroll{
 		font-size: 15pt;
 		color: white;
 		font-weight: bolder;
 		border-radius: 5px;
 	}
 	
-	#backToTop{
+	.backToTop{
 		margin-left: 25%;
-	}		
-		
+		cursor: pointer;
+	}	
 		
 	/* 캐쉬변동 */
 	#cashChange{height: 700px; margin-top: 30px;}
@@ -818,7 +824,7 @@
 							</div>
 						</div>
 						<div style="clear:both;"></div>
-						<div class="replyArea">
+						<div class="replyAreaList">
 							<div id="replyText">댓글&nbsp;<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyReply();"/></div>
 							<div class="replayList">
 								<c:if test="${ !empty rList}">
@@ -932,6 +938,7 @@
 								<div class="portpolioThumb" onclick="detailView(this);"><img class="portImgTag" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }" width="100%" height="100%"></div>
 								<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
 								<div class="portCount">조회수 : ${ port.poCount }</div>
+								<div style="display: none;">${ port.poNum }</div>
 							</div>
 							
 							<!-- 모달 디테일 영역 -->
@@ -945,8 +952,25 @@
 											${ port.poTitle }
 										</div>
 										<div class="portpolioContents">
-											<img style="width: 100%;" name="portImage" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
+											<img style="width: 100%;" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
 										</div>
+										
+										<c:if test="${ port.poCategory eq '이미지 제작' or port.poCategory eq '이미지 편집' }">
+											<c:forEach var="attach" items="${ port.portContents }">
+												<div class="portpolioContents">
+													<img style="width: 100%;" name="portImage" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }">
+												</div>										
+											</c:forEach>											
+										</c:if>
+										
+										<c:if test="${ port.poCategory eq '동영상 제작' or port.poCategory eq '동영상 편집' }">
+											<c:forEach var="attach" items="${ port.portContents }">
+												<div class="portpolioContents">
+													<video class="portVideo" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }" controls width="100%" height="100%"></video>
+												</div>										
+											</c:forEach>											
+										</c:if>
+										
 									</div>
 									<div class="portpolioDesc">
 										<div class="userId">${ port.poWriter }</div>
@@ -963,30 +987,40 @@
 										</div>						
 									</div>
 									<div class="BtnArea">
+										<form action="deletePort.my" name="deletePortForm" method="post">
+											<input type="hidden" name="poNum" value="${ port.poNum }">
+											<input type="hidden" name="poWriter" value="${ port.poStatus }">
+										</form>
 										<div class="updateBtn">수정</div>
 										<div class="deleteBtn">삭제</div>
 									</div>					
 									<div style="clear: both;"></div>
 									<div class="replyArea">
 										<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
-										<div class="repWriterImg">
-											<img src="${ contextPath }/${ port.poStatus }/${ port.pocStatus }" width="100%" height="100%">
+										<div class="replyBoard">
+											<c:forEach var="ppr" items="${ port.portReply }">
+													<div class="repWriterImg">
+														<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+													</div>
+													<div class="repIdDateCon">
+														<div class="idDate">
+															<span class="smallOption">${ ppr.porWriter }</span>
+															<span>20${ ppr.porEnrollDate }</span>
+														</div>
+														<div class="repContents">
+															${ ppr.porContent } 
+														</div>
+													</div>
+													<div style="clear: both;"></div>
+											</c:forEach>
+											
 										</div>
-										<div class="repIdDateCon">
-											<div class="idDate">
-												<span>user02</span>
-												<span>2020.03.28.</span>
-											</div>
-											<div class="repContents">
-												와 정말 감탄이 절로 나오네요.. 
-											</div>
-										</div>
-										<div style="clear: both;"></div>
+										
 										<div class="repEnrollArea">
 											<form name="repEnrollForm" method="post" action="enrollPoReply.my" class="repEnrollForm">
 												<input type="hidden" name="porRef" value="${ port.poNum }">
 												<input type="hidden" name="porWriter" value="${ loginUser.userId }">
-												<textarea class="porContent" name="porContent" rows="5" cols="110" style="resize: none; margin: 1%;"></textarea><br>
+												<textarea class="porContent" name="porContent" rows="5" cols="97" style="resize: none; margin: 1%;"></textarea><br>
 												<div class="repEnrollBtn" style="float: right;">등록</div>
 												<div style="clear: both;"></div>								
 											</form>
@@ -1224,13 +1258,30 @@
 			console.log(e);
 			console.log($(e).parent().next()[0]);
 			$(e).parent().next().show();
-		
+			
+			// 포트폴리오 조회수 업데이트 기능
+			var poNum = $(e).nextAll().eq(2).text();
+			console.log("poNum : " + poNum);
+			
+			$.ajax({
+				type	: "POST",
+				url	    : 'uPortCount.my',
+				data	: {'poNum':poNum},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("ajax 조회수 업데이트 성공!");
+				},
+				error : function(e) {
+					console.log("안되네...");
+				}
+			});			
+			
 			//스크롤이 움직일때마다 이벤트 발생
 			$(e).parent().next().scroll(function(){  
 	      			var position = $(e).parent().next().scrollTop(); // 현재 스크롤바의 위치값을 반환
 	      			$(e).parent().next().children().last().stop().animate({top:800+position+"px"}, 200); //해당 오브젝트 위치값 재설정
 			});
-		}
+		};
 		
 		// top이미지 클릭시 상단으로 이동
 		function backToTop(b){
@@ -1238,7 +1289,7 @@
 				scrollTop: 250
 			}, 100);
 		
-		}
+		};
 		
 		/* $('.portpolioThumb').click(function(){
 			$('#portDetailModal').show();
@@ -1276,9 +1327,6 @@
 			location.href="portpolioList.my?poWriter=" + poWriter;
 		}
 		
-		$(function(){
-			
-		});
 	</script>
 	<script>
 		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수
@@ -1348,15 +1396,18 @@
              });
 		}
 		
+		// x버튼 클릭시 새로고침
+		function closeDetail(c){
+			location.reload();
+		};
+		
+		
 		// 포트폴리오 리스트 페이징 ajax로 구현
 		function pageMove(active, page){
 			var userId = '${ member.userId }';
 			
 			console.log("page : " + page);
 			console.log("userId : " + userId);
-			
-			console.log("active : " + active);
-			
 			
 			$.ajax({
 				type	: "POST",
@@ -1365,17 +1416,37 @@
 				dataType: 'JSON',
 				success : function(data) {
 					console.log("페이지 이동 성공!");
-					data.pi
 					
-					for(var i in data.pcList){
-						console.log("data[i].pocModify : " + data.pcList[i].pocModify);
+					$('.portArea').remove();
+					
+					var portpolioArea = $('.portpolioArea');
+					
+					for(var i = 0; i < data.pcList.length; i++) {
+						/* console.log("data[i].pocModify : " + data.pcList[i].pocModify);
 						var test = $('.portImgTag').eq(i);
 						console.log(test);
 						var contextPath = "<c:out value='${ contextPath }' />";
 						console.log(contextPath);
 						var src = contextPath + '/' + data.pcList[i].pocPath + '/' + data.pcList[i].pocModify;
 						console.log(src);
-						test.attr("src", src);
+						test.attr("src", src); */
+						console.log(i);
+						var $portArea = $('<div class="portArea" style="width: 18%;	height: 180px; border: 1px solid gray; float: left;	margin: 2%;	margin-left: 2.5%;	padding: 10px;">');
+						var $portpolioThumb = $('<div class="portpolioThumb" onclick="detailView(this);" style="width: 100%; height: 150px; border: 1px solid lightgrey; float: left; display: line-block;">');
+						var $portImgTag = $('<img class="portImgTag" src="${ contextPath }/' + data.pcList[i].pocPath + '/' + data.pcList[i].pocModify + '" width="100%" height="100%">');
+						var $portDate = $('<div class="portDate" style="margin-top: 10px; float: left; font-size: 9pt;">등록일 : ' + data.pcList[i].poEnrollDate + '</div>');
+						var $portCount = $('<div class="portCount" style="margin-top: 10px; float: right; font-size: 9pt;">조회수 : ' + data.pcList[i].poCount + '</div>');
+						var $poNum = $('<div style="display: none;">' + data.pcList[i].poNum + '</div>');
+						
+						$portpolioThumb.append($portImgTag);
+						
+						$portArea.append($portpolioThumb);
+						$portArea.append($portDate);
+						$portArea.append($portCount);
+						$portArea.append($poNum);
+						
+						portpolioArea.append($portArea);
+						
 					}
 				},
 				error : function(e) {
@@ -1383,6 +1454,86 @@
 				}
 			});
 		};
+		
+		// 댓글 입력 기능
+		$('.repEnrollBtn').on('click', function(){
+			var porContent = $(this).prevAll().eq(1).val();
+			var porWriter = $(this).prevAll().eq(2).val();
+			var porRef = $(this).prevAll().eq(3).val();
+			
+			$.ajax({
+				type	: "POST",
+				url	    : 'enrollPoReply.my',
+				data	: {'porRef':porRef, 'porWriter': porWriter, 'porContent': porContent},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("ajax댓글입력 성공!");
+					$('.replyCount').text(data.length);
+					var replyBoard = $('.replyBoard')
+					
+					replyBoard.children().remove();
+					
+					for(var i = 0; i < data.length; i++) {
+						var $repWriterImg = $('<div class="repWriterImg" style="width: 6%; border: 1px solid black; height: 65px; border-radius: 50px; float: left; overflow: hidden; margin: 10px;">');
+						var $writerImgTag = $('<img src="${ contextPath }/' + data[i].conUrl + "/" + data[i].conCop + '" width="100%" height="100%">');
+						var $repIdDateCon = $('<div class="repIdDateCon" style="float: left;">');
+						var $idDate = $('<div class="idDate" style="margin: 10px;">');
+						var $spanId = $('<span style="margin-right: 6px;">'+ data[i].porWriter + '</span>&nbsp;');
+						var $spanDate = $('<span>20' +  data[i].porEnrollDate + '</span>');
+						var $repContents = $('<div style="margin: 10px;">' + data[i].porContent + '</div>');
+						var $clear = $('<div style="clear: both;">');
+						
+						$idDate.append($spanId);
+						$idDate.append($spanDate);
+						
+						$repIdDateCon.append($idDate);
+						$repIdDateCon.append($repContents);
+						
+						$repWriterImg.append($writerImgTag);
+						
+						replyBoard.append($repWriterImg);
+						replyBoard.append($repIdDateCon);
+						replyBoard.append($clear);
+						
+						
+					}
+					
+					$('.porContent').val("");
+				},
+				error : function(e) {
+					console.log("안되네...");
+				}
+			});
+			
+		});		
+		
+		// 포트폴리오 삭제 기능
+		$('.deleteBtn').on('click', function(){
+			swal({
+                title: "포트폴리오를 삭제 하시겠습니까?",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '삭제',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+                	$(this).prevAll().eq(1).submit();
+                } else {
+                	swal({
+    				    title: "포트폴리오",
+    				    text: "포트폴리오 삭제에 실패하였습니다.",
+    				    icon: "error" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
+		});
 		
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>

@@ -15,6 +15,7 @@ import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.dao.MemberDAO;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 @Service("mService")
 public class MemberServiceImpl implements MemberService {
@@ -114,6 +115,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public ArrayList<PortpolioContents> selectMyPagePortList(PageInfo pi, String userId) {
 		return mDAO.selectMyPagePortList(sqlSession, pi, userId);
+	}
+
+	@Override
+	public ArrayList<PortpolioReply> selectPoReply(int poNum) {
+		return mDAO.selectPoReply(sqlSession, poNum);
+	}
+
+	@Override
+	public ArrayList<PortpolioContents> selectAttachFile(int poNum) {
+		return mDAO.selectAttachFile(sqlSession, poNum);
 	}
 }
 	

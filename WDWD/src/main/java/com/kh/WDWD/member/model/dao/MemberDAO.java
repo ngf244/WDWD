@@ -14,6 +14,7 @@ import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 @Repository("uDAO")
 public class MemberDAO {
@@ -90,4 +91,12 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("portpolioMapper.selectMyPagePortList", userId, rowBounds);
 	}
 
+	public ArrayList<PortpolioReply> selectPoReply(SqlSessionTemplate sqlSession, int poNum) {
+		return (ArrayList)sqlSession.selectList("portpolioMapper.selectPoReplyFirst", poNum);
 	}
+
+	public ArrayList<PortpolioContents> selectAttachFile(SqlSessionTemplate sqlSession, int poNum) {
+		return (ArrayList)sqlSession.selectList("portpolioMapper.selectAttachFile", poNum);
+	}
+
+}

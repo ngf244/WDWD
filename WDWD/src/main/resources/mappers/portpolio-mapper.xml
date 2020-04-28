@@ -95,9 +95,10 @@
 	</select>
 	
 	<select id="selectMyPagePortList" parameterType="string" resultMap="pcResultSet">
-		select p.*, c.*, SUBSTR(c.poc_path,-35)
+		select p.*, c.*, m.*, SUBSTR(c.poc_path,-35)
 		from portpolio p
 			 left join po_contents c on (po_num = poc_ref)
+			 left join member m on (po_writer = me_id)
 		where po_writer = #{userId} and poc_level = 0 and po_status = 'Y'
 		order by po_enrolldate desc, poc_modify desc
 	</select>

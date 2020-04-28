@@ -10,6 +10,7 @@ import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
+import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
 
 public interface MemberService {
 
@@ -48,6 +49,10 @@ public interface MemberService {
 	int getMyPagePortCount(String userId);
 
 	ArrayList<PortpolioContents> selectMyPagePortList(PageInfo pi, String userId);
+
+	ArrayList<PortpolioReply> selectPoReply(int poNum);
+
+	ArrayList<PortpolioContents> selectAttachFile(int poNum);
 
 }
 
