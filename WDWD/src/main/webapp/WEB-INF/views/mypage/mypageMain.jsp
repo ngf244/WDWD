@@ -866,7 +866,7 @@
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty scList }">
-									<div class="sList">- 작성한 댓글이 없습니다.</div>
+									<div class="sList">- 스크랩 목록이 없습니다.</div>
 								</c:if>
 							</div>
 						</div>

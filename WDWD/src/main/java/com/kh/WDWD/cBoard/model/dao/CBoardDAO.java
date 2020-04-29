@@ -216,4 +216,8 @@ public class CBoardDAO {
 		
 		return (result1 >= result2) ? result2 : result1;
 	}
+
+	public String selectThumbnail(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.selectThumbnail", boNum);
+	}
 }

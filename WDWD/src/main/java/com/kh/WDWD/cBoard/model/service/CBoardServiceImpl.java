@@ -179,5 +179,10 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.go3stageContest(sqlSession, r);
 	}
 
+	@Override
+	public String selectThumbnail(int boNum) {
+		return cBoardDAO.selectThumbnail(sqlSession, boNum);
+	}
+
 	
 }

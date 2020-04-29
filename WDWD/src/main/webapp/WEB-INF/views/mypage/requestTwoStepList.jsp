@@ -59,6 +59,13 @@
 	
 	#buttonSelectNSerch:hover .dropdown-content {display: block;}
 	
+	#CategoryInfo {
+		display: inline-block;
+		font-size: 20pt;
+		color: #050099;
+		font-weight: bolder;
+	}
+	
 	/* 리스트 부분 */	
 	.boardList {
 		height: 199px;
@@ -69,7 +76,7 @@
 		border: 1px solid black;
 		display: flex;
 		
-		overflow: hidden;
+		/* overflow: hidden; */
 	}
 	
 	.boardList:hover {
@@ -77,12 +84,14 @@
 	}
 		
 	.boardImg {
-		display: inline-table;
+		display: inline-block;
 		width: 140px;
 		height: 140px;
 		margin: 5px;
 		
 		border: 1px solid black;
+		
+		cursor: pointer;
 	}
 	.boardCon {
 		/* width 값은 script로 별도 지정 */
@@ -171,19 +180,31 @@
 						    <a href="#"><span onclick="myReqCateList(4);">콘테스트</span></a>
 						</div>							
 					</div>
+					<c:if test="${ cboard.boGroup eq null}">
+						<div id="CategoryInfo">전체 보기</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '2'}">
+						<div id="CategoryInfo">1:1 의뢰</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '3'}">
+						<div id="CategoryInfo">역경매</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '4'}">
+						<div id="CategoryInfo">콘테스트</div>
+					</c:if>
 				
 					<!-- 리스트 시작 -->
+					<c:if test="${ empty list }">
+						<div class="boardList">※ 목록이 없습니다.</div>
+					</c:if>
 					<c:forEach var="rtl" items="${ list }">
 						<div class="boardList">
-							<div class="boardImg">
-								<c:if test="${ rtl.boGroup == '2' }">
-									<img src="${ contextPath }/resources/images/1on1_icon.png" style="width: 100%;">
+							<div class="boardImg" onclick="goCBD(${ rtl.boNum });">
+								<c:if test="${ rtl.thumbnail eq null }">
+									<img src="${ contextPath }/resources/images/emptyImage.png" width= "100%" height= "100%">
 								</c:if>
-								<c:if test="${ rtl.boGroup == '3' }">
-									<img src="${ contextPath }/resources/images/auction.png" style="width: 100%;">
-								</c:if>
-								<c:if test="${ rtl.boGroup == '4' }">
-									<img src="${ contextPath }/resources/images/trophy_icon.png" style="width: 100%;">
+								<c:if test="${ rtl.thumbnail ne null }">
+									<img src="${ contextPath }/resources/real_photo/${ rtl.thumbnail }" width= "100%" height= "100%">
 								</c:if>																
 							</div>
 							<div class="boardCon">
@@ -203,7 +224,7 @@
 									<c:if test="${ rtl.boGroup == '4' }" >
 									 	<b>의뢰유형</b> : 콘테스트<br>
 									</c:if>									 						 	 
-									<p><b>내용</b> : ${ rtl.boContent }</p>
+									<div class="contents"><b>내용</b>${ rtl.boContent }</div>
 								</div>
 								<div class="rightCon">
 									<c:if test="${ rtl.boGroup == '2' }">
@@ -211,7 +232,7 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rtl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											~ 20${ rtl.cbDate }
+											기한 제한 없음
 										</div>
 										<div class="rightBtn">
 											의뢰비 : ${ rtl.cbCash }
@@ -222,7 +243,7 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rtl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											~ 20${ rtl.cbDate }
+											경매 마감
 										</div>
 										<div class="rightBtn">
 											낙찰가 : ${ rtl.cbCash }
@@ -233,7 +254,7 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rtl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											~ 20${ rtl.cbDate }
+											콘테스트 마감
 										</div>
 										<div class="rightBtn">
 											상금 : ${ rtl.cbCash }
@@ -338,6 +359,18 @@
 			var cbStep = 2;
 			location.href = "reqList.my?boGroup=" + e + "&boWriter=" + boWriter + "&cbStep=" + cbStep;	
 		}
+		
+		$(function(){
+			console.log($('.contents').find('img'));
+			$('.contents').find('img').remove();
+			$('.contents').find('br').remove();
+			
+			$('.boardList').css('overflow', 'hidden');
+		});
+		
+		function goCBD(boNum){
+			location.href = "detailView.ch?boNum=" + boNum;
+		}		
 
 	</script>			
 </body>

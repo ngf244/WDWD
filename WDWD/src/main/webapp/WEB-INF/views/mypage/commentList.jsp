@@ -112,18 +112,25 @@
 							<thead>
 								<tr>
 									<th style="width: 60%;">댓글</th>
-									<th style="width: 15%">원문보기</th>
-									<th style="width: 20%">작성일</th>
+									<th style="width: 15%;">원문보기</th>
+									<th style="width: 20%;">작성일</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="r" items="${ rList }">
-								<tr>
-									<td>${ r.rpContent }</td>
-									<td><button class="orgBtn" onclick="goToOrgBoard(${ r.refNum });">원문보기</button></td>
-									<td>${ r.rpDate }</td>							
-								</tr>									
-								</c:forEach>
+								<c:if test="${ empty rList }">
+									<tr><td colspan="3">※ 댓글 목록이 없습니다.</td></tr>
+								</c:if>
+								<c:if test="${ !empty rList }">
+									<c:forEach var="r" items="${ rList }">
+										<tr>
+											<td>${ r.rpContent }</td>
+											<td><button class="orgBtn" onclick="goToOrgBoard(${ r.refNum });">원문보기</button></td>
+											<td>${ r.rpDate }</td>							
+										</tr>									
+									</c:forEach>
+								</c:if>
+								
+								
 							</tbody>
 						</table>
 					</div>

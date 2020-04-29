@@ -56,9 +56,15 @@ public class CBoardController {
 		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);
 
 		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
-
+		for(CBoard cb : list) {
+			String thumbnail = cBoardService.selectThumbnail(cb.getBoNum());
+			cb.setThumbnail(thumbnail);
+		}
+		
 		if (list != null) {
-			mv.addObject("list", list).addObject("pi", pi).addObject("cboard", cboard);
+			mv.addObject("list", list)
+			  .addObject("pi", pi)
+			  .addObject("cboard", cboard);
 
 			switch (cboard.getCbStep()) {
 			case 1:

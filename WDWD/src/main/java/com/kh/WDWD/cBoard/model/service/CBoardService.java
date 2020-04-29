@@ -75,6 +75,8 @@ public interface CBoardService {
 	
 	int go3stageContest(Request r);
 	
+	String selectThumbnail(int boNum);
+	
 
 	
 

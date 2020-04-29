@@ -118,11 +118,15 @@
 								<tr>
 									<th style="width: 400px;">제목</th>
 									<th style="width: 25%;">작성자</th>
-									<th style="width: 25%;">스크랩 등록일</th>
+									<th style="width: 25%;">스크랩 시간</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="sc" items="${ scList }">
+								<c:if test="${ empty scList }">
+									<tr><td colspan="3">※ 스크랩 목록이 없습니다.</td></tr>
+								</c:if>
+								<c:if test="${ !empty scList }">
+									<c:forEach var="sc" items="${ scList }">
 								<tr>
 									<c:url var="scr" value="detail.bo">
 										<c:param name="boNum" value="${ sc.boNum }" />
@@ -132,6 +136,8 @@
 									<td>${ sc.scrapDate }</td>							
 								</tr>									
 								</c:forEach>
+								</c:if>
+								
 							</tbody>
 						</table>
 					</div>

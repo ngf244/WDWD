@@ -100,7 +100,7 @@
 	
 	<insert id="insertScrap">
 		insert into scrap
-		values(#{userId}, #{boNum})
+		values(#{userId}, #{boNum}, to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'))
 	</insert>
 	
 	<delete id="deleteScrap">

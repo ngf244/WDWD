@@ -410,7 +410,8 @@
 				and cb_step = #{cbStep}
 			</if>
 				and bo_del = 'N'
-		</where> 
+		</where>
+		order by bo_date desc, bo_num desc
 	</select>
 	
 	<resultMap type="Request" id="RequestResultSet">
@@ -468,7 +469,8 @@
 				and cb_step = #{cbStep}
 			</if>
 				and bo_del = 'N'
-		</where>     
+		</where>
+		     
 	</select>
 	
 	<select id="selectMyWorkList" parameterType="Request" resultMap="RequestResultSet">
@@ -493,7 +495,8 @@
 				and cb_step = #{cbStep}
 			</if>
 				and bo_del = 'N'
-		</where>  	 
+		</where>
+		order by bo_date desc, bo_num desc	 
 	</select>
 	   	
   
@@ -599,4 +602,9 @@
 		
 	</select>	
 
+	<select id="selectThumbnail" parameterType="_int" resultType="string">
+		select con_cop
+		from contents
+		where con_ref = #{boNum} and con_level = 0
+	</select>
 </mapper>
