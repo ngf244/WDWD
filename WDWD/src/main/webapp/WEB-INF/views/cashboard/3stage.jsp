@@ -12,7 +12,7 @@
 	#registWrap {
 		margin-top: 50px;
 		width: auto;
-		min-height: 500px;
+		min-height: 300px;
 		height: auto;
 	}
 	#buyerInfo {

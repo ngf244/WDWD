@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
+import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.request.model.vo.Request;
 
@@ -208,7 +210,7 @@ public class CBoardController {
 	}
 
 	@RequestMapping("insert.ch")
-	public String cBoardInsert(@ModelAttribute CBoard b, HttpSession session, HttpServletRequest request,
+	public String cBoardInsert(@ModelAttribute CBoard b, Model model, HttpSession session, HttpServletRequest request,
 			@RequestParam(value = "conUrl", required = false) String[] conUrl,
 			@RequestParam(value = "conCop", required = false) String[] conCop,
 			@RequestParam(value = "conOri", required = false) String[] conOri) {
@@ -222,6 +224,10 @@ public class CBoardController {
 		}
 		
 		CBoard board = cBoardService.cBoardInsert(b);
+		
+		if(!board.getBoGroup().equals("3")) {
+			cBoardService.minusCash(board);
+		}
 		
 		if(board != null) {
 			if(conUrl != null) {
@@ -313,7 +319,12 @@ public class CBoardController {
 			
 			if(b.getBoGroup().equals("4")) {
 				ArrayList<Request> reqMList = cBoardService.reqList(boNum);
-				ArrayList<Board> reqBList = cBoardService.reqBList(boNum);
+				ArrayList<CBoard> reqBList = cBoardService.reqBList(boNum);
+				
+				for(int i = 0; i < reqBList.size(); i++) {
+					reqBList.get(i).setProfileImg(cBoardService.getProfileImg(reqBList.get(i).get));
+				}
+				
 				mv.addObject("reqMList", reqMList);
 				mv.addObject("reqBList", reqBList);
 				
@@ -343,7 +354,8 @@ public class CBoardController {
 						}
 					}
 				} else {
-					// 마감되었을 때
+					ArrayList<Contents> reqFileList = cBoardService.fileListContest(boNum);
+					mv.addObject("reqFileList", reqFileList);
 					mv.setViewName("cashboard/contest_3stage");
 				}
 			} else {

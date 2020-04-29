@@ -134,10 +134,34 @@
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
 	</insert>
 	
+	<update id="MinusCash" parameterType="CBoard">
+		update member
+		set me_cash = me_cash - #{cbCash}
+		<if test='cbPrimium.equals("Y")'>-10000</if>
+		where me_nick = #{boWriter}
+	</update>
+	
+	<insert id="MinusDetail" parameterType="CBoard">
+		insert into point_cash
+		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>+10000</if>, sysdate, 'C', (select me_id from member where me_nick = #{boWriter}))
+	</insert>
+	
+	<update id="PlusCash" parameterType="_int">
+		update member
+		set me_cash = me_cash + (select cb_cash from cash_board where cb_num = #{boNum})
+		where me_id = (select re_id from request where re_num = #{boNum} and re_plz = 'Y') 
+	</update>
+	
+	<insert id="PlusDetail" parameterType="_int">
+		insert into point_cash
+		values (pc_seq.nextval, '의뢰 수주', (select cb_cash from cash_board where cb_num = #{boNum}), sysdate, 'C', (select re_id from request where re_num = #{boNum} and re_plz = 'Y'))
+	</insert>
+	
 	<select id="cBoardSelect" resultMap="CBoardResultSet">
 		select *
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
+		join member on (board.bo_writer = member.me_id)
 		where bo_num = (select max(bo_num) from board)
 	</select>
 	
@@ -165,6 +189,13 @@
 		select *
 		from contents
 		where con_ref = #{boNum} and con_status = 'Y'
+		order by con_level
+	</select>
+	
+	<select id="fileListContest" parameterType="_int" resultMap="ContentsResultSet">
+		select *
+		from contents
+		where con_ref = (select re_refnum from request where re_num = #{boNum} and re_plz = 'Y') and con_status = 'Y'
 		order by con_level
 	</select>
 	

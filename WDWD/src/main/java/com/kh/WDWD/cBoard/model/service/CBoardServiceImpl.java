@@ -170,13 +170,23 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<Board> reqBList(int boNum) {
+	public ArrayList<CBoard> reqBList(int boNum) {
 		return cBoardDAO.reqBList(sqlSession, boNum);
 	}
 
 	@Override
 	public int go3stageContest(Request r) {
 		return cBoardDAO.go3stageContest(sqlSession, r);
+	}
+
+	@Override
+	public ArrayList<Contents> fileListContest(int boNum) {
+		return cBoardDAO.fileListContest(sqlSession, boNum);
+	}
+
+	@Override
+	public int minusCash(CBoard board) {
+		return cBoardDAO.minusCash(sqlSession, board);
 	}
 
 	

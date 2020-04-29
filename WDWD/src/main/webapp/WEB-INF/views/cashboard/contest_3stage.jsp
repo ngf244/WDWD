@@ -11,7 +11,6 @@
 	}
 	#contest_winner {
 		position: absolute;
-		opacity: 0.3;
 	}
 	.editorView {
 		width: 20%;
@@ -69,6 +68,16 @@
 	.modal-text img {
 		max-width: 100%;
 	}
+	.profile_img {
+		width: 80px;
+		height: 80px;
+		display: inline-table;
+		border-radius: 50%;
+		margin-right: 20px;
+		overflow: hidden;
+		
+		border: 1px solid black;
+	}
 	#btnList {
 		text-align: center;
 		margin-top: 30px;
@@ -122,7 +131,7 @@
 							<c:forEach var="r" items="${ reqMList }">
 								<c:forEach var="b" items="${ reqBList }">
 									<c:if test="${r.reId eq b.boWriter and r.rePlz eq 'Y'}">
-										<div class="editorView">
+										<div class="editorView" style="border: 5px double yellow;" onclick="createModal(this);">
 											<c:if test="${ !empty b.thumbnail }">
 												<img class="editorPhoto" src="${ contextPath }/resources/real_photo/${ b.thumbnail }">
 											</c:if>
@@ -130,8 +139,6 @@
 											<c:if test="${ empty b.thumbnail }">
 												<img class="editorPhoto" src="${ contextPath }/resources/images/emptyImage.png">
 											</c:if>
-											
-											<img id="contest_winner" src='${ contextPath }/resources/images/contest_winner.PNG' onclick="createWinnerModal(this);">
 											
 											<div class="editorId">
 												${ r.reId }
@@ -146,11 +153,27 @@
 										    			<div class="modal-text">
 										    				${ b.boContent }
 										    			</div>
+										    			
+										    			<div class="leftLine">
+															<span class="redColor">＞ </span>첨부파일
+														</div>
+														<div class="rightLine">
+															<c:if test="${ empty reqFileList}">
+																첨부된 파일이 없습니다.
+															</c:if>
+															
+															<c:if test="${ !empty reqFileList }">
+																<c:forEach var="file" items="${ reqFileList }">
+																	<span class="downloadName">${ file.conOri }</span> <a class="downloadBtn" href="${ file.conUrl }/${ file.conCop }" download="${ file.conOri }">download</a><br>
+																</c:forEach>
+															</c:if>
+														</div>
+										    			
 										    		</div>
 										    		<div class="modal-right">
 										    			<div id="profile_wrap">
-										    				<div id="profile_img"><img src=''></div>
-										    				<b>${ b.boWriter }</b>
+										    				<div class="profile_img"><img src=''></div>
+										    				<b id="contestWinnerNick">${ b.boWriter }</b>
 										    			</div>	
 														<p>마이페이지</p>
 														<p>작성 글 보기</p>
@@ -158,6 +181,8 @@
 										    		</div>
 										    	</div>
 										    </div>
+										    
+										    <img id="contest_winner" src='${ contextPath }/resources/images/contest_winner.png'>
 										</div>
 									</c:if>
 								</c:forEach>
@@ -167,8 +192,8 @@
 									
 									winnerImg.css("left", winnerDiv.offset().left + "px");
 									winnerImg.css("top", winnerDiv.offset().top + "px");
-									winnerImg.css("width", winnerDiv.innerWidth());
-									winnerImg.css("height", winnerDiv.innerHeight());
+									winnerImg.css("width", winnerDiv.innerWidth() / 5);
+									winnerImg.css("height", winnerDiv.innerHeight() / 5);
 								</script>
 							</c:forEach>
 						
@@ -201,7 +226,7 @@
 										    		</div>
 										    		<div class="modal-right">
 										    			<div id="profile_wrap">
-										    				<div id="profile_img"><img src=''></div>
+										    				<div class="profile_img"><img src=''></div>
 										    				<b>${ b.boWriter }</b>
 										    			</div>	
 														<p>마이페이지</p>
@@ -236,6 +261,17 @@
 					</div>
 					
 					<script>
+						$('.downloadBtn').click(function(e){
+							if($('#contestWinnerNick').text() != "${sessionScope.loginUser.nickName}" && "${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
+								e.preventDefault();
+								swal({
+									title: "원본 파일은 작성자와 에디터만 다운로드할 수 있습니다.",
+									icon: "error"
+								});
+							}
+						})
+					
+					
 						function waitAlert() {
 							swal({
 								title: "에디터가 아직 글을 등록하지 않았습니다.",
@@ -250,24 +286,6 @@
 							});
 							return false;
 				        });
-						
-						function createWinnerModal(e) {
-							$('.editorView').attr('onclick', '')
-				    		$(e).parent().children().eq(3).show();
-				    		$(e).parent().children().eq(3).scrollTop(0);
-				    		
-				    		var modalImg = $(e).parent().children().eq(3).children().children().children().eq(1).find('img');
-				    		
-			    			for(var i = 0; i < modalImg.length; i++) {
-								var $watermark = $('<img>');
-								$watermark.attr('class', 'watermark_contest');
-								$watermark.attr('src', '${ contextPath }/resources/images/watermark_free.png');
-								
-								$(e).children().eq(2).children().children().children().eq(1).append($watermark);
-								setWaterMarkContest(modalImg.eq(i), $watermark);
-							}
-							
-						}
 						
 						function createModal(e) {
 				    		$('.editorView').attr('onclick', '')

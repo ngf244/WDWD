@@ -385,12 +385,12 @@
 
                 <div class="smallMenu yellow">
                   <img src="${ contextPath }/resources/images/point.png">
-                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.point }" type="number" groupingUsed="true"/> POINT</b>
+                  <br><b><span id="havePoint"></span> POINT</b>
                 </div>
 
                 <div class="smallMenu yellow">
                   <img src="${ contextPath }/resources/images/cash.png">
-                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.cash }" type="number" groupingUsed="true"/> CASH</b>
+                  <br><b><span id="haveCash"></span> CASH</b>
                 </div>
 
                 <div class="smallMenu blue" onclick="goMyPage();">
@@ -426,10 +426,27 @@
             </c:if>
 				<script>
 					$('#modalMenu').click(function() {
-						$('#smallInfo').css('display', 'block');
-						setTimeout(function() {
-							$('#smallInfoContent').addClass("open");
-						}, 1);
+						$.ajax({
+							url: 'sessionUpdate.me',
+							data: {userId: '${ sessionScope.loginUser.userId }'},
+							type: 'post',
+							success: function(data) {
+								var point = Number(JSON.parse(data).point);
+								var cash = Number(JSON.parse(data).cash);
+								
+								$('#smallInfo').css('display', 'block');
+								$('#havePoint').text(point.toLocaleString());
+								$('#haveCash').text(cash.toLocaleString());
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + JSON.parse(data).profileImg);
+								
+								setTimeout(function() {
+									$('#smallInfoContent').addClass("open");
+								}, 100);
+							}
+						})
+						.always(function() {
+							
+						});
 					});
 					$('#smallInfo').click(function() {
 						if(!($('#smallInfoContent').is(":hover"))) {

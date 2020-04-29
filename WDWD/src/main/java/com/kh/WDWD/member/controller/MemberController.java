@@ -1,6 +1,8 @@
 package com.kh.WDWD.member.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +40,7 @@ import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 
 @SessionAttributes("loginUser")
@@ -45,6 +49,28 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mService;
+	
+	@ResponseBody
+	@RequestMapping("sessionUpdate.me")
+	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
+		Member loginUser = mService.selectMember(userId);
+		model.addAttribute("loginUser", loginUser);
+		
+		JSONObject updateUser = new JSONObject();
+
+		updateUser.put("point", loginUser.getPoint());
+		updateUser.put("cash", loginUser.getCash());
+		updateUser.put("profileImg", loginUser.getProfileImg());
+
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(updateUser);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@RequestMapping(value="login.me",method=RequestMethod.POST)
 	public String memberLogin(@ModelAttribute Member m, Model model) {

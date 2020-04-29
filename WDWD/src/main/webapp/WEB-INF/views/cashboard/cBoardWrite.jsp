@@ -634,7 +634,7 @@
 								
 								<div id="detailPremiumText" class="miniInfo" hidden="">
 									프리미엄 글로 등록할 시<br>
-									3,000 캐시를 추가로 차감해<br>
+									10,000 캐시를 추가로 차감해<br>
 									게시판 상단에 노출시켜 드립니다.
 								</div>
 								
@@ -689,7 +689,7 @@
 						
 						$('#submit').click(function(){
 							editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-
+							
 							if($('#boTitle').val() == "") {
 								swal({
 									title: "제목을 입력해주세요.",
@@ -709,6 +709,16 @@
 								// 현재 미작동
 								swal({
 									title: "내용을 입력해주세요.",
+									icon: "error"
+								});
+							} else if(Number("${ sessionScope.loginUser.cash }") < Number($('#cbCash').val())) {
+								swal({
+									title: "보유 캐쉬가 부족합니다.",
+									icon: "error"
+								});
+							} else if(Number("${ sessionScope.loginUser.cash }") - 10000 < Number($('#cbCash').val()) && $('#cbPrimium').val() == 'Y') {
+								swal({
+									title: "보유 캐쉬가 부족합니다.",
 									icon: "error"
 								});
 							} else {

@@ -71,9 +71,13 @@ public interface CBoardService {
 	
 	int timeOut(int boNum);
 	
-	ArrayList<Board> reqBList(int boNum);
+	ArrayList<CBoard> reqBList(int boNum);
 	
 	int go3stageContest(Request r);
+	
+	ArrayList<Contents> fileListContest(int boNum);
+	
+	int minusCash(CBoard board);
 	
 
 	
