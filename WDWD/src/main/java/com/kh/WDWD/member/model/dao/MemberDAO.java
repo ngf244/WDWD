@@ -16,6 +16,7 @@ import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Repository("uDAO")
 public class MemberDAO {
@@ -113,6 +114,22 @@ public class MemberDAO {
 
 	public ArrayList<Scrap> selectRecentlyScrap(SqlSessionTemplate sqlSession, String userId) {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyScrap", userId);
+	}
+
+	public int nickCheck(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.nickCheck", m);
+	}
+
+	public int updateMember(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updateMember", m);
+	}
+
+	public int insertGrade(SqlSessionTemplate sqlSession, Request r) {
+		return sqlSession.update("memberMapper.insertGrade", r);
+	}
+
+	public String selectUserId(SqlSessionTemplate sqlSession, Request r) {
+		return sqlSession.selectOne("memberMapper.selectUserId", r);
 	}
 
 }

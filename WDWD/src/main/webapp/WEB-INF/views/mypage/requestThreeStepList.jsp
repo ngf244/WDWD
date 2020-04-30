@@ -160,6 +160,42 @@
 	
 	.pagination a:hover:not(.active) {background-color: #ddd;}	
 	
+	/* 평점 매기기 */
+	.gradeArea{
+		position: absolute;
+		display: none;
+		width: 15%;
+		height: 160px;
+		border: 1px solid black;
+		padding: 10px;
+		text-align: center;
+		background: white;
+	}
+	
+	.gradeBtn{
+		cursor: pointer;
+	}
+	
+	h3{font-family: 'Noto Sans KR', sans-serif;}
+	
+	/*제이쿼리 활용 별점 매기기*/
+	.starR{
+	  background: url('<%= request.getContextPath() %>/resources/images/ico_review.png') no-repeat right 0;
+	  background-size: auto 100%;
+	  width: 30px;
+	  height: 30px;
+	  display: inline-block;
+	  text-indent: -9999px;
+	  cursor: pointer;
+	}
+	.starR.on{background-position:0 0;}
+	.starRev{margin-left: 10px;}
+	/*버튼 css*/
+    .btn{
+		border-radius: 0.5rem; white-space: nowrap; border: 1px solid transparent; background-color: #7780b7; color: white; 
+		line-height: 1.5; padding: 4px 10px; margin: 7px; width: auto;    
+    }
+	
 </style>
 <title>거래 완료</title>
 </head>
@@ -239,7 +275,9 @@
 										<div class="rightBtn">
 											의뢰비 : ${ rthl.cbCash }
 										</div>
-										<div class="rightBtn">
+										<div class="rightBtn gradeBtn">
+											<input type="hidden" value="${ rthl.reId }">
+											<input type="hidden" value="${ rthl.reNum }">
 											<c:choose>
 												<c:when test="${ rthl.reGrade == '5' }">
 													평점 : <span class="starRating">★★★★★</span>
@@ -269,7 +307,9 @@
 										<div class="rightBtn">
 											낙찰가 : ${ rthl.cbCash }
 										</div>
-										<div class="rightBtn">
+										<div class="rightBtn gradeBtn">
+											<input type="hidden" value="${ rthl.reId }">
+											<input type="hidden" value="${ rthl.reNum }">
 											<c:choose>
 												<c:when test="${ rthl.reGrade == '5' }">
 													평점 : <span class="starRating">★★★★★</span>
@@ -299,7 +339,9 @@
 										<div class="rightBtn">
 											상금 : ${ rthl.cbCash }
 										</div>
-										<div class="rightBtn">
+										<div class="rightBtn gradeBtn">
+											<input type="hidden" value="${ rthl.reId }">
+											<input type="hidden" value="${ rthl.reNum }">
 											<c:choose>
 												<c:when test="${ rthl.reGrade == '5' }">
 													평점 : <span class="starRating">★★★★★</span>
@@ -392,7 +434,35 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="gradeArea" id="gradeArea">
+				<h3 style="margin-left: 20px;">평점 매기기</h3>
+				<div class="bodyArea">
+					<form action="iGrade.my" method="post">
+						<div class="starRev">
+						    <a class="starR on" value="1">별1</a>
+						    <a class="starR" value="2">별2</a>
+						    <a class="starR" value="3">별3</a>
+						    <a class="starR" value="4">별4</a>
+						    <a class="starR" value="5">별5</a>
+						</div>
+						<div style="clear: both;"></div>
+						<br>
+						<input type="hidden" id="reId" name="reId" value="">
+						<input type="hidden" id="reNum" name="reNum" value="">
+						<input type="hidden" name="reGrade" id="reGrade" class="reGrade" value="">
+						<div class="btnArea">
+							<button type="submit" name="send" class="btn" style="cursor: pointer;">완료</button>
+							<button type="button" name="cancel" class="btn" onclick="closePopUp(this);" style="cursor: pointer;">취소</button>  		
+						</div>
+					</form>	
+				</div>
+			</div>
+		
 		</div>
+		
+		
+		
 		<div id="right-side">
 				
 		</div>
@@ -432,7 +502,44 @@
 		
 		function goCBD(boNum){
 			location.href = "detailView.ch?boNum=" + boNum;
-		}		
+		}
+		
+		// 평점 매기기 
+		$('.starRev a').click(function(){
+			$(this).parent().children('a').removeClass('on');
+		    $(this).addClass('on').prevAll('a').addClass('on');
+		    console.log($(this).attr("value"));
+		  	$('.reGrade').attr("value",$(this).attr("value"));
+		    console.log($('.reGrade').attr("value"));
+		    return false;
+		});
+		
+		// 평점 영역 클릭 시 평점 매기는 레이어 팝업
+		$('.gradeBtn').click(function(e) {
+			$('#gradeArea').css({
+				"top" : (($(window).height()-$('#gradeArea').outerHeight())/2+$(window).scrollTop())+"px",
+				"left" : (($( window ).width()-$('#gradeArea').outerWidth())/2+$(window).scrollLeft())+"px",
+				"position" : "absolute"
+			}).show();
+		
+			var reId = $(this).children().eq(0).val();
+			var reNum = $(this).children().eq(1).val();
+			
+			console.log("reId : " + reId);
+			console.log("reNum : " + reNum);
+			
+			$('#reNum').attr('value', reNum);
+			$('#reId').attr('value', reId);
+		});
+		
+		// 취소버튼 클릭 시 팝업 창 닫기
+		function closePopUp(e){
+			$(e).parent().parent().parent().parent().hide();
+		}
+		
+		// 완료버튼 클릭 시 평점 등록
+		
+		
 	</script>			
 </body>
 </html>

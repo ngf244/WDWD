@@ -192,8 +192,8 @@
 		margin: 15% auto;
 		padding: 20px;
 		border: 1px solid #888;
-		width: 45%;
-		height: 1120px;
+		width: 50%;
+		height: 1240px;
 		border-radius: 10px;
 	}
 	
@@ -205,7 +205,7 @@
 		 padding-top: 10px;
 		 width: 100px;
 		 border-radius: 10px;
-		 margin-left: 300px;
+		 margin-left: 360px;
 		 margin-top: 15px;
 		 font-size: 13pt; 
 		 font-weight: bold;
@@ -240,11 +240,22 @@
 	
 	#addInfoText{width: 80%; height: 60px; background: rgb(102, 102, 102); color: white; margin: 20px; margin-left: 90px; font-size: 18pt; font-weight: bold; text-align: center; line-height: 55px; border-radius: 10px;}	
 	
-	.basicInfo>table{margin: 50px; margin-left: 150px; font-size: 14pt; line-height: 30px;}
-	.addInfo>table{margin: 50px; margin-left: 150px; font-size: 14pt; line-height: 30px;}
+	.basicInfo>table{margin: 50px; margin-left: 120px; font-size: 14pt; line-height: 30px;}
+	.addInfo>table{margin: 50px; margin-left: 120px; font-size: 14pt; line-height: 30px;}
 	
 	input{border-radius: 5px; height: 25px; font-size: 12pt;}
 	textarea{border-radius: 5px; resize: none; margin-top: 30px; font-size: 12pt;}
+	.nickBtn{
+		color: white;
+		background: gray;
+		padding: 2px;
+		font-family:Arial;
+		box-shadow: 1px 1px 2px black;
+		font-size: 12pt;
+		text-align: center;
+		cursor: pointer;
+		width: 40%; 
+	}
 	
 	/* 현재 포인트&캐쉬 */
 	.point-cash-area{height: 110px; margin-top: 25px;}
@@ -1148,37 +1159,48 @@
 						<div class="col-sm-12">
 							<div class="row">
 								<div class="col-sm-12">
-									<form action="uMember.my" name="basicInfoForm" method="post">
+									<form action="uMember.my" name="basicInfoForm" id="basicInfoForm" method="post">
 										<div class="basicInfo">
 											<div id="basicInfoText">기본 정보</div>
+											<div style="color: red; font-size: 12pt; margin-left: 100px;">※ 아래 입력란은 필수 기입 사항입니다.</div>
+											<input type="hidden" name="userId" value="${ loginUser.userId }">
 											<table>
 												<tr>
-													<td style="width: 300px; height: 50px;">이름</td>
-													<td style="height: 50px;"><input type="text" name="userName" class="userName" value="${ loginUser.userName }"></td>
+													<td style="width: 25%; height: 50px;">이름</td>
+													<td style="width: 35%; height: 50px;"><input type="text" name="userName" id="userName" class="userName" value="${ loginUser.userName }"></td>
+													<td style="width: 40%;"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">비밀번호</td>
-													<td style="height: 50px;"><input type="password" name="userPwd" class="userPwd"></td>
+													<td style="height: 50px;"><input type="password" name="userPwd" id="userPwd" class="userPwd" id="userPwd"></td>
+													<td style="font-size: 12pt;"><label id="pwd1Result"></label></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">비밀번호 재확인</td>
-													<td style="height: 50px;"><input type="password" name="userPwd2" class="userPwd2"></td>
+													<td style="height: 50px;"><input type="password" name="userPwd2" id="userPwd2" class="userPwd2" id="userPwd2"></td>
+													<td style="font-size: 12pt;"><label id="pwd2Result"></label></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">닉네임</td>
-													<td style="height: 50px;"><input type="text" name="nickName" class="nickName" value="${ loginUser.nickName }"></td>
+													<td colspan="2" style="height: 50px;"><input type="text" name="nickName" id="nickName" class="nickName" value="${ loginUser.nickName }"></td>
+													<td><input type="hidden" name="nickFlag" id="nickFlag"></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td><div class="nickBtn">중복 확인</div></td>
+													<td style="font-size: 12pt;"><label id="nickResult"></label></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">연락처</td>
-													<td style="height: 50px;"><input type="text" name="phone" class="phone" value="${ loginUser.phone }"></td>
+													<td colspan="2" style="height: 50px;"><input type="text" name="phone" id="phone" class="phone" value="${ loginUser.phone }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">이메일</td>
-													<td style="height: 50px;"><input type="email" name="email" class="email" value="${ loginUser.email }"></td>
+													<td colspan="2" style="height: 50px;"><input type="email" name="email" id="email" class="email" value="${ loginUser.email }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">자기소개</td>
-													<td style="height: 50px;"><textarea rows="8" cols="50">${ loginUser.intro }</textarea></td>
+													<td colspan="2" style="height: 50px;"><textarea name="intro" id="intro" class="intro" rows="8" cols="60">${ loginUser.intro }</textarea></td>
 												</tr>																																																
 											</table>
 										
@@ -1186,14 +1208,15 @@
 										</div>
 										<div class="addInfo">
 											<div id="addInfoText">추가 정보</div>
+											<div style="color: red; font-size: 12pt; margin-left: 100px;">※ 아래 입력란은 선택 사항입니다.</div>
 												<table>
 													<tr>
 														<td style="width: 300px; height: 50px;">은행명</td>
-														<td style="height: 50px;"><input type="text" name="bank" class="bank" value="${ loginUser.bank }"></td>
+														<td style="height: 50px;"><input type="text" name="bank" id="bank" class="bank" value="${ loginUser.bank }"></td>
 													</tr>
 													<tr>
 														<td style="height: 50px;">계좌번호</td>
-														<td style="height: 50px;"><input type="text" name="accountNumber" class="accountNumber" value="${ loginUser.account }"></td>
+														<td style="height: 50px;"><input type="text" name="account" id="account" class="account" value="${ loginUser.account }"></td>
 													</tr>													
 												</table>
 										</div>
@@ -1203,8 +1226,8 @@
 						</div>
 					</div>
 					<hr>
-					<div id="editCompleteBtn" onClick="closeModal();">완료</div>
-					<div id="editCancelBtn" onClick="closeModal();">취소</div>
+					<div id="editCompleteBtn">완료</div>
+					<div id="editCancelBtn" onclick="closeModal();">취소</div>
 					<div style="clear: both;"></div>
 				</div>
 			</div>
@@ -1576,6 +1599,133 @@
              });
 		});
 		
+		$('#userPwd').blur(function(){
+			var regExp3 = /^[a-zA-Z](?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!*&]).{7,11}$/;
+
+			if(!regExp3.test($(this).val())){
+				$('#pwd1Result').html("알맞은 비밀번호를 입력하세요").css('color', 'red');
+				$(this).focus().css('background', 'red');
+			} else{
+				$('#pwd1Result').html("정상입력").css({'color':'green'},{'text-align':'center'});
+				$(this).css('background', 'white');
+			}
+		});
+
+		$('#userPwd2').keyup(function(){
+			if($('#userPwd').val() == $(this).val()){
+				$('#pwd2Result').html("정상입력").css({'color':'green'},{'text-align':'center'});
+				$(this).css('background', 'white');
+			} else{
+				$('#pwd2Result').html("비밀번호가 일치하지 않습니다.").css('color', 'red');
+				$(this).focus().css('background', 'red');
+			}
+		});
+		
+		$('.nickBtn').on('click', function(){
+			var nickName = $('.nickName').val();
+			console.log(nickName);
+			$.ajax({
+				type	: "POST",
+				url	    : 'nickCheck.my',
+				data	: {'nickName':nickName},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("닉체크 성공!")
+					console.log(data);
+					if(data){
+						$('#nickResult').text("이미 닉네임이 존재합니다.").css('color','red');
+						$('#nickName').focus();
+						$('#nickFlag').val("true");
+					} else{
+						$('#nickResult').text("사용 가능한 닉네임입니다.").css('color','green');
+						$('#nickFlag').val("false");
+					}
+					
+					
+				}
+			});
+		});
+
+		
+		$('#editCompleteBtn').click(function(){
+			
+			if($('#userName').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "이름을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#userPwd').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "비밀번호를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#nickName').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "닉네임을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#nickFlag').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "닉네임 중복체크를 해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#nickFlag').val() != "false") {
+				swal({
+				    title: "프로필",
+				    text: "다른 닉네임을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#phone').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "전화번호를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#email').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "이메일를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#intro').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "자기소개를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else {
+				
+				swal({
+                    title: "프로필 정보 수정을 마치시겠습니까?",
+                    icon: "info",
+                    buttons : {
+                       cancle : {
+                          text : '취소',
+                          value : false
+                       },
+                       confirm : {
+                          text : '완료',
+                          value : true
+                       }
+                    }
+                 }).then((result) => {
+                    if(result) {
+        				$('#basicInfoForm').submit();
+                    } else {
+                    	swal({
+        				    title: "프로필",
+        				    text: "프로필 정보 수정에 실패하였습니다.",
+        				    icon: "error" //"info,success,warning,error" 중 택1
+        				});
+                    }
+                 });
+					
+			};
+		});		
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>

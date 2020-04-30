@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,7 @@ import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 
 @SessionAttributes("loginUser")
@@ -302,6 +304,56 @@ public class MemberController {
 		}
 		
 		return mv;
+	}
+	
+	@RequestMapping("nickCheck.my")
+	public @ResponseBody void nickCheck(@ModelAttribute Member m, HttpServletResponse response) throws Exception {
+		System.out.println("m : " + m);
+		
+		int result = mService.nickCheck(m);
+		
+		System.out.println("result : " + result);
+		
+		response.setCharacterEncoding("UTF-8");
+		
+		if(result >= 1) {
+			new Gson().toJson(true, response.getWriter());
+		} else {
+			new Gson().toJson(false, response.getWriter());
+		}
+		
+	}
+	
+	@RequestMapping("uMember.my")
+	public String updateMember(@ModelAttribute Member m) {
+		System.out.println("Member : " + m);
+		
+		int result = mService.updateMember(m);
+		
+		if(result > 0) {
+			return "redirect:main.my?userId=" + m.getUserId();
+		} else {
+			throw new MemberException("프로필 정보 수정에 실패하였습니다.");
+		}
+		
+	}
+	
+	@RequestMapping("iGrade.my")
+	public String insertGrade(@ModelAttribute Request r, HttpSession session) {
+		System.out.println("Request : " + r);
+		
+		String boWriter = ((Member)session.getAttribute("loginUser")).getUserId();
+		String reId = mService.selectUserId(r);
+		
+		r.setReId(reId);
+		
+		int result = mService.insertGrade(r);
+		
+		if(result > 0) {
+			return "redirect:reqList.my?boWriter=" + boWriter + "&cbStep=3";
+		} else {
+			throw new MemberException("평점 등록에 실패하였습니다.");
+		}
 	}
 }
 	

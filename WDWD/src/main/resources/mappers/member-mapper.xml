@@ -266,5 +266,35 @@
 		]]>
 	</select>
 	  
+	<select id="nickCheck" parameterType="Member" resultType="_int">
+		select count(*)
+		from member
+		where me_nick = #{nickName}
+	</select>
+	
+	<update id="updateMember" parameterType="Member">
+		update member
+		set me_pw = #{userPwd}, me_name = #{userName}, me_nick = #{nickName}, me_phone = #{phone}, me_email = #{email},
+			me_intro = #{intro}
+			<if test="account != null">
+			, me_acount = #{account}	
+			</if>
+			<if test="account != null">
+			, me_bank = #{bank}	
+			</if>
+		where me_id = #{userId}
+	</update>
+	
+	<update id="insertGrade" parameterType="Request">
+		update request
+		set re_grade = #{reGrade}
+		where re_num = #{reNum} and re_id = #{reId}
+	</update>
+	
+	<select id="selectUserId" parameterType="Request" resultType="string">
+		select me_id
+		from member
+		where me_nick = #{reId}
+	</select>  
 </mapper>
 

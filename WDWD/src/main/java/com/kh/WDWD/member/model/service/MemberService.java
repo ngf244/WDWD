@@ -12,6 +12,7 @@ import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 public interface MemberService {
 
@@ -60,6 +61,14 @@ public interface MemberService {
 	ArrayList<Scrap> selectMyScrapList(String userId, PageInfo pi);
 
 	ArrayList<Scrap> selectRecentlyScrap(String userId);
+
+	int nickCheck(Member m);
+
+	int updateMember(Member m);
+
+	int insertGrade(Request r);
+
+	String selectUserId(Request r);
 
 }
 

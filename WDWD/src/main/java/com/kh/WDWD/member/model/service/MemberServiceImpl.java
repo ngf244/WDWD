@@ -17,6 +17,7 @@ import com.kh.WDWD.member.model.dao.MemberDAO;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Service("mService")
 public class MemberServiceImpl implements MemberService {
@@ -141,6 +142,26 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public ArrayList<Scrap> selectRecentlyScrap(String userId) {
 		return mDAO.selectRecentlyScrap(sqlSession, userId);
+	}
+
+	@Override
+	public int nickCheck(Member m) {
+		return mDAO.nickCheck(sqlSession, m);
+	}
+
+	@Override
+	public int updateMember(Member m) {
+		return mDAO.updateMember(sqlSession, m);
+	}
+
+	@Override
+	public int insertGrade(Request r) {
+		return mDAO.insertGrade(sqlSession, r);
+	}
+
+	@Override
+	public String selectUserId(Request r) {
+		return mDAO.selectUserId(sqlSession, r);
 	}
 }
 	
