@@ -143,7 +143,7 @@
 										    		</div>
 										    		<div class="modal-right">
 										    			<div id="profile_wrap">
-										    				<div id="profile_img"><img src=''></div>
+										    				<div id="profile_img"><img src='${ contextPath }/resources/profile_Image/${b.profileImg}'></div>
 										    				<b>${ b.boWriter }</b>
 										    			</div>	
 														<p>마이페이지</p>

@@ -364,6 +364,13 @@
  		where bo_num = #{reRefNum}
  	</delete>
  	
+ 	<select id="getProfileImg" parameterType="string" resultType="string">
+ 		select con_cop
+ 		from contents
+ 		join member on (con_num = me_con_num)
+ 		where me_nick = #{boWriter}
+ 	</select>
+ 	
 	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">
 		select count(*)
 		from board

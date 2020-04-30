@@ -406,20 +406,12 @@
                 <div style="height: 60px;"></div>
 
                 <div id="recently">최근 본 글</div>
-                <div class="recentlyBoard">
-                  1번글제목이 엄청나게 길면 어떻게 될까요ㅎㅎㅎㅎㅎㅎㅎㅎㅎ
-                </div>
-                <div class="recentlyBoard">
-                  2번글제목
-                </div>
-                <div class="recentlyBoard">
-                  3번글제목
-                </div>
-                <div class="recentlyBoard">
-                  4번글제목
-                </div>
-                <div class="recentlyBoard">
-                  5번글제목
+                
+                <input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+                <input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+                <input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+                <input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+                <input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
                 </div>				
                 </div>
               </div>
@@ -431,13 +423,39 @@
 							data: {userId: '${ sessionScope.loginUser.userId }'},
 							type: 'post',
 							success: function(data) {
-								var point = Number(JSON.parse(data).point);
-								var cash = Number(JSON.parse(data).cash);
+								var list = JSON.parse(data).list;
+																
+								var point = Number(list[0].point);
+								var cash = Number(list[0].cash);
 								
 								$('#smallInfo').css('display', 'block');
 								$('#havePoint').text(point.toLocaleString());
 								$('#haveCash').text(cash.toLocaleString());
-								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + JSON.parse(data).profileImg);
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
+								
+								for(var i = 1; i < list.length; i++) {
+									if(list[0].recent1 == list[i].boNum) {
+										$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(0).text(list[i].boTitle);
+										$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
+									} else if(list[0].recent2 == list[i].boNum) {
+										$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(1).text(list[i].boTitle);
+										$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
+									} else if(list[0].recent3 == list[i].boNum) {
+										$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(2).text(list[i].boTitle);
+										$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
+									} else if(list[0].recent4 == list[i].boNum) {
+										$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(3).text(list[i].boTitle);
+										$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
+									} else if(list[0].recent5 == list[i].boNum) {
+										$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(4).text(list[i].boTitle);
+										$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
+									}
+								}
 								
 								setTimeout(function() {
 									$('#smallInfoContent').addClass("open");
@@ -454,6 +472,14 @@
 							$('#smallInfo').css('display', 'none');
 							setTimeout(() => {
 							}, 500);
+						}
+					});
+					
+					$('.recentlyBoard').click(function() {
+						if($(this).next().val() == 1) {
+							location.href= "detail.bo?boNum=" + $(this).prev().val();
+						} else {
+							location.href= "detailView.ch?boNum=" + $(this).prev().val();
 						}
 					});
 

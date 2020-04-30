@@ -54,5 +54,9 @@ public interface MemberService {
 
 	ArrayList<PortpolioContents> selectAttachFile(int poNum);
 
+	int recentlyBoard(Member m);
+
+	ArrayList<Board> recentlyBoardList(Member loginUser);
+
 }
 

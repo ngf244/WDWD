@@ -126,5 +126,15 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<PortpolioContents> selectAttachFile(int poNum) {
 		return mDAO.selectAttachFile(sqlSession, poNum);
 	}
+
+	@Override
+	public int recentlyBoard(Member m) {
+		return mDAO.recentlyBoard(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Board> recentlyBoardList(Member loginUser) {
+		return mDAO.recentlyBoardList(sqlSession, loginUser);
+	}
 }
 	

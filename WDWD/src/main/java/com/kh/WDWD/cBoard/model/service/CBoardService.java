@@ -79,6 +79,8 @@ public interface CBoardService {
 	
 	int minusCash(CBoard board);
 	
+	String getProfileImg(String boWriter);
+	
 
 	
 

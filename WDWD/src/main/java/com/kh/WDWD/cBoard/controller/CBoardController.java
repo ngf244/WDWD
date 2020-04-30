@@ -35,6 +35,7 @@ import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cBoard.model.vo.Chat;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
+import com.kh.WDWD.member.controller.MemberController;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.request.model.vo.Request;
@@ -44,6 +45,9 @@ public class CBoardController {
 
 	@Autowired
 	private CBoardService cBoardService;
+	
+	@Autowired
+	private MemberService mService;
 
 	@RequestMapping("reqList.my")
 	public ModelAndView reqListView(@ModelAttribute CBoard cboard,
@@ -309,6 +313,28 @@ public class CBoardController {
 	@RequestMapping("detailView.ch")
 	public ModelAndView cBoardDetailView(@RequestParam("boNum") int boNum, ModelAndView mv, HttpServletRequest request,
 			HttpSession session) {
+		
+		Member m = (Member)session.getAttribute("loginUser");
+		if(m != null) {
+			if(boNum != m.getRecent1()) {
+				if(boNum != m.getRecent2()) {
+					if(boNum == m.getRecent3()) {
+						m.setRecent3(m.getRecent2());
+					} else if(boNum == m.getRecent4()) {
+						m.setRecent4(m.getRecent3());
+						m.setRecent3(m.getRecent2());
+					} else {
+						m.setRecent5(m.getRecent4());
+						m.setRecent4(m.getRecent3());
+						m.setRecent3(m.getRecent2());
+					}
+				}
+				m.setRecent2(m.getRecent1());
+				m.setRecent1(boNum);
+			}
+			
+			mService.recentlyBoard(m);
+		}
 
 		CBoard b = cBoardService.cBoardDetailView(boNum);
 		ArrayList<Contents> fileList = cBoardService.fileList(boNum);
@@ -322,7 +348,7 @@ public class CBoardController {
 				ArrayList<CBoard> reqBList = cBoardService.reqBList(boNum);
 				
 				for(int i = 0; i < reqBList.size(); i++) {
-					reqBList.get(i).setProfileImg(cBoardService.getProfileImg(reqBList.get(i).get));
+					reqBList.get(i).setProfileImg(cBoardService.getProfileImg(reqBList.get(i).getBoWriter()));
 				}
 				
 				mv.addObject("reqMList", reqMList);
@@ -331,7 +357,6 @@ public class CBoardController {
 				if(b.getCbStep() != 3) {
 					mv.setViewName("cashboard/contest_1stage");
 					
-					Member m = (Member)session.getAttribute("loginUser");
 					for(int i = 0; i < reqMList.size(); i++) {
 						if(m != null) {
 							if(reqMList.get(i).getReId().equals(m.getNickName())) {
@@ -367,8 +392,7 @@ public class CBoardController {
 						break;
 					case 2:
 						String userNick = "";
-						if(session.getAttribute("loginUser") != null) {
-							Member m = (Member)session.getAttribute("loginUser");
+						if(m != null) {
 							userNick = m.getNickName();
 						}
 						

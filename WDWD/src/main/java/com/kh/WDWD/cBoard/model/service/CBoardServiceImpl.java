@@ -189,5 +189,10 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.minusCash(sqlSession, board);
 	}
 
+	@Override
+	public String getProfileImg(String boWriter) {
+		return cBoardDAO.getProfileImg(sqlSession, boWriter);
+	}
+
 	
 }

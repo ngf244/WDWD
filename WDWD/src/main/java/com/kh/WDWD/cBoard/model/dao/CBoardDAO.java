@@ -247,4 +247,8 @@ public class CBoardDAO {
 		
 		return 0;
 	}
+
+	public String getProfileImg(SqlSessionTemplate sqlSession, String boWriter) {
+		return sqlSession.selectOne("cBoardMapper.getProfileImg", boWriter);
+	}
 }
