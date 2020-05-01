@@ -103,7 +103,7 @@ public class PortpolioController {
 	}
 	
 	@RequestMapping("enrollPort.my")
-	public String EnrollPortpolio(HttpSession session, @ModelAttribute Portpolio p, 
+	public String enrollPortpolio(HttpSession session, @ModelAttribute Portpolio p, 
 								  @RequestParam("pocOriginArr") String[] pocOriginArr, 
 								  @RequestParam("pocModifyArr") String[] pocModifyArr, 
 								  HttpServletRequest request) {
@@ -326,5 +326,114 @@ public class PortpolioController {
 		}
 	}
 	
+	@RequestMapping("uPortView.my")
+	public ModelAndView updatePortView(@ModelAttribute Portpolio p, ModelAndView mv) {
+		System.out.println("uPortView : " + p);
+		
+		PortpolioContents pc = pService.updatePortView(p);
+		System.out.println("uPortView1 : " + pc);
+		
+		ArrayList<PortpolioReply> portReply = pService.selectPoReply(pc.getPoNum());
+		pc.setPortReply(portReply);
+		
+		ArrayList<PortpolioContents> portContents = pService.selectAttachFile(pc.getPoNum());
+		
+		System.out.println("portContents : " + portContents);
+		pc.setPortContents(portContents);
+		
+		System.out.println("uPortView2 : " + pc);
+		if(pc != null) {
+			mv.addObject("pc", pc)
+			  .addObject("portContents", portContents)
+			  .setViewName("portpolioUpdate");
+		}
+		
+		return mv;
+	}
+	
+	@RequestMapping("updatePort.my")
+	public String updatePortpolio(HttpSession session, @ModelAttribute Portpolio p, 
+								  @RequestParam("pocOriginArr") String[] pocOriginArr, 
+								  @RequestParam("pocModifyArr") String[] pocModifyArr, 
+								  HttpServletRequest request) {
+		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
+		p.setPoWriter(userId);
+		System.out.println("updatePortpolio : " + p);
+		
+		int result = pService.updatePortpolio(p);
+		
+		if(result > 0) {
+			
+			int deleteResult = pService.deletePortContents(p);
+			
+			if(deleteResult > 0) {
+				ArrayList<String> pocOrigins = new ArrayList<>(Arrays.asList(pocOriginArr));
+				
+				for(int i = 0; i < pocOrigins.size(); i++) {
+					if(pocOrigins.get(i).equals("")) {
+						pocOrigins.remove("");
+					}
+				}
+				// test ----------------
+				for(int i = 0; i < pocOrigins.size(); i++) {
+					System.out.println(pocOrigins.get(i));
+				}
+				// -------------------------
+				
+				ArrayList<String> pocModifys = new ArrayList<>(Arrays.asList(pocModifyArr));
+				
+				for(int i = 0; i < pocModifys.size(); i++) {
+					if(pocModifys.get(i).equals("")) {
+						pocModifys.remove("");
+					}
+				}
+				
+				String check = FileMove(pocModifys, userId, request);
+				if(check != null) {
+					System.out.println("파일 이동 완료!");
+				} else {
+					throw new PortpolioException("파일 이동 실패!");
+				}
+				
+				String root = request.getSession().getServletContext().getRealPath("resources");
+		        String beforePath = root + "/portpolio_upload/" + userId;
+				
+				deleteUserFolder(beforePath); // 임시 유저 아이디 폴더 삭제
+				
+				ArrayList<PortpolioContents> pcArr = new ArrayList<PortpolioContents>();
+				
+				if(pocOrigins.size() == pocModifys.size()) {
+					for(int i = 0; i < pocModifys.size(); i++) {
+						PortpolioContents pc = new PortpolioContents();
+						pc.setPocModify(pocModifys.get(i));
+						pc.setPocOrigin(pocOrigins.get(i));
+						pc.setPocPath(check);
+						pc.setPocLevel(i);
+						pc.setPoNum(p.getPoNum());
+						
+						pcArr.add(pc);
+					}
+				} else {
+					throw new PortpolioException("리스트의 길이가 맞지 않습니다.");
+				}
+				
+				int PortConResult = pService.updatePortpolioCotents(pcArr);
+				
+				if(PortConResult >= pocModifys.size()) {
+					return "redirect:portpolioList.my?poWriter=" + userId;
+				} else {
+					throw new BoardException("1차 포트폴리오 콘텐츠 테이블 수정에 실패하였습니다.");
+				}
+			} else {
+				throw new BoardException("2차 포트폴리오 콘텐츠 테이블 수정에 실패하였습니다.");
+			}
+			
+			
+			
+		} else {
+			throw new PortpolioException("포트폴리오 테이블 수정에 실패하였습니다");
+		}
+		
+	}
 	
 }

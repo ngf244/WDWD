@@ -155,5 +155,46 @@
 		from po_contents c
 		where poc_ref = #{poNum} and poc_level > 0
 	</select>
+	
+	<select id="updatePortView" parameterType="Portpolio" resultMap="pcResultSet">
+		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id
+		from portpolio p
+     		 left join po_contents c on (PO_NUM = POC_REF)
+     		 left join member m on (po_writer = m.me_id)
+     		 left join po_reply r on (po_num = por_ref)
+     		 left join member rm on (por_writer = rm.me_id)
+     		 left join contents con on (rm.me_con_num = con_num)
+		<where>
+			po_num = #{poNum} and poc_level = 0 and po_status = 'Y'
+			<if test="poCategory != null">
+				<if test="poCategory.equals('image')">
+					and po_category in ('이미지 편집', '이미지 제작')
+				</if>
+				<if test="poCategory.equals('video')">
+					and po_category in ('동영상 편집', '동영상 제작') 				
+				</if>
+			</if>
+		</where>
+		group by p.po_num, p.po_title, p.po_writer, p.po_desc, p.po_category, p.po_enrolldate, p.po_modifydate, p.po_use_yn, p.po_fee, p.po_count, p.po_status, 
+         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id
+		order by po_enrolldate desc, poc_modify desc 
+	</select>
+	
+	<update id="updatePortpolio" parameterType="Portpolio">
+		update portpolio
+		set po_title = #{poTitle}, po_desc = #{poDesc}, po_category = #{poCategory}, po_modifydate = sysdate, po_use_yn = #{poUseYn} 
+		where po_num = #{poNum}
+	</update>
+	
+	<update id="updatePortpolioCotents" parameterType="PortpolioContents">
+		update po_contents
+		set poc_orgin = #{pocOrigin}, poc_modify = #{pocModify}, poc_path = #{pocPath}
+		where poc_ref = #{poNum} and poc_level = #{pocLevel}
+	</update>
+	
+	<delete id="deletePortContents" parameterType="Portpolio">
+		delete from po_contents
+		where poc_ref = #{poNum}
+	</delete>
 		  
 </mapper>

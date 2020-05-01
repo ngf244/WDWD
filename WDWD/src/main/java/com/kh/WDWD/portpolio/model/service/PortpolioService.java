@@ -29,4 +29,12 @@ public interface PortpolioService {
 
 	ArrayList<PortpolioContents> selectAttachFile(int poNum);
 
+	PortpolioContents updatePortView(Portpolio p);
+
+	int updatePortpolio(Portpolio p);
+
+	int updatePortpolioCotents(ArrayList<PortpolioContents> pcArr);
+
+	int deletePortContents(Portpolio p);
+
 }

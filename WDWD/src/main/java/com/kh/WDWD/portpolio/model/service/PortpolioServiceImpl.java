@@ -71,4 +71,24 @@ public class PortpolioServiceImpl implements PortpolioService {
 		return pDAO.selectAttachFile(sqlSession, poNum);
 	}
 
+	@Override
+	public PortpolioContents updatePortView(Portpolio p) {
+		return pDAO.updatePortView(sqlSession, p);
+	}
+
+	@Override
+	public int updatePortpolio(Portpolio p) {
+		return pDAO.updatePortpolio(sqlSession, p);
+	}
+
+	@Override
+	public int updatePortpolioCotents(ArrayList<PortpolioContents> pcArr) {
+		return pDAO.updatePortpolioCotents(sqlSession, pcArr);
+	}
+
+	@Override
+	public int deletePortContents(Portpolio p) {
+		return pDAO.deletePortContents(sqlSession, p);
+	}
+
 }

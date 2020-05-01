@@ -178,6 +178,7 @@
 						<div class="dropdown-content">
 							<a href="#"><span onclick="myReqOneStepList();">전체 보기</span></a>
 						    <a href="#"><span onclick="myReqCateList(2);">1:1 의뢰</span></a>
+						    <a href="#"><span onclick="myReqCateList(7);">비공개 의뢰</span></a>
 						    <a href="#"><span onclick="myReqCateList(3);">역경매</span></a>
 						    <a href="#"><span onclick="myReqCateList(4);">콘테스트</span></a>
 						</div>						
@@ -220,6 +221,9 @@
 									<c:if test="${ rol.boGroup == '2' }" >
 										<b>의뢰유형</b> : 1:1 의뢰<br>
 									</c:if>
+									<c:if test="${ rol.boGroup == '7' }" >
+										<b>의뢰유형</b> : 비공개 의뢰<br>
+									</c:if>
 									<c:if test="${ rol.boGroup == '3' }" >
 									 	<b>의뢰유형</b> : 역경매<br>
 									</c:if>			
@@ -232,6 +236,17 @@
 									<c:if test="${ rol.boGroup == '2' }">
 										<div class="rightBtn">
 											참여자 : ${ rol.boReNum }명
+										</div>
+										<div class="rightBtn">
+											기한 제한 없음
+										</div>
+										<div class="rightBtn">
+											의뢰비 : ${ rol.cbCash }
+										</div>
+									</c:if>
+									<c:if test="${ rol.boGroup == '7' }">
+										<div class="rightBtn">
+											요청한 에디터 : ${ rol.reId }
 										</div>
 										<div class="rightBtn">
 											기한 제한 없음

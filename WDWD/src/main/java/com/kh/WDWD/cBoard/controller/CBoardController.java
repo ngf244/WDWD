@@ -61,6 +61,8 @@ public class CBoardController {
 			cb.setThumbnail(thumbnail);
 		}
 		
+		System.out.println("reqList : " + list);
+		
 		if (list != null) {
 			mv.addObject("list", list)
 			  .addObject("pi", pi)
