@@ -251,4 +251,35 @@ public class CBoardDAO {
 	public String getProfileImg(SqlSessionTemplate sqlSession, String boWriter) {
 		return sqlSession.selectOne("cBoardMapper.getProfileImg", boWriter);
 	}
+
+	public void directRequest(SqlSessionTemplate sqlSession, Request r) {
+		sqlSession.insert("cBoardMapper.directRequest", r);
+	}
+
+	public Request directWho(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.directWho", boNum);
+	}
+
+	public int change2stage(SqlSessionTemplate sqlSession, int boNum) {
+		int result1 = sqlSession.update("cBoardMapper.change2stage1", boNum);
+		int result2 = sqlSession.update("cBoardMapper.change2stage2", boNum);
+		int result3 = sqlSession.update("cBoardMapper.change2stage3", boNum);
+		
+		if(result1 > 0 && result2 > 0 && result3 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public int directFalse(SqlSessionTemplate sqlSession, int boNum) {
+		int result1 = sqlSession.update("cBoardMapper.directFalse1", boNum);
+		int result2 = sqlSession.delete("cBoardMapper.directFalse2", boNum);
+		
+		if(result1 > 0 && result2 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }

@@ -146,4 +146,9 @@ public class BoardServiceImpl implements BoardService {
 		return bDAO.boardUpdate(sqlSession, b);
 	}
 
+	@Override
+	public ArrayList<Board> getTopBoard(int number) {
+		return bDAO.getTopBoard(sqlSession, number);
+	}
+
 }

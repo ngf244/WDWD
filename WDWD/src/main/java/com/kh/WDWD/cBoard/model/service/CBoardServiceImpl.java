@@ -194,5 +194,25 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.getProfileImg(sqlSession, boWriter);
 	}
 
+	@Override
+	public void directRequest(Request r) {
+		cBoardDAO.directRequest(sqlSession, r);
+	}
+
+	@Override
+	public Request directWho(int boNum) {
+		return cBoardDAO.directWho(sqlSession, boNum);
+	}
+
+	@Override
+	public int change2stage(int boNum) {
+		return cBoardDAO.change2stage(sqlSession, boNum);
+	}
+
+	@Override
+	public int directFalse(int boNum) {
+		return cBoardDAO.directFalse(sqlSession, boNum);
+	}
+
 	
 }

@@ -52,7 +52,7 @@ public class MemberController {
 	
 	@RequestMapping("sessionUpdate.me")
 	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
-		/* response.setContentType("application/json; charset=utf-8"); */
+		response.setContentType("application/json; charset=utf-8");
 		
 		Member loginUser = mService.selectMember(userId);
 		model.addAttribute("loginUser", loginUser);

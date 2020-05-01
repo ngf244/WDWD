@@ -134,6 +134,16 @@
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
 	</insert>
 	
+	<insert id="directRequest" parameterType="Request">
+		insert into request
+		values (#{reNum}, #{reId}, #{reCash}, #{rePlz}, null, sysdate, default)
+	</insert>
+	
+	<select id="directWho" parameterType="_int" resultMap="requestResultSet2">
+		select * from request
+		where re_num = #{boNum}
+	</select>
+	
 	<update id="MinusCash" parameterType="CBoard">
 		update member
 		set me_cash = me_cash - #{cbCash}
@@ -295,6 +305,35 @@
 		set cb_step = 2
 		where cb_num = #{reNum}
 	</update>
+	
+	<update id="change2stage1" parameterType="_int">
+		update board
+		set bo_group = 2
+		where bo_num = #{boNum}
+	</update>
+	
+	<update id="change2stage2" parameterType="_int">
+		update cash_board
+		set cb_step = 2
+		where cb_num = #{boNum}
+	</update>
+	
+	<update id="change2stage3" parameterType="_int">
+		update request
+		set re_plz = 'Y'
+		where re_num = #{boNum}
+	</update>
+	
+	<update id="directFalse1" parameterType="_int">
+		update board
+		set bo_group = 2
+		where bo_num = #{boNum}
+	</update>
+	
+	<delete id="directFalse2" parameterType="_int">
+		delete from request
+		where re_num = #{boNum}
+	</delete>
 	
 	<update id="go3stage" parameterType="_int">
 		update cash_board

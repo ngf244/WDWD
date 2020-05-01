@@ -208,13 +208,15 @@ public class CBoardController {
 	}
 
 	@RequestMapping("writeView.ch")
-	public String cBoardInsertView(@RequestParam("boardType") int boardType, Model model) {
+	public String cBoardInsertView(@RequestParam("boardType") int boardType, @RequestParam(value = "reqId", required = false) String reqId, Model model) {
 		model.addAttribute("boardType", boardType);
+		model.addAttribute("reqId", reqId);
 		return "cashboard/cBoardWrite";
 	}
 
 	@RequestMapping("insert.ch")
 	public String cBoardInsert(@ModelAttribute CBoard b, Model model, HttpSession session, HttpServletRequest request,
+			@RequestParam(value = "reqId", required = false) String reqId,
 			@RequestParam(value = "conUrl", required = false) String[] conUrl,
 			@RequestParam(value = "conCop", required = false) String[] conCop,
 			@RequestParam(value = "conOri", required = false) String[] conOri) {
@@ -228,6 +230,11 @@ public class CBoardController {
 		}
 		
 		CBoard board = cBoardService.cBoardInsert(b);
+		
+		if(board.getBoGroup().equals("7")) {
+			Request r = new Request(board.getBoNum(), reqId, board.getCbCash(), "N", 0, null, 0);
+			cBoardService.directRequest(r);
+		}
 		
 		if(!board.getBoGroup().equals("3")) {
 			cBoardService.minusCash(board);
@@ -332,7 +339,6 @@ public class CBoardController {
 				m.setRecent2(m.getRecent1());
 				m.setRecent1(boNum);
 			}
-			
 			mService.recentlyBoard(m);
 		}
 
@@ -343,7 +349,27 @@ public class CBoardController {
 			mv.addObject("cBoard", b);
 			mv.addObject("fileList", fileList);
 			
-			if(b.getBoGroup().equals("4")) {
+			if(b.getBoGroup().equals("7")) {
+				String userNick = "";
+				if(m != null) {
+					userNick = m.getNickName();
+				}
+				
+				Request r = cBoardService.directWho(b.getBoNum());
+				
+				if(userNick.equals(b.getBoWriter()) || m.getUserId().equals(r.getReId())) {
+					mv.setViewName("cashboard/directRequest");
+				} else {
+					String url = (String)request.getHeader("REFERER");
+					int urlNum = url.lastIndexOf("/");
+					String urlName = url.substring(urlNum + 1);
+					if(urlName.equals("")) {
+						urlName = "index.home";
+					}
+					mv.addObject("sysMsg", "1");
+					mv.setViewName("redirect:" + urlName);
+				}
+			} else if(b.getBoGroup().equals("4")) {
 				ArrayList<Request> reqMList = cBoardService.reqList(boNum);
 				ArrayList<CBoard> reqBList = cBoardService.reqBList(boNum);
 				
@@ -566,6 +592,28 @@ public class CBoardController {
 			return "redirect:detailView.ch?sysMsg=2&boNum=" + r.getReNum();
 		} else {
 			throw new CBoardException("에디터 선택에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("change2stage.ch")
+	public String change2stage(@RequestParam("boNum") int boNum) {
+		int result = cBoardService.change2stage(boNum);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?sysMsg=2&boNum=" + boNum;
+		} else {
+			throw new CBoardException("수락에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("directFalse.ch")
+	public String directFalse(@RequestParam("boNum") int boNum) {
+		int result = cBoardService.directFalse(boNum);
+		
+		if(result != 0) {
+			return "redirect:detailView.ch?sysMsg=5&boNum=" + boNum;
+		} else {
+			throw new CBoardException("거절에 실패하였습니다.");
 		}
 	}
 	

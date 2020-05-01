@@ -81,6 +81,14 @@ public interface CBoardService {
 	
 	String getProfileImg(String boWriter);
 	
+	void directRequest(Request r);
+	
+	Request directWho(int boNum);
+	
+	int change2stage(int boNum);
+	
+	int directFalse(int boNum);
+	
 
 	
 

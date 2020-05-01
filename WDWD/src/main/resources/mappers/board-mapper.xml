@@ -125,4 +125,34 @@
 		set bo_title = #{boTitle}, bo_con = #{boContent}, bo_update = sysdate, bo_category = #{boCategory}
 		where bo_num = #{boNum}
 	</update>
+	
+	<select id="getTopBoard" resultMap="boardResultSet">
+		<![CDATA[
+	    select * from 
+	    	(select * from board 
+	    	where bo_group = 1 
+	    	order by bo_view desc, bo_date desc) 
+	    where rownum <= 10
+	    ]]>
+	</select>
+	
+	<select id="getTopBoard" resultMap="boardResultSet">
+		<![CDATA[
+	    select * from 
+	    	(select * from board 
+	    	where bo_group = 1 
+	    	order by bo_good desc, bo_date desc) 
+	    where rownum <= 10
+	    ]]>
+	</select>
+	
+	<select id="getTopBoard" resultMap="boardResultSet">
+		<![CDATA[
+	    select * from 
+	    	(select * from board 
+	    	where bo_group = 1 
+	    	order by bo_renum desc, bo_date desc) 
+	    where rownum <= 10
+	    ]]>
+	</select>
 </mapper>

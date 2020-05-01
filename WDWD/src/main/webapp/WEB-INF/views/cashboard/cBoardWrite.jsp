@@ -359,6 +359,8 @@
 				
 				<form action="insert.ch" method="post" id="insertForm">
 					<input type="hidden" value="${ boardType }" name="boGroup">
+					<input type="hidden" value="${ reqId }" name="reqId">
+					
 					<div class="leftLine">
 						1. 어떤 작품을 원하시나요?
 					</div>
@@ -375,7 +377,7 @@
 						</select><br>
 						<div class="br"></div>
 						
-						<c:if test="${ boardType ne 2 }">
+						<c:if test="${ boardType ne 2 && boardType ne 7 }">
 							<input type="hidden" name="cbDate" id="cbDate" value="">
 							<b>마감일</b><br>
 							
@@ -623,45 +625,47 @@
 								</div>
 							</c:if>
 							
-							<div class='detailWrap'>
-								<input type="hidden" value="N" name="cbPrimium" id="cbPrimium">
-								<b>프리미엄여부</b><br>
-								<label class="switch">
-								<input id="detailPremium" type="checkbox">
-								<span class="slider round"></span>
-								</label>
-								<p class="detailPremiumSwitch">&nbsp;일반</p><p style="display:none;" class="detailPremiumSwitch">&nbsp;프리미엄</p>
-								
-								<div id="detailPremiumText" class="miniInfo" hidden="">
-									프리미엄 글로 등록할 시<br>
-									10,000 캐시를 추가로 차감해<br>
-									게시판 상단에 노출시켜 드립니다.
-								</div>
-								
-								<script>
-									var check = $("#detailPremium");
-									check.click(function(){
-										$(".detailPremiumSwitch").toggle();
-										
-										if($('#cbPrimium').val() == "Y") {
-											$('#cbPrimium').val('N');
-										} else {
-											$('#cbPrimium').val('Y');
-										}
-									});
+							<input type="hidden" value="N" name="cbPrimium" id="cbPrimium">
+							<c:if test="${ boardType ne 7 }">
+								<div class='detailWrap'>
+									<b>프리미엄여부</b><br>
+									<label class="switch">
+									<input id="detailPremium" type="checkbox">
+									<span class="slider round"></span>
+									</label>
+									<p class="detailPremiumSwitch">&nbsp;일반</p><p style="display:none;" class="detailPremiumSwitch">&nbsp;프리미엄</p>
 									
-									$(document).mousemove(function(e){
-										if($('#detailPremium').is(":hover")) {
-											$('#detailPremiumText').show();
-											$('#detailPremiumText').css("top", e.pageY - 80);
-											$('#detailPremiumText').css("cursor", "pointer");
-											$('#detailPremiumText').css("left", e.pageX - $('#detailPremiumText').width() / 2);
-										} else {
-											$('#detailPremiumText').hide();
-										}
-									});
-								</script>
-							</div>
+									<div id="detailPremiumText" class="miniInfo" hidden="">
+										프리미엄 글로 등록할 시<br>
+										10,000 캐시를 추가로 차감해<br>
+										게시판 상단에 노출시켜 드립니다.
+									</div>
+									
+									<script>
+										var check = $("#detailPremium");
+										check.click(function(){
+											$(".detailPremiumSwitch").toggle();
+											
+											if($('#cbPrimium').val() == "Y") {
+												$('#cbPrimium').val('N');
+											} else {
+												$('#cbPrimium').val('Y');
+											}
+										});
+										
+										$(document).mousemove(function(e){
+											if($('#detailPremium').is(":hover")) {
+												$('#detailPremiumText').show();
+												$('#detailPremiumText').css("top", e.pageY - 80);
+												$('#detailPremiumText').css("cursor", "pointer");
+												$('#detailPremiumText').css("left", e.pageX - $('#detailPremiumText').width() / 2);
+											} else {
+												$('#detailPremiumText').hide();
+											}
+										});
+									</script>
+								</div>
+							</c:if>
 						</div>
 						<div class="sectionafter"></div>
 					</div>
@@ -674,7 +678,6 @@
 						<div id="cancle" class="button">돌아가기</div>
 					</div>
 					
-					<script src="http://localhost:82/socket.io/socket.io.js"></script>
 					<script>
 						$('#submit').hover(function(){
 							$(this).css({'background-color':'rgb(52, 152, 219)', 'color':'white'})
