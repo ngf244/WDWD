@@ -700,7 +700,7 @@
 				<div class="mypageTopArea">
 					<div id="mypageText">마이페이지</div>
 					<!-- <div class="requestBtn"><b>의뢰 요청</b></div> -->
-					<button id="reqGifBtn" onclick="location.href='directReq.my'">
+					<button id="reqGifBtn">
 					  <span class="shadow">
 					    <span class="vert">
 					      <span class="floating">
@@ -712,7 +712,6 @@
 					</button>
 					<div style="clear: both;"></div>		
 				</div>
-				
 				<div class="myprofileArea">
 					<div class="normalInfo">
 						<div class="profileImage" id="profileImage">
@@ -1725,7 +1724,35 @@
                  });
 					
 			};
-		});		
+		});	
+		
+		$('#reqGifBtn').on('click',function(){
+			swal({
+                title: "해당 에디터가 요청 거절 시 공개요청으로 전환됩니다.",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '요청',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+    				var editorId = "<c:out value = '${ member.userId }' />";
+                	location.href = "writeView.ch?boardType=7&reqId=" + editorId;
+                } else {
+                	swal({
+    				    title: "비공개 의뢰",
+    				    text: "비공개 의뢰 요청을 취소하셨습니다.",
+    				    icon: "error" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
+		})
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>
