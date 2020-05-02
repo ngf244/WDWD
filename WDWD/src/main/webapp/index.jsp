@@ -191,6 +191,7 @@
 						}
 					}).click(function(){
 						if($(this).css('background-color') != 'rgb(255, 255, 255)') {
+							
 							$('.boardViewButton').css("background-color", "#64636d")
 							$('.boardViewButton').css("color", "white")
 							$(this).css('background-color', 'white');
@@ -204,7 +205,7 @@
 								data: {number: $(this).index()},
 								type: 'post',
 								success: function(data){
-									socket.emit("chatArr", data);
+									console.log(data);
 								}
 							});
 						}

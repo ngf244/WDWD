@@ -126,32 +126,16 @@
 		where bo_num = #{boNum}
 	</update>
 	
-	<select id="getTopBoard" resultMap="boardResultSet">
-		<![CDATA[
+	<select id="getTopBoard" resultMap="boardResultSet" parameterType="_int">
 	    select * from 
 	    	(select * from board 
 	    	where bo_group = 1 
-	    	order by bo_view desc, bo_date desc) 
-	    where rownum <= 10
-	    ]]>
-	</select>
-	
-	<select id="getTopBoard" resultMap="boardResultSet">
-		<![CDATA[
-	    select * from 
-	    	(select * from board 
-	    	where bo_group = 1 
-	    	order by bo_good desc, bo_date desc) 
-	    where rownum <= 10
-	    ]]>
-	</select>
-	
-	<select id="getTopBoard" resultMap="boardResultSet">
-		<![CDATA[
-	    select * from 
-	    	(select * from board 
-	    	where bo_group = 1 
-	    	order by bo_renum desc, bo_date desc) 
+	    	order by
+	    	<if test="number == 0">bo_view desc,</if>
+	    	<if test="number == 1">bo_good desc,</if>
+	    	<if test="number == 2">bo_renum desc,</if>
+	    	bo_date desc) 
+	    <![CDATA[
 	    where rownum <= 10
 	    ]]>
 	</select>
