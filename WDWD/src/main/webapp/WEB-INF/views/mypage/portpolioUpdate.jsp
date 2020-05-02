@@ -146,7 +146,6 @@
 					<div id="portpolioUpdateText">포트폴리오 등록</div>
 				</div>
 				<div id="portpolioUpdateContent">
-					${ pc.poNum }	
 						<div id="porThumbnail">
 							<img id="portThumbnailImage" src="${ contextPath }/${ pc.pocPath }/${ pc.pocModify }" width="100%" height="100%">
 							<div id="thumbnailUpdateArea" hidden="">
@@ -157,6 +156,8 @@
 						<div id="porFormArea">
 							<form action="updatePort.my" method="post" id="updatePortForm">
 								<input type="hidden" name="poNum" class="poNum" value="${ pc.poNum }">
+								<input type="hidden" name="pocOriginArr" id="pocOriginArrBefore" value="${ pc.pocOrigin }">
+								<input type="hidden" name="pocModifyArr" id="pocModifyArrBefore" value="${ pc.pocModify }">
 								<table id="portUpdateTable">
 									<tr>
 										<td style="width: 30%;">포트폴리오 제목</td>
@@ -218,14 +219,16 @@
 							<form method="post" encType="multipart/form-data" id="updatePortThumbForm">
 								<div id="thumbnailFileArea" class="thumbnailFileArea">
 									<input type="file" hidden="" id="thumbnailImg" class="thumbnailImg" multiple="multiple" name="pFile" onchange="LoadImg(this)">
-									<span id="thumbnailOriginName" style="display: none;"></span>
-									<span id="thumbnailModifyName" style="display: none;"></span>
+									<span id="thumbnailOriginName" style="display: none;">${ pc.pocOrigin }</span>
+									<span id="thumbnailModifyName" style="display: none;">${ pc.pocModify }</span>
 								</div>
 							</form>
 							<form method="post" encType="multipart/form-data" id="UpdatePortImgForm">
 								<c:forEach var="pcList" items="${ portContents }">
-									<input type="hidden" class="pcPath" value="${ contextPath }/${ pcList.pocPath }/${ pcList.pocModify }">
+									<input type="hidden" class="contextPath" value="${ contextPath }">
+									<input type="hidden" class="pcPath" value="${ pcList.pocPath }">
 									<input type="hidden" class="pcOrigin" value="${ pcList.pocOrigin }">
+									<input type="hidden" class="pcModify" value="${ pcList.pocModify }">
 								</c:forEach>
 								<table id="attachFileTable">	
 									<tr>
@@ -333,6 +336,8 @@
     					success: function(data){ 
     						$('#thumbnailOriginName').text(fileName);
     						$('#thumbnailModifyName').text(data);
+    						$('#pocOriginArrBefore').val(fileName);
+    						$('#pocModifyArrBefore').val(data);
     						
     						swal({
     						    title: "포트폴리오 썸네일",
@@ -370,30 +375,46 @@
 			fileCount = $('.pcPath').length;
 			fileNum = $('.pcPath').length;
 			for(var i = 0; i < $('.pcPath').length; i++){
+				var contextPath = $('.contextPath').eq(i).val();
 				var pcPath = $('.pcPath').eq(i).val();
 				var pcOrigin = $('.pcOrigin').eq(i).val();
+				var pcModify = $('.pcModify').eq(i).val();
 				
-				console.log(pcPath);
-				console.log(pcOrigin);
-							
 				var $div = $('<div class="fileArea">');
 				var $img1 = $('<img class="fileAreaRemove">');
 				var $img2 = $('<img class="fileAreaImg">');
 				var $p = $('<p>')
 				
+				var $imgNameArea = $('<div class="imageNameArea" style="display: inline;">');
+				var $spanPocOrigin = $('<span class="pocOrigin" name="pocOrigin" id="pocOrigin" style="display: none;">');
+				var $spanPocModify = $('<span class="pocModify" name="pocModify" id="pocModify" style="display: none;">');
+				
+				var $attachFileUploadForm = $('<form enctype="multipart/form-data" style="display: inline;" method="post">');
+				var $attachFileInputTag = $('<input type="file" hidden="" onchange="changeFile(this)" id="fileNum'+ i +'" name="pFile" multiple="">');
+				
+				$attachFileUploadForm.append($attachFileInputTag);
+				
 				$p.text(pcOrigin);
+				
+				$spanPocOrigin.text(pcOrigin);
+				$spanPocModify.text(pcModify);
+				
+				$imgNameArea.append($spanPocOrigin);
+				$imgNameArea.append($spanPocModify);
 				
 				$img1.attr("src", "${ contextPath }/resources/images/x-button.png");
 				
 				var reader = new FileReader();
 				
 				
-				$img2.attr("src", pcPath);
+				$img2.attr("src", contextPath + "/" + pcPath + "/" + pcModify);
 				
 				$div.append($img1);
 				$div.append($img2);
 				$div.append($p)
 				
+				$('#fileList').append($attachFileUploadForm);
+				$('#fileList').append($imgNameArea);
 				$('#fileList').append($div);
 			}	
 		});
@@ -490,6 +511,7 @@
 			this.parentNode.remove();
 		});
 		
+		// 완료 버튼을 눌렀을 때 업데이트 폼 submit
 		$('#portCompleteBtn').click(function(){
 			
 			if($('#poTitle').val() == "") {
@@ -533,9 +555,6 @@
                     }
                  }).then((result) => {
                     if(result) {
-                    	$('#updatePortForm').append('<input type="hidden" name="pocOriginArr" value="' + $('#thumbnailOriginName').text() + '">');				
-        				$('#updatePortForm').append('<input type="hidden" name="pocModifyArr" value="' + $('#thumbnailModifyName').text() + '">');
-        				
         				var pocOrigins = new Array();
 
         				$('.pocOrigin').each(function () {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.portpolio.model.dao.PortpolioDAO;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
@@ -27,7 +28,7 @@ public class PortpolioServiceImpl implements PortpolioService {
 	}
 
 	@Override
-	public int insertPortpolioCotents(ArrayList<PortpolioContents> pcArr) {
+	public int insertPortpolioContents(ArrayList<PortpolioContents> pcArr) {
 		return pDAO.insertPortpolioContents(sqlSession, pcArr);
 	}
 
@@ -82,13 +83,18 @@ public class PortpolioServiceImpl implements PortpolioService {
 	}
 
 	@Override
-	public int updatePortpolioCotents(ArrayList<PortpolioContents> pcArr) {
-		return pDAO.updatePortpolioCotents(sqlSession, pcArr);
+	public int updatePortpolioContents(ArrayList<PortpolioContents> pcArr) {
+		return pDAO.updatePortpolioContents(sqlSession, pcArr);
 	}
 
 	@Override
 	public int deletePortContents(Portpolio p) {
 		return pDAO.deletePortContents(sqlSession, p);
+	}
+
+	@Override
+	public ArrayList<PortpolioContents> getContents(Portpolio p) {
+		return pDAO.getContents(sqlSession, p);
 	}
 
 }

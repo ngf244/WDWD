@@ -8,7 +8,16 @@
 	
 	<insert id="insertPortpolioContents" parameterType="PortpolioContents">
 		insert into po_contents
-		values(poc_seq.nextval, po_seq.currval, #{pocOrigin}, #{pocModify}, #{pocPath}, DEFAULT, #{pocLevel})
+		values(poc_seq.nextval, 
+		<choose>
+			<when test="pocRef == 0">
+				po_seq.currval,
+			</when>
+			<otherwise>
+				#{pocRef},
+			</otherwise>
+		</choose>
+		#{pocOrigin}, #{pocModify}, #{pocPath}, DEFAULT, #{pocLevel})
 	</insert>
 	
 	<resultMap type="Portpolio" id="portpolioResultSet">
@@ -154,6 +163,7 @@
 		select c.*, SUBSTR(c.poc_path,-35)
 		from po_contents c
 		where poc_ref = #{poNum} and poc_level > 0
+		order by poc_level 
 	</select>
 	
 	<select id="updatePortView" parameterType="Portpolio" resultMap="pcResultSet">
@@ -186,7 +196,7 @@
 		where po_num = #{poNum}
 	</update>
 	
-	<update id="updatePortpolioCotents" parameterType="PortpolioContents">
+	<update id="updatePortpolioContents" parameterType="PortpolioContents">
 		update po_contents
 		set poc_orgin = #{pocOrigin}, poc_modify = #{pocModify}, poc_path = #{pocPath}
 		where poc_ref = #{poNum} and poc_level = #{pocLevel}
@@ -196,5 +206,33 @@
 		delete from po_contents
 		where poc_ref = #{poNum}
 	</delete>
+
+	<resultMap type="PortpolioContents" id="getContentsResultSet">
+		<id property="poNum" column="PO_NUM"/>
+		<result property="poTitle" column="PO_TITLE"/>
+		<result property="poWriter" column="PO_WRITER"/>
+		<result property="poDesc" column="PO_DESC"/>
+		<result property="poCategory" column="PO_CATEGORY"/>
+		<result property="poEnrollDate" column="PO_ENROLLDATE"/>
+		<result property="poModifyDate" column="PO_MODIFYDATE"/>
+		<result property="poUseYn" column="PO_USE_YN"/>
+		<result property="poFee" column="count(r.por_ref)"/>
+		<result property="poCount" column="PO_COUNT"/>
+		<result property="poStatus" column="ME_ID"/>
+		<result property="pocNum" column="POC_NUM"/>
+		<result property="pocRef" column="POC_REF"/>
+		<result property="pocOrigin" column="POC_ORGIN"/>
+		<result property="pocModify" column="POC_MODIFY"/>
+		<result property="pocPath" column="POC_PATH"/>
+		<result property="pocStatus" column="con_cop"/>
+		<result property="pocLevel" column="POC_LEVEL"/>
+	</resultMap>
+	
+	<select id="getContents" parameterType="Portpolio" resultMap="getContentsResultSet">
+		select *
+		from po_contents
+		where poc_ref = #{poNum} and poc_status = 'N'
+		order by substr(poc_modify, 0, 14)
+	</select>
 		  
 </mapper>
