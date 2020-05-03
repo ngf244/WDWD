@@ -735,14 +735,22 @@
 								<tr>
 									<td>>이메일 : </td>
 									<td>${ member.email }</td>
-									<td>>예금주 : </td>
+									<td>>이름 : </td>
 									<td>${ member.userName }</td>
 								</tr>
 								<tr>
 									<td>>전화번호 : </td>
 									<td>${ member.phone }</td>
 									<td>>은행명 : </td>
-									<td>${ member.bank }</td>
+									<td>
+										<c:if test="${ member.bank eq null }">
+											내용 없음
+										</c:if>
+										<c:if test="${ member.bank ne null }">
+											${ member.bank }
+										</c:if>
+										
+									</td>
 									
 								</tr>
 								<tr>
@@ -768,14 +776,27 @@
 									</c:if>																																				
 									</td>
 									<td>>계좌번호 : </td>
-									<td>${ member.account }</td>
+									<td>
+										<c:if test="${ member.account eq null }">
+											내용 없음
+										</c:if>
+										<c:if test="${ member.account ne null }">
+											${ member.account }
+										</c:if>
+									</td>
 								</tr>								
 							</table>
 						</div>					
 					</div>
 					<div class="introduceInfo">
 						<h3>>자기소개</h3>
-						<p>${ member.intro }
+						<p>
+							<c:if test="${ member.intro eq null }">
+								내용 없음
+							</c:if>
+							<c:if test="${ member.intro ne null }">
+								${ member.intro }
+							</c:if>
 						</p>
 					</div>
 				</div>
@@ -963,7 +984,7 @@
 					<div class="portpolioText">
 						포트폴리오
 						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyPortpolioList();"/>
-						<div id="smallReqBtn" onclick="location.href='directReq.my'">의뢰 요청</div>
+						<div id="smallReqBtn" class="secretReq">의뢰 요청</div>
 					</div>
 					<div class="portpolioArea">
 						<c:if test="${ empty pcList }">
@@ -1752,7 +1773,35 @@
     				});
                 }
              });
-		})
+		});
+		
+		$('.secretReq').on('click',function(){
+			swal({
+                title: "해당 에디터가 요청 거절 시 공개요청으로 전환됩니다.",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '요청',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+    				var editorId = "<c:out value = '${ member.userId }' />";
+                	location.href = "writeView.ch?boardType=7&reqId=" + editorId;
+                } else {
+                	swal({
+    				    title: "비공개 의뢰",
+    				    text: "비공개 의뢰 요청을 취소하셨습니다.",
+    				    icon: "error" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
+		});
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>
