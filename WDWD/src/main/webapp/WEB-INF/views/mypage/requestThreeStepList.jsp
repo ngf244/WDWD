@@ -451,6 +451,7 @@
 						<input type="hidden" id="reId" name="reId" value="">
 						<input type="hidden" id="reNum" name="reNum" value="">
 						<input type="hidden" name="reGrade" id="reGrade" class="reGrade" value="">
+						<input type="hidden" name="page" id="page" value="${ pi.currentPage }">
 						<div class="btnArea">
 							<button type="submit" name="send" class="btn" style="cursor: pointer;">완료</button>
 							<button type="button" name="cancel" class="btn" onclick="closePopUp(this);" style="cursor: pointer;">취소</button>  		

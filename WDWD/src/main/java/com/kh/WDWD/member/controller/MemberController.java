@@ -339,7 +339,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping("iGrade.my")
-	public String insertGrade(@ModelAttribute Request r, HttpSession session) {
+	public String insertGrade(@ModelAttribute Request r, @RequestParam(value="page", required=false) Integer page, HttpSession session) {
 		System.out.println("Request : " + r);
 		
 		String boWriter = ((Member)session.getAttribute("loginUser")).getUserId();
@@ -350,7 +350,7 @@ public class MemberController {
 		int result = mService.insertGrade(r);
 		
 		if(result > 0) {
-			return "redirect:reqList.my?boWriter=" + boWriter + "&cbStep=3";
+			return "redirect:reqList.my?boWriter=" + boWriter + "&cbStep=3&page=" + page;
 		} else {
 			throw new MemberException("평점 등록에 실패하였습니다.");
 		}

@@ -715,13 +715,13 @@
 				<div class="myprofileArea">
 					<div class="normalInfo">
 						<div class="profileImage" id="profileImage">
-<%-- 							<c:if test="${ member.profileImg eq 0 }">
-								<img class="profile" src="${ contextPath }/resources/images/default_profile.png">
+	 						<c:if test="${ member.profileImg eq null }">
+								<img id="profile" class="profile" src="${ contextPath }/resources/images/default_profile.png">
 							</c:if>
-							<c:if test="${ member.profileImg ne 0 }">
-								<img class="profile" src="${ contextPath }/resources/images/profileImage/point.png">
-							</c:if> --%>
-							<img id="profile" class="profile" src="${ contextPath }/resources/profile_Image/${ member.profileImg }"/>
+							<c:if test="${ member.profileImg ne null }">
+								<img id="profile" class="profile" src="${ contextPath }/resources/profile_Image/${ member.profileImg }"/>
+							</c:if>
+							
 						</div>
 						<div id="profileImgFileArea">
 							<form method="post" encType="multipart/form-data" id="profileImgForm">
