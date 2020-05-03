@@ -26,7 +26,7 @@
 		margin-right: 5%;
 	}
 	#boardViewLeft img {
-		width: 70%;
+		width: 100%;
 		height: 220px;
 		margin: 0 auto;
 		border: 1px solid black;
@@ -65,13 +65,16 @@
 		width: 83%;
 	}
 	.boardTitle {
-		width: 380px;
+		width: 300px;
 		font-size: 13pt;
 		padding: 5px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		cursor: pointer;
+	}
+	.boardTitle:hover {
+		color: #f44336;
 	}
 	#boardViewRight {
 		width: 12%;
@@ -133,7 +136,7 @@
 					<div id="boardViewLeft">
 						인기 게시글<br>
 						<div style="height:40px;"></div>
-						<img src="">
+						<img id="thumbnailArea" src="">
 						
 					</div>
 					<div id="boardViewCenter">
@@ -157,22 +160,14 @@
 						</div>
 						<div class="rightLine">
 							<!-- boardTitle 은 글자수 overflow 제한을 두기 위해 width를 픽셀로 지정해둠 -->
+							<!-- width 노트북용으로 현재는 300이고 나중에 380으로 -->
 							<c:forEach var="board" items="${ boardList }" varStatus="status">
-								<div class="boardTitle">${ board.boTitle } (${ board.boReNum })</div><input type="hidden" value="${ board.boNum }">
+								<div class="boardTitle">${ board.boTitle } (${ board.boReNum })</div>
+								<input type="hidden" value="${ board.boNum }">
+								<input type="hidden" value="${ board.thumbnail }">
+								<input type="hidden" value="${ board.thumbnailURL }">
 							</c:forEach>
 						</div>
-						
-						<%-- <c:forEach var="board" items="${ boardList }" varStatus="status">
-							<input type="hidden" value="${ board.boNum }">
-							<div class="boardViewList">
-								<div class="leftLine">${ status.count }</div>
-								<div class="rightLine">${ board.boTitle } ( ${ board.boReNum } )</div>
-							</div>
-							<script>
-								$('.boardTitle').eq('${status.index}').text('${board.boTitle}');
-							</script>
-							
-						</c:forEach> --%>
 					</div>
 					<div id="boardViewRight">
 						<div style="height:150px;">.</div>
@@ -198,18 +193,31 @@
 							$(this).css('color', 'black');
 							$(this).css('border-top', '2px solid black');
 							
-							console.log($(this).index());
-							
 							$.ajax({
 								url: 'topList.home',
 								data: {number: $(this).index()},
 								type: 'post',
 								success: function(data){
-									console.log(data);
+									for(var i = 0; i < data.length; i++) {
+										$('.boardTitle').eq(i).text(data[i].boTitle + ' (' + data[i].boReNum + ')');
+										$('.boardTitle').eq(i).next().val(data[i].boNum);
+										$('.boardTitle').eq(i).next().next().val(data[i].thumbnail);
+										$('.boardTitle').eq(i).next().next().next().val(data[i].thumbnailURL);
+									}
 								}
 							});
 						}
-					});	
+					});
+					
+					$('.boardTitle').click(function(){
+						location.href='detail.bo?boNum=' + $(this).next().val()
+					}).hover(function(){
+						if($(this).next().next().val() == "") {
+							$('#thumbnailArea').attr('src', '${ contextPath }/resources/images/emptyImage.png');
+						} else {
+							$('#thumbnailArea').attr('src', $(this).next().next().next().val() + '/' + $(this).next().next().val());
+						}
+					});
 				</script>
 				
 				<div style="height:100px;"></div>
