@@ -15,6 +15,13 @@
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
+
+    @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+    <link href="https: //fonts.googleapis.com /css?family=Noto+Sans+KR&display =swap"rel="stylesheet ">
+    body {
+         font-family: "Noto Sans KR", sans-serif;
+      }
 	header {
 		width : 100%;
 		height: auto;
@@ -507,7 +514,8 @@
 		<div id="smallOptionBlock" class="smallOptionBlock">
 			<div>마이페이지</div>
 			<div>게시글 보기</div>
-			<div>작성 댓글 보기</div>
+			<div>작성 댓글 보기</div>	
+			<div onclick="messageSend();">쪽지 보내기</div>	
 			<c:if test="${loginUser.userId == 'admin'}">
 				<div id="restrictBtn">제재</div>
 			</c:if>
@@ -762,6 +770,24 @@
 							title: "거절 완료되었습니다.",
 							icon: "success"
 						});
+					}
+				</script>
+				
+				<!-- 쪽지 보내기 실행 -->
+				<script>
+					function messageSend(){
+						window.screen.width
+						window.screen.height
+						
+						var popupWidth = 600;
+						var popupHeight = 600;
+						
+						var popupX = (window.screen.width / 2) - (popupWidth / 2);
+						var popupY= (window.screen.height / 2) - (popupHeight / 2);
+						
+						//받는 사람 id와 nick을 보낸다. 
+						window.open("messageSendView.ms?rsgId=${rsgId}&rsgNick=${rsgNick}", "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
+						
 					}
 				</script>
 			</div>

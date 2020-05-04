@@ -97,15 +97,15 @@ public class CBoardController {
 	@RequestMapping("actionList.ch")
 	public ModelAndView actionList(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv,
 									@RequestParam(value = "searchCate", required = false) String searchCate,
-									@RequestParam(value = "searchWord", required = false) String searchWord) {
+									@RequestParam(value = "searchWord", required = false) String searchWord,
+									@RequestParam(value = "boCategory", required = false) String boCategory,
+									@ModelAttribute CBoard cBoard) {
 		
 		String boGroup1 = "1";
 		
-		System.out.println(searchCate);
-		System.out.println(searchWord);
-		
+		System.out.println("boCate??? " + boCategory);
 		HashMap<String, String> searchMap = new HashMap<String, String>();
-		
+		searchMap.put("boCategory", boCategory);
 		searchMap.put("searchCate", searchCate);
 		searchMap.put("searchWord", searchWord);
 		
@@ -116,21 +116,29 @@ public class CBoardController {
 		}
 
 		int listCount = cBoardService.getListCount(searchMap);
+		int listCount2 = cBoardService.getListCount2(cBoard);
 
 		// 자유게시판 페이징
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount);
+		PageInfo piCash = Pagination.getCashBoardEternalPageInfo(currentPage, listCount2);
 
 		ArrayList<CBoard> list = cBoardService.selectBoardList(searchMap, pi);
-		
+		//System.out.println("list에 searchCate, word담기니?" + list);
+		//System.out.println("list에 searchWord, word담기니?" + list);
 		CBoard CBoard = new CBoard();
 		CBoard.setBoGroup("2");
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(CBoard);
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(CBoard, piCash);
 
 		if (list != null) {
 
 			mv.addObject("list", list);
+			mv.addObject("searchCate", searchCate);
+			mv.addObject("searchWord", searchWord);
+			System.out.println("searchCate 이거 뭐니??" + searchCate);
+			System.out.println("searchWord 이거 뭐니??" + searchWord);
 			mv.addObject("list2", list2);
 			mv.addObject("pi", pi);
+			mv.addObject("piCash", piCash);
 			mv.setViewName("board/boardlist");
 		} else {
 
@@ -175,7 +183,8 @@ public class CBoardController {
 		System.out.println("boCategory 넘어온값은? : " + cBoard.getBoCategory()); // 1:1게시판
 		System.out.println("검색 기능은? " + searchText);
 		System.out.println("검색 기능은??? " + searchCate);
-
+		System.out.println();
+		
 		String boGroup = cBoard.getBoGroup();
 		int cbStep = cBoard.getCbStep();
 		String boCategory = cBoard.getBoCategory();
@@ -185,12 +194,21 @@ public class CBoardController {
 		searchMap.put("searchCate", searchCate);
 		searchMap.put("searchText", searchText);
 		
+		
 		int listCount2 = cBoardService.getCateListCount2(searchMap);
 		System.out.println("listCount2 : " + listCount2);
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(searchMap);
-		System.out.println("list2 : " + list2);
+		//CashBoard 무한 페이징
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = page;
+		}
+		PageInfo piCash = Pagination.getCashBoardEternalPageInfo(currentPage, listCount2);
 
 		
+		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(searchMap, piCash);
+		
+		System.out.println("list2 : " + list2);
+
 		//int listCount2 = cBoardService.getCateListCount2(cBoard, searchCate, searchText);
 		//ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard, searchCate, searchText);
 

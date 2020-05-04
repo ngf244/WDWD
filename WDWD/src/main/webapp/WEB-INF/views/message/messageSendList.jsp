@@ -40,7 +40,8 @@
 		#bottom-side {
 			width: 100%;
 		}
-		#receiveMs{
+
+		#sendMs{
 			width:200px;
 		}
 	</style>
@@ -51,7 +52,7 @@
 
 <body>
 	<div id="messageHeader">
-		<img id="receiveMs" src="${ contextPath }/resources/images/receiveMs.png" alt="">
+		<img id="sendMs" src="${ contextPath }/resources/images/sendMs.png" alt="">
 	</div>
 	<form method="get">
 		<div style="width:100% ; text-align:right ; padding:0 0 10px 0">
@@ -62,7 +63,7 @@
 			</select>
 			<input type="text" class="searchText" size="20" name="keyword" value="">
 			<span id="searchButton" class="button" value="검색">검색</span>
-			<input type="button" value="보낸쪽지 목록" id="sendMsgButton" class="sendMsgButton" role="button"
+			<input type="button" value="받은쪽지 목록" id="receiveMsgButton" class="receiveMsgButton" role="button"
 				aria-disabled="false">
 		</div>
 	</form>
@@ -88,20 +89,18 @@
 				<c:param name="msNum" value="${ ms.msgNum }" />
 			</c:url>
 
-			<!-- 받은 리스트 -->
+			<!-- 보낸 리스트 -->
 			<div class=tableRow>
 				<div class="tableCol checkBox" style="padding-left:0; padding-right:0; width:5%; text-align:center;">
 					<input type=checkbox name="msgkeys[]" value="${ ms.msgNum }" class=letterCheckBox></div>
-				<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%;"> ${ ms.ssgNick }</div>
+				<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%;"> ${ ms.rsgNick }</div>
 				<div class="tableCol subject" style="padding-left:0; padding-right:0; width:45%;">&nbsp;<a
-						href="messageDetail.ms?msgNum=${ ms.msgNum }"> ${ ms.msgTitle }</a></div>
+						href="messageSendDetail.ms?msgNum=${ ms.msgNum }"> ${ ms.msgTitle }</a></div>  
 				<div class="tableCol sendDate" style="padding-left:0; padding-right:0; width:25%; text-align:center;">${
 					ms.msgDate }</div>
 			</div>
 		</c:forEach>
-
 	</form>
-
 
 	<div style="width:100% ; text-align:right; display: inline-block; margin-top: 10px; margin-bottom: 10px;">
 
@@ -116,15 +115,15 @@
 					</c:if>
 
 					<c:if test="${ p ne pi.currentPage }">
-						<c:url var="pagination" value="messageList.ms">
-							<c:param name="page" value="${ p }" />
-						</c:url>
-						<a href="${ pagination }&searchCon=${ searchCon }&searchWord=${ searchWord }">${ p }</a>
-						&nbsp;
+							<c:url var="pagination" value="messageSendList.ms">
+								<c:param name="page" value="${ p }" />
+							</c:url>
+							<a href="${ pagination }&searchCon=${ searchCon }&searchWord=${ searchWord }">${ p }</a>
+							&nbsp;
 					</c:if>
-
+					
 					<c:if test="${ pi.currentPage < pi.maxPage }">
-						<c:url var="after" value="messageList.ms">
+						<c:url var="after" value="messageSendList.ms">
 							<c:param name="page" value="${ pi.currentPage + 1 }" />
 						</c:url>
 					</c:if>
@@ -136,8 +135,7 @@
 	</div>
 
 	<div style="width:100% ; clear:both ; padding:10px 0 0 0 ; text-align:right">
-		<button id="deleteButton" class="deleteButton" role="button" aria-disabled="false"><span
-				class="ui-button-text">선택쪽지 삭제</span></button>
+		<input type="button" id="deleteSendButton" class="deleteSendButton" aria-disabled="false" value="선택쪽지 삭제">
 	</div>
 
 	<div id="bottom-side">

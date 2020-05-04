@@ -49,11 +49,11 @@ public interface CBoardService {
 
 	int getListCount2(CBoard cBoard);
 
-	ArrayList<CBoard> selectCashOneList(CBoard cBoard);
+	ArrayList<CBoard> selectCashOneList(CBoard cBoard, PageInfo piCash);
 	
 	int getCateListCount2(HashMap searchMap);
 	
-	ArrayList<CBoard> selectCashOneCateList(HashMap searchMap);
+	ArrayList<CBoard> selectCashOneCateList(HashMap searchMap, PageInfo piCash);
 	
 	//int getCateListCount2(CBoard cBoard, String searchCate, String searchText);
 

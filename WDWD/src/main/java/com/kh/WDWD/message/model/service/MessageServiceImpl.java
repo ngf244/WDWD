@@ -1,6 +1,7 @@
 package com.kh.WDWD.message.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,49 @@ public class MessageServiceImpl implements MessageService{
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public int getListCount(String loginUser) {
-		return MessageDAO.getListCount(sqlSession, loginUser);
+	public int getListCount(HashMap searchMap) {
+		return MessageDAO.getListCount(sqlSession, searchMap);
 	}
 
 	@Override
-	public ArrayList<Message> selectMessageList(String loginUser, PageInfo pi) {
-		return MessageDAO.selectMessageList(sqlSession, loginUser, pi);
+	public ArrayList<Message> selectMessageList(HashMap searchMap, PageInfo pi) {
+		return MessageDAO.selectMessageList(sqlSession, searchMap, pi);
 	}
+
+	@Override
+	public ArrayList<Message> getMessageDetail(int msgNum) {
+		return MessageDAO.getMessageDetail(sqlSession, msgNum);
+	}
+
+	@Override
+	public int getSendListCount(HashMap searchMap) {
+		return MessageDAO.getSendListCount(sqlSession, searchMap);
+	}
+
+	@Override
+	public ArrayList<Message> selectSendMessageList(HashMap searchMap, PageInfo pi) {
+		return MessageDAO.selectSendMessageList(sqlSession, searchMap, pi);
+	}
+
+	@Override
+	public int deleteMessages(String[] checkArr) {
+		return MessageDAO.deleteMessages(sqlSession, checkArr);
+	}
+
+	@Override
+	public int deleteSendMessages(String[] checkArr) {
+		return MessageDAO.deleteSendMessages(sqlSession, checkArr);
+	}
+
+	@Override
+	public int insertSendMessages(HashMap sendMap) {
+		return MessageDAO.insertSendMessages(sqlSession, sendMap);
+	}
+
+	@Override
+	public ArrayList<Message> getMessageSendDetail(int msgNum) {
+		return MessageDAO.getMessageSendDetail(sqlSession, msgNum);
+	}
+
 
 }

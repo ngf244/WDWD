@@ -8,6 +8,23 @@
 		    join member m on (bo_writer = me_id)
 		    left join contents c on (bo_num = con_ref)
 		where bo_del='N'and bo_group= 1
+		<if test='boCategory != "" and boCategory != null'>
+			<choose>
+				<when test='boCategory == "짤방"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+				<when test='boCategory == "아무말"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+				<when test='boCategory == "요청"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+				<when test='boCategory == "질문"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+			</choose>
+		
+		</if>
 		<if test='searchWord != "" and searchWord != null'>
 			<choose>
 				<when test='searchCate == "title"'>
@@ -40,6 +57,23 @@
 		    join member m on (bo_writer = me_id)
 		    left join contents c on (bo_num = con_ref)
 		where bo_del='N'and bo_group= 1
+		<if test='boCategory != "" and boCategory != null'>
+			<choose>
+				<when test='boCategory == "짤방"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+				<when test='boCategory == "아무말"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+				<when test='boCategory == "요청"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+				<when test='boCategory == "질문"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
+			</choose>
+		
+		</if>
 		<if test='searchWord != "" and searchWord != null'>
 			<choose>
 				<when test='searchCate == "title"'>
@@ -610,6 +644,7 @@
 		select count(*)
 		from board
 			join cash_board on (bo_num = cb_num)
+			JOIN MEMBER ON(ME_ID = BO_WRITER) 
 		<where>
 				<if test= "cBoard.boGroup != null">
 					BO_GROUP = #{ cBoard.boGroup }
