@@ -155,4 +155,8 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("memberMapper.recentlyBoardList", loginUser);
 	}
 
+	public ArrayList<Board> recentlyScrapList(SqlSessionTemplate sqlSession, Member loginUser) {
+		return (ArrayList)sqlSession.selectList("memberMapper.recentlyScrapList", loginUser);
+	}
+
 }

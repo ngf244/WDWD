@@ -186,7 +186,7 @@
 					<div id="boardViewLeft">
 						<b>인기 게시글</b><br>
 						<div style="height:40px;"></div>
-						<img id="thumbnailArea" src="">
+						<img id="thumbnailArea" src='${ contextPath }/resources/images/emptyImage.png'>
 						
 					</div>
 					<div id="boardViewCenter">

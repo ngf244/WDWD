@@ -304,6 +304,16 @@
 		join board on (me_recent5 = bo_num)
 		where me_id = #{userId}
 	</select>
+	
+	<select id="recentlyScrapList" parameterType="Member" resultMap="boardResultSet">
+		select *
+		from (select * from scrap
+		  	 join board on (me_id = bo_writer)
+			 where me_id = #{userId})
+		<![CDATA[
+		where rownum <= 3
+		]]>
+	</select>
 	  
 	<select id="nickCheck" parameterType="Member" resultType="_int">
 		select count(*)

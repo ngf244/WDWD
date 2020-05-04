@@ -160,7 +160,7 @@
 		font-size: 16pt;
 	}
 	.smallMenu {
-		width: 100px;
+		width: 130px;
 		display: inline-table;
 		margin: 8px;
 		font-size: 13pt;
@@ -175,25 +175,25 @@
 		background-color: rgb(179, 229, 252);
 	}
 	.smallMenu img {
-		width: 80px;
-		height: 80px;
+		width: 60px;
+		height: 60px;
 		margin-bottom: 10px;
 	}
-	#recently {
+	.recently {
 		width: 200px;
 		display: inline-table;
 		font-size: 14pt;
 		font-weight: bold;
 		padding: 10px;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 		border-top: 2px solid gray;
 		border-bottom: 2px solid gray;
 	}
-	.recentlyBoard {
+	.recentlyBoard, .scrapBoard {
 		margin: 0 auto;
 		width: 300px;
-		padding: 10px;
-		font-size: 13pt;
+		padding: 8px;
+		font-size: 12pt;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -386,7 +386,7 @@
 					
 					<div id="smallInfo">
 						<div id="smallInfoContent">
-							<div style="height: 60px;"></div>
+							<div style="height: 30px;"></div>
 							<div id="profile_wrap">
 								<div id="profile_img"><img src=''></div>
 								<b>${ sessionScope.loginUser.nickName } 님</b>
@@ -414,15 +414,23 @@
 								<br><b>로그아웃</b>
 							</div>
 	
-							<div style="height: 60px;"></div>
+							<div style="height: 30px;"></div>
 							
-							<div id="recently">최근 본 글</div>
+							<div class="recently">최근 본 글</div>
 	                
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+							
+							<div style="height: 30px;"></div>
+							
+							<div class="recently">최근 스크랩 한 글</div>
+							
+							<div class="scrapBoard"></div><input type="hidden" value="0">
+							<div class="scrapBoard"></div><input type="hidden" value="0">
+							<div class="scrapBoard"></div><input type="hidden" value="0">
 						</div>				
 					</div>
 				</c:if>
@@ -445,12 +453,12 @@
 							$('#haveCash').text(cash.toLocaleString());
 							
 							if(list[0].profileImg == null) {
-								$('#profile_img').children().attr('src', '${ contextPath }/resources/images/people.png');
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/images/default_profile.png');
 							} else {
 								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
 							}
 							
-							for(var i = 1; i < list.length; i++) {
+							for(var i = 1; i < 6; i++) {
 								if(list[0].recent1 == list[i].boNum) {
 									$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
 									$('.recentlyBoard').eq(0).text(list[i].boTitle);
@@ -474,15 +482,18 @@
 								}
 							}
 							
+							for(var i = 6; i < 9; i++) {
+								$('.scrapBoard').eq(i-6).next().val(list[i].boNum);
+								$('.scrapBoard').eq(i-6).text(list[i].boTitle);
+							}
+							
 							setTimeout(function() {
 								$('#smallInfoContent').addClass("open");
 							}, 100);
 						}
 					})
-					.always(function() {
-						
-					});
 				});
+				
 				$('#smallInfo').click(function() {
 					if(!($('#smallInfoContent').is(":hover"))) {
 						$('#smallInfoContent').removeClass("open");
@@ -499,6 +510,10 @@
 						location.href= "detailView.ch?boNum=" + $(this).prev().val();
 					}
 				});
+				
+				$('.scrapBoard').click(function(){
+					location.href= "detail.bo?boNum=" + $(this).next().val();
+				})
 
 				$('#notice').click(function(e){
 					$('#noticeArea').slideToggle();

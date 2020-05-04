@@ -380,21 +380,20 @@
 						<script>
 							$('.buyerInfoOption').click(function(){
 								var whatIndex = $(this).index();
+								var nickName = $(this).parent().find('span').text();
 								
 								$.ajax({
 									url: 'callmeId.ch',
-									data: {nickName: $(this).parent().find('span').text()},
+									data: {nickName: nickName},
 									type: 'post',
 									success: function(data){
 										console.log(whatIndex)
 										if(whatIndex == '1') {
 											location.href = "main.my?userId=" + data
 										} else if(whatIndex == '2') {
-											// 수정예정
-											location.href = "main.my?userId=" + data
+											location.href = "actionList.ch?searchWord=" + nickName
 										} else if(whatIndex == '3') {
-											// 수정예정
-											location.href = "main.my?userId=" + data
+											location.href = "myReplyList.my?userId=" + data
 										}
 									}
 								});

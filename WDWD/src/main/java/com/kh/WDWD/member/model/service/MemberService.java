@@ -79,5 +79,7 @@ public interface MemberService {
 
 	ArrayList<Board> recentlyBoardList(Member loginUser);
 
+	ArrayList<Board> recentlyScrapList(Member loginUser);
+
 }
 

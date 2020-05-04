@@ -65,7 +65,7 @@ public class MemberController {
 		if(loginUser != null) {
 			// 로그인 성공 시 세션에 정보를 담아야 하기 때문에 세션이 필요
 			model.addAttribute("loginUser", loginUser);
-			return "redirect:/";
+			return "redirect:/index.home";
 		}else {
 			model.addAttribute("msg","로그인 실패하셨습니다!");
 			return "common/errorPage";
@@ -405,6 +405,16 @@ public class MemberController {
 			jBoard.put("boNum", b.getBoNum());
 			jBoard.put("boTitle", b.getBoTitle());
 			jBoard.put("boGroup", b.getBoGroup());
+			
+			jArr.add(jBoard);
+		}
+		
+		ArrayList<Board> recentlyScrapList = mService.recentlyScrapList(loginUser);
+		
+		for(Board b: recentlyScrapList) {
+			JSONObject jBoard = new JSONObject();
+			jBoard.put("boNum", b.getBoNum());
+			jBoard.put("boTitle", b.getBoTitle());
 			
 			jArr.add(jBoard);
 		}

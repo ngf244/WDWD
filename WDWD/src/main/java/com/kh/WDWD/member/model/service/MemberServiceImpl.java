@@ -182,5 +182,10 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<Board> recentlyBoardList(Member loginUser) {
 		return mDAO.recentlyBoardList(sqlSession, loginUser);
 	}
+
+	@Override
+	public ArrayList<Board> recentlyScrapList(Member loginUser) {
+		return mDAO.recentlyScrapList(sqlSession, loginUser);
+	}
 }
 
