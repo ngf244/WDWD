@@ -22,4 +22,9 @@
 		where PC_ID = #{userId} and PC_DIV = 'C'
 		order by PC_DATE DESC
 	</select>
+	
+	<insert id="insertCP">
+		insert into point_cash
+		values(pc_seq.nextval, #{pcContent}, #{pcAmount}, to_char(sysdate, 'yyyy/mm/dd hh24:mi:ss'), #{pcDiv}, #{pcId})
+	</insert>
 </mapper>

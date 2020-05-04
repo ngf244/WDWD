@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
 import com.kh.WDWD.author.model.vo.Declaration;
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.member.model.vo.Member;
 
 public interface AuthorService {
@@ -27,5 +28,11 @@ public interface AuthorService {
 	ArrayList<Ban> getBanList();
 
 	int deleteBan(String userId);
+
+	ArrayList<Dispute> getCancelList();
+
+	ArrayList<Dispute> getDisputeList();
+
+	int updateDispute(HashMap map);
 
 }

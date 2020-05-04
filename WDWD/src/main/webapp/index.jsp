@@ -37,7 +37,7 @@
 			<button onclick="javascript:location.href='writing.bo';">boardwriting</button>
 			<button onclick="javascript:location.href='revis.bo';">boardrevis</button>
 			<button onclick="javascript:location.href='aban.au';">authorBan</button>
-			<button onclick="javascript:location.href='trade.au';">authorTrade</button>
+			<button onclick="javascript:location.href='atrade.au';">authorTrade</button>
 			<button onclick="javascript:location.href='aunban.au';">authorUnban</button>
 			
 		</div>

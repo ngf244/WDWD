@@ -1,6 +1,9 @@
 package com.kh.WDWD.cash.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,5 +46,21 @@ public class CashController {
 		}		
 		
 		return mv;
+	}
+	
+	@RequestMapping("insertCP.my")
+	public void insertCash(PointNCash pc, HttpServletResponse response) {
+		
+		int insertCashResult = cService.insertCP(pc);
+		
+		if(insertCashResult > 0) {
+			try {
+				response.getWriter().println(insertCashResult);
+			} catch (IOException e) {
+				throw new CashException(e.getMessage());
+			}
+		} else {
+			throw new CashException("캐쉬 충전 실패");
+		}
 	}
 }

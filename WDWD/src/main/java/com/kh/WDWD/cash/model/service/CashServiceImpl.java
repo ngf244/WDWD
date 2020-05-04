@@ -29,4 +29,9 @@ public class CashServiceImpl implements CashService {
 		return cDAO.selectMyCashChangeList(sqlSession, userId, pi);
 	}
 
+	@Override
+	public int insertCP(PointNCash pc) {
+		return cDAO.insertCP(sqlSession, pc);
+	}
+
 }

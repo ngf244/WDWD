@@ -10,5 +10,7 @@ public interface CashService {
 	int getCashChangeCount(String userId);
 
 	ArrayList<PointNCash> selectMyCashChangeList(String userId, PageInfo pi);
+
+	int insertCP(PointNCash pc);
 	
 }
