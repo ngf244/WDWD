@@ -30,4 +30,6 @@
     <mapper resource="mappers/guideboard-mapper.xml"/>
 	</mappers>
 	
+
+	
 </configuration>

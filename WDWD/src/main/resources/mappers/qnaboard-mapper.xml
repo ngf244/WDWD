@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="qnaboardMapper">
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from Qna
+		where b_status = 'Y'
+	</select>
+	
+	<select id="selectList" resultMap="QnaResultSet">
+		select *
+		from Qna
+		where q_status = 'Y'
+		order by bno desc	
+	</select>
+	
+	<resultMap type="Qna" id="QnaResultSet">
+		<id property="bno" column="BNO"/>
+		<result property="title" column="TITLE"/>
+		<result property="content" column="content"/>
+		<result property="writer" column="WRITER"/>
+		<result property="regDate" column="REGDATE"/>
+		<result property="viewCnt" column="VIEWCNT"/>	
+	</resultMap>
+	
+	
+
+</mapper>

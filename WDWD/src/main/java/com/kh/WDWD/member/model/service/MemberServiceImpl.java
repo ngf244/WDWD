@@ -98,10 +98,14 @@ public class MemberServiceImpl implements MemberService {
 		return mDAO.selectRecentlyCashChange(sqlSession, userId);
 	}
 
-	@Override
-	public int checkIdDup(String id) {
-//		return mDAO.checkIdDup(sqlSession, id);
-		return 0;
-	}
-}
 	
+	// 회원가입시 유저 아이디 체크
+	@Override
+	public int userIdCheck(String user_id) {
+		return mDAO.selectuserIdcheck(sqlSession, user_id);
+	}
+	
+}
+
+
+

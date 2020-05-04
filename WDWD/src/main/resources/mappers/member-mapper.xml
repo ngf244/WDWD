@@ -48,10 +48,17 @@
 	</insert>
 	
 	
-	<!-- 아이디 확인  -->
-	<select id ="idCheck" parameterType="Member">
-		select userId from myMember
-		where userId = #{userId}
+	<!-- 아이디 중복 체크  -->
+	<select id ="idChk" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE USERID = #{userId}
+	</select>
+	
+	<!-- 패스워드 중복 체크 -->
+	<select id="passChk" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE USERID = #{userId}
+		AND USERPASS = #{userPass}
 	</select>
 	
 	

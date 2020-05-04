@@ -75,4 +75,8 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyCashChange", userId);
 	}
 
+	// 회원가입시 유저 아이디 체크
+	public int selectuserIdcheck(SqlSessionTemplate sqlSession, String user_id) {
+		return sqlSession.selectOne("memberMapper.selectMember", user_id);
 	}
+}
