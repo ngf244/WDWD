@@ -172,6 +172,15 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int updateSecretToggle(String userId) {
 		return mDAO.updateSecretToggle(sqlSession, userId);
+    
+	@Override
+  public int recentlyBoard(Member m) {
+		return mDAO.recentlyBoard(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Board> recentlyBoardList(Member loginUser) {
+		return mDAO.recentlyBoardList(sqlSession, loginUser);
 	}
 }
 	

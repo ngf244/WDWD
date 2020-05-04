@@ -17,12 +17,13 @@ public class Board {
 	private String boWriterNick;
 	private int boFileExist;
 	private String thumbnail;
+	private String thumbnailURL;
 
 	public Board() {}
 
 	public Board(int boNum, String boGroup, String boTitle, String boContent, int boView, String boDate,
 			String boUpdate, String boDel, String boWriter, int boGood, String boCategory, int boReNum,
-			String boWriterNick, int boFileExist, String thumbnail) {
+			String boWriterNick, int boFileExist, String thumbnail, String thumbnailURL) {
 		super();
 		this.boNum = boNum;
 		this.boGroup = boGroup;
@@ -39,6 +40,7 @@ public class Board {
 		this.boWriterNick = boWriterNick;
 		this.boFileExist = boFileExist;
 		this.thumbnail = thumbnail;
+		this.thumbnailURL = thumbnailURL;
 	}
 
 	public Board(String boGroup, String boCategory) {
@@ -165,6 +167,14 @@ public class Board {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+	
+	public String getThumbnailURL() {
+		return thumbnailURL;
+	}
+
+	public void setThumbnailURL(String thumbnailURL) {
+		this.thumbnailURL = thumbnailURL;
 	}
 
 	@Override

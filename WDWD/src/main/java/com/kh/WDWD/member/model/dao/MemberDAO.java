@@ -140,6 +140,13 @@ public class MemberDAO {
 
 	public int updateSecretToggle(SqlSessionTemplate sqlSession, String userId) {
 		return sqlSession.update("memberMapper.updateSecretToggle", userId);
+	
+  public int recentlyBoard(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.recentlyBoard", m);
+	}
+
+	public ArrayList<Board> recentlyBoardList(SqlSessionTemplate sqlSession, Member loginUser) {
+		return (ArrayList)sqlSession.selectList("memberMapper.recentlyBoardList", loginUser);
 	}
 
 }

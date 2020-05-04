@@ -73,6 +73,10 @@ public interface MemberService {
 	String selectSecretYn(String userId);
 
 	int updateSecretToggle(String userId);
+	
+  int recentlyBoard(Member m);
+
+	ArrayList<Board> recentlyBoardList(Member loginUser);
 
 }
 

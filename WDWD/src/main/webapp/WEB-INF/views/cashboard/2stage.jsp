@@ -20,8 +20,19 @@
 		width: 80%;
 		margin: 0 auto;
 		margin-bottom: 30px;
-		
-		border: 1px solid black;
+		border-style: double;
+	}
+	.buyerInfoOption {
+		display: inline-table;
+		text-align: center;
+		border-radius: 15px;
+		background-color: rgba(161, 206, 244, 0.55);
+		cursor: pointer;
+		font-weight: bold;
+		font-size: 11pt;
+		margin-left: 30px;
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 	#notRegist {
 		width: 60%;
@@ -202,7 +213,7 @@
 						<img src='${ contextPath }/resources/images/writeIcon.jpg'>1
 					</div>
 					<div id="mainTitle">
-						참여 에디터 : <span>${ cBoard.reId }</span>
+						참여 에디터 : <span class="smallOption">${ cBoard.reId }</span>
 					</div>
 					
 					<div id="registWrap">
@@ -211,8 +222,10 @@
 								의뢰인 정보
 							</div>
 							<div class="rightLine">
-								정문종 하나 284-891239-76707 <br>
-								010-5217-5324
+								<span class="smallOption">${ cBoard.boWriter }</span>
+								<div class="buyerInfoOption">마이페이지</div>
+								<div class="buyerInfoOption">작성 글 보기</div>
+								<div class="buyerInfoOption">작성 댓글 보기</div>
 							</div>
 						</div>
 						
@@ -365,6 +378,28 @@
 						</div>
 						
 						<script>
+							$('.buyerInfoOption').click(function(){
+								var whatIndex = $(this).index();
+								
+								$.ajax({
+									url: 'callmeId.ch',
+									data: {nickName: $(this).parent().find('span').text()},
+									type: 'post',
+									success: function(data){
+										console.log(whatIndex)
+										if(whatIndex == '1') {
+											location.href = "main.my?userId=" + data
+										} else if(whatIndex == '2') {
+											// 수정예정
+											location.href = "main.my?userId=" + data
+										} else if(whatIndex == '3') {
+											// 수정예정
+											location.href = "main.my?userId=" + data
+										}
+									}
+								});
+							});
+						
 							$('#registViewWrap .downloadBtn').click(function(e){
 								if("${cBoard.boWriter}" == "${sessionScope.loginUser.nickName}") {
 									e.preventDefault();
@@ -527,7 +562,7 @@
 					
 					<div id="btnList">
 						<div id="submit" class="button">수락하기</div>
-						<div id="cancle" class="button">돌아가기</div>
+						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
 					</div>
 					
 					<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">

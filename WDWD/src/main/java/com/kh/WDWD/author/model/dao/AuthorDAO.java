@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
 import com.kh.WDWD.author.model.vo.Declaration;
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.member.model.vo.Member;
 
 @Repository("aDAO")
@@ -48,6 +49,18 @@ public class AuthorDAO {
 
 	public int deleteBan(SqlSession sqlSession, String userId) {
 		return sqlSession.delete("authorMapper.deleteBan", userId);
+	}
+
+	public ArrayList<Dispute> getCancelList(SqlSession sqlSession) {
+		return (ArrayList)sqlSession.selectList("authorMapper.getCancelList");
+	}
+
+	public ArrayList<Dispute> getDisputeList(SqlSession sqlSession) {
+		return (ArrayList)sqlSession.selectList("authorMapper.getDisputeList");
+	}
+
+	public int updateDispute(SqlSession sqlSession, HashMap map) {
+		return sqlSession.update("authorMapper.updateDispute", map);
 	}
 
 }

@@ -264,6 +264,40 @@
 			      order by scrap_date DESC) 
 			where ROWNUM <= 5
 		]]>
+  </select> 
+	
+  <update id="recentlyBoard" parameterType="Member">
+		update member
+		<set>
+			<if test="recent1 != 0">me_recent1 = #{recent1},</if>
+			<if test="recent2 != 0">me_recent2 = #{recent2},</if>
+			<if test="recent3 != 0">me_recent3 = #{recent3},</if>
+			<if test="recent4 != 0">me_recent4 = #{recent4},</if>
+			<if test="recent5 != 0">me_recent5 = #{recent5},</if>
+		</set>
+		where me_id = #{userId}
+	</update>
+	
+	<select id="recentlyBoardList" parameterType="Member" resultMap="boardResultSet">
+		select * from member 
+		join board on (me_recent1 = bo_num)
+		where me_id = #{userId}
+			union
+		select * from member 
+		join board on (me_recent2 = bo_num)
+		where me_id = #{userId}
+			union
+		select * from member 
+		join board on (me_recent3 = bo_num)
+		where me_id = #{userId}
+			union
+		select * from member 
+		join board on (me_recent4 = bo_num)
+		where me_id = #{userId}
+		union
+			select * from member 
+		join board on (me_recent5 = bo_num)
+		where me_id = #{userId}
 	</select>
 	  
 	<select id="nickCheck" parameterType="Member" resultType="_int">

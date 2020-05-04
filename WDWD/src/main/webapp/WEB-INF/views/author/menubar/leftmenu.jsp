@@ -55,7 +55,7 @@
     } );
     
     $('#authorTrade').click(function(){
-    	location.href = "ban.au";
+    	location.href = "trade.au";
     })
     $('#ban').click(function(){
     	location.href = "ban.au";

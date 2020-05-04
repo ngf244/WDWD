@@ -37,6 +37,7 @@ import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
+import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 
 @Controller
@@ -44,6 +45,9 @@ public class BoardController {
 
 	@Autowired
 	private BoardService bService;
+	
+	@Autowired
+	private MemberService mService;
 	
 	@RequestMapping("myReplyList.my")
 	public ModelAndView myReplyListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
@@ -291,8 +295,28 @@ public class BoardController {
 			entirDir.add(entir);
 		}
 		
-		if(session.getAttribute("loginUser") != null) {
-			String userId = ((Member)session.getAttribute("loginUser")).getUserId();
+		Member m = (Member)session.getAttribute("loginUser");
+		if(m != null) {
+			if(boNum != m.getRecent1()) {
+				if(boNum != m.getRecent2()) {
+					if(boNum == m.getRecent3()) {
+						m.setRecent3(m.getRecent2());
+					} else if(boNum == m.getRecent4()) {
+						m.setRecent4(m.getRecent3());
+						m.setRecent3(m.getRecent2());
+					} else {
+						m.setRecent5(m.getRecent4());
+						m.setRecent4(m.getRecent3());
+						m.setRecent3(m.getRecent2());
+					}
+				}
+				m.setRecent2(m.getRecent1());
+				m.setRecent1(boNum);
+			}
+			
+			mService.recentlyBoard(m); // 최근 글 보기 멤버 업데이트
+			
+			String userId = m.getUserId();
 			
 			HashMap scraptToggle = new HashMap();
 			
@@ -609,7 +633,7 @@ public class BoardController {
 								@RequestParam(value = "fileOriginName", required = false) String[] originNamesArr,
 								@RequestParam String writingContent, HttpServletRequest request,
 								@RequestParam int boNum, RedirectAttributes redirect) {
-		
+		//RedirectAttributes : addAttribute로 parameter를 담고, return "redirect:detail.bo" 와 같이 URL을 입력하여 파라미터와 함께 넘길 수 있음
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
 		
 		ArrayList<String> reNames = new ArrayList<String>();

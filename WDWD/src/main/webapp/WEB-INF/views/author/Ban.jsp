@@ -320,7 +320,7 @@
 
                 if(targetTd.length < 1){
                     swal("No Target", "일치하는 회원이 없습니다.", "error");
-                    $('.bnaUserCancelRes').trigger('click');
+                    $('.banUserCancelRes').trigger('click');
                 } else {
                     document.getElementById("banUserToday").valueAsDate = new Date();
                     $('input[name=banUserNick]').val(targetTd.children('td:nth-of-type(2)').text());
@@ -332,7 +332,7 @@
                 }
             })
 
-            $('.bnaUserCancelRes').click(function () {
+            $('.banUserCancelRes').click(function () {
                 $('.banWrite').hide();
                 $('.banWrite textarea').val("");
                 $('.userList tr').css('color','black');
@@ -344,11 +344,20 @@
                 }
             })
 
-            $(document).on("click", ".needCheck", function () {
-                var deNum = $(this).closest('tr').find('.deNum').val();
-                var boGruop = $(this).closest('tr').find('input[name=boGroup]').val();
-                var boNum = $(this).closest('tr').children().eq(0).text().trim();
-                var target = $(this);
+            $(document).on("click", ".reportList tr", function () {
+                var deNum = $(this).find('.deNum').val();
+                var boGruop = $(this).find('input[name=boGroup]').val();
+                var boNum = $(this).children().eq(0).text().trim();
+                var target = $(this).find('.needCheck');
+                
+                var check = $(this).children().eq(6).text().trim();
+                if(check == "삭제됨"){
+                    return false;
+                }
+                // var deNum = $(this).closest('tr').find('.deNum').val();
+                // var boGruop = $(this).closest('tr').find('input[name=boGroup]').val();
+                // var boNum = $(this).closest('tr').children().eq(0).text().trim();
+                // var target = $(this);
                 
                 var a = document.createElement('a');
                 a.target="_blank";
@@ -373,23 +382,23 @@
                     }
                 })
             })
-            $(document).on("click", ".delete", function () {
+            $(document).on("click", ".delete", function (e) {
                 var deNum = $(this).closest('tr').find('.deNum').val();
                 var boGruop = $(this).closest('tr').find('input[name=boGroup]').val();
                 var boNum = $(this).closest('tr').children().eq(0).text().trim();
                 var target = $(this);
                 
-                var a = document.createElement('a');
-                a.target="_blank";
-                var location = "";
-                switch (boGruop) {
-                    case '1': location = "detail.bo?boNum="+boNum; break;
-                    case '2': location = "detail.bo?boNum="+boNum; break;
+                // var a = document.createElement('a');
+                // a.target="_blank";
+                // var location = "";
+                // switch (boGruop) {
+                //     case '1': location = "detail.bo?boNum="+boNum; break;
+                //     case '2': location = "detail.bo?boNum="+boNum; break;
                 
-                    default: break;
-                }
-                a.href = location;
-                a.click();
+                //     default: break;
+                // }
+                // a.href = location;
+                // a.click();
 
                 $.ajax({
                     url : "updateDeclaration.au",
@@ -401,6 +410,7 @@
                         }
                     }
                 })
+                e.stopPropagation();
             })
 
             $('.showInfo').click(function () {

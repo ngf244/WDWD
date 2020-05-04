@@ -376,7 +376,51 @@ public class MemberController {
 		}
 	}
 	
+  @RequestMapping("sessionUpdate.me")
+	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		Member loginUser = mService.selectMember(userId);
+		model.addAttribute("loginUser", loginUser);
+		
+		ArrayList<Board> recentlyList = mService.recentlyBoardList(loginUser);
+		
+		JSONArray jArr = new JSONArray();
+
+		JSONObject updateUser = new JSONObject();
+		updateUser.put("point", loginUser.getPoint());
+		updateUser.put("cash", loginUser.getCash());
+		updateUser.put("profileImg", loginUser.getProfileImg());
+		updateUser.put("recent1", loginUser.getRecent1());
+		updateUser.put("recent2", loginUser.getRecent2());
+		updateUser.put("recent3", loginUser.getRecent3());
+		updateUser.put("recent4", loginUser.getRecent4());
+		updateUser.put("recent5", loginUser.getRecent5());
+		jArr.add(updateUser);
+		
+		for(Board b: recentlyList) {
+			JSONObject jBoard = new JSONObject();
+			jBoard.put("boNum", b.getBoNum());
+			jBoard.put("boTitle", b.getBoTitle());
+			jBoard.put("boGroup", b.getBoGroup());
+			
+			jArr.add(jBoard);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+  
+  
 }
-	
 	
 	
