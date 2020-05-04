@@ -23,10 +23,10 @@
 			<div id="main">
 			<button onclick="goToBoardList();">자유게시판&1:1</button>
 			
-			
 			<c:if test="${ loginUser != null }">
 				<button class = "messageList">쪽지</button>
 			</c:if>
+			<button class= "pointShop" onclick="javascript:location.href='pointShop.ps';">포인트샵</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
 			<button onclick="javascript:location.href='writeView.ch?boardType=4';">콘테스트 글쓰기</button>
@@ -63,9 +63,20 @@
 	
 	<script>
 		$('.messageList').on('click', function(){
-			window.open("messageList.ms", "_blank", "toolbar=no, menubar=no, width=500, height=600");	
+			window.screen.width
+			window.screen.height
+			
+			var popupWidth = 500;
+			var popupHeight = 600;
+			
+			var popupX = (window.screen.width / 2) - (popupWidth / 2);
+			var popupY= (window.screen.height / 2) - (popupHeight / 2);
+			
+			window.open("messageList.ms", "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
 		});
 	
 	</script>
+	
+
 </body>
 </html>

@@ -116,8 +116,8 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<CBoard> selectCashOneList(CBoard cBoard) {
-		return cBoardDAO.selectCashOneList(sqlSession,  cBoard);
+	public ArrayList<CBoard> selectCashOneList(CBoard cBoard, PageInfo piCash) {
+		return cBoardDAO.selectCashOneList(sqlSession,  cBoard, piCash);
 	}
 
 	@Override
@@ -126,8 +126,8 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 	
 	@Override
-	public ArrayList<CBoard> selectCashOneCateList(HashMap searchMap) {
-		return cBoardDAO.selectCashOneCateList(sqlSession, searchMap);
+	public ArrayList<CBoard> selectCashOneCateList(HashMap searchMap, PageInfo piCash) {
+		return cBoardDAO.selectCashOneCateList(sqlSession, searchMap, piCash);
 	}
 //	@Override
 //	public int getCateListCount2(CBoard cBoard, String searchCate, String searchText) {

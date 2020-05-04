@@ -205,5 +205,23 @@
 		<servlet-name>HomeServlet</servlet-name>
 		<url-pattern>*.home</url-pattern>
 	</servlet-mapping>	   
+	
+	
+	<!-- 포인트샵 -->
+	<servlet>
+		<servlet-name>PointShopServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/pointShop-context.xml
+			</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PointShopServlet</servlet-name>
+		<url-pattern>*.ps</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
 

@@ -24,6 +24,7 @@
 		<typeAlias type="com.kh.WDWD.author.model.vo.BanList" alias="BanList"/>
 		<typeAlias type="com.kh.WDWD.author.model.vo.BanPageUserList" alias="BanPageUserList"/>
 		<typeAlias type="com.kh.WDWD.author.model.vo.Ban" alias="Ban"/>
+		<typeAlias type="com.kh.WDWD.pointShop.model.vo.PointShop" alias="PointShop"/>
 	</typeAliases>
 	
 	<mappers>
@@ -37,6 +38,7 @@
 	    <mapper resource="mappers/guideboard-mapper.xml"/>
 	    <mapper resource="mappers/message-mapper.xml"/>
 	    <mapper resource="mappers/author-mapper.xml"/>
+	    <mapper resource="mappers/pointShop-mapper.xml"/>
 	</mappers>
 	
 </configuration>

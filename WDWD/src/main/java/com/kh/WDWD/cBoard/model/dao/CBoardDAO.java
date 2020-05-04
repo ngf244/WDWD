@@ -18,11 +18,12 @@ import com.kh.WDWD.request.model.vo.Request;
 public class CBoardDAO {
 	
 	
-	
+	//자유게시판 글 수 
 	public int getListCount(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap) {
 		return sqlSession.selectOne("cBoardMapper.getListCount", searchMap);
 	}
 	
+	//자유게시판 갖고오기
 	public ArrayList<CBoard> selectBoardList(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit(); // 몇번째 게시글부터 불러오는지
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit()); // 몇번째부터 몇번째까지인지 가져가는것
@@ -136,17 +137,22 @@ public class CBoardDAO {
 		return sqlSession.selectOne("cBoardMapper.getListCount2", cBoard);
 	}
 
-	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession,  CBoard cBoard) {
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", cBoard);
+	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession,  CBoard cBoard, PageInfo piCash) {
+		int offset = (piCash.getCurrentPage() - 1) * piCash.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, piCash.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", cBoard, rowBounds);
 	}
-
+	
+	
+	// CashBoard 무한페이징
 	public int getCateListCount2(SqlSessionTemplate sqlSession, HashMap searchMap) {
 		return sqlSession.selectOne("cBoardMapper.getCateListCount2", searchMap);
 	}
 	
-	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, HashMap searchMap) {
-		System.out.println("searchMap? " + ((CBoard)searchMap.get("cBoard")).getBoGroup());
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", searchMap);
+	public ArrayList<CBoard> selectCashOneCateList(SqlSessionTemplate sqlSession, HashMap searchMap, PageInfo piCash) {
+		int offset = (piCash.getCurrentPage() - 1) * piCash.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, piCash.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashOneCateList", searchMap, rowBounds);
 	}
 	
 //	public int getCateListCount2(SqlSessionTemplate sqlSession, CBoard cBoard, String searchCate, String searchText) {

@@ -114,18 +114,28 @@
 	        	 				
 	      	 					</div> 
 	        						<div class="loginform">
-	         							<div id="loginbtn">로그인</div><br><br>
+	         							<div id="loginbtn" onclick="loginbtn();">로그인</div><br><br>
 	        							<button type="button" id="kakaoBtn">카카오아이디 로그인</button><br>
 	         							<button type ="button" id="googleBtn">구글아이디 로그인</button>
 	     	 </div>
 	      </form>
 		<script type="text/javascript">
-	     	window.onload = function(){
-	     		document.getElementById('loginbtn').onclick = function(){
+	    	
+	    	/*
+	    	window.onload = function (){ 
+	     	 	document.getElementById('loginbtn').onclick = function(){
 	     			document.getElementById('loginaction').submit();
 	     		};
-	     	};
-	     	
+	     	 */
+	    	function loginbtn(){
+	    		$('#loginaction').submit();
+	    	};
+	    	
+			$("#loginPw").keyup(function(e){if(e.keyCode == 13)  
+		         loginbtn(); 
+			});
+		
+
 	     	//공백 체크 정규식
 	     	
 	     	var empJ = /\s/g
