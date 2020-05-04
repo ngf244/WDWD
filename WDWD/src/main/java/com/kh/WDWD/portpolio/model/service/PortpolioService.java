@@ -3,6 +3,7 @@ package com.kh.WDWD.portpolio.model.service;
 import java.util.ArrayList;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.portpolio.model.vo.Portpolio;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
@@ -11,7 +12,7 @@ public interface PortpolioService {
 
 	int enrollPortpolio(Portpolio p);
 
-	int insertPortpolioCotents(ArrayList<PortpolioContents> pcArr);
+	int insertPortpolioContents(ArrayList<PortpolioContents> pcArr);
 
 	int getPortpolioCount(Portpolio p);
 
@@ -28,5 +29,15 @@ public interface PortpolioService {
 	int updatePortCount(Portpolio p);
 
 	ArrayList<PortpolioContents> selectAttachFile(int poNum);
+
+	PortpolioContents updatePortView(Portpolio p);
+
+	int updatePortpolio(Portpolio p);
+
+	int updatePortpolioContents(ArrayList<PortpolioContents> pcArr);
+
+	int deletePortContents(Portpolio p);
+
+	ArrayList<PortpolioContents> getContents(Portpolio p);
 
 }

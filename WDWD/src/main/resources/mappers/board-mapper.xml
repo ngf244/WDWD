@@ -73,6 +73,8 @@
 		<result property="boCategory" column="BO_CATEGORY"/>
 		<result property="boReNum" column="BO_RENUM"/>
 		<result property="boWriterNick" column="ME_NICK"/>
+		<result property="thumbnail" column="CON_COP"/>
+		<result property="thumbnailURL" column="CON_URL"/>
 	</resultMap>
 	
 	<select id="checkRecommendExist" resultType="_int">
@@ -100,7 +102,7 @@
 	
 	<insert id="insertScrap">
 		insert into scrap
-		values(#{userId}, #{boNum})
+		values(#{userId}, #{boNum}, to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'))
 	</insert>
 	
 	<delete id="deleteScrap">
@@ -125,4 +127,22 @@
 		set bo_title = #{boTitle}, bo_con = #{boContent}, bo_update = sysdate, bo_category = #{boCategory}
 		where bo_num = #{boNum}
 	</update>
+	
+	<select id="getTopBoard" resultMap="boardResultSet" parameterType="_int">
+	    select *
+		from (select bo_num, bo_title, bo_renum, bo_view, bo_good, bo_date, con_url, min(con_cop) as con_cop
+		      from (select *
+		            from board
+		            left join contents on (contents.con_ref = board.bo_num)
+		            where bo_group = 1)
+		      group by bo_num, bo_title, bo_renum, bo_view, bo_good, bo_renum, bo_date, con_url
+		      order by
+		      <if test="number == 0">bo_view desc,</if>
+		      <if test="number == 1">bo_good desc,</if>
+		      <if test="number == 2">bo_renum desc,</if>
+		      bo_date desc) 
+		<![CDATA[
+	    where rownum <= 10
+	    ]]>
+	</select>
 </mapper>

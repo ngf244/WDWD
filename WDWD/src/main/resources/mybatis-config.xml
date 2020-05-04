@@ -25,6 +25,8 @@
 		<typeAlias type="com.kh.WDWD.author.model.vo.BanPageUserList" alias="BanPageUserList"/>
 		<typeAlias type="com.kh.WDWD.author.model.vo.Ban" alias="Ban"/>
 		<typeAlias type="com.kh.WDWD.pointShop.model.vo.PointShop" alias="PointShop"/>
+		<typeAlias type="com.kh.WDWD.board.model.vo.Scrap" alias="Scrap"/>
+		<typeAlias type="com.kh.WDWD.author.model.vo.Dispute" alias="Dispute"/>
 	</typeAliases>
 	
 	<mappers>

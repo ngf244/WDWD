@@ -133,4 +133,48 @@
 		where ben_id = #{userId}
 	</delete>
 	
+	<select id="getCancelList" resultMap="DisputeResultSet">
+		select d.*, c.cb_cash, b.bo_group
+		from dispute d
+		    join cash_board c on (di_refnum = cb_num)
+		    join board b on (cb_num = bo_num)
+		    join member m on (bo_writer = me_id)
+		where di_status in (1, 2)
+			and di_prs &lt;&gt; 'D'
+	</select>
+	
+	<select id="getDisputeList" resultMap="DisputeResultSet">
+		select d.*, c.cb_cash, b.bo_group
+		from dispute d
+		    join cash_board c on (di_refnum = cb_num)
+		    join board b on (cb_num = bo_num)
+		    join member m on (bo_writer = me_id)
+		where di_status in (3, 4)
+			and di_prs &lt;&gt; 'D'
+	</select>
+	
+	<resultMap type="Dispute" id="DisputeResultSet">
+		<id property="diNum" column="DI_NUM"/>
+		<result property="diRef" column="DI_REFNUM"/>
+		<result property="diRps" column="DI_PRS"/>
+		<result property="diStatus" column="DI_STATUS"/>
+		<result property="diContent" column="DI_CONTENT"/>
+		<result property="diDate" column="DI_DATE"/>
+		<result property="cbCash" column="CB_CASH"/>
+		<result property="boGroup" column="BO_GROUP"/>
+	</resultMap>
+	
+	<update id="updateDispute" parameterType="hashmap">
+		update dispute
+		set di_prs = 
+		<choose>
+			<when test="type == 'N'">
+				'C'
+			</when>
+			<otherwise>
+				'D'
+			</otherwise>
+		</choose>
+		where di_num = #{diNum}
+	</update>
 </mapper>

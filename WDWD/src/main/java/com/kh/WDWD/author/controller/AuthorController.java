@@ -24,6 +24,7 @@ import com.kh.WDWD.author.model.service.AuthorService;
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
 import com.kh.WDWD.author.model.vo.Declaration;
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
 import com.kh.WDWD.member.model.vo.Member;
 
@@ -47,7 +48,7 @@ public class AuthorController {
 		return "author/Ban";
 	}
 	
-	@RequestMapping("trade.au")
+	@RequestMapping("atrade.au")
 	public String authorTrade() {
 		return "author/TradeCare";
 	}
@@ -66,6 +67,7 @@ public class AuthorController {
 		
 		if(insertReportResult > 0) {
 			try {
+				response.setCharacterEncoding("UTF-8");
 				response.getWriter().println("전송완료");
 			} catch (IOException e) {
 				throw new AuthorException("신고 실패");
@@ -139,12 +141,42 @@ public class AuthorController {
 	
 	@RequestMapping("deleteBan.au")
 	public void deleteBan(String userId, HttpServletResponse response) throws IOException {
-		System.out.println(userId);
-		
 		int deleteBanResult = aService.deleteBan(userId);
 		
 		response.getWriter().println(deleteBanResult);
+	}
+	
+	@RequestMapping("trade.au")
+	public String TradeCarePage(Model model) {
+		ArrayList<Dispute> cancelArr = aService.getCancelList();
+		ArrayList<Dispute> disputeArr = aService.getDisputeList();
 		
+		System.out.println(cancelArr);
+		System.out.println(disputeArr);
+		
+		model.addAttribute("cancelArr", cancelArr);
+		model.addAttribute("disputeArr", disputeArr);
+		
+		return "author/TradeCare";
+	}
+	
+	@RequestMapping("updateDispute.au")
+	public void updateDispute(int diNum, char type, HttpServletResponse response) throws IOException {
+		System.out.println(diNum);
+		System.out.println(type);
+		
+		HashMap map = new HashMap();
+		map.put("diNum", diNum);
+		map.put("type", type);
+		System.out.println(map);
+		
+		int result = aService.updateDispute(map);
+		if(result > 0) {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(result);
+		} else {
+			throw new AuthorException("분쟁 status 업데이트 실패");
+		}
 	}
 	
 }

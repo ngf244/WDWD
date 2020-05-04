@@ -12,6 +12,7 @@ import com.kh.WDWD.author.model.service.AuthorService;
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
 import com.kh.WDWD.author.model.vo.Declaration;
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.member.model.vo.Member;
 
 @Service("aService")
@@ -66,6 +67,21 @@ public class AuthorServiceImpl implements AuthorService{
 	@Override
 	public int deleteBan(String userId) {
 		return aDAO.deleteBan(sqlSession, userId);
+	}
+
+	@Override
+	public ArrayList<Dispute> getCancelList() {
+		return aDAO.getCancelList(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Dispute> getDisputeList() {
+		return aDAO.getDisputeList(sqlSession);
+	}
+
+	@Override
+	public int updateDispute(HashMap map) {
+		return aDAO.updateDispute(sqlSession, map);
 	}
 	
 }

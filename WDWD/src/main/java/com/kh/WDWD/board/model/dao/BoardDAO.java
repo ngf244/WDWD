@@ -132,5 +132,9 @@ public class BoardDAO {
 		return sqlSession.update("boardMapper.boardUpdate", b);
 	}
 
+	public ArrayList<Board> getTopBoard(SqlSessionTemplate sqlSession, int number) {
+		return (ArrayList)sqlSession.selectList("boardMapper.getTopBoard", number);
+	}
+
 
 }

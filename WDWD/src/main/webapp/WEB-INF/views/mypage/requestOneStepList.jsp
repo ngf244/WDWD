@@ -59,6 +59,14 @@
 	
 	#buttonSelectNSerch:hover .dropdown-content {display: block;}
 	
+	#CategoryInfo {
+		display: inline-block;
+		font-size: 20pt;
+		color: #050099;
+		font-weight: bolder;
+	}
+	
+	
 	/* 리스트 부분 */
 	.boardList {
 		height: 199px;
@@ -69,19 +77,23 @@
 		border: 1px solid black;
 		display: flex;
 		
-		overflow: hidden;
+		/* overflow: hidden; */
+		
 	}
 	.boardList:hover {
 		background: rgba(161, 206, 244, 0.1)
 	}
 	
 	.boardImg {
-		display: inline-table;
+		display: inline-block;
 		width: 140px;
 		height: 140px;
 		margin: 5px;
 		
 		border: 1px solid black;
+		
+		cursor: pointer;
+		
 	}
 	.boardCon {
 		/* width 값은 script로 별도 지정 */
@@ -166,24 +178,37 @@
 						<div class="dropdown-content">
 							<a href="#"><span onclick="myReqOneStepList();">전체 보기</span></a>
 						    <a href="#"><span onclick="myReqCateList(2);">1:1 의뢰</span></a>
+						    <a href="#"><span onclick="myReqCateList(7);">비공개 의뢰</span></a>
 						    <a href="#"><span onclick="myReqCateList(3);">역경매</span></a>
 						    <a href="#"><span onclick="myReqCateList(4);">콘테스트</span></a>
 						</div>						
 					</div>
+					<c:if test="${ cboard.boGroup eq null}">
+						<div id="CategoryInfo">전체 보기</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '2'}">
+						<div id="CategoryInfo">1:1 의뢰</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '3'}">
+						<div id="CategoryInfo">역경매</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '4'}">
+						<div id="CategoryInfo">콘테스트</div>
+					</c:if>
 				
 					<!-- 리스트 시작 -->
+					<c:if test="${ empty list }">
+						<div class="boardList">※ 목록이 없습니다.</div>
+					</c:if>					
 					<c:forEach var="rol" items="${ list }">
 						<div class="boardList">
-							<div class="boardImg">
-								<c:if test="${ rol.boGroup == '2' }">
-									<img src="${ contextPath }/resources/images/1on1_icon.png" style="width: 100%;">
+							<div class="boardImg" onclick="goCBD(${ rol.boNum });">
+								<c:if test="${ rol.thumbnail eq null }">
+									<img src="${ contextPath }/resources/images/emptyImage.png" width= "100%" height= "100%">
 								</c:if>
-								<c:if test="${ rol.boGroup == '3' }">
-									<img src="${ contextPath }/resources/images/auction.png" style="width: 100%;">
+								<c:if test="${ rol.thumbnail ne null }">
+									<img src="${ contextPath }/resources/real_photo/${ rol.thumbnail }" width= "100%" height= "100%">
 								</c:if>
-								<c:if test="${ rol.boGroup == '4' }">
-									<img src="${ contextPath }/resources/images/trophy_icon.png" style="width: 100%;">
-								</c:if>																
 							</div>
 							<div class="boardCon">
 								<div class="leftCon">
@@ -196,13 +221,16 @@
 									<c:if test="${ rol.boGroup == '2' }" >
 										<b>의뢰유형</b> : 1:1 의뢰<br>
 									</c:if>
+									<c:if test="${ rol.boGroup == '7' }" >
+										<b>의뢰유형</b> : 비공개 의뢰<br>
+									</c:if>
 									<c:if test="${ rol.boGroup == '3' }" >
 									 	<b>의뢰유형</b> : 역경매<br>
 									</c:if>			
 									<c:if test="${ rol.boGroup == '4' }" >
 									 	<b>의뢰유형</b> : 콘테스트<br>
 									</c:if>									 						 	 
-									<p><b>내용</b> : ${ rol.boContent }</p>
+									<div class="contents"><b>내용</b>${ rol.boContent }</div>
 								</div>
 								<div class="rightCon">
 									<c:if test="${ rol.boGroup == '2' }">
@@ -210,7 +238,18 @@
 											참여자 : ${ rol.boReNum }명
 										</div>
 										<div class="rightBtn">
-											~ 20${ rol.cbDate }
+											기한 제한 없음
+										</div>
+										<div class="rightBtn">
+											의뢰비 : ${ rol.cbCash }
+										</div>
+									</c:if>
+									<c:if test="${ rol.boGroup == '7' }">
+										<div class="rightBtn">
+											요청한 에디터 : ${ rol.reId }
+										</div>
+										<div class="rightBtn">
+											기한 제한 없음
 										</div>
 										<div class="rightBtn">
 											의뢰비 : ${ rol.cbCash }
@@ -220,9 +259,7 @@
 										<div class="rightBtn">
 											참여자 : ${ rol.boReNum }명
 										</div>
-										<div class="rightBtn">
-											~ 20${ rol.cbDate }
-										</div>
+										<div class="rightBtn cbDate">${ rol.cbDate }</div>
 										<div class="rightBtn">
 											최소 입찰가 : ${ rol.cbCash }
 										</div>
@@ -231,9 +268,7 @@
 										<div class="rightBtn">
 											참여자 : ${ rol.boReNum }명
 										</div>
-										<div class="rightBtn">
-											~ 20${ rol.cbDate }
-										</div>
+										<div class="rightBtn cbDate">${ rol.cbDate }</div>
 										<div class="rightBtn">
 											상금 : ${ rol.cbCash }
 										</div>
@@ -337,7 +372,39 @@
 			var cbStep = 1;
 			location.href = "reqList.my?boGroup=" + e + "&boWriter=" + boWriter + "&cbStep=" + cbStep;	
 		}
-
+	
+		$(function(){
+			console.log($('.contents').find('img'));
+			$('.contents').find('img').remove();
+			$('.contents').find('br').remove();
+			
+			$('.boardList').css('overflow', 'hidden');
+		});
+		
+		function goCBD(boNum){
+			location.href = "detailView.ch?boNum=" + boNum;
+		}
+		
+		$(function (){
+			var cbDateLength = $('.cbDate').length;
+			
+			console.log(cbDateLength);
+			for(var i = 0; i < cbDateLength; i++){
+				var cbDate = $('.cbDate').eq(i).text();
+				console.log("cbDate : " + cbDate);
+				var nDate = new Date(cbDate);
+				console.log(nDate);
+				var yyyy = nDate.getFullYear();
+				var mm = nDate.getMonth() + 1;
+				var dd = nDate.getDate();
+				
+				console.log(nDate.getFullYear());
+				console.log(nDate.getMonth());
+				console.log(nDate.getDate());
+				
+				$('.cbDate').eq(i).text('~ ' + yyyy + '년 ' + mm + '월 ' + dd + '일');
+			} 
+		});
 	</script>		
 </body>
 </html>

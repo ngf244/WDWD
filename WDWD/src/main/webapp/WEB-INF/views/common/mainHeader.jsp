@@ -7,10 +7,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://localhost:82/socket.io/socket.io.js"></script>
+<!-- <script src="http://localhost:82/socket.io/socket.io.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 
@@ -147,8 +149,8 @@
 		border: 1px solid black;
 	}
 	#profile_img img {
-		width: 100%;
-		height: 100%;
+		width: 80px;
+		height: 80px;
 		overflow: hidden;
 	}
 	#profile_wrap b {
@@ -370,94 +372,144 @@
 				<img src="${ contextPath }/resources/images/search.png">
 			</div>
 			<div id="basicForm">
-			<c:if test="${ empty sessionScope.loginUser }">
+				<c:if test="${ empty sessionScope.loginUser }">
 					<div id="loginView" onclick="location.href='gologin.me';">login</div>
-			</c:if>
+				</c:if>
+				
 				<c:if test="${ !empty sessionScope.loginUser }">
-          <div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
-          <img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
-          <img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
-          
-            <div id="noticeArea" class="notice">
-            </div>
-            <div id="smallInfo">
-              <div id="smallInfoContent">
-                <div style="height: 60px;"></div>
-                <div id="profile_wrap">
-                  <div id="profile_img"><img src=''></div>
-                  <b>${ sessionScope.loginUser.nickName } 님</b>
-                </div>
-
-                <div style="height: 30px;"></div>
-
-                <div class="smallMenu yellow">
-                  <img src="${ contextPath }/resources/images/point.png">
-                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.point }" type="number" groupingUsed="true"/> POINT</b>
-                </div>
-
-                <div class="smallMenu yellow">
-                  <img src="${ contextPath }/resources/images/cash.png">
-                  <br><b><fmt:formatNumber value="${ sessionScope.loginUser.cash }" type="number" groupingUsed="true"/> CASH</b>
-                </div>
-
-                <div class="smallMenu blue" onclick="goMyPage();">
-                  <img src="${ contextPath }/resources/images/info.png">
-                  <br><b>마이페이지</b>
-                </div>
-
-                <div class="smallMenu blue">
-                  <img src="${ contextPath }/resources/images/logout.png" onclick="location.href='logout.me'">
-                  <br><b>로그아웃</b>
-                </div>
-
-                <div style="height: 60px;"></div>
-
-                <div id="recently">최근 본 글</div>
-                <div class="recentlyBoard">
-                  1번글제목이 엄청나게 길면 어떻게 될까요ㅎㅎㅎㅎㅎㅎㅎㅎㅎ
-                </div>
-                <div class="recentlyBoard">
-                  2번글제목
-                </div>
-                <div class="recentlyBoard">
-                  3번글제목
-                </div>
-                <div class="recentlyBoard">
-                  4번글제목
-                </div>
-                <div class="recentlyBoard">
-                  5번글제목
-                </div>				
-                </div>
-              </div>
-            </c:if>
-				<script>
-					$('#modalMenu').click(function() {
-						$('#smallInfo').css('display', 'block');
-						setTimeout(function() {
-							$('#smallInfoContent').addClass("open");
-						}, 1);
-					});
-					$('#smallInfo').click(function() {
-						if(!($('#smallInfoContent').is(":hover"))) {
-							$('#smallInfoContent').removeClass("open");
-							$('#smallInfo').css('display', 'none');
-							setTimeout(() => {
-							}, 500);
-						}
-					});
-
-					$('#notice').click(function(e){
-						$('#noticeArea').slideToggle();
-					})
-
-					$('html').click(function(e){
-						if(!$(e.target).hasClass("notice")){
-							$('#noticeArea').slideUp();
-						}
-					})
-				</script>
+					<div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
+					<img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
+					<img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
+					
+					<div id="noticeArea" class="notice">
+					</div>
+					
+					<div id="smallInfo">
+						<div id="smallInfoContent">
+							<div style="height: 60px;"></div>
+							<div id="profile_wrap">
+								<div id="profile_img"><img src=''></div>
+								<b>${ sessionScope.loginUser.nickName } 님</b>
+							</div>
+	
+							<div style="height: 30px;"></div>
+	
+							<div class="smallMenu yellow">
+								<img src="${ contextPath }/resources/images/point.png">
+								<br><b><span id="havePoint"></span> POINT</b>
+							</div>
+	
+							<div class="smallMenu yellow">
+								<img src="${ contextPath }/resources/images/cash.png">
+								<br><b><span id="haveCash"></span> CASH</b>
+							</div>
+	
+							<div class="smallMenu blue" onclick="goMyPage();">
+								<img src="${ contextPath }/resources/images/info.png">
+								<br><b>마이페이지</b>
+							</div>
+							
+							<div class="smallMenu blue">
+								<img src="${ contextPath }/resources/images/logout.png" onclick="location.href='logout.me'">
+								<br><b>로그아웃</b>
+							</div>
+	
+							<div style="height: 60px;"></div>
+							
+							<div id="recently">최근 본 글</div>
+	                
+							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+						</div>				
+					</div>
+				</c:if>
 			</div>
+
+			<script>
+				$('#modalMenu').click(function() {
+					$.ajax({
+						url: 'sessionUpdate.me',
+						data: {userId: '${ sessionScope.loginUser.userId }'},
+						type: 'post',
+						success: function(data) {
+							var list = data.list;
+															
+							var point = Number(list[0].point);
+							var cash = Number(list[0].cash);
+							
+							$('#smallInfo').css('display', 'block');
+							$('#havePoint').text(point.toLocaleString());
+							$('#haveCash').text(cash.toLocaleString());
+							
+							if(list[0].profileImg == null) {
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/images/people.png');
+							} else {
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
+							}
+							
+							for(var i = 1; i < list.length; i++) {
+								if(list[0].recent1 == list[i].boNum) {
+									$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
+									$('.recentlyBoard').eq(0).text(list[i].boTitle);
+									$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
+								} else if(list[0].recent2 == list[i].boNum) {
+									$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
+									$('.recentlyBoard').eq(1).text(list[i].boTitle);
+									$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
+								} else if(list[0].recent3 == list[i].boNum) {
+									$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
+									$('.recentlyBoard').eq(2).text(list[i].boTitle);
+									$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
+								} else if(list[0].recent4 == list[i].boNum) {
+									$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
+									$('.recentlyBoard').eq(3).text(list[i].boTitle);
+									$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
+								} else if(list[0].recent5 == list[i].boNum) {
+									$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
+									$('.recentlyBoard').eq(4).text(list[i].boTitle);
+									$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
+								}
+							}
+							
+							setTimeout(function() {
+								$('#smallInfoContent').addClass("open");
+							}, 100);
+						}
+					})
+					.always(function() {
+						
+					});
+				});
+				$('#smallInfo').click(function() {
+					if(!($('#smallInfoContent').is(":hover"))) {
+						$('#smallInfoContent').removeClass("open");
+						$('#smallInfo').css('display', 'none');
+						setTimeout(() => {
+						}, 500);
+					}
+				});
+				
+				$('.recentlyBoard').click(function() {
+					if($(this).next().val() == 1) {
+						location.href= "detail.bo?boNum=" + $(this).prev().val();
+					} else {
+						location.href= "detailView.ch?boNum=" + $(this).prev().val();
+					}
+				});
+
+				$('#notice').click(function(e){
+					$('#noticeArea').slideToggle();
+				})
+
+				$('html').click(function(e){
+					if(!$(e.target).hasClass("notice")){
+						$('#noticeArea').slideUp();
+					}
+				})
+			</script>
 		</div>
 		<div id="smallOptionBlock" class="smallOptionBlock">
 			<div>마이페이지</div>
@@ -538,6 +590,8 @@
 					type : 'POST', 
 					data : formData, 
 					success : function(data) {
+							console.log(data.trim());
+							console.log(data.trim()=="전송완료");
 						if(data.trim() == "전송완료"){
 							swal("Send Complete", "신고 완료", "success");
 							$('.cancelRes').trigger('click');
@@ -653,6 +707,10 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
+					function goToCashPage() {
+						var userId = "${loginUser.userId}";
+						location.href="cashChange.my?userId="+userId;
+					}
 					
 					function checkTime(board) {
 						var timer = setInterval(function() {
@@ -689,7 +747,7 @@
 					
 					if('${param.sysMsg}' == "1") {
 						swal({
-							title: "작업중인 게시물은 에디터와 작성자만 확인할 수 있습니다.",
+							title: "해당 게시물은 에디터와 작성자만 확인할 수 있습니다.",
 							icon: "error"
 						});
 					} else if('${param.sysMsg}' == "2") {
@@ -705,6 +763,11 @@
 					} else if('${param.sysMsg}' == "4") {
 						swal({
 							title: "신청 완료되었습니다.",
+							icon: "success"
+						});
+					} else if('${param.sysMsg}' == "5") {
+						swal({
+							title: "거절 완료되었습니다.",
 							icon: "success"
 						});
 					}

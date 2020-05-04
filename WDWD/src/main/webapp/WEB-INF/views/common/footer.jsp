@@ -100,5 +100,26 @@
 			$('input[name=deReporterNick]').val('${loginUser.nickName}');
 			$('#reportForm').css('display','block');
 		}
+
+		function insertPoint(point, Content) {
+			var userId = '${loginUser.userId}';
+			if(userId == ""){
+				return false;
+			}
+			$.ajax({
+				url : "insertCP.my",
+				data : {pcContent : content, pcAmount : point, pcDiv : 'P', pcId : userId},
+				type : "POST",
+				success : function (data) {
+					if(data == 1){
+						console.log("point 변동 : ", point)
+					} else {
+						console.log("ajax insertPoint 실패");
+					}
+				}
+			})
+			
+		}
+
 	</script>
 </body>

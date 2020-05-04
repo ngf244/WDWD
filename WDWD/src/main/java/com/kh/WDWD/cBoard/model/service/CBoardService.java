@@ -71,9 +71,27 @@ public interface CBoardService {
 	
 	int timeOut(int boNum);
 	
-	ArrayList<Board> reqBList(int boNum);
+	ArrayList<CBoard> reqBList(int boNum);
 	
 	int go3stageContest(Request r);
+	
+	String selectThumbnail(int boNum);
+	
+  ArrayList<Contents> fileListContest(int boNum);
+	
+	int minusCash(CBoard board);
+	
+	String getProfileImg(String boWriter);
+	
+	void directRequest(Request r);
+	
+	Request directWho(int boNum);
+	
+	int change2stage(int boNum);
+	
+	int directFalse(int boNum);
+	
+	String callmeId(String nickName);
 	
 
 	

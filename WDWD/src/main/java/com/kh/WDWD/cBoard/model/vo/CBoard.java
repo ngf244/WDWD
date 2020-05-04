@@ -16,13 +16,12 @@ public class CBoard extends Board{
 	private String cbDate;
 	private String cbPrimium;
 	private String reId;
-		
+	private String profileImg;
 	
-
 	public CBoard() {}
-
+	
 	public CBoard(int cbStep, String cbSecret, int cbCash, int cbCate, int cbStep1, int cbStep2, int cbStep3,
-			int cbStep4, int cbStep5, String cbDate, String cbPrimium, String reId) {
+			int cbStep4, int cbStep5, String cbDate, String cbPrimium, String reId, String profileImg) {
 		super();
 		this.cbStep = cbStep;
 		this.cbSecret = cbSecret;
@@ -36,6 +35,7 @@ public class CBoard extends Board{
 		this.cbDate = cbDate;
 		this.cbPrimium = cbPrimium;
 		this.reId = reId;
+		this.profileImg = profileImg;
 	}
 
 	public int getCbStep() {
@@ -134,14 +134,20 @@ public class CBoard extends Board{
 		this.reId = reId;
 	}
 	
+	public String getProfileImg() {
+		return profileImg;
+	}
+
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
+	}
+
 	@Override
 	public String toString() {
 		return "CBoard [cbStep=" + cbStep + ", cbSecret=" + cbSecret + ", cbCash=" + cbCash + ", cbCate=" + cbCate
 				+ ", cbStep1=" + cbStep1 + ", cbStep2=" + cbStep2 + ", cbStep3=" + cbStep3 + ", cbStep4=" + cbStep4
-				+ ", cbStep5=" + cbStep5 + ", cbDate=" + cbDate + ", cbPrimium=" + cbPrimium + ", toString()="
-				+ super.toString() + "]";
+				+ ", cbStep5=" + cbStep5 + ", cbDate=" + cbDate + ", cbPrimium=" + cbPrimium + ", reId=" + reId
+				+ ", profileImg=" + profileImg + "]";
 	}
-
-	
 }
 

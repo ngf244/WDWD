@@ -59,4 +59,6 @@ public interface BoardService {
 	int deleteBoardContents(int boNum);
 
 	int boardUpdate(Board b);
+
+	ArrayList<Board> getTopBoard(int number);
 }

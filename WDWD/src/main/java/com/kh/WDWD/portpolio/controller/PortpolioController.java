@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.kh.WDWD.board.model.exception.BoardException;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.common.Pagination;
+import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.exception.PortpolioException;
 import com.kh.WDWD.portpolio.model.service.PortpolioService;
@@ -103,7 +105,7 @@ public class PortpolioController {
 	}
 	
 	@RequestMapping("enrollPort.my")
-	public String EnrollPortpolio(HttpSession session, @ModelAttribute Portpolio p, 
+	public String enrollPortpolio(HttpSession session, @ModelAttribute Portpolio p, 
 								  @RequestParam("pocOriginArr") String[] pocOriginArr, 
 								  @RequestParam("pocModifyArr") String[] pocModifyArr, 
 								  HttpServletRequest request) {
@@ -165,7 +167,7 @@ public class PortpolioController {
 				throw new PortpolioException("리스트의 길이가 맞지 않습니다.");
 			}
 			
-			int PortConResult = pService.insertPortpolioCotents(pcArr);
+			int PortConResult = pService.insertPortpolioContents(pcArr);
 			
 			if(PortConResult >= pocModifys.size()) {
 				return "redirect:portpolioList.my?poWriter=" + userId;
@@ -326,5 +328,139 @@ public class PortpolioController {
 		}
 	}
 	
+	@RequestMapping("uPortView.my")
+	public ModelAndView updatePortView(@ModelAttribute Portpolio p, ModelAndView mv) {
+		System.out.println("uPortView : " + p);
+		
+		PortpolioContents pc = pService.updatePortView(p);
+		System.out.println("uPortView1 : " + pc);
+		
+		ArrayList<PortpolioReply> portReply = pService.selectPoReply(pc.getPoNum());
+		pc.setPortReply(portReply);
+		
+		ArrayList<PortpolioContents> portContents = pService.selectAttachFile(pc.getPoNum());
+		
+		System.out.println("portContents : " + portContents);
+		pc.setPortContents(portContents);
+		
+		System.out.println("uPortView2 : " + pc);
+		if(pc != null) {
+			mv.addObject("pc", pc)
+			  .addObject("portContents", portContents)
+			  .setViewName("portpolioUpdate");
+		}
+		
+		return mv;
+	}
+	
+	@RequestMapping("updatePort.my")
+	public String updatePortpolio(HttpSession session, @ModelAttribute Portpolio p, 
+								  @RequestParam("pocOriginArr") String[] pocOriginArr, 
+								  @RequestParam("pocModifyArr") String[] pocModifyArr, 
+								  HttpServletRequest request, RedirectAttributes redirect) {
+		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
+		p.setPoWriter(userId);
+		
+		ArrayList<String> pocOrigins = new ArrayList<String>();
+		ArrayList<String> pocModifys = new ArrayList<String>();
+		
+		if(pocOriginArr != null) {
+			pocOrigins = new ArrayList<>(Arrays.asList(pocOriginArr));
+			while(pocOrigins.remove(""));
+		}
+		if(pocModifyArr != null) {
+			pocModifys = new ArrayList<>(Arrays.asList(pocModifyArr));
+			while(pocModifys.remove(""));
+		}
+		
+		ArrayList<PortpolioContents> PortpolioContentsArr = pService.getContents(p);
+		
+		System.out.println("PortpolioContentsArr : " + PortpolioContentsArr);
+		
+		String path = FileMoveReverse(PortpolioContentsArr, userId, request);
+		
+		if(path == null) {
+			throw new PortpolioException("FileMoveReverse 실패");
+		}
+		
+		int deletePortContents = pService.deletePortContents(p); //해당 Board에 연결된 Contents 데이터 전부 삭제
+		
+		String check = FileMove(pocModifys, userId, request);
+		if(check != null) {
+			System.out.println("파일 이동 에러없이 완료! ");
+		} else {
+			throw new PortpolioException("아왜 파일이동 망했는데;;");
+		}
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+        String beforePath = root + "/portpolio_upload/" + userId;
+		
+        deleteUserFolder(beforePath); // 임시 유저 아이디 폴더 삭제
+        
+        ArrayList<PortpolioContents> newPortpolioContentsArr = new ArrayList<PortpolioContents>();
+        if(pocOrigins.size() == pocModifys.size()) {
+			for(int i = 0; i < pocModifys.size(); i++) {
+				PortpolioContents pContent = new PortpolioContents();
+				pContent.setPocModify(pocModifys.get(i));
+				pContent.setPocOrigin(pocOrigins.get(i));
+				pContent.setPocPath(check);
+				pContent.setPocRef(p.getPoNum());
+				pContent.setPocLevel(i);
+				
+				newPortpolioContentsArr.add(pContent);
+			}
+		} else {
+			throw new PortpolioException("리스트 길이가 다릅니다.");
+		}
+        
+        int result = pService.updatePortpolio(p);
+        
+		if(result > 0) {
+			int result2 = pService.insertPortpolioContents(newPortpolioContentsArr); // 새 컨텐츠 리스트로 교체
+			
+			if(result2 >= pocModifys.size()) {
+				redirect.addAttribute("poWriter", p.getPoWriter());
+				return "redirect:portpolioList.my";
+			} else {
+				throw new PortpolioException("콘텐츠 테이블 입력에 실패하였습니다.");
+			}
+			
+		} else {
+			throw new PortpolioException("포트폴리오 테이블 입력에 실패하였습니다");
+		}
+        
+	}
+	
+	public String FileMoveReverse(ArrayList<PortpolioContents> contentsArr, String userId, HttpServletRequest request) {
+
+        String root = request.getSession().getServletContext().getRealPath("resources");
+        String afterPath = root + "/portpolio_upload/" + userId;
+        
+        File folder = new File(afterPath);
+        if (!folder.exists()) {
+        	folder.mkdirs();
+        }
+        
+        boolean check = true;
+        
+		for (int i = 0; i < contentsArr.size(); i++) {
+			String beforeFileRoot = contentsArr.get(i).getPocPath() + "/" + contentsArr.get(i).getPocModify();
+			String afterFileRoot = afterPath + "/" + contentsArr.get(i).getPocModify();
+			
+			File beforeFile = new File(beforeFileRoot);
+			if(beforeFile.renameTo(new File(afterFileRoot))) {
+				System.out.println(beforeFileRoot + "에서 " + afterFileRoot + "이동 성공!");
+			} else {
+				System.out.println(beforeFileRoot + "에서 " + afterFileRoot + "이동 실패 ㅠㅠ");
+				check = false;
+			}
+		}
+		
+		if(check) {
+			return afterPath;
+		} else {
+			return null;
+		}
+	}
 	
 }
