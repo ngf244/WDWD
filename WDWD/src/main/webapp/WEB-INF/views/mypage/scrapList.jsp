@@ -6,28 +6,28 @@
 <head>
 <meta charset="UTF-8">
 <style>
-	.commentList{
+	.scrapList{
 		width: 80%;
 		border: 1px solid lightgray;
 		margin: auto;
 	}
 
-	.commentListTopArea{height: 60px; background: #4374D9; color: white; font-size: 18pt; box-shadow: 2px 2px 5px black;}
+	.scrapListTopArea{height: 60px; background: #4374D9; color: white; font-size: 18pt; box-shadow: 2px 2px 5px black;}
 	
-	#commentListText{font-weight: bolder; padding-left: 40px; margin-top: 12px; padding-right: 30px; display:inline-block;}
+	#scrapListText{font-weight: bolder; padding-left: 40px; margin-top: 12px; padding-right: 30px; display:inline-block;}
 
-	.commentListCount{
+	.scrapListCount{
 		width: 88%;
 		text-align: right;
 	}
 
-	.commentListCount>b{
+	.scrapListCount>b{
 		color: #050099;
 		font-size: 15pt;
 	}
 
 
-	#commentListContent{
+	#scrapListContent{
 		margin-top: 30px;
 	}
 	
@@ -38,7 +38,7 @@
 		height: 80px;
 	}
 	
-	.commentBoard{
+	.scrapBoard{
 /* 		height: 850px;
 		border: 1px solid black;
 		margin: 30px;
@@ -47,7 +47,7 @@
 		margin-left:auto; margin:auto; margin-top:10px;		 
 	}
 	
-	/* 전체 댓글 게시판 테이블 */
+	/* 전체 스크랩 게시판 테이블 */
 	#boardTable{text-align:center; margin: auto;}
 	#boardTable th{border-bottom: 3px solid lightgray; background: #ececec; height: 50px; font-size: 13pt; border-bottom: 3px solid #036;}
 	#boardTable td{border-bottom: 1px solid lightgray; height: 40px; font-size: 11pt;}	
@@ -89,8 +89,13 @@
 	}
 	
 	.pagination a:hover:not(.active) {background-color: #ddd;}	
+	
+	/* a태그 관련 css 초기화*/
+	a:link { color: black; text-decoration: none;}
+	a:visited { color: black; text-decoration: none;}
+ 	a:hover { color: black; text-decoration: underline;}
 </style>
-<title>전체 댓글</title>
+<title>스크랩</title>
 </head>
 <body>
 	<jsp:include page="../common/mainHeader.jsp"/>
@@ -99,37 +104,39 @@
 			
 		</div>
 		<div id="main">
-			<div class="commentList">
-				<div class="commentListTopArea">
-					<div id="commentListText">전체 댓글 보기</div>	
+			<div class="scrapList">
+				<div class="scrapListTopArea">
+					<div id="scrapListText">전체 스크랩 보기</div>	
 				</div>
-				<div id="commentListContent">
-					<div class="commentListCount">
-						작성 댓글 수 : <b>${ pi.listCount }</b>
+				<div id="scrapListContent">
+					<div class="scrapListCount">
+						스크랩 수 : <b>${ pi.listCount }</b>
 					</div>
-					<div class="commentBoard">
+					<div class="scrapBoard">
 						<table id="boardTable">
 							<thead>
 								<tr>
-									<th style="width: 60%;">댓글</th>
-									<th style="width: 15%;">원문보기</th>
-									<th style="width: 20%;">작성일</th>
+									<th style="width: 400px;">제목</th>
+									<th style="width: 25%;">작성자</th>
+									<th style="width: 25%;">스크랩 시간</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:if test="${ empty rList }">
-									<tr><td colspan="3">※ 댓글 목록이 없습니다.</td></tr>
+								<c:if test="${ empty scList }">
+									<tr><td colspan="3">※ 스크랩 목록이 없습니다.</td></tr>
 								</c:if>
-								<c:if test="${ !empty rList }">
-									<c:forEach var="r" items="${ rList }">
-										<tr>
-											<td>${ r.rpContent }</td>
-											<td><button class="orgBtn" onclick="goToOrgBoard(${ r.refNum });">원문보기</button></td>
-											<td>${ r.rpDate }</td>							
-										</tr>									
-									</c:forEach>
+								<c:if test="${ !empty scList }">
+									<c:forEach var="sc" items="${ scList }">
+								<tr>
+									<c:url var="scr" value="detail.bo">
+										<c:param name="boNum" value="${ sc.boNum }" />
+									</c:url>
+									<td><a href="${ scr }">${ sc.boTitle }</a></td>
+									<td>${ sc.boWriterNick }</td>
+									<td>${ sc.scrapDate }</td>							
+								</tr>									
+								</c:forEach>
 								</c:if>
-								
 								
 							</tbody>
 						</table>
@@ -144,7 +151,7 @@
 							<a href=""> &laquo; </a>
 						</c:if>
 						<c:if test="${ pi.currentPage > 1 }">
-							<c:url var="before" value="myReplyList.my">
+							<c:url var="before" value="scrapList.my">
 								<c:param name="page" value="${ pi.currentPage - 1 }"/>
 								<c:param name="userId" value="${ userId }"/>
 							</c:url>
@@ -158,7 +165,7 @@
 						</c:if>
 						
 						<c:if test="${ p ne pi.currentPage }">
-							<c:url var="pagination" value="myReplyList.my">
+							<c:url var="pagination" value="scrapList.my">
 								<c:param name="page" value="${ p }"/>
 								<c:param name="userId" value="${ userId }"/>
 							</c:url>
@@ -171,7 +178,7 @@
 						<a href=""> &raquo; </a>
 					</c:if>
 					<c:if test="${ pi.currentPage < pi.maxPage }">
-						<c:url var="after" value="myReplyList.my">
+						<c:url var="after" value="scrapList.my">
 							<c:param name="page" value="${ pi.currentPage + 1 }"/>
 							<c:param name="userId" value="${ userId }"/>
 						</c:url> 

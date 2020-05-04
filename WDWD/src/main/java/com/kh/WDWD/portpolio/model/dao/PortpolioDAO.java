@@ -64,4 +64,30 @@ public class PortpolioDAO {
 		return (ArrayList)sqlSession.selectList("portpolioMapper.selectAttachFile", poNum);
 	}
 
+	public PortpolioContents updatePortView(SqlSessionTemplate sqlSession, Portpolio p) {
+		return sqlSession.selectOne("portpolioMapper.updatePortView", p);
+	}
+
+	public int updatePortpolio(SqlSessionTemplate sqlSession, Portpolio p) {
+		return sqlSession.update("portpolioMapper.updatePortpolio", p);
+	}
+
+	public int updatePortpolioContents(SqlSessionTemplate sqlSession, ArrayList<PortpolioContents> pcArr) {
+		int count = 0;
+		for (PortpolioContents pc : pcArr) {
+			int result = sqlSession.update("portpolioMapper.updatePortpolioContents", pc);
+			count += result;
+		}
+		
+		return count;
+	}
+
+	public int deletePortContents(SqlSessionTemplate sqlSession, Portpolio p) {
+		return sqlSession.delete("portpolioMapper.deletePortContents", p);
+	}
+
+	public ArrayList<PortpolioContents> getContents(SqlSessionTemplate sqlSession, Portpolio p) {
+		return (ArrayList)sqlSession.selectList("portpolioMapper.getContents", p);
+	}
+
 }

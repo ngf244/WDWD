@@ -180,7 +180,12 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<Contents> fileListContest(int boNum) {
+	public String selectThumbnail(int boNum) {
+		return cBoardDAO.selectThumbnail(sqlSession, boNum);
+  }
+  
+  @Override
+  public ArrayList<Contents> fileListContest(int boNum) {
 		return cBoardDAO.fileListContest(sqlSession, boNum);
 	}
 

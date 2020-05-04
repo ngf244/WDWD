@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.board.model.vo.Scrap;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
@@ -16,6 +17,7 @@ import com.kh.WDWD.member.model.dao.MemberDAO;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Service("mService")
 public class MemberServiceImpl implements MemberService {
@@ -128,7 +130,51 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int recentlyBoard(Member m) {
+	public int getMyScrapCount(String userId) {
+		return mDAO.getMyScrapCount(sqlSession, userId);
+	}
+
+	@Override
+	public ArrayList<Scrap> selectMyScrapList(String userId, PageInfo pi) {
+		return mDAO.selectMyScrapList(sqlSession, userId, pi);
+	}
+
+	@Override
+	public ArrayList<Scrap> selectRecentlyScrap(String userId) {
+		return mDAO.selectRecentlyScrap(sqlSession, userId);
+	}
+
+	@Override
+	public int nickCheck(Member m) {
+		return mDAO.nickCheck(sqlSession, m);
+	}
+
+	@Override
+	public int updateMember(Member m) {
+		return mDAO.updateMember(sqlSession, m);
+	}
+
+	@Override
+	public int insertGrade(Request r) {
+		return mDAO.insertGrade(sqlSession, r);
+	}
+
+	@Override
+	public String selectUserId(Request r) {
+		return mDAO.selectUserId(sqlSession, r);
+	}
+
+	@Override
+	public String selectSecretYn(String userId) {
+		return mDAO.selectSecretYn(sqlSession, userId);
+	}
+
+	@Override
+	public int updateSecretToggle(String userId) {
+		return mDAO.updateSecretToggle(sqlSession, userId);
+    
+	@Override
+  public int recentlyBoard(Member m) {
 		return mDAO.recentlyBoard(sqlSession, m);
 	}
 

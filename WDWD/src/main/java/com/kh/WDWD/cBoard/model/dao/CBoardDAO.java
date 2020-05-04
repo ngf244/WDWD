@@ -286,4 +286,8 @@ public class CBoardDAO {
 	public String callmeId(SqlSessionTemplate sqlSession, String nickName) {
 		return sqlSession.selectOne("cBoardMapper.callmeId", nickName);
 	}
+
+	public String selectThumbnail(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.selectThumbnail", boNum);
+	}
 }

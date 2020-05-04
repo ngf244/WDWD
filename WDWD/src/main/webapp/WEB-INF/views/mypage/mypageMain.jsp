@@ -155,7 +155,7 @@
 	
 	/* 회원정보수정버튼 */
 	#profileEditBtn{
-		margin-left: 150px; 
+		margin-left: 200px; 
 		position: absolute; 
 		margin-top: 10px;
 		background: rgb(243, 156, 18);
@@ -165,8 +165,79 @@
 		padding: 10px;
 		font-family:Arial;
 		font-size:15px;
-		font-weight: bold;			 
+		font-weight: bold;
 	}
+	
+	/* 마이페이지 비공개 여부 */
+	/* The switch - the box around the slider */
+	.switch {
+	  position: relative;
+	  display: inline-block;
+	  width: 60px;
+	  height: 34px;
+	  vertical-align:middle;
+	  margin-left: 2%;
+	}
+	
+	/* Hide default HTML checkbox */
+	.switch input {display:none;}
+	
+	/* The slider */
+	.slider {
+	  position: absolute;
+	  cursor: pointer;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: #ccc;
+	  -webkit-transition: .4s;
+	  transition: .4s;
+	}
+	
+	.slider:before {
+	  position: absolute;
+	  content: "";
+	  height: 26px;
+	  width: 26px;
+	  left: 4px;
+	  bottom: 4px;
+	  background-color: white;
+	  -webkit-transition: .4s;
+	  transition: .4s;
+	}
+	
+	input:checked + .slider {
+	  background-color: #2196F3;
+	}
+	
+	input:focus + .slider {
+	  box-shadow: 0 0 1px #2196F3;
+	}
+	
+	input:checked + .slider:before {
+	  -webkit-transform: translateX(26px);
+	  -ms-transform: translateX(26px);
+	  transform: translateX(26px);
+	}
+	
+	/* Rounded sliders */
+	.slider.round {
+	  border-radius: 34px;
+	}
+	
+	.slider.round:before {
+	  border-radius: 50%;
+	}
+	
+	.secretOption {
+		margin:0px;
+		display:inline-block;
+		font-size:15px;
+		font-weight:bold;
+	}
+	
+	
 	
 	/* 자기소개 영역 */
 	.introduceInfo{height: 180px; padding-left: 20px; line-height: 30px;}
@@ -192,8 +263,8 @@
 		margin: 15% auto;
 		padding: 20px;
 		border: 1px solid #888;
-		width: 45%;
-		height: 1120px;
+		width: 50%;
+		height: 1240px;
 		border-radius: 10px;
 	}
 	
@@ -205,7 +276,7 @@
 		 padding-top: 10px;
 		 width: 100px;
 		 border-radius: 10px;
-		 margin-left: 300px;
+		 margin-left: 360px;
 		 margin-top: 15px;
 		 font-size: 13pt; 
 		 font-weight: bold;
@@ -240,11 +311,22 @@
 	
 	#addInfoText{width: 80%; height: 60px; background: rgb(102, 102, 102); color: white; margin: 20px; margin-left: 90px; font-size: 18pt; font-weight: bold; text-align: center; line-height: 55px; border-radius: 10px;}	
 	
-	.basicInfo>table{margin: 50px; margin-left: 150px; font-size: 14pt; line-height: 30px;}
-	.addInfo>table{margin: 50px; margin-left: 150px; font-size: 14pt; line-height: 30px;}
+	.basicInfo>table{margin: 50px; margin-left: 120px; font-size: 14pt; line-height: 30px;}
+	.addInfo>table{margin: 50px; margin-left: 120px; font-size: 14pt; line-height: 30px;}
 	
 	input{border-radius: 5px; height: 25px; font-size: 12pt;}
 	textarea{border-radius: 5px; resize: none; margin-top: 30px; font-size: 12pt;}
+	.nickBtn{
+		color: white;
+		background: gray;
+		padding: 2px;
+		font-family:Arial;
+		box-shadow: 1px 1px 2px black;
+		font-size: 12pt;
+		text-align: center;
+		cursor: pointer;
+		width: 40%; 
+	}
 	
 	/* 현재 포인트&캐쉬 */
 	.point-cash-area{height: 110px; margin-top: 25px;}
@@ -669,6 +751,12 @@
 		text-align: center;
 		font-family: 'Malgun Gothic';
 	}
+	
+	/* a태그 관련 css 초기화*/
+	a:link { color: black; text-decoration: none;}
+	a:visited { color: black; text-decoration: none;}
+ 	a:hover { color: black; text-decoration: underline;}
+	
 </style>
 <title>마이 페이지</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
@@ -683,7 +771,7 @@
 				<div class="mypageTopArea">
 					<div id="mypageText">마이페이지</div>
 					<!-- <div class="requestBtn"><b>의뢰 요청</b></div> -->
-					<button id="reqGifBtn" onclick="location.href='directReq.my'">
+					<button id="reqGifBtn">
 					  <span class="shadow">
 					    <span class="vert">
 					      <span class="floating">
@@ -695,38 +783,52 @@
 					</button>
 					<div style="clear: both;"></div>		
 				</div>
-				
 				<div class="myprofileArea">
 					<div class="normalInfo">
 						<div class="profileImage" id="profileImage">
-<%-- 							<c:if test="${ member.profileImg eq 0 }">
-								<img class="profile" src="${ contextPath }/resources/images/default_profile.png">
+	 						<c:if test="${ member.profileImg eq null }">
+								<img id="profile" class="profile" src="${ contextPath }/resources/images/default_profile.png">
 							</c:if>
-							<c:if test="${ member.profileImg ne 0 }">
-								<img class="profile" src="${ contextPath }/resources/images/profileImage/point.png">
-							</c:if> --%>
-							<img id="profile" class="profile" src="${ contextPath }/resources/profile_Image/${ member.profileImg }"/>
+							<c:if test="${ member.profileImg ne null }">
+								<img id="profile" class="profile" src="${ contextPath }/resources/profile_Image/${ member.profileImg }"/>
+							</c:if>
+							
 						</div>
 						<div id="profileImgFileArea">
 							<form method="post" encType="multipart/form-data" id="profileImgForm">
 								<input type="file" hidden="" name="profileImg" id="profileImg" multiple="multiple" onchange="LoadImg(this)">
 							</form>
 						</div>
-						<button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button>
+						<c:if test="${ member.userId eq loginUser.userId }"><button id="profileEditBtn" style="width: 120px; margin-left: 640px;">프로필 수정</button></c:if>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
+						<c:if test="${ member.userId eq loginUser.userId }">
+							<label class="switch">
+								<input type="checkbox">
+								<span class="slider round"></span>
+							</label>
+							<p class="secretOption">공개</p><p class="secretOption" style="display:none;">비공개</p>
+						</c:if>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
 								<tr>
 									<td>>이메일 : </td>
 									<td>${ member.email }</td>
-									<td>>예금주 : </td>
+									<td>>이름 : </td>
 									<td>${ member.userName }</td>
 								</tr>
 								<tr>
 									<td>>전화번호 : </td>
 									<td>${ member.phone }</td>
 									<td>>은행명 : </td>
-									<td>${ member.bank }</td>
+									<td>
+										<c:if test="${ member.bank eq null }">
+											내용 없음
+										</c:if>
+										<c:if test="${ member.bank ne null }">
+											${ member.bank }
+										</c:if>
+										
+									</td>
 									
 								</tr>
 								<tr>
@@ -752,41 +854,56 @@
 									</c:if>																																				
 									</td>
 									<td>>계좌번호 : </td>
-									<td>${ member.account }</td>
+									<td>
+										<c:if test="${ member.account eq null }">
+											내용 없음
+										</c:if>
+										<c:if test="${ member.account ne null }">
+											${ member.account }
+										</c:if>
+									</td>
 								</tr>								
 							</table>
 						</div>					
 					</div>
 					<div class="introduceInfo">
 						<h3>>자기소개</h3>
-						<p>${ member.intro }
+						<p>
+							<c:if test="${ member.intro eq null }">
+								내용 없음
+							</c:if>
+							<c:if test="${ member.intro ne null }">
+								${ member.intro }
+							</c:if>
 						</p>
 					</div>
 				</div>
 				
-				<div class="point-cash-area">
-					<div class="point">
-						<table id="pointStatusTable">
-							<tr>
-								<td>Point</td>
-								<td style="text-align: right; color: rgb(52, 152, 219);"><fmt:formatNumber value="${ member.point }"/></td>
-							</tr>
-						</table>
-						<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 포인트샵으로 이동</a></span>
-						<div style="clear: both;"></div>
+				<c:if test="${ member.userId eq loginUser.userId }">
+					<div class="point-cash-area">
+						<div class="point">
+							<table id="pointStatusTable">
+								<tr>
+									<td>Point</td>
+									<td style="text-align: right; color: rgb(52, 152, 219);"><fmt:formatNumber value="${ member.point }"/></td>
+								</tr>
+							</table>
+							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 포인트샵으로 이동</a></span>
+							<div style="clear: both;"></div>
+						</div>
+						<div class="cash" style="float: right;">
+							<table id="cashStatusTable">
+								<tr>
+									<td>Cash</td>
+									<td style="text-align: right; color: rgb(231, 76, 60);"><fmt:formatNumber value="${ member.cash }"/></td>
+								</tr>
+							</table>
+							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 캐쉬 충전 페이지로 이동</a></span>
+							<div style="clear: both;"></div>					
+						</div>
+						<div style="clear:both;"></div>
 					</div>
-					<div class="cash" style="float: right;">
-						<table id="cashStatusTable">
-							<tr>
-								<td>Cash</td>
-								<td style="text-align: right; color: rgb(231, 76, 60);"><fmt:formatNumber value="${ member.cash }"/></td>
-							</tr>
-						</table>
-						<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 캐쉬 충전 페이지로 이동</a></span>
-						<div style="clear: both;"></div>					
-					</div>
-					<div style="clear:both;"></div>
-				</div>
+				</c:if>
 				
 				<!-- 내 글 관리 -->
 				<div id="mypostManagement">
@@ -797,11 +914,17 @@
 					<div class="mypostArea">
 						<div class="pointArea">
 							<span style="display: inline-block;">자유 게시판</span>
-							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/>
+							<c:url var="fbl" value="actionList.ch">
+								<c:param name="searchWord" value="${ member.nickName }"/>
+							</c:url>
+							<a href="${ fbl }"><img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/></a>
 							<div class="postList">
 								<c:if test="${ !empty pList}">
 									<c:forEach var="p" items="${ pList }">
-										<div class="pList">- ${ p.boTitle }</div>
+										<c:url var="bd" value="detail.bo">
+											<c:param name="boNum" value="${ p.boNum }"/>
+										</c:url>
+										<div class="pList"><a href="${ bd }"> - ${ p.boTitle }</a></div>
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty pList }">
@@ -829,7 +952,10 @@
 							<div class="replayList">
 								<c:if test="${ !empty rList}">
 									<c:forEach var="r" items="${ rList }">
-										<div class="rList">- ${ r.rpContent }</div>
+										<c:url var="bdr" value="detail.bo">
+											<c:param name="boNum" value="${ r.refNum }"/>
+										</c:url>
+										<div class="rList"><a href="${ bdr }">- ${ r.rpContent }</a></div>
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty rList }">
@@ -840,93 +966,103 @@
 						<div class="scrapArea">
 							<div id="ScrapText">스크랩&nbsp;<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyScrap();"/></div>
 							<div class="scrapList">
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
-								<div class="sList">- 스크랩 제목</div>
+								<c:if test="${ !empty scList}">
+									<c:forEach var="scl" items="${ scList }">
+										<c:url var="sclb" value="detail.bo">
+											<c:param name="boNum" value="${ scl.boNum }"/>
+										</c:url>
+										<div class="sList"><a href="${ sclb }">- ${ scl.boTitle }</a></div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty scList }">
+									<div class="sList">- 스크랩 목록이 없습니다.</div>
+								</c:if>
 							</div>
 						</div>
 						<div style="clear: both;"></div>					
 					</div>
 				</div>
-				<!-- 내 의뢰/작업 현황 -->
-				<div id="myReqWorkState">
-					<div class="myReqWorkStateText">
-						나의 의뢰/작업 현황
-						<!-- <div id="allReqListBtn">전체 의뢰 요청 리스트 보기</div> -->
-						<div style="clear: both;"></div>						
-					</div>
-					<div class="myReqWorkStateArea">
-						<div class="myReqState">
-							<div id="myReqStateText">의뢰 현황</div>
-							<div class="recruit">
-								<span class="stepText">STEP 1. 지원자 모집 중</span>
-								<div class="innerArea" onclick="goToMyReqList(1);">
-									<div class="innerAreaText">${ rwCount[0] } </div>건
-								</div>
-								<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="working1">
-								<span class="stepText">STEP 2. 작업 진행 중</span>
-								<div class="innerArea" onclick="goToMyReqList(2);">
-									<div class="innerAreaText">${ rwCount[1] } </div>건
-								</div>
-								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="complete1">
-								<span class="stepText">STEP 3. 거래 완료</span>
-								<div class="innerArea" onclick="goToMyReqList(3);">
-									<div class="innerAreaText">${ rwCount[2] } </div>건
-								</div>
-								<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
-							</div>						
+				
+				<c:if test="${ member.userId eq loginUser.userId }">
+					<!-- 내 의뢰/작업 현황 -->
+					<div id="myReqWorkState">
+						<div class="myReqWorkStateText">
+							나의 의뢰/작업 현황
+							<!-- <div id="allReqListBtn">전체 의뢰 요청 리스트 보기</div> -->
+							<div style="clear: both;"></div>						
 						</div>
-						<div class="myWorkState">
-							<div id="myWorkStateText">작업 현황</div>
-							<div class="participate">
-								<span class="stepText">STEP 1. 참가 지원 중</span>
-								<div class="innerArea" onclick="goToMyWorkList(1)">
-									<div class="innerAreaText">${ rwCount[3] } </div>건
+						<div class="myReqWorkStateArea">
+							<div class="myReqState">
+								<div id="myReqStateText">의뢰 현황</div>
+								<div class="recruit">
+									<span class="stepText">STEP 1. 지원자 모집 중</span>
+									<div class="innerArea" onclick="goToMyReqList(1);">
+										<div class="innerAreaText">${ rwCount[0] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
 								</div>
-								<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="working2">
-								<span class="stepText">STEP 2. 작업 진행 중</span>
-								<div class="innerArea" onclick="goToMyWorkList(2)">
-									<div class="innerAreaText">${ rwCount[4] } </div>건
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
 								</div>
-								<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
-							</div>
-							<div id="arrow_icon_area">
-								<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
-							</div>
-							<div class="complete2">
-								<span class="stepText">STEP 3. 거래 완료</span>
-								<div class="innerArea" onclick="goToMyWorkList(3)">
-									<div class="innerAreaText">${ rwCount[5] } </div>건
+								<div class="working1">
+									<span class="stepText">STEP 2. 작업 진행 중</span>
+									<div class="innerArea" onclick="goToMyReqList(2);">
+										<div class="innerAreaText">${ rwCount[1] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
 								</div>
-								<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
+								</div>
+								<div class="complete1">
+									<span class="stepText">STEP 3. 거래 완료</span>
+									<div class="innerArea" onclick="goToMyReqList(3);">
+										<div class="innerAreaText">${ rwCount[2] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
+								</div>						
 							</div>
-							<div style="clear: both;"></div>					
+							<div class="myWorkState">
+								<div id="myWorkStateText">작업 현황</div>
+								<div class="participate">
+									<span class="stepText">STEP 1. 참가 지원 중</span>
+									<div class="innerArea" onclick="goToMyWorkList(1)">
+										<div class="innerAreaText">${ rwCount[3] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
+								</div>
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
+								</div>
+								<div class="working2">
+									<span class="stepText">STEP 2. 작업 진행 중</span>
+									<div class="innerArea" onclick="goToMyWorkList(2)">
+										<div class="innerAreaText">${ rwCount[4] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
+								</div>
+								<div id="arrow_icon_area">
+									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
+								</div>
+								<div class="complete2">
+									<span class="stepText">STEP 3. 거래 완료</span>
+									<div class="innerArea" onclick="goToMyWorkList(3)">
+										<div class="innerAreaText">${ rwCount[5] } </div>건
+									</div>
+									<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
+								</div>
+								<div style="clear: both;"></div>					
+							</div>
 						</div>
 					</div>
-				</div>
+				</c:if>
+
 				<!-- 포트폴리오 -->
 				<div id="portpolio">
 					<div class="portpolioText">
 						포트폴리오
 						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyPortpolioList();"/>
-						<div id="smallReqBtn" onclick="location.href='directReq.my'">의뢰 요청</div>
+						<div id="smallReqBtn" class="secretReq">의뢰 요청</div>
 					</div>
 					<div class="portpolioArea">
 						<c:if test="${ empty pcList }">
@@ -1055,56 +1191,60 @@
 						
 						</div>
 					</div>
-						<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
+						<c:if test="${ member.userId eq loginUser.userId }"><div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div></c:if>
 						<div style="clear: both;"></div>						
 					</div>
 				</div>
-				<!-- 캐쉬 변동 내역 -->
-				<div id="cashChange">
-					<div class="cashChangeText">
-						Cash 변동내역
-						<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyCashChangeList();"/>
-					</div>
-					<div class="cashChangeArea">
-						<div class="dateArea">
-							<div class="monthArea">${ nowDay }</div>
-							<c:if test="${ !empty ccList}">
-									<c:forEach var="cc" items="${ ccList }">
-										<c:if test="${ cc.pcContent eq '캐쉬 충전' }">
-											<div class="changeList">
-											<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
-											<div class="chageDesc">
-												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<fmt:formatNumber value="${ cc.pcAmount }"/>충전
+				
+				<c:if test="${ member.userId eq loginUser.userId }">
+					<!-- 캐쉬 변동 내역 -->
+					<div id="cashChange">
+						<div class="cashChangeText">
+							Cash 변동내역
+							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" onclick="goToMyCashChangeList();"/>
+						</div>
+						<div class="cashChangeArea">
+							<div class="dateArea">
+								<div class="monthArea">${ nowDay }</div>
+								<c:if test="${ !empty ccList}">
+										<c:forEach var="cc" items="${ ccList }">
+											<c:if test="${ cc.pcContent eq '캐쉬 충전' }">
+												<div class="changeList">
+												<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
+												<div class="chageDesc">
+													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>충전
+												</div>
 											</div>
-										</div>
-										</c:if>
-										<c:if test="${ cc.pcContent eq '의뢰 비용' }">
-											<div class="changeList">
-											<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
-											<div class="chageDesc">
-												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<fmt:formatNumber value="${ cc.pcAmount }"/>지출
+											</c:if>
+											<c:if test="${ cc.pcContent eq '의뢰 비용' }">
+												<div class="changeList">
+												<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
+												<div class="chageDesc">
+													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>지출
+												</div>
 											</div>
-										</div>
-										</c:if>
-										<c:if test="${ cc.pcContent eq '의뢰 수주' }">
-											<div class="changeList">
-											<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
-											<div class="chageDesc">
-												20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+											</c:if>
+											<c:if test="${ cc.pcContent eq '의뢰 수주' }">
+												<div class="changeList">
+												<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
+												<div class="chageDesc">
+													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+												</div>
 											</div>
-										</div>
-										</c:if>
-									</c:forEach>
-								</c:if>
-								<c:if test="${ empty ccList }">
-									<div class="ccList" style="text-align: center; color: red;">※ 캐쉬 변동 내역이 없습니다.</div>
-								</c:if>
+											</c:if>
+										</c:forEach>
+									</c:if>
+									<c:if test="${ empty ccList }">
+										<div class="ccList" style="text-align: center; color: red;">※ 캐쉬 변동 내역이 없습니다.</div>
+									</c:if>
+							</div>
 						</div>
 					</div>
-				</div>
+				</c:if>
+
 			</div>
 			
 			<!-- 회원 정보 수정 모달창 -->
@@ -1117,37 +1257,48 @@
 						<div class="col-sm-12">
 							<div class="row">
 								<div class="col-sm-12">
-									<form action="uMember.my" name="basicInfoForm" method="post">
+									<form action="uMember.my" name="basicInfoForm" id="basicInfoForm" method="post">
 										<div class="basicInfo">
 											<div id="basicInfoText">기본 정보</div>
+											<div style="color: red; font-size: 12pt; margin-left: 100px;">※ 아래 입력란은 필수 기입 사항입니다.</div>
+											<input type="hidden" name="userId" value="${ loginUser.userId }">
 											<table>
 												<tr>
-													<td style="width: 300px; height: 50px;">이름</td>
-													<td style="height: 50px;"><input type="text" name="userName" class="userName" value="${ loginUser.userName }"></td>
+													<td style="width: 25%; height: 50px;">이름</td>
+													<td style="width: 35%; height: 50px;"><input type="text" name="userName" id="userName" class="userName" value="${ loginUser.userName }"></td>
+													<td style="width: 40%;"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">비밀번호</td>
-													<td style="height: 50px;"><input type="password" name="userPwd" class="userPwd"></td>
+													<td style="height: 50px;"><input type="password" name="userPwd" id="userPwd" class="userPwd" id="userPwd"></td>
+													<td style="font-size: 12pt;"><label id="pwd1Result"></label></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">비밀번호 재확인</td>
-													<td style="height: 50px;"><input type="password" name="userPwd2" class="userPwd2"></td>
+													<td style="height: 50px;"><input type="password" name="userPwd2" id="userPwd2" class="userPwd2" id="userPwd2"></td>
+													<td style="font-size: 12pt;"><label id="pwd2Result"></label></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">닉네임</td>
-													<td style="height: 50px;"><input type="text" name="nickName" class="nickName" value="${ loginUser.nickName }"></td>
+													<td colspan="2" style="height: 50px;"><input type="text" name="nickName" id="nickName" class="nickName" value="${ loginUser.nickName }"></td>
+													<td><input type="hidden" name="nickFlag" id="nickFlag"></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td><div class="nickBtn">중복 확인</div></td>
+													<td style="font-size: 12pt;"><label id="nickResult"></label></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">연락처</td>
-													<td style="height: 50px;"><input type="text" name="phone" class="phone" value="${ loginUser.phone }"></td>
+													<td colspan="2" style="height: 50px;"><input type="text" name="phone" id="phone" class="phone" value="${ loginUser.phone }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">이메일</td>
-													<td style="height: 50px;"><input type="email" name="email" class="email" value="${ loginUser.email }"></td>
+													<td colspan="2" style="height: 50px;"><input type="email" name="email" id="email" class="email" value="${ loginUser.email }"></td>
 												</tr>
 												<tr>
 													<td style="height: 50px;">자기소개</td>
-													<td style="height: 50px;"><textarea rows="8" cols="50">${ loginUser.intro }</textarea></td>
+													<td colspan="2" style="height: 50px;"><textarea name="intro" id="intro" class="intro" rows="8" cols="60">${ loginUser.intro }</textarea></td>
 												</tr>																																																
 											</table>
 										
@@ -1155,14 +1306,15 @@
 										</div>
 										<div class="addInfo">
 											<div id="addInfoText">추가 정보</div>
+											<div style="color: red; font-size: 12pt; margin-left: 100px;">※ 아래 입력란은 선택 사항입니다.</div>
 												<table>
 													<tr>
 														<td style="width: 300px; height: 50px;">은행명</td>
-														<td style="height: 50px;"><input type="text" name="bank" class="bank" value="${ loginUser.bank }"></td>
+														<td style="height: 50px;"><input type="text" name="bank" id="bank" class="bank" value="${ loginUser.bank }"></td>
 													</tr>
 													<tr>
 														<td style="height: 50px;">계좌번호</td>
-														<td style="height: 50px;"><input type="text" name="accountNumber" class="accountNumber" value="${ loginUser.account }"></td>
+														<td style="height: 50px;"><input type="text" name="account" id="account" class="account" value="${ loginUser.account }"></td>
 													</tr>													
 												</table>
 										</div>
@@ -1172,8 +1324,8 @@
 						</div>
 					</div>
 					<hr>
-					<div id="editCompleteBtn" onClick="closeModal();">완료</div>
-					<div id="editCancelBtn" onClick="closeModal();">취소</div>
+					<div id="editCompleteBtn">완료</div>
+					<div id="editCancelBtn" onclick="closeModal();">취소</div>
 					<div style="clear: both;"></div>
 				</div>
 			</div>
@@ -1302,10 +1454,14 @@
 	</script>
 	
 	<script>
-		var userId = '${ loginUser.userId }';
+		var userId = '${ member.userId }';
 		
 		function goToMyReply(){
 			location.href="myReplyList.my?userId=" + userId;
+		}
+		
+		function goToMyScrap(){
+			location.href="scrapList.my?userId=" + userId;
 		}
 		
 		function goToMyCashChangeList(){
@@ -1331,7 +1487,13 @@
 	<script>
 		// 내용 작성 부분의 공간을 클릭할 때 파일 첨부 창이 뜨도록 설정하는 함수
 		$('#profileImage').on('click', function(){
-			$('#profileImg').click();
+			var mypageHost = '${ member.userId }';
+			var mypageVisitor = '${ loginUser.userId }';
+			console.log(mypageHost);
+			console.log(mypageVisitor);
+			if(mypageHost==mypageVisitor){
+				$('#profileImg').click();
+			}
 		});
 		
 		// 파일을 첨부 했을 경우 미리 보기가 가능하도록 하는 함수
@@ -1421,7 +1583,7 @@
 					
 					var portpolioArea = $('.portpolioArea');
 					
-					for(var i = 0; i < data.pcList.length; i++) {
+					for(var i = data.pcList.length - 1; i >= 0; i--) {
 						/* console.log("data[i].pocModify : " + data.pcList[i].pocModify);
 						var test = $('.portImgTag').eq(i);
 						console.log(test);
@@ -1445,8 +1607,8 @@
 						$portArea.append($portCount);
 						$portArea.append($poNum);
 						
-						portpolioArea.append($portArea);
-						
+						portpolioArea.prepend($portArea);
+					
 					}
 				},
 				error : function(e) {
@@ -1535,6 +1697,207 @@
              });
 		});
 		
+		$('#userPwd').blur(function(){
+			var regExp3 = /^[a-zA-Z](?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!*&]).{7,11}$/;
+
+			if(!regExp3.test($(this).val())){
+				$('#pwd1Result').html("알맞은 비밀번호를 입력하세요").css('color', 'red');
+				$(this).focus().css('background', 'red');
+			} else{
+				$('#pwd1Result').html("정상입력").css({'color':'green'},{'text-align':'center'});
+				$(this).css('background', 'white');
+			}
+		});
+
+		$('#userPwd2').keyup(function(){
+			if($('#userPwd').val() == $(this).val()){
+				$('#pwd2Result').html("정상입력").css({'color':'green'},{'text-align':'center'});
+				$(this).css('background', 'white');
+			} else{
+				$('#pwd2Result').html("비밀번호가 일치하지 않습니다.").css('color', 'red');
+				$(this).focus().css('background', 'red');
+			}
+		});
+		
+		$('.nickBtn').on('click', function(){
+			var nickName = $('.nickName').val();
+			console.log(nickName);
+			$.ajax({
+				type	: "POST",
+				url	    : 'nickCheck.my',
+				data	: {'nickName':nickName},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("닉체크 성공!")
+					console.log(data);
+					if(data){
+						$('#nickResult').text("이미 닉네임이 존재합니다.").css('color','red');
+						$('#nickName').focus();
+						$('#nickFlag').val("true");
+					} else{
+						$('#nickResult').text("사용 가능한 닉네임입니다.").css('color','green');
+						$('#nickFlag').val("false");
+					}
+					
+					
+				}
+			});
+		});
+
+		
+		$('#editCompleteBtn').click(function(){
+			
+			if($('#userName').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "이름을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#userPwd').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "비밀번호를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#nickName').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "닉네임을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#nickFlag').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "닉네임 중복체크를 해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#nickFlag').val() != "false") {
+				swal({
+				    title: "프로필",
+				    text: "다른 닉네임을 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#phone').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "전화번호를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#email').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "이메일를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else if($('#intro').val() == "") {
+				swal({
+				    title: "프로필",
+				    text: "자기소개를 입력해주세요.",
+				    icon: "warning" //"info,success,warning,error" 중 택1
+				});
+			} else {
+				
+				swal({
+                    title: "프로필 정보 수정을 마치시겠습니까?",
+                    icon: "info",
+                    buttons : {
+                       cancle : {
+                          text : '취소',
+                          value : false
+                       },
+                       confirm : {
+                          text : '완료',
+                          value : true
+                       }
+                    }
+                 }).then((result) => {
+                    if(result) {
+        				$('#basicInfoForm').submit();
+                    } else {
+                    	swal({
+        				    title: "프로필",
+        				    text: "프로필 정보 수정에 실패하였습니다.",
+        				    icon: "error" //"info,success,warning,error" 중 택1
+        				});
+                    }
+                 });
+					
+			};
+		});	
+		
+		$('#reqGifBtn').on('click',function(){
+			swal({
+                title: "해당 에디터가 요청 거절 시 공개요청으로 전환됩니다.",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '요청',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+    				var editorId = "<c:out value = '${ member.userId }' />";
+                	location.href = "writeView.ch?boardType=7&reqId=" + editorId;
+                } else {
+                	swal({
+    				    title: "비공개 의뢰",
+    				    text: "비공개 의뢰 요청을 취소하셨습니다.",
+    				    icon: "error" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
+		});
+		
+		$('.secretReq').on('click',function(){
+			swal({
+                title: "해당 에디터가 요청 거절 시 공개요청으로 전환됩니다.",
+                icon: "info",
+                buttons : {
+                   cancle : {
+                      text : '취소',
+                      value : false
+                   },
+                   confirm : {
+                      text : '요청',
+                      value : true
+                   }
+                }
+             }).then((result) => {
+                if(result) {
+    				var editorId = "<c:out value = '${ member.userId }' />";
+                	location.href = "writeView.ch?boardType=7&reqId=" + editorId;
+                } else {
+                	swal({
+    				    title: "비공개 의뢰",
+    				    text: "비공개 의뢰 요청을 취소하셨습니다.",
+    				    icon: "error" //"info,success,warning,error" 중 택1
+    				});
+                }
+             });
+		});
+		
+		/* var userId = ${ member.userId } */
+		var check = $("input[type='checkbox']");
+		check.click(function(){
+			$('.secretOption').toggle();
+			
+			/* $.ajax({
+				type	: "POST",
+				url	    : 'secretToggle.my',
+				data	: {'userId':userId},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("마이페이지 비공개 여부 토글 성공!")
+					console.log(data);
+					
+				}
+			}); */
+		});
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>
 </body>

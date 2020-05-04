@@ -75,7 +75,9 @@ public interface CBoardService {
 	
 	int go3stageContest(Request r);
 	
-	ArrayList<Contents> fileListContest(int boNum);
+	String selectThumbnail(int boNum);
+	
+  ArrayList<Contents> fileListContest(int boNum);
 	
 	int minusCash(CBoard board);
 	

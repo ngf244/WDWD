@@ -11,9 +11,8 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +28,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.kh.WDWD.board.model.exception.BoardException;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.board.model.vo.Scrap;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.common.Pagination;
@@ -41,6 +42,7 @@ import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 
 @SessionAttributes("loginUser")
@@ -49,50 +51,6 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mService;
-	
-	@RequestMapping("sessionUpdate.me")
-	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
-		response.setContentType("application/json; charset=utf-8");
-		
-		Member loginUser = mService.selectMember(userId);
-		model.addAttribute("loginUser", loginUser);
-		
-		ArrayList<Board> recentlyList = mService.recentlyBoardList(loginUser);
-		
-		JSONArray jArr = new JSONArray();
-
-		JSONObject updateUser = new JSONObject();
-		updateUser.put("point", loginUser.getPoint());
-		updateUser.put("cash", loginUser.getCash());
-		updateUser.put("profileImg", loginUser.getProfileImg());
-		updateUser.put("recent1", loginUser.getRecent1());
-		updateUser.put("recent2", loginUser.getRecent2());
-		updateUser.put("recent3", loginUser.getRecent3());
-		updateUser.put("recent4", loginUser.getRecent4());
-		updateUser.put("recent5", loginUser.getRecent5());
-		jArr.add(updateUser);
-		
-		for(Board b: recentlyList) {
-			JSONObject jBoard = new JSONObject();
-			jBoard.put("boNum", b.getBoNum());
-			jBoard.put("boTitle", b.getBoTitle());
-			jBoard.put("boGroup", b.getBoGroup());
-			
-			jArr.add(jBoard);
-		}
-		
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("list", jArr);
-
-		try {
-			PrintWriter out = response.getWriter();
-			out.println(sendJson);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	@RequestMapping(value="login.me",method=RequestMethod.POST)
 	public String memberLogin(@ModelAttribute Member m, Model model) {
@@ -129,6 +87,7 @@ public class MemberController {
 		ArrayList<Reply> rList = mService.selectRecentlyReply(userId);		
 		ArrayList<Board> pList = mService.selectRecentlyPBoard(userId);
 		ArrayList<CBoard> cList = mService.selectRecentlyCBoard(userId);
+		ArrayList<Scrap> scList = mService.selectRecentlyScrap(userId);
 		
 		int currentPage = 1;
 		if(page != null) {
@@ -173,6 +132,7 @@ public class MemberController {
 			  .addObject("rwCount", rwCount)
 			  .addObject("pList", pList)
 			  .addObject("cList", cList)
+			  .addObject("scList", scList)
 			  .addObject("pi", pi)
 			  .addObject("pcList", pcList)
 			  .addObject("nowDay", nowDay)
@@ -308,13 +268,159 @@ public class MemberController {
 		
 		ArrayList<PortpolioContents> pcList = mService.selectMyPagePortList(pi, userId);
 		
+		for(PortpolioContents pc : pcList) {
+			ArrayList<PortpolioReply> portReply = mService.selectPoReply(pc.getPoNum());
+			pc.setPortReply(portReply);
+			
+			ArrayList<PortpolioContents> portContents = mService.selectAttachFile(pc.getPoNum());
+			pc.setPortContents(portContents);
+		}
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();				
 		map.put("pcList", pcList);
 		map.put("pi", pi);
 		
 		new Gson().toJson(map, response.getWriter());
 	}
-}
 	
+	@RequestMapping("scrapList.my")
+	public ModelAndView scrapListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = mService.getMyScrapCount(userId);
+		
+		PageInfo pi = Pagination.getMyReplyPageInfo(currentPage, listCount);		
+		ArrayList<Scrap> scList = mService.selectMyScrapList(userId, pi);
+		
+		if(scList != null) {
+			mv.addObject("scList", scList)
+			  .addObject("pi", pi)
+			  .addObject("userId", userId)
+			  .setViewName("scrapList");
+		} else {
+			throw new BoardException("내 댓글 조회에 실패하였습니다.");
+		}
+		
+		return mv;
+	}
+	
+	@RequestMapping("nickCheck.my")
+	public @ResponseBody void nickCheck(@ModelAttribute Member m, HttpServletResponse response) throws Exception {
+		System.out.println("m : " + m);
+		
+		int result = mService.nickCheck(m);
+		
+		System.out.println("result : " + result);
+		
+		response.setCharacterEncoding("UTF-8");
+		
+		if(result >= 1) {
+			new Gson().toJson(true, response.getWriter());
+		} else {
+			new Gson().toJson(false, response.getWriter());
+		}
+		
+	}
+	
+	@RequestMapping("uMember.my")
+	public String updateMember(@ModelAttribute Member m) {
+		System.out.println("Member : " + m);
+		
+		int result = mService.updateMember(m);
+		
+		if(result > 0) {
+			return "redirect:main.my?userId=" + m.getUserId();
+		} else {
+			throw new MemberException("프로필 정보 수정에 실패하였습니다.");
+		}
+		
+	}
+	
+	@RequestMapping("iGrade.my")
+	public String insertGrade(@ModelAttribute Request r, @RequestParam(value="page", required=false) Integer page, HttpSession session) {
+		System.out.println("Request : " + r);
+		
+		String boWriter = ((Member)session.getAttribute("loginUser")).getUserId();
+		String reId = mService.selectUserId(r);
+		
+		r.setReId(reId);
+		
+		int result = mService.insertGrade(r);
+		
+		if(result > 0) {
+			return "redirect:reqList.my?boWriter=" + boWriter + "&cbStep=3&page=" + page;
+		} else {
+			throw new MemberException("평점 등록에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("secretToggle.my")
+	public @ResponseBody void secretToggle(@RequestParam String userId, HttpServletResponse response) {
+		response.setCharacterEncoding("UTF-8");
+		String secretYn = mService.selectSecretYn(userId);
+		
+		PrintWriter out = null;
+		
+		if(secretYn.equals("N")) {
+			try {
+				out  = response.getWriter();
+				int result1 = mService.updateSecretToggle(userId);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+  @RequestMapping("sessionUpdate.me")
+	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
+		response.setContentType("application/json; charset=utf-8");
+		
+		Member loginUser = mService.selectMember(userId);
+		model.addAttribute("loginUser", loginUser);
+		
+		ArrayList<Board> recentlyList = mService.recentlyBoardList(loginUser);
+		
+		JSONArray jArr = new JSONArray();
+
+		JSONObject updateUser = new JSONObject();
+		updateUser.put("point", loginUser.getPoint());
+		updateUser.put("cash", loginUser.getCash());
+		updateUser.put("profileImg", loginUser.getProfileImg());
+		updateUser.put("recent1", loginUser.getRecent1());
+		updateUser.put("recent2", loginUser.getRecent2());
+		updateUser.put("recent3", loginUser.getRecent3());
+		updateUser.put("recent4", loginUser.getRecent4());
+		updateUser.put("recent5", loginUser.getRecent5());
+		jArr.add(updateUser);
+		
+		for(Board b: recentlyList) {
+			JSONObject jBoard = new JSONObject();
+			jBoard.put("boNum", b.getBoNum());
+			jBoard.put("boTitle", b.getBoTitle());
+			jBoard.put("boGroup", b.getBoGroup());
+			
+			jArr.add(jBoard);
+		}
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jArr);
+
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(sendJson);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+  
+  
+}
 	
 	

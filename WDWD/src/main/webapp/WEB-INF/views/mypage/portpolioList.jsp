@@ -110,6 +110,7 @@
 		border: 1px solid lightgrey;
 		float: left;
 		display: line-block;
+		cursor: pointer;
 	}
 	
 	.portDate{
@@ -176,6 +177,7 @@
 		height: 40px;
 		float: right;
 		margin-top: 8px;
+		cursor: pointer;
 	}
 	
 	.portpolioNameContents{
@@ -858,6 +860,12 @@
     				});
                 }
              });
+		});
+		
+		$('.updateBtn').on('click', function(){
+			console.log($(this).prev());
+			$(this).prev().attr('action', 'uPortView.my');
+			$(this).prev().submit();
 		});
 		
 	</script>

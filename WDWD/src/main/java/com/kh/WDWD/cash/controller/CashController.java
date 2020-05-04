@@ -16,6 +16,8 @@ import com.kh.WDWD.cash.model.exception.CashException;
 import com.kh.WDWD.cash.model.service.CashService;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.common.Pagination;
+import com.kh.WDWD.member.model.service.MemberService;
+import com.kh.WDWD.member.model.vo.Member;
 
 @Controller
 public class CashController {
@@ -23,8 +25,15 @@ public class CashController {
 	@Autowired
 	private CashService cService;
 	
+	@Autowired
+	private MemberService mService;
+	
 	@RequestMapping("cashChange.my")
 	public ModelAndView cashChangeListView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		Member member = mService.selectMember(userId);
+		
+		System.out.println("member : " + member);
 		
 		int currentPage = 1;
 		if(page != null) {
@@ -39,7 +48,7 @@ public class CashController {
 		if(pcList != null) {
 			mv.addObject("pcList", pcList)
 			  .addObject("pi", pi)
-			  .addObject("userId", userId)
+			  .addObject("member", member)
 			  .setViewName("cashChangeList");
 		} else {
 			throw new CashException("캐쉬 변동 내역 조회에 실패하였습니다.");

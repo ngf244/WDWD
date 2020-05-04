@@ -59,6 +59,13 @@
 	
 	#buttonSelectNSerch:hover .dropdown-content {display: block;}
 	
+	#CategoryInfo {
+		display: inline-block;
+		font-size: 20pt;
+		color: #050099;
+		font-weight: bolder;
+	}
+		
 	/* 리스트 부분 */	
 	.boardList {
 		height: 199px;
@@ -69,7 +76,7 @@
 		border: 1px solid black;
 		display: flex;
 		
-		overflow: hidden;
+		/* overflow: hidden; */
 	}
 	
 	.boardList:hover {
@@ -77,12 +84,14 @@
 	}
 	
 	.boardImg {
-		display: inline-table;
+		display: inline-block;
 		width: 140px;
 		height: 140px;
 		margin: 5px;
 		
 		border: 1px solid black;
+		
+		cursor: pointer;
 	}
 	.boardCon {
 		/* width 값은 script로 별도 지정 */
@@ -151,6 +160,42 @@
 	
 	.pagination a:hover:not(.active) {background-color: #ddd;}	
 	
+	/* 평점 매기기 */
+	.gradeArea{
+		position: absolute;
+		display: none;
+		width: 15%;
+		height: 160px;
+		border: 1px solid black;
+		padding: 10px;
+		text-align: center;
+		background: white;
+	}
+	
+	.gradeBtn{
+		cursor: pointer;
+	}
+	
+	h3{font-family: 'Noto Sans KR', sans-serif;}
+	
+	/*제이쿼리 활용 별점 매기기*/
+	.starR{
+	  background: url('<%= request.getContextPath() %>/resources/images/ico_review.png') no-repeat right 0;
+	  background-size: auto 100%;
+	  width: 30px;
+	  height: 30px;
+	  display: inline-block;
+	  text-indent: -9999px;
+	  cursor: pointer;
+	}
+	.starR.on{background-position:0 0;}
+	.starRev{margin-left: 10px;}
+	/*버튼 css*/
+    .btn{
+		border-radius: 0.5rem; white-space: nowrap; border: 1px solid transparent; background-color: #7780b7; color: white; 
+		line-height: 1.5; padding: 4px 10px; margin: 7px; width: auto;    
+    }
+	
 </style>
 <title>거래 완료</title>
 </head>
@@ -176,20 +221,32 @@
 						    <a href="#"><span onclick="myReqCateList(4);">콘테스트</span></a>
 						</div>						
 					</div>
+					<c:if test="${ cboard.boGroup eq null}">
+						<div id="CategoryInfo">전체 보기</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '2'}">
+						<div id="CategoryInfo">1:1 의뢰</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '3'}">
+						<div id="CategoryInfo">역경매</div>
+					</c:if>
+					<c:if test="${ cboard.boGroup == '4'}">
+						<div id="CategoryInfo">콘테스트</div>
+					</c:if>
 				
 					<!-- 리스트 시작 -->
+					<c:if test="${ empty list }">
+						<div class="boardList">※ 목록이 없습니다.</div>
+					</c:if>
 					<c:forEach var="rthl" items="${ list }">
 						<div class="boardList">
-							<div class="boardImg">
-								<c:if test="${ rthl.boGroup == '2' }">
-									<img src="${ contextPath }/resources/images/1on1_icon.png" style="width: 100%;">
+							<div class="boardImg" onclick="goCBD(${ rthl.boNum });">
+								<c:if test="${ rthl.thumbnail eq null }">
+									<img src="${ contextPath }/resources/images/emptyImage.png" width= "100%" height= "100%">
 								</c:if>
-								<c:if test="${ rthl.boGroup == '3' }">
-									<img src="${ contextPath }/resources/images/auction.png" style="width: 100%;">
-								</c:if>
-								<c:if test="${ rthl.boGroup == '4' }">
-									<img src="${ contextPath }/resources/images/trophy_icon.png" style="width: 100%;">
-								</c:if>																
+								<c:if test="${ rthl.thumbnail ne null }">
+									<img src="${ contextPath }/resources/real_photo/${ rthl.thumbnail }" width= "100%" height= "100%">
+								</c:if>															
 							</div>
 							<div class="boardCon">
 								<div class="leftCon">
@@ -208,7 +265,7 @@
 									<c:if test="${ rthl.boGroup == '4' }" >
 									 	<b>의뢰유형</b> : 콘테스트<br>
 									</c:if>									 						 	 
-									<p><b>내용</b> : ${ rthl.boContent }</p>
+									<div class="contents"><b>내용</b>${ rthl.boContent }</div>
 								</div>
 								<div class="rightCon">
 									<c:if test="${ rthl.boGroup == '2' }">
@@ -216,12 +273,11 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											마감일 : 20${ rthl.cbDate }
-										</div>
-										<div class="rightBtn">
 											의뢰비 : ${ rthl.cbCash }
 										</div>
-										<div class="rightBtn">
+										<div class="rightBtn gradeBtn">
+											<input type="hidden" value="${ rthl.reId }">
+											<input type="hidden" value="${ rthl.reNum }">
 											<c:choose>
 												<c:when test="${ rthl.reGrade == '5' }">
 													평점 : <span class="starRating">★★★★★</span>
@@ -249,12 +305,11 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											마감일 : 20${ rthl.cbDate }
-										</div>
-										<div class="rightBtn">
 											낙찰가 : ${ rthl.cbCash }
 										</div>
-										<div class="rightBtn">
+										<div class="rightBtn gradeBtn">
+											<input type="hidden" value="${ rthl.reId }">
+											<input type="hidden" value="${ rthl.reNum }">
 											<c:choose>
 												<c:when test="${ rthl.reGrade == '5' }">
 													평점 : <span class="starRating">★★★★★</span>
@@ -282,12 +337,11 @@
 											우승자 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											마감일 : 20${ rthl.cbDate }
-										</div>
-										<div class="rightBtn">
 											상금 : ${ rthl.cbCash }
 										</div>
-										<div class="rightBtn">
+										<div class="rightBtn gradeBtn">
+											<input type="hidden" value="${ rthl.reId }">
+											<input type="hidden" value="${ rthl.reNum }">
 											<c:choose>
 												<c:when test="${ rthl.reGrade == '5' }">
 													평점 : <span class="starRating">★★★★★</span>
@@ -380,7 +434,36 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="gradeArea" id="gradeArea">
+				<h3 style="margin-left: 20px;">평점 매기기</h3>
+				<div class="bodyArea">
+					<form action="iGrade.my" method="post">
+						<div class="starRev">
+						    <a class="starR on" value="1">별1</a>
+						    <a class="starR" value="2">별2</a>
+						    <a class="starR" value="3">별3</a>
+						    <a class="starR" value="4">별4</a>
+						    <a class="starR" value="5">별5</a>
+						</div>
+						<div style="clear: both;"></div>
+						<br>
+						<input type="hidden" id="reId" name="reId" value="">
+						<input type="hidden" id="reNum" name="reNum" value="">
+						<input type="hidden" name="reGrade" id="reGrade" class="reGrade" value="">
+						<input type="hidden" name="page" id="page" value="${ pi.currentPage }">
+						<div class="btnArea">
+							<button type="submit" name="send" class="btn" style="cursor: pointer;">완료</button>
+							<button type="button" name="cancel" class="btn" onclick="closePopUp(this);" style="cursor: pointer;">취소</button>  		
+						</div>
+					</form>	
+				</div>
+			</div>
+		
 		</div>
+		
+		
+		
 		<div id="right-side">
 				
 		</div>
@@ -409,7 +492,55 @@
 			var cbStep = 3;
 			location.href = "reqList.my?boGroup=" + e + "&boWriter=" + boWriter + "&cbStep=" + cbStep;	
 		}
-
+		
+		$(function(){
+			console.log($('.contents').find('img'));
+			$('.contents').find('img').remove();
+			$('.contents').find('br').remove();
+			
+			$('.boardList').css('overflow', 'hidden');
+		});
+		
+		function goCBD(boNum){
+			location.href = "detailView.ch?boNum=" + boNum;
+		}
+		
+		// 평점 매기기 
+		$('.starRev a').click(function(){
+			$(this).parent().children('a').removeClass('on');
+		    $(this).addClass('on').prevAll('a').addClass('on');
+		    console.log($(this).attr("value"));
+		  	$('.reGrade').attr("value",$(this).attr("value"));
+		    console.log($('.reGrade').attr("value"));
+		    return false;
+		});
+		
+		// 평점 영역 클릭 시 평점 매기는 레이어 팝업
+		$('.gradeBtn').click(function(e) {
+			$('#gradeArea').css({
+				"top" : (($(window).height()-$('#gradeArea').outerHeight())/2+$(window).scrollTop())+"px",
+				"left" : (($( window ).width()-$('#gradeArea').outerWidth())/2+$(window).scrollLeft())+"px",
+				"position" : "absolute"
+			}).show();
+		
+			var reId = $(this).children().eq(0).val();
+			var reNum = $(this).children().eq(1).val();
+			
+			console.log("reId : " + reId);
+			console.log("reNum : " + reNum);
+			
+			$('#reNum').attr('value', reNum);
+			$('#reId').attr('value', reId);
+		});
+		
+		// 취소버튼 클릭 시 팝업 창 닫기
+		function closePopUp(e){
+			$(e).parent().parent().parent().parent().hide();
+		}
+		
+		// 완료버튼 클릭 시 평점 등록
+		
+		
 	</script>			
 </body>
 </html>

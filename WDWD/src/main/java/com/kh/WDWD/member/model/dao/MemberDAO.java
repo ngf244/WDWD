@@ -9,12 +9,14 @@ import org.springframework.stereotype.Repository;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.board.model.vo.Reply;
+import com.kh.WDWD.board.model.vo.Scrap;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.contents.model.vo.Contents;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.portpolio.model.vo.PortpolioContents;
 import com.kh.WDWD.portpolio.model.vo.PortpolioReply;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Repository("uDAO")
 public class MemberDAO {
@@ -99,7 +101,47 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("portpolioMapper.selectAttachFile", poNum);
 	}
 
-	public int recentlyBoard(SqlSessionTemplate sqlSession, Member m) {
+	public int getMyScrapCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("memberMapper.getMyScrapCount", userId);
+	}
+
+	public ArrayList<Scrap> selectMyScrapList(SqlSessionTemplate sqlSession, String userId, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMyScrapList", userId, rowBounds);
+	}
+
+	public ArrayList<Scrap> selectRecentlyScrap(SqlSessionTemplate sqlSession, String userId) {
+		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyScrap", userId);
+	}
+
+	public int nickCheck(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.nickCheck", m);
+	}
+
+	public int updateMember(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updateMember", m);
+	}
+
+	public int insertGrade(SqlSessionTemplate sqlSession, Request r) {
+		return sqlSession.update("memberMapper.insertGrade", r);
+	}
+
+	public String selectUserId(SqlSessionTemplate sqlSession, Request r) {
+		return sqlSession.selectOne("memberMapper.selectUserId", r);
+	}
+
+	public String selectSecretYn(SqlSessionTemplate sqlSession, String userId) {
+		String result = sqlSession.selectOne("memberMapper.selectSecretYn", userId);
+		System.out.println("result : " + result);
+		return sqlSession.selectOne("memberMapper.selectSecretYn", userId);
+	}
+
+	public int updateSecretToggle(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.update("memberMapper.updateSecretToggle", userId);
+	
+  public int recentlyBoard(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.recentlyBoard", m);
 	}
 
