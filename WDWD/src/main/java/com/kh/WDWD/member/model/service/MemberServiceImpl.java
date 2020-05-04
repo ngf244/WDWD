@@ -163,5 +163,15 @@ public class MemberServiceImpl implements MemberService {
 	public String selectUserId(Request r) {
 		return mDAO.selectUserId(sqlSession, r);
 	}
+
+	@Override
+	public String selectSecretYn(String userId) {
+		return mDAO.selectSecretYn(sqlSession, userId);
+	}
+
+	@Override
+	public int updateSecretToggle(String userId) {
+		return mDAO.updateSecretToggle(sqlSession, userId);
+	}
 }
 	

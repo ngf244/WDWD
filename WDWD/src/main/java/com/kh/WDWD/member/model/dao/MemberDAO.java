@@ -132,4 +132,14 @@ public class MemberDAO {
 		return sqlSession.selectOne("memberMapper.selectUserId", r);
 	}
 
+	public String selectSecretYn(SqlSessionTemplate sqlSession, String userId) {
+		String result = sqlSession.selectOne("memberMapper.selectSecretYn", userId);
+		System.out.println("result : " + result);
+		return sqlSession.selectOne("memberMapper.selectSecretYn", userId);
+	}
+
+	public int updateSecretToggle(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.update("memberMapper.updateSecretToggle", userId);
+	}
+
 }

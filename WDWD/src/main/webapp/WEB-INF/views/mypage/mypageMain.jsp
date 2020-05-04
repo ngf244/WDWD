@@ -155,7 +155,7 @@
 	
 	/* 회원정보수정버튼 */
 	#profileEditBtn{
-		margin-left: 150px; 
+		margin-left: 200px; 
 		position: absolute; 
 		margin-top: 10px;
 		background: rgb(243, 156, 18);
@@ -165,8 +165,79 @@
 		padding: 10px;
 		font-family:Arial;
 		font-size:15px;
-		font-weight: bold;			 
+		font-weight: bold;
 	}
+	
+	/* 마이페이지 비공개 여부 */
+	/* The switch - the box around the slider */
+	.switch {
+	  position: relative;
+	  display: inline-block;
+	  width: 60px;
+	  height: 34px;
+	  vertical-align:middle;
+	  margin-left: 2%;
+	}
+	
+	/* Hide default HTML checkbox */
+	.switch input {display:none;}
+	
+	/* The slider */
+	.slider {
+	  position: absolute;
+	  cursor: pointer;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: #ccc;
+	  -webkit-transition: .4s;
+	  transition: .4s;
+	}
+	
+	.slider:before {
+	  position: absolute;
+	  content: "";
+	  height: 26px;
+	  width: 26px;
+	  left: 4px;
+	  bottom: 4px;
+	  background-color: white;
+	  -webkit-transition: .4s;
+	  transition: .4s;
+	}
+	
+	input:checked + .slider {
+	  background-color: #2196F3;
+	}
+	
+	input:focus + .slider {
+	  box-shadow: 0 0 1px #2196F3;
+	}
+	
+	input:checked + .slider:before {
+	  -webkit-transform: translateX(26px);
+	  -ms-transform: translateX(26px);
+	  transform: translateX(26px);
+	}
+	
+	/* Rounded sliders */
+	.slider.round {
+	  border-radius: 34px;
+	}
+	
+	.slider.round:before {
+	  border-radius: 50%;
+	}
+	
+	.secretOption {
+		margin:0px;
+		display:inline-block;
+		font-size:15px;
+		font-weight:bold;
+	}
+	
+	
 	
 	/* 자기소개 영역 */
 	.introduceInfo{height: 180px; padding-left: 20px; line-height: 30px;}
@@ -728,8 +799,15 @@
 								<input type="file" hidden="" name="profileImg" id="profileImg" multiple="multiple" onchange="LoadImg(this)">
 							</form>
 						</div>
-						<c:if test="${ member.userId eq loginUser.userId }"><button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button></c:if>
+						<c:if test="${ member.userId eq loginUser.userId }"><button id="profileEditBtn" style="width: 120px; margin-left: 640px;">프로필 수정</button></c:if>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
+						<c:if test="${ member.userId eq loginUser.userId }">
+							<label class="switch">
+								<input type="checkbox">
+								<span class="slider round"></span>
+							</label>
+							<p class="secretOption">공개</p><p class="secretOption" style="display:none;">비공개</p>
+						</c:if>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
 								<tr>
@@ -1801,6 +1879,24 @@
     				});
                 }
              });
+		});
+		
+		/* var userId = ${ member.userId } */
+		var check = $("input[type='checkbox']");
+		check.click(function(){
+			$('.secretOption').toggle();
+			
+			/* $.ajax({
+				type	: "POST",
+				url	    : 'secretToggle.my',
+				data	: {'userId':userId},
+				dataType: 'JSON',
+				success : function(data) {
+					console.log("마이페이지 비공개 여부 토글 성공!")
+					console.log(data);
+					
+				}
+			}); */
 		});
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>

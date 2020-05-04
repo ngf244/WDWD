@@ -1,6 +1,8 @@
 package com.kh.WDWD.member.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -355,6 +357,25 @@ public class MemberController {
 			throw new MemberException("평점 등록에 실패하였습니다.");
 		}
 	}
+	
+	@RequestMapping("secretToggle.my")
+	public @ResponseBody void secretToggle(@RequestParam String userId, HttpServletResponse response) {
+		response.setCharacterEncoding("UTF-8");
+		String secretYn = mService.selectSecretYn(userId);
+		
+		PrintWriter out = null;
+		
+		if(secretYn.equals("N")) {
+			try {
+				out  = response.getWriter();
+				int result1 = mService.updateSecretToggle(userId);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
 	
 	

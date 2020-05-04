@@ -70,5 +70,9 @@ public interface MemberService {
 
 	String selectUserId(Request r);
 
+	String selectSecretYn(String userId);
+
+	int updateSecretToggle(String userId);
+
 }
 

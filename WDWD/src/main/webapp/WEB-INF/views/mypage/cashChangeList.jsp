@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>   
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,10 +27,10 @@
 	/* 현재 캐쉬 현황 */
 	#nowCash{
 		margin: 30px;
-		margin-left: 340px;
+		margin-left: 320px;
 		margin-top: 40px;
 		border: 1px solid black;
-		width: 35%;
+		width: 40%;
 		height: 120px;
 		box-shadow: 2px 2px 5px black;
 		border-radius: 5px;
@@ -45,7 +47,7 @@
 		font-size: 30pt;
 		display: inline-block;
 		float: right;
-		margin: 35px;
+		margin: 30px;
 		margin-right: 50px;
 		color: rgb(231, 76, 60);
 		font-weight: bold;
@@ -118,7 +120,8 @@
 				<div id="cashChangeListContent">
 					<div id="nowCash">
 						<div id="nowCashText">Cash</div>
-						<div id="nowCashAmount">5,000</div>
+						<div id="nowCashAmount">${ member.cash }</div>
+						<div style="clear: both;"></div>
 					</div>
 					<div class="cashChangeBoard">
 						<table id="boardTable">
@@ -132,7 +135,11 @@
 							<c:if test="${ pc.pcDiv == 'C' }">
 							<tr>
 								<td>${ pc.pcContent }</td>
-								<td><span class="amount">${ pc.pcAmount }</span></td>
+								<td>
+									<span class="amount">
+										${ pc.pcAmount }
+									</span>
+								</td>
 								<td>${ pc.pcDate }</td>							
 							</tr>
 							</c:if>									
@@ -152,7 +159,7 @@
 						<c:if test="${ pi.currentPage > 1 }">
 							<c:url var="before" value="cashChange.my">
 								<c:param name="page" value="${ pi.currentPage - 1 }"/>
-								<c:param name="userId" value="${ userId }"/>
+								<c:param name="userId" value="${ member.userId }"/>
 							</c:url>
 						<a href="${ before }"> &laquo; </a>
 						</c:if>
@@ -166,7 +173,7 @@
 						<c:if test="${ p ne pi.currentPage }">
 							<c:url var="pagination" value="cashChange.my">
 								<c:param name="page" value="${ p }"/>
-								<c:param name="userId" value="${ userId }"/>
+								<c:param name="userId" value="${ member.userId }"/>
 							</c:url>
 							<a href="${ pagination }">${ p }</a> &nbsp;
 						</c:if>
@@ -179,7 +186,7 @@
 					<c:if test="${ pi.currentPage < pi.maxPage }">
 						<c:url var="after" value="cashChange.my">
 							<c:param name="page" value="${ pi.currentPage + 1 }"/>
-							<c:param name="userId" value="${ userId }"/>
+							<c:param name="userId" value="${ member.userId }"/>
 						</c:url> 
 						<a href="${ after }"> &raquo; </a>
 					</c:if>		
