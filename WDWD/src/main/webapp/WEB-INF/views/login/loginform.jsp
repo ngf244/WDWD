@@ -88,7 +88,7 @@
 <body>
 	<div id="loginlogo">
 		<img src="${ contextPath }/resources/images/logo.png"
-			onclick="location.href='index.me'">
+			onclick="location.href='index.home'">
 	</div>
 	<form id="loginaction" action="login.me" method="post">
 		<div class="loginform">
@@ -274,6 +274,13 @@
  
 }
  
+	function loginbtn(){
+        $('#loginaction').submit();
+     };
+     
+    $("#loginPw").keyup(function(e){if(e.keyCode == 13)  
+          loginbtn(); 
+    });
  
   //]]>
 </script>
