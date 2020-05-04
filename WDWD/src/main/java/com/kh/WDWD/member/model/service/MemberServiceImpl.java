@@ -21,18 +21,18 @@ import com.kh.WDWD.request.model.vo.Request;
 
 @Service("mService")
 public class MemberServiceImpl implements MemberService {
-	
+
 	@Autowired
 	private MemberDAO mDAO;
-	
+
 	@Autowired	
 	private SqlSessionTemplate sqlSession;
-	
+
 	@Override
 	public Member selectMember(String userId) {
 		return mDAO.selectMember(sqlSession, userId);
 	}
-	
+
 	@Override
 	public Member loginMember(Member m) {
 		return mDAO.loginMember(sqlSession, m);
@@ -104,9 +104,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int checkIdDup(String id) {
-//		return mDAO.checkIdDup(sqlSession, id);
-		return 0;
+	public int userIdCheck(String user_id) {
+		return mDAO.selectuserIdcheck(sqlSession, user_id);
 	}
 
 	@Override
@@ -172,9 +171,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int updateSecretToggle(String userId) {
 		return mDAO.updateSecretToggle(sqlSession, userId);
-    
+	}
+
 	@Override
-  public int recentlyBoard(Member m) {
+	public int recentlyBoard(Member m) {
 		return mDAO.recentlyBoard(sqlSession, m);
 	}
 
@@ -183,4 +183,4 @@ public class MemberServiceImpl implements MemberService {
 		return mDAO.recentlyBoardList(sqlSession, loginUser);
 	}
 }
-	
+
