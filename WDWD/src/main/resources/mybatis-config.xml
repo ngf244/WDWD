@@ -12,7 +12,7 @@
 		<typeAlias type="com.kh.WDWD.board.model.vo.Reply" alias="Reply"/>
 		<typeAlias type="com.kh.WDWD.cash.model.vo.PointNCash" alias="PointNCash"/>
 		<typeAlias type="com.kh.WDWD.cBoard.model.vo.CBoard" alias="CBoard"/>
-		<typeAlias type="com.kh.WDWD.guideboard.model.vo.Guideboard" alias="Guide"/>
+		<typeAlias type="com.kh.WDWD.guideboard.model.vo.Qna" alias="Qna"/>
 		<typeAlias type="com.kh.WDWD.request.model.vo.Request" alias="Request"/>
 		<typeAlias type="com.kh.WDWD.contents.model.vo.Contents" alias="Contents"/>
 		<typeAlias type="com.kh.WDWD.cBoard.model.vo.Chat" alias="Chat"/>
@@ -37,7 +37,7 @@
 	   	<mapper resource="mappers/portpolio-mapper.xml"/>
 	   	<mapper resource="mappers/contents-mapper.xml"/>
 	   	<mapper resource="mappers/reply-mapper.xml"/>
-	    <mapper resource="mappers/guideboard-mapper.xml"/>
+	    <mapper resource="mappers/qnaboard-mapper.xml"/>
 	    <mapper resource="mappers/message-mapper.xml"/>
 	    <mapper resource="mappers/author-mapper.xml"/>
 	    <mapper resource="mappers/pointShop-mapper.xml"/>

@@ -14,17 +14,18 @@
 	#menuHeader {
 		width: 70%;
 		margin: 0 auto;
+		text-align: center;
 	}
 	.menubar {
 		float: center;
 		color: white;
 		display: inline-block;
 		font-size: 12pt;
-		margin: 5px;
+		margin: 6px;
 		cursor: pointer;
 		text-align: center;
 		line-height: 10px;
-		font-weight: bold;
+		margin-top: 5px;
 	}
 	
 	

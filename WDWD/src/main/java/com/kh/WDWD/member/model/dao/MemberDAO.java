@@ -73,6 +73,11 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyPBoard", userId);
 	}
 
+	// 회원가입시 유저 아이디 체크
+	public int selectuserIdcheck(SqlSessionTemplate sqlSession, String user_id) {
+		return sqlSession.selectOne("memberMapper.selectMember", user_id);
+	}
+
 	public ArrayList<CBoard> selectRecentlyCBoard(SqlSessionTemplate sqlSession, String userId) {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectRecentlyCBoard", userId);
 	}
@@ -89,7 +94,7 @@ public class MemberDAO {
 			String userId) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		
+
 		return (ArrayList)sqlSession.selectList("portpolioMapper.selectMyPagePortList", userId, rowBounds);
 	}
 
@@ -108,7 +113,7 @@ public class MemberDAO {
 	public ArrayList<Scrap> selectMyScrapList(SqlSessionTemplate sqlSession, String userId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		
+
 		return (ArrayList)sqlSession.selectList("memberMapper.selectMyScrapList", userId, rowBounds);
 	}
 
@@ -140,8 +145,9 @@ public class MemberDAO {
 
 	public int updateSecretToggle(SqlSessionTemplate sqlSession, String userId) {
 		return sqlSession.update("memberMapper.updateSecretToggle", userId);
-	
-  public int recentlyBoard(SqlSessionTemplate sqlSession, Member m) {
+	}
+
+	public int recentlyBoard(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.recentlyBoard", m);
 	}
 
