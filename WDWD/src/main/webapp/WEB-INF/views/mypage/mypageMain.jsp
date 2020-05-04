@@ -1881,22 +1881,18 @@
              });
 		});
 		
-		/* var userId = ${ member.userId } */
 		var check = $("input[type='checkbox']");
 		check.click(function(){
 			$('.secretOption').toggle();
 			
-			/* $.ajax({
+			$.ajax({
 				type	: "POST",
 				url	    : 'secretToggle.my',
 				data	: {'userId':userId},
-				dataType: 'JSON',
 				success : function(data) {
 					console.log("마이페이지 비공개 여부 토글 성공!")
-					console.log(data);
-					
 				}
-			}); */
+			});
 		});
 	</script>
 	<jsp:include page="mypageSideMenubar.jsp"/>

@@ -361,21 +361,45 @@ public class MemberController {
 	}
 	
 	@RequestMapping("secretToggle.my")
-	public @ResponseBody void secretToggle(@RequestParam String userId, HttpServletResponse response) {
+	public @ResponseBody void secretToggle(@ModelAttribute Member m, HttpServletResponse response) {
+		
+		System.out.println("userId : " + m.getUserId());
+		
+		String userId = m.getUserId();
 		response.setCharacterEncoding("UTF-8");
-		String secretYn = mService.selectSecretYn(userId);
+		String secretYn = mService.selectSecretYn(m);
 		
 		PrintWriter out = null;
 		
-		if(secretYn.equals("N")) {
-			try {
+		try {
+			if(secretYn.equals("N")) {
+				
 				out  = response.getWriter();
 				int result1 = mService.updateSecretToggle(userId);
 				
-			} catch (IOException e) {
-				e.printStackTrace();
+				if(result1 > 0) {
+					out.println("updateY");
+				} else {
+					out.println("update 실패!");
+				}
+		
+			} else {
+				out = response.getWriter();
+				int result2 = mService.updateSecretToggle2(userId);
+				
+				if(result2 > 0) {
+					out.println("updateN");
+				} else {
+					out.println("update 실패!");
+				}
 			}
+		} catch (IOException e) {
+			throw new MemberException(e.getMessage());
+		} finally {
+			out.flush();
+			out.close();
 		}
+		
 	}
 	
   @RequestMapping("sessionUpdate.me")
