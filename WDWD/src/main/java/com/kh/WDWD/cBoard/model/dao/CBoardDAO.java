@@ -30,7 +30,6 @@ public class CBoardDAO {
 	}
 	
 
-
 	public CBoard cBoardInsert(SqlSessionTemplate sqlSession, CBoard b) {
 		int result1 = sqlSession.insert("cBoardMapper.cBoardInsert1", b);
 		int result2 = sqlSession.insert("cBoardMapper.cBoardInsert2", b);
@@ -185,7 +184,15 @@ public class CBoardDAO {
 	}
 
 	public int go3stage(SqlSessionTemplate sqlSession, int boNum) {
-		return sqlSession.update("cBoardMapper.go3stage", boNum);
+		int result1 = sqlSession.update("cBoardMapper.go3stage", boNum);
+		int result2 = sqlSession.update("cBoardMapper.PlusCash", boNum);
+		int result3 = sqlSession.insert("cBoardMapper.PlusDetail", boNum);
+		
+		if(result1 > 0 && result2 > 0 && result3 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	public ArrayList<CBoard> checkTime(SqlSessionTemplate sqlSession) {
@@ -194,19 +201,24 @@ public class CBoardDAO {
 
 	public int timeOut(SqlSessionTemplate sqlSession, int boNum) {
 		Request r = sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
+		CBoard b = sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
 		
 		if(r == null) {
 			sqlSession.update("cBoardMapper.endTime", boNum);
 		} else {
-			if(sqlSession.update("cBoardMapper.okCash1", r) <= 0 || sqlSession.update("cBoardMapper.okCash2", r) <= 0) {
-				return 0;
+			sqlSession.update("cBoardMapper.okCash1", r);
+			if(b.getBoGroup().equals("3")) {
+				sqlSession.update("cBoardMapper.okCash2", r);
+				b = sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
+				sqlSession.update("cBoardMapper.MinusCash", b);
+				sqlSession.insert("cBoardMapper.MinusDetail", b);
 			}
 		}
 		
 		return 0;
 	}
 
-	public ArrayList<Board> reqBList(SqlSessionTemplate sqlSession, int boNum) {
+	public ArrayList<CBoard> reqBList(SqlSessionTemplate sqlSession, int boNum) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.reqBList", boNum);
 	}
 
@@ -214,6 +226,64 @@ public class CBoardDAO {
 		int result1 = sqlSession.update("cBoardMapper.go3stageContest1", r);
 		int result2 = sqlSession.update("cBoardMapper.go3stageContest2", r);
 		
-		return (result1 >= result2) ? result2 : result1;
+		int boNum = r.getReNum();
+		int result3 = sqlSession.update("cBoardMapper.PlusCash", boNum);
+		int result4 = sqlSession.insert("cBoardMapper.PlusDetail", boNum);
+		
+		if(result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public ArrayList<Contents> fileListContest(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.fileListContest", boNum);
+	}
+
+	public int minusCash(SqlSessionTemplate sqlSession, CBoard board) {
+		sqlSession.update("cBoardMapper.MinusCash", board);
+		sqlSession.insert("cBoardMapper.MinusDetail", board);
+		
+		return 0;
+	}
+
+	public String getProfileImg(SqlSessionTemplate sqlSession, String boWriter) {
+		return sqlSession.selectOne("cBoardMapper.getProfileImg", boWriter);
+	}
+
+	public void directRequest(SqlSessionTemplate sqlSession, Request r) {
+		sqlSession.insert("cBoardMapper.directRequest", r);
+	}
+
+	public Request directWho(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.directWho", boNum);
+	}
+
+	public int change2stage(SqlSessionTemplate sqlSession, int boNum) {
+		int result1 = sqlSession.update("cBoardMapper.change2stage1", boNum);
+		int result2 = sqlSession.update("cBoardMapper.change2stage2", boNum);
+		int result3 = sqlSession.update("cBoardMapper.change2stage3", boNum);
+		
+		if(result1 > 0 && result2 > 0 && result3 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public int directFalse(SqlSessionTemplate sqlSession, int boNum) {
+		int result1 = sqlSession.update("cBoardMapper.directFalse1", boNum);
+		int result2 = sqlSession.delete("cBoardMapper.directFalse2", boNum);
+		
+		if(result1 > 0 && result2 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public String callmeId(SqlSessionTemplate sqlSession, String nickName) {
+		return sqlSession.selectOne("cBoardMapper.callmeId", nickName);
 	}
 }

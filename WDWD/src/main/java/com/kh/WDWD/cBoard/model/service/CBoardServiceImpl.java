@@ -170,13 +170,53 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<Board> reqBList(int boNum) {
+	public ArrayList<CBoard> reqBList(int boNum) {
 		return cBoardDAO.reqBList(sqlSession, boNum);
 	}
 
 	@Override
 	public int go3stageContest(Request r) {
 		return cBoardDAO.go3stageContest(sqlSession, r);
+	}
+
+	@Override
+	public ArrayList<Contents> fileListContest(int boNum) {
+		return cBoardDAO.fileListContest(sqlSession, boNum);
+	}
+
+	@Override
+	public int minusCash(CBoard board) {
+		return cBoardDAO.minusCash(sqlSession, board);
+	}
+
+	@Override
+	public String getProfileImg(String boWriter) {
+		return cBoardDAO.getProfileImg(sqlSession, boWriter);
+	}
+
+	@Override
+	public void directRequest(Request r) {
+		cBoardDAO.directRequest(sqlSession, r);
+	}
+
+	@Override
+	public Request directWho(int boNum) {
+		return cBoardDAO.directWho(sqlSession, boNum);
+	}
+
+	@Override
+	public int change2stage(int boNum) {
+		return cBoardDAO.change2stage(sqlSession, boNum);
+	}
+
+	@Override
+	public int directFalse(int boNum) {
+		return cBoardDAO.directFalse(sqlSession, boNum);
+	}
+
+	@Override
+	public String callmeId(String nickName) {
+		return cBoardDAO.callmeId(sqlSession, nickName);
 	}
 
 	
