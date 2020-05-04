@@ -102,7 +102,7 @@
 	
 	<insert id="insertScrap">
 		insert into scrap
-		values(#{userId}, #{boNum})
+		values(#{userId}, #{boNum}, sysdate)
 	</insert>
 	
 	<delete id="deleteScrap">

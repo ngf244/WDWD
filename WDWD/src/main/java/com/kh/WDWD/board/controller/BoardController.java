@@ -633,7 +633,7 @@ public class BoardController {
 								@RequestParam(value = "fileOriginName", required = false) String[] originNamesArr,
 								@RequestParam String writingContent, HttpServletRequest request,
 								@RequestParam int boNum, RedirectAttributes redirect) {
-		
+		//RedirectAttributes : addAttribute로 parameter를 담고, return "redirect:detail.bo" 와 같이 URL을 입력하여 파라미터와 함께 넘길 수 있음
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
 		
 		ArrayList<String> reNames = new ArrayList<String>();

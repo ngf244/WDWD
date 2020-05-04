@@ -23,4 +23,8 @@ public class CashDAO {
 		return (ArrayList)sqlSession.selectList("cashMapper.selectMyCashChangeList", userId, rowBounds);
 	}
 
+	public int insertCP(SqlSessionTemplate sqlSession, PointNCash pc) {
+		return sqlSession.insert("cashMapper.insertCP", pc);
+	}
+
 }

@@ -7,10 +7,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://localhost:82/socket.io/socket.io.js"></script>
+<!-- <script src="http://localhost:82/socket.io/socket.io.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 	header {
@@ -580,6 +582,8 @@
 					type : 'POST', 
 					data : formData, 
 					success : function(data) {
+							console.log(data.trim());
+							console.log(data.trim()=="전송완료");
 						if(data.trim() == "전송완료"){
 							swal("Send Complete", "신고 완료", "success");
 							$('.cancelRes').trigger('click');
@@ -695,6 +699,10 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
+					function goToCashPage() {
+						var userId = "${loginUser.userId}";
+						location.href="cashChange.my?userId="+userId;
+					}
 					
 					function checkTime(board) {
 						var timer = setInterval(function() {
