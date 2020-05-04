@@ -78,6 +78,17 @@
 		
 		border: 1px solid black;
 	}
+	.modalOption {
+		display: inline-table;
+		margin: 0 auto;
+		text-align: center;
+		padding: 15px;
+		border-radius: 15px;
+		background-color: rgba(161, 206, 244, 0.55);
+		cursor: pointer;
+		font-weight: bold;
+		font-size: 11pt;
+	}
 	#btnList {
 		text-align: center;
 		margin-top: 30px;
@@ -172,12 +183,21 @@
 										    		</div>
 										    		<div class="modal-right">
 										    			<div id="profile_wrap">
-										    				<div class="profile_img"><img src=''></div>
+										    				<c:if test="${ empty b.profileImg }">
+										    					<div id="profile_img"><img src='${ contextPath }/resources/images/people.png'></div>
+										    				</c:if>
+										    				
+										    				<c:if test="${ !empty b.profileImg }">
+										    					<div id="profile_img"><img src='${ contextPath }/resources/profile_Image/${b.profileImg}'></div>
+										    				</c:if>
+
 										    				<b id="contestWinnerNick">${ b.boWriter }</b>
 										    			</div>	
-														<p>마이페이지</p>
-														<p>작성 글 보기</p>
-														<p>작성 댓글 보기</p>
+														
+														<br><br>
+														<div class="modalOption">마이페이지</div><br><br>
+														<div class="modalOption">작성 글 보기</div><br><br>
+														<div class="modalOption">작성 댓글 보기</div>
 										    		</div>
 										    	</div>
 										    </div>
@@ -226,12 +246,21 @@
 										    		</div>
 										    		<div class="modal-right">
 										    			<div id="profile_wrap">
-										    				<div class="profile_img"><img src=''></div>
+										    				<c:if test="${ empty b.profileImg }">
+										    					<div id="profile_img"><img src='${ contextPath }/resources/images/people.png'></div>
+										    				</c:if>
+										    				
+										    				<c:if test="${ !empty b.profileImg }">
+										    					<div id="profile_img"><img src='${ contextPath }/resources/profile_Image/${b.profileImg}'></div>
+										    				</c:if>
+										    				
 										    				<b>${ b.boWriter }</b>
 										    			</div>	
-														<p>마이페이지</p>
-														<p>작성 글 보기</p>
-														<p>작성 댓글 보기</p>
+														
+														<br><br>
+														<div class="modalOption">마이페이지</div><br><br>
+														<div class="modalOption">작성 글 보기</div><br><br>
+														<div class="modalOption">작성 댓글 보기</div>
 										    		</div>
 										    	</div>
 										    </div>
@@ -261,6 +290,28 @@
 					</div>
 					
 					<script>
+						$('.modalOption').click(function(){
+							var whatIndex = $(this).index();
+							
+							$.ajax({
+								url: 'callmeId.ch',
+								data: {nickName: $(this).parent().find('b').text()},
+								type: 'post',
+								success: function(data){
+									console.log(whatIndex)
+									if(whatIndex == '3') {
+										location.href = "main.my?userId=" + data
+									} else if(whatIndex == '6') {
+										// 수정예정
+										location.href = "main.my?userId=" + data
+									} else if(whatIndex == '9') {
+										// 수정예정
+										location.href = "main.my?userId=" + data
+									}
+								}
+							});
+						});
+					
 						$('.downloadBtn').click(function(e){
 							if($('#contestWinnerNick').text() != "${sessionScope.loginUser.nickName}" && "${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}") {
 								e.preventDefault();
@@ -328,7 +379,7 @@
 					<br><br>
 					
 					<div id="btnList">
-						<div id="cancle" class="button">돌아가기</div>
+						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
 					</div>
 				</div>
 			</div>

@@ -214,5 +214,10 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.directFalse(sqlSession, boNum);
 	}
 
+	@Override
+	public String callmeId(String nickName) {
+		return cBoardDAO.callmeId(sqlSession, nickName);
+	}
+
 	
 }

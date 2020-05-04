@@ -61,7 +61,7 @@
 					
 					<div id="btnList">
 						<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
-							<div id="cancle" class="button">돌아가기</div>
+							<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
 						</c:if>
 						
 						<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">

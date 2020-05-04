@@ -140,8 +140,8 @@
 		border: 1px solid black;
 	}
 	#profile_img img {
-		width: 100%;
-		height: 100%;
+		width: 80px;
+		height: 80px;
 		overflow: hidden;
 	}
 	#profile_wrap b {
@@ -434,32 +434,32 @@
 							$('#smallInfo').css('display', 'block');
 							$('#havePoint').text(point.toLocaleString());
 							$('#haveCash').text(cash.toLocaleString());
-							$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
+							
+							if(list[0].profileImg == null) {
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/images/people.png');
+							} else {
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
+							}
 							
 							for(var i = 1; i < list.length; i++) {
 								if(list[0].recent1 == list[i].boNum) {
 									$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
-									/* $('.recentlyBoard').eq(0).text(decodeURIComponent(list[i].boTitle)); */
 									$('.recentlyBoard').eq(0).text(list[i].boTitle);
 									$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
 								} else if(list[0].recent2 == list[i].boNum) {
 									$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
-									/* $('.recentlyBoard').eq(1).text(decodeURIComponent(list[i].boTitle)); */
 									$('.recentlyBoard').eq(1).text(list[i].boTitle);
 									$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
 								} else if(list[0].recent3 == list[i].boNum) {
 									$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
-									/* $('.recentlyBoard').eq(2).text(decodeURIComponent(list[i].boTitle)); */
 									$('.recentlyBoard').eq(2).text(list[i].boTitle);
 									$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
 								} else if(list[0].recent4 == list[i].boNum) {
 									$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
-									/* $('.recentlyBoard').eq(3).text(decodeURIComponent(list[i].boTitle)); */
 									$('.recentlyBoard').eq(3).text(list[i].boTitle);
 									$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
 								} else if(list[0].recent5 == list[i].boNum) {
 									$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
-									/* $('.recentlyBoard').eq(4).text(decodeURIComponent(list[i].boTitle)); */
 									$('.recentlyBoard').eq(4).text(list[i].boTitle);
 									$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
 								}

@@ -59,7 +59,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "topList.home")
-	public void topList(Model model, @RequestParam("number") int number, HttpServletResponse response) {
+	public void topList(@RequestParam("number") int number, HttpServletResponse response) {
 		ArrayList<Board> boardList = bService.getTopBoard(number);
 		
 		try {
@@ -68,8 +68,6 @@ public class HomeController {
 		} catch (JsonIOException | IOException e) {
 			e.printStackTrace();
 		}
-		
-		/* model.addAttribute("boardList", boardList); */
 	}
 	
 }

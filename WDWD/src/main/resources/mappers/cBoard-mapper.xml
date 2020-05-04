@@ -675,5 +675,11 @@
 		
 		
 	</select>	
+	
+	<select id="callmeId" parameterType="string" resultType="string">
+		select me_id
+		from member
+		where me_nick = #{nickName}
+	</select>
 
 </mapper>

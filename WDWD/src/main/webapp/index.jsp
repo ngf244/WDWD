@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
 <style>
 	#slide-img {
 		width: 70%;
@@ -94,6 +96,32 @@
 		font-weight: bold;
 		color: black;
 	}
+	#pointBoardView {
+		width: 80%;
+		margin-left: 10%;
+		height: 250px;
+	}
+	#pointBoardLeft {
+		float: left;
+		width: 40%;
+		text-align: center;
+		height: 100%;
+		border: 1px solid black;
+	}
+	#pointBoardBoldText {
+		font-size: 18pt;
+		font-weight: bold;
+	}
+	#pointBoardRight {
+		float: right;
+		width: 55%;
+	}
+	.pointItem {
+		width: 200px;
+		height: 150px;
+		border: 1px solid black;
+		margin-right: 40px;
+	}
 </style>
 <title>Insert title here</title>
 </head>
@@ -128,13 +156,32 @@
 				
 				<div style="height:100px;"></div>
 				
-				<div id="slide-img">슬라이드 이미지 영역</div>
+				<div id="slide-img">
+					<div>111</div>
+					<div>222</div>
+					<div>333</div>
+				</div>
 				
-				<div style="height:50px;"></div>
+				<script type="text/javascript" src="http://kenwheeler.github.io/slick/slick/slick.min.js"></script>
+				<script>
+					$('#slide-img').slick({
+						autoplay : true,
+						dots: true,
+						speed : 300,
+						infinite: true,
+						autoplaySpeed: 2000,
+						arrows: true,
+						slidesToShow: 1,
+						slidesToScroll: 1,
+						fade: false
+					});
+				</script>
+				
+				<div style="height:100px;"></div>
 				
 				<div id="boardTopView">
 					<div id="boardViewLeft">
-						인기 게시글<br>
+						<b>인기 게시글</b><br>
 						<div style="height:40px;"></div>
 						<img id="thumbnailArea" src="">
 						
@@ -171,11 +218,14 @@
 					</div>
 					<div id="boardViewRight">
 						<div style="height:150px;">.</div>
-						<div id="boardViewMore">더보기 ></div>
+						<div id="boardViewMore" onclick="location.href='actionList.ch'">더보기 ></div>
 					</div>
 				</div>
 				
 				<script>
+					var isMouseOver = 0;
+					var topBoardNum = 0;
+					
 					$('.boardViewButton').hover(function() {
 						if($(this).css('background-color') != 'rgb(255, 255, 255)') {
 							$(this).css("background-color", "black")
@@ -212,17 +262,77 @@
 					$('.boardTitle').click(function(){
 						location.href='detail.bo?boNum=' + $(this).next().val()
 					}).hover(function(){
+						isMouseOver = 1;
+						$('.boardTitle').css('color', 'black');
+						$(this).css('color', '#f44336');
 						if($(this).next().next().val() == "") {
 							$('#thumbnailArea').attr('src', '${ contextPath }/resources/images/emptyImage.png');
 						} else {
-							$('#thumbnailArea').attr('src', $(this).next().next().next().val() + '/' + $(this).next().next().val());
+							var imgPath = $(this).next().next().next().val();
+							$('#thumbnailArea').attr('src', '${ contextPath }/resources/free_photo_upload/' + imgPath.substring(imgPath.length-8) + '/' + $(this).next().next().val());
 						}
+					}, function(){
+						isMouseOver = 0;
+						$('.boardTitle').css('color', 'black');
+					});
+					
+					!function topBoard(){
+						setTimeout(function() {
+							if(isMouseOver == 0) {
+								$('.boardTitle').css('color', 'black');
+								$('.boardTitle').eq(topBoardNum).css('color', '#f44336');
+								
+								if($('.boardTitle').eq(topBoardNum).next().next().val() == "") {
+									$('#thumbnailArea').attr('src', '${ contextPath }/resources/images/emptyImage.png');
+								} else {
+									var imgPath = $('.boardTitle').eq(topBoardNum).next().next().next().val();
+									$('#thumbnailArea').attr('src', '${ contextPath }/resources/free_photo_upload/' + imgPath.substring(imgPath.length-8) + '/' + $('.boardTitle').eq(topBoardNum).next().next().val());
+								}
+								
+								if(topBoardNum != 9) {
+									topBoardNum++;
+								} else {
+									topBoardNum = 0;
+								}
+							}
+							
+							topBoard();
+						}, 1500)
+					}()
+				</script>
+				
+				<div style="height:100px;"></div>
+				
+				<div id="pointBoardView">
+					<div id="pointBoardLeft">
+						<div id="pointBoardBoldText">포인트 게시판</div>
+						포인트게시판입니당.<br>
+						대충 설명이랑 바로가기 링크
+					</div>
+					<span id="pointBoardRight">
+						<span class="pointItem">1번상품 상품 이미지 정보 링크 추가될 예정</span>
+						<span class="pointItem">2번상품</span>
+						<span class="pointItem">3번상품</span>
+						<span class="pointItem">4번상품</span>
+						<span class="pointItem">5번상품</span>
+						<span class="pointItem">6번상품</span>
+					</span>
+				</div>
+				
+				<script>
+					$('#pointBoardRight').slick({
+						autoplay : true,
+						dots: false,
+						infinite: true,
+						speed: 300,
+						autoplaySpeed: 2000,
+						slidesToShow: 1,
+						centerMode: true,
+						variableWidth: true
 					});
 				</script>
 				
 				<div style="height:100px;"></div>
-				<div style="text-align: center; border: 1px solid black;">포인트 게시판 나오는거 봐서 연결시켜줄 부분</div>
-				
 			</div>
         <div id="right-side" style="background: blue">
             

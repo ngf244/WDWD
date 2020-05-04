@@ -282,4 +282,8 @@ public class CBoardDAO {
 			return 0;
 		}
 	}
+
+	public String callmeId(SqlSessionTemplate sqlSession, String nickName) {
+		return sqlSession.selectOne("cBoardMapper.callmeId", nickName);
+	}
 }

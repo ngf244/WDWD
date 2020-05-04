@@ -269,7 +269,7 @@
 			<span class="redColor">＞ </span> 의뢰인
 		</div>
 		<div class="rightLine">
-			${ cBoard.boWriter }
+			<span class="smallOption">${ cBoard.boWriter }</span>
 		</div>
 		
 		<c:if test="${ cBoard.boGroup ne 2 && cBoard.boGroup ne 7 }">

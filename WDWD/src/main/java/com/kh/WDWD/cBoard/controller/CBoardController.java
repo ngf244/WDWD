@@ -663,6 +663,18 @@ public class CBoardController {
 		}
 	}
 	
+	@RequestMapping(value = "callmeId.ch")
+	public void topList(@RequestParam("nickName") String nickName, HttpServletResponse response) {
+		String userId = cBoardService.callmeId(nickName);
+		
+		try {
+			response.setContentType("application/json; charset=UTF-8");
+			new Gson().toJson(userId, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
   @RequestMapping("workList.my")
 	public ModelAndView workListView(@ModelAttribute Request request, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		

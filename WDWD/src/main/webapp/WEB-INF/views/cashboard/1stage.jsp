@@ -92,7 +92,7 @@
 								<c:if test="${ r.reId eq sessionScope.loginUser.nickName }">
 									<div class="editorList" style="background: rgba(161, 206, 244, 0.55);">
 										<div class="editorId">
-											${ r.reId }
+											<span class="smallOption">${ r.reId }</span>
 										</div>
 										<div class="editorDate">
 											<c:if test="${ cBoard.boGroup eq 3 }">
@@ -117,7 +117,7 @@
 								<c:if test="${ r.reId ne sessionScope.loginUser.nickName }">
 									<div class="editorList">
 										<div class="editorId">
-											${ r.reId }
+											<span class="smallOption">${ r.reId }</span>
 										</div>
 										<div class="editorDate">
 											<c:if test="${ cBoard.boGroup eq 3 }">
@@ -189,7 +189,7 @@
 							</c:if>
 						</c:if>
 
-						<div id="cancle" class="button">돌아가기</div>
+						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
 					</div>
 					
 					<script>
@@ -312,8 +312,10 @@
 												var $subDiv1 = $('<div class="editorId">');
 												var $subDiv2 = $('<div class="editorDate">');
 												var $subDiv3 = $('<div class="editorCheck">');
+												var $span = $('<span class="smallOption">');
 												
-												$subDiv1.text(data.list[i].reId);
+												$span.text(data.list[i].reId);
+												$subDiv1.append($span);
 												
 												if('${ cBoard.boGroup }' == 3) {
 													var cashNum = data.list[i].reCash;
@@ -336,8 +338,10 @@
 												var $subDiv1 = $('<div class="editorId">');
 												var $subDiv2 = $('<div class="editorDate">');
 												var $subDiv3 = $('<div class="editorCheck">');
+												var $span = $('<span class="smallOption">');
 												
-												$subDiv1.text(data.list[i].reId);
+												$span.text(data.list[i].reId);
+												$subDiv1.append($span);
 												
 												if('${ cBoard.boGroup }' == 3) {
 													var cashNum = data.list[i].reCash;

@@ -675,7 +675,7 @@
 					
 					<div id="btnList">
 						<div id="submit" class="button">작성완료</div>
-						<div id="cancle" class="button">돌아가기</div>
+						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
 					</div>
 					
 					<script>

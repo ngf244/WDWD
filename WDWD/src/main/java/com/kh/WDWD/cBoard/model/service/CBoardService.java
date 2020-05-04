@@ -89,6 +89,8 @@ public interface CBoardService {
 	
 	int directFalse(int boNum);
 	
+	String callmeId(String nickName);
+	
 
 	
 
