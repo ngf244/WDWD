@@ -134,10 +134,44 @@
 		values (bo_seq.currval, 1, #{cbSecret}, #{cbCash}, 1, #{cbStep1}, #{cbStep2}, #{cbStep3}, #{cbStep4}, #{cbStep5}, #{cbDate}, #{cbPrimium})
 	</insert>
 	
+	<insert id="directRequest" parameterType="Request">
+		insert into request
+		values (#{reNum}, #{reId}, #{reCash}, #{rePlz}, null, sysdate, default)
+	</insert>
+	
+	<select id="directWho" parameterType="_int" resultMap="requestResultSet2">
+		select * from request
+		where re_num = #{boNum}
+	</select>
+	
+	<update id="MinusCash" parameterType="CBoard">
+		update member
+		set me_cash = me_cash - #{cbCash}
+		<if test='cbPrimium.equals("Y")'>-10000</if>
+		where me_nick = #{boWriter}
+	</update>
+	
+	<insert id="MinusDetail" parameterType="CBoard">
+		insert into point_cash
+		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>+10000</if>, sysdate, 'C', (select me_id from member where me_nick = #{boWriter}))
+	</insert>
+	
+	<update id="PlusCash" parameterType="_int">
+		update member
+		set me_cash = me_cash + (select cb_cash from cash_board where cb_num = #{boNum})
+		where me_id = (select re_id from request where re_num = #{boNum} and re_plz = 'Y') 
+	</update>
+	
+	<insert id="PlusDetail" parameterType="_int">
+		insert into point_cash
+		values (pc_seq.nextval, '의뢰 수주', (select cb_cash from cash_board where cb_num = #{boNum}), sysdate, 'C', (select re_id from request where re_num = #{boNum} and re_plz = 'Y'))
+	</insert>
+	
 	<select id="cBoardSelect" resultMap="CBoardResultSet">
 		select *
 		from board
 		join cash_board on (board.bo_num = cash_board.cb_num)
+		join member on (board.bo_writer = member.me_id)
 		where bo_num = (select max(bo_num) from board)
 	</select>
 	
@@ -165,6 +199,13 @@
 		select *
 		from contents
 		where con_ref = #{boNum} and con_status = 'Y'
+		order by con_level
+	</select>
+	
+	<select id="fileListContest" parameterType="_int" resultMap="ContentsResultSet">
+		select *
+		from contents
+		where con_ref = (select re_refnum from request where re_num = #{boNum} and re_plz = 'Y') and con_status = 'Y'
 		order by con_level
 	</select>
 	
@@ -265,6 +306,35 @@
 		where cb_num = #{reNum}
 	</update>
 	
+	<update id="change2stage1" parameterType="_int">
+		update board
+		set bo_group = 2
+		where bo_num = #{boNum}
+	</update>
+	
+	<update id="change2stage2" parameterType="_int">
+		update cash_board
+		set cb_step = 2
+		where cb_num = #{boNum}
+	</update>
+	
+	<update id="change2stage3" parameterType="_int">
+		update request
+		set re_plz = 'Y'
+		where re_num = #{boNum}
+	</update>
+	
+	<update id="directFalse1" parameterType="_int">
+		update board
+		set bo_group = 2
+		where bo_num = #{boNum}
+	</update>
+	
+	<delete id="directFalse2" parameterType="_int">
+		delete from request
+		where re_num = #{boNum}
+	</delete>
+	
 	<update id="go3stage" parameterType="_int">
 		update cash_board
 		set cb_step = 3
@@ -332,6 +402,13 @@
  		delete from board
  		where bo_num = #{reRefNum}
  	</delete>
+ 	
+ 	<select id="getProfileImg" parameterType="string" resultType="string">
+ 		select con_cop
+ 		from contents
+ 		join member on (con_num = me_con_num)
+ 		where me_nick = #{boWriter}
+ 	</select>
  	
 	<select id="getMyReqListCount" parameterType="CBoard" resultType="_int">
 		select count(*)
@@ -598,5 +675,11 @@
 		
 		
 	</select>	
+	
+	<select id="callmeId" parameterType="string" resultType="string">
+		select me_id
+		from member
+		where me_nick = #{nickName}
+	</select>
 
 </mapper>

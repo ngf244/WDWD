@@ -269,10 +269,10 @@
 			<span class="redColor">＞ </span> 의뢰인
 		</div>
 		<div class="rightLine">
-			${ cBoard.boWriter }
+			<span class="smallOption">${ cBoard.boWriter }</span>
 		</div>
 		
-		<c:if test="${ cBoard.boGroup ne 2 }">
+		<c:if test="${ cBoard.boGroup ne 2 && cBoard.boGroup ne 7 }">
 			<div class="leftLine">
 				<span class="redColor">＞ </span>마감일
 			</div>
@@ -434,7 +434,7 @@
 	</div>
 	
 	<script>
-		if('${param.sysMsg}' == "3" && "${sessionScope.loginUser.nickName}" == "${ cBoard.boWriter }" && "${ cBoard.boGroup }" != 2) {
+		if('${param.sysMsg}' == "3" && "${sessionScope.loginUser.nickName}" == "${ cBoard.boWriter }" && "${ cBoard.boGroup }" != 2 && "${ cBoard.boGroup }" != 7) {
 			var socket = io("http://localhost:82");
 			var data = {"boNum":"${cBoard.boNum}", "cbDate":"${cBoard.cbDate}"};
 			socket.emit("addCount", data);
