@@ -39,6 +39,7 @@ import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
+import com.kh.WDWD.kakaoAPI.model.service.KakaoAPI;
 import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
@@ -53,6 +54,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mService;
+	
+	@Autowired
+	private KakaoAPI kakao;
 	
 	@RequestMapping(value="login.me",method=RequestMethod.POST)
 	public String memberLogin(@ModelAttribute Member m, Model model) {
@@ -445,8 +449,38 @@ public class MemberController {
 			e.printStackTrace();
 		}
 	}
-  
-  
+  	
+  	@RequestMapping("kakaoLogin.my")
+  	public ModelAndView kakaoLogin(@RequestParam("code") String code, HttpSession session, ModelAndView mv) {
+  	    System.out.println("code : " + code);
+  	    
+		String access_Token = kakao.getAccessToken(code);
+		HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
+	    System.out.println("login Controller : " + userInfo);
+	    
+	    Member m = new Member();
+	    m.setNickName((String)userInfo.get("nickName"));
+	    m.setEmail((String)userInfo.get("email"));
+	    m.setProfileImg((String)userInfo.get("profileImg"));
+	    
+	    //    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
+	    if (userInfo.get("email") != null) {
+	        mv.addObject("member", m);
+	    	mv.setViewName("redirect:index.home");
+	    	session.setAttribute("userId", userInfo.get("email"));
+	        session.setAttribute("access_Token", access_Token);
+	    }
+  	    return mv;
+  	}
+  	
+  	@RequestMapping(value="kakaoLogout.my")
+  	public String kakaoLogout(HttpSession session) {
+  	    kakao.kakaoLogout((String)session.getAttribute("access_Token"));
+  	    session.removeAttribute("access_Token");
+  	    session.removeAttribute("userId");
+  	    return "redirect:index.home";
+  	}
+
 }
 	
 	
