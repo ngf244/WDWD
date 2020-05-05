@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<!-- <script src="http://localhost:82/socket.io/socket.io.js"></script> -->
+<script src="http://localhost:82/socket.io/socket.io.js"></script> 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -443,6 +443,7 @@
 						data: {userId: '${ sessionScope.loginUser.userId }'},
 						type: 'post',
 						success: function(data) {
+							console.log(data);
 							var list = data.list;
 															
 							var point = Number(list[0].point);
@@ -458,33 +459,39 @@
 								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
 							}
 							
+							var recentlyCheck = 1;
 							for(var i = 1; i < 6; i++) {
-								if(list[0].recent1 == list[i].boNum) {
-									$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(0).text(list[i].boTitle);
-									$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
-								} else if(list[0].recent2 == list[i].boNum) {
-									$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(1).text(list[i].boTitle);
-									$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
-								} else if(list[0].recent3 == list[i].boNum) {
-									$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(2).text(list[i].boTitle);
-									$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
-								} else if(list[0].recent4 == list[i].boNum) {
-									$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(3).text(list[i].boTitle);
-									$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
-								} else if(list[0].recent5 == list[i].boNum) {
-									$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(4).text(list[i].boTitle);
-									$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
+								if(list[recentlyCheck].boGroup == null) {
+									break;
+								} else {
+									if(list[0].recent1 == list[i].boNum) {
+										$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(0).text(list[i].boTitle);
+										$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
+									} else if(list[0].recent2 == list[i].boNum) {
+										$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(1).text(list[i].boTitle);
+										$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
+									} else if(list[0].recent3 == list[i].boNum) {
+										$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(2).text(list[i].boTitle);
+										$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
+									} else if(list[0].recent4 == list[i].boNum) {
+										$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(3).text(list[i].boTitle);
+										$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
+									} else if(list[0].recent5 == list[i].boNum) {
+										$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(4).text(list[i].boTitle);
+										$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
+									}
+									recentlyCheck++;
 								}
 							}
 							
-							for(var i = 6; i < 9; i++) {
-								$('.scrapBoard').eq(i-6).next().val(list[i].boNum);
-								$('.scrapBoard').eq(i-6).text(list[i].boTitle);
+							for(var i = 0; i < 3; i++) {
+								$('.scrapBoard').eq(i).next().val(list[recentlyCheck + i].boNum);
+								$('.scrapBoard').eq(i).text(list[recentlyCheck + i].boTitle);
 							}
 							
 							setTimeout(function() {

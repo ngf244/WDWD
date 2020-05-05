@@ -3,6 +3,7 @@ package com.kh.WDWD.cBoard.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
@@ -92,6 +93,14 @@ public interface CBoardService {
 	int directFalse(int boNum);
 	
 	String callmeId(String nickName);
+	
+	int goDispute(Dispute d);
+	
+	ArrayList<Dispute> dpList(int boNum);
+		
+	int cancleDispute(Dispute d);
+	
+	int endDispute(Dispute d);
 	
 
 	

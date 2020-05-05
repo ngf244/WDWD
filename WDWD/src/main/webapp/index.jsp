@@ -16,8 +16,11 @@
 		border: 1px solid black;
 	}
 	#boardTopView {
-		width: 80%;
+		width: 78%;
 		margin-left: 10%;
+		padding: 1%;
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 13px;
+		background-color: #F3F3F3;
 	}
 	#boardViewLeft {
 		text-align: center;
@@ -96,31 +99,190 @@
 		font-weight: bold;
 		color: black;
 	}
-	#pointBoardView {
+	#editorRank {
+		position: relative;
 		width: 80%;
 		margin-left: 10%;
 		height: 250px;
+		text-align: center;
+		background-color: #F3E5F5;
+		font-weight: bold;
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 13px;
+	}
+	#rankStart {
+		position: absolute;
+		width: 45%;
+		left: 2%;
+		top: 15px;
+		text-align: center;
+		font-size: 18pt;
+		font-weight: bold;
+	}
+	#rankNo1 {
+		position: absolute;
+		width: 45%;
+		height: 160px;
+		left: 2%;
+		bottom: 25px;
+		background-color: #D6ADDC;
+		color: white;
+	}
+	#rank1Profile {
+		position: absolute;
+		height: 120px;
+		width: 120px;
+		top: 20px;
+		left: 20px;
+	}
+	#number1 {
+		position: absolute;
+		height: 80px;
+		top: 40px;
+		left: 150px;
+	}
+	#rankNo1 div {
+		position: absolute;
+		height: 80px;
+		left: 240px;
+		top: 40px;
+		font-size: 20pt;
+		line-height: 40px;
+	}
+	#rankNo2 {
+		position: absolute;
+		width: 25%;
+		height: 200px;
+		left: 50%;
+		bottom: 25px;
+		background-color: #D6ADDC;
+		color: white;
+	}
+	#rank2Profile {
+		position: absolute;
+		height: 100px;
+		width: 65%;
+		top: 10px;
+		left: 17%;
+	}
+	#number2 {
+		position: absolute;
+		height: 50px;
+		top: 130px;
+		left: 15px;
+	}
+	#rankNo2 div {
+		position: absolute;
+		height: 50px;
+		left: 70px;
+		top: 130px;
+		font-size: 14pt;
+		line-height: 25px;
+	}
+	#rankNo3 {
+		position: absolute;
+		width: 20%;
+		height: 60px;
+		right: 2%;
+		top: 25px;
+		background-color: #D6ADDC;
+		color: white;
+	}
+	
+	#rankNo4 {
+		position: absolute;
+		width: 20%;
+		height: 60px;
+		right: 2%;
+		top: 95px;
+		background-color: #D6ADDC;
+		color: white;
+	}
+	#rankNo5 {
+		position: absolute;
+		width: 20%;
+		height: 60px;
+		right: 2%;
+		bottom: 25px;
+		background-color: #D6ADDC;
+		color: white;
+	}
+	#rank3Profile, #rank4Profile, #rank5Profile {
+		position: absolute;
+		height: 50px;
+		width: 50px;
+		top: 5px;
+		left: 5px;
+	}
+	#rankNo3 div, #rankNo4 div, #rankNo5 div {
+		position: absolute;
+		height: 50px;
+		left: 70px;
+		top: 5px;
+		font-size: 12pt;
+		line-height: 25px;
+	}
+	#pointBoardView {
+		width: 78%;
+		height: 200px;
+		padding: 1%;
+		margin-left: 10%;
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 13px;
+		background-color: #EDFAF7;
 	}
 	#pointBoardLeft {
 		float: left;
-		width: 40%;
+		width: 35%;
 		text-align: center;
-		height: 100%;
-		border: 1px solid black;
+		padding: 10px;
+		background-color: #B9E9DE;
 	}
 	#pointBoardBoldText {
 		font-size: 18pt;
 		font-weight: bold;
 	}
+	#pointViewMore {
+		width: 80px;
+		margin: 0 auto;
+		height: 40px;
+		line-height: 40px;
+		font-size: 12pt;
+		text-align: center;
+		border-radius: 5px;
+		border: 1px solid black;
+		cursor: pointer;
+		font-weight: bold;
+		color: black;
+	}
 	#pointBoardRight {
 		float: right;
-		width: 55%;
+		width: 60%;
 	}
 	.pointItem {
-		width: 200px;
-		height: 150px;
+		width: 150px;
+		height: 190px;
 		border: 1px solid black;
 		margin-right: 40px;
+		text-align: center;
+	}
+	.pointItem img {
+		width: 130px;
+		height: 120px;
+		border: 1px solid black;
+		margin-left: 10px;
+		margin-top: 10px;
+	}
+	.itemName {
+		line-height: 25px;
+		font-size: 15px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 130px;
+	}
+	.itemPrice {
+		line-height: 25px;
+		color: rgb(255, 68, 127);
+		font-size: 17px;
 	}
 </style>
 <title>Insert title here</title>
@@ -306,20 +468,86 @@
 				
 				<div style="height:100px;"></div>
 				
+				<div id="editorRank">
+					<div id="rankStart">에디터 랭킹</div>
+					<div id="rankNo1">
+						<img id="rank1Profile">
+						<img id="number1" src="${ contextPath }/resources/images/number-1.jpg">
+						<div>
+							운영자<br>
+							1,000 POINT
+						</div>
+					</div>
+					<div id="rankNo2">
+						<img id="rank2Profile">
+						<img id="number2" src="${ contextPath }/resources/images/number-2.jpg">
+						<div>
+							동동이<br>
+							500 POINT
+						</div>
+					</div>
+					<div id="rankNo3">
+						<img id="rank3Profile">
+						<div>
+							동동이<br>
+							300 POINT
+						</div>
+					</div>
+					<div id="rankNo4">
+						<img id="rank4Profile">
+						<div>
+							동동이<br>
+							200 POINT
+						</div>
+					</div>
+					<div id="rankNo5">
+						<img id="rank5Profile">
+						<div>
+							동동이<br>
+							100 POINT
+						</div>
+					</div>
+				</div>
+				
+				<div style="height:100px;"></div>
+				
 				<div id="pointBoardView">
 					<div id="pointBoardLeft">
-						<div id="pointBoardBoldText">포인트 게시판</div>
-						포인트게시판입니당.<br>
-						대충 설명이랑 바로가기 링크
+						<div id="pointBoardBoldText">포인트 SHOP</div>
+						<div style="height:30px;"></div>
+						회원 활동으로 모은 포인트<br>
+						사용할 수 있는 공간입니다.
+						<div style="height:30px;"></div>
+						<div id="pointViewMore" onclick="location.href='pointShop.ps'">더보기 ></div>
 					</div>
-					<span id="pointBoardRight">
-						<span class="pointItem">1번상품 상품 이미지 정보 링크 추가될 예정</span>
-						<span class="pointItem">2번상품</span>
-						<span class="pointItem">3번상품</span>
-						<span class="pointItem">4번상품</span>
-						<span class="pointItem">5번상품</span>
-						<span class="pointItem">6번상품</span>
-					</span>
+					<div id="pointBoardRight">
+						<div class="pointItem">
+							<img>
+							<div class="itemName">문화상품권 5천원권</div>
+							<div class="itemPrice">500 POINT</div>
+						</div>
+						
+						<div class="pointItem">
+							<img>
+							<div class="itemName">문화상품권 5천원권</div>
+							<div class="itemPrice">500 POINT</div>
+						</div>
+						<div class="pointItem">
+							<img>
+							<div class="itemName">문화상품권 5천원권</div>
+							<div class="itemPrice">500 POINT</div>
+						</div>
+						<div class="pointItem">
+							<img>
+							<div class="itemName">문화상품권 5천원권</div>
+							<div class="itemPrice">500 POINT</div>
+						</div>
+						<div class="pointItem">
+							<img>
+							<div class="itemName">문화상품권 5천원권</div>
+							<div class="itemPrice">500 POINT</div>
+						</div>
+					</div>
 				</div>
 				
 				<script>
@@ -335,6 +563,7 @@
 					});
 				</script>
 				
+				<div class="sectionafter"></div>
 				<div style="height:100px;"></div>
 			</div>
         <div id="right-side" style="background: blue">

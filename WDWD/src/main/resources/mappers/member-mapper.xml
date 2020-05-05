@@ -308,8 +308,9 @@
 	<select id="recentlyScrapList" parameterType="Member" resultMap="boardResultSet">
 		select *
 		from (select * from scrap
-		  	 join board on (me_id = bo_writer)
-			 where me_id = #{userId})
+		  	 join board using (bo_num)
+			 where me_id = #{userId}
+			 order by scrap_date desc)
 		<![CDATA[
 		where rownum <= 3
 		]]>
