@@ -41,7 +41,7 @@
 	  color: crimson;
 	  width: 250px;
 	}
-	span {
+	.span1 {
 	  display: block;
 	}
 	.shadow:before,
@@ -176,7 +176,8 @@
 	  width: 60px;
 	  height: 34px;
 	  vertical-align:middle;
-	  margin-left: 2%;
+	  margin-left: 55%;
+	  
 	}
 	
 	/* Hide default HTML checkbox */
@@ -417,6 +418,7 @@
 		line-height: 50px;
 		cursor: pointer;
 	} */
+	.stepSpan{display: block;}
 	.myReqWorkStateArea{height: 700px; margin-top: 25px;}
 	#myReqStateText{font-size: 15pt; color: white; font-weight: bolder; padding-left: 30px; margin-top: 15px; padding-top: 10px;}
 	#myWorkStateText{font-size: 15pt; color: white; font-weight: bolder; padding-left: 30px; margin-top: 15px; padding-top: 10px;}
@@ -466,6 +468,7 @@
 		border: 1px solid lightgrey;
 		float: left;
 		display: line-block;
+		cursor: pointer;
 	}
 	
 	.portDate{
@@ -565,6 +568,7 @@
 		height: 40px;
 		float: right;
 		margin-top: 8px;
+		cursor: pointer;
 	}
 	
 	.portpolioNameContents{
@@ -772,11 +776,11 @@
 					<div id="mypageText">마이페이지</div>
 					<!-- <div class="requestBtn"><b>의뢰 요청</b></div> -->
 					<button id="reqGifBtn">
-					  <span class="shadow">
-					    <span class="vert">
-					      <span class="floating">
-					        <span class="front">Request</span>
-					        <span class="back">Request</span>
+					  <span class="shadow span1">
+					    <span class="vert span1">
+					      <span class="floating span1">
+					        <span class="front span1">Request</span>
+					        <span class="back span1">Request</span>
 					      </span>
 					    </span>
 					  </span>
@@ -799,35 +803,79 @@
 								<input type="file" hidden="" name="profileImg" id="profileImg" multiple="multiple" onchange="LoadImg(this)">
 							</form>
 						</div>
-						<c:if test="${ member.userId eq loginUser.userId }"><button id="profileEditBtn" style="width: 120px; margin-left: 640px;">프로필 수정</button></c:if>
+						<c:if test="${ member.userId eq loginUser.userId }"><button id="profileEditBtn" style="width: 120px; margin-left: 180px;">프로필 수정</button></c:if>
 						<span id="userId" class="smallOption">${ member.nickName }</span><span style="display: inline-block;">님</span>
 						<c:if test="${ member.userId eq loginUser.userId }">
-							<label class="switch">
-								<input type="checkbox">
-								<span class="slider round"></span>
-							</label>
-							<p class="secretOption">공개</p><p class="secretOption" style="display:none;">비공개</p>
+								<c:choose>
+									<c:when test="${ member.easy eq 'N'}">
+										<label class="switch">
+											<input type="checkbox">
+											<span class="slider round"></span>
+										</label>
+										<p class="secretOption">공개</p><p class="secretOption" style="display:none;">비공개</p>
+									</c:when>
+									<c:otherwise>
+										<label class="switch">
+											<input type="checkbox" checked>
+											<span class="slider round"></span>
+										</label>
+										<p class="secretOption" style="display:none;">공개</p><p class="secretOption">비공개</p>
+									</c:otherwise>
+								</c:choose>
 						</c:if>
 						<div id="normalInfoArea">
 							<table id="userInfoTable">
 								<tr>
 									<td>>이메일 : </td>
-									<td>${ member.email }</td>
+									<td>
+										<c:choose>
+											<c:when test="${ member.easy eq 'N' }">
+												${ member.email }
+											</c:when>
+											<c:otherwise>
+												(비공개)
+											</c:otherwise>
+										</c:choose>
+									</td>
 									<td>>이름 : </td>
-									<td>${ member.userName }</td>
+									<td>
+										<c:choose>
+											<c:when test="${ member.easy eq 'N' }">
+												${ member.userName }
+											</c:when>
+											<c:otherwise>
+												(비공개)
+											</c:otherwise>
+										</c:choose>
+									</td>
 								</tr>
 								<tr>
 									<td>>전화번호 : </td>
-									<td>${ member.phone }</td>
+									<td>
+										<c:choose>
+											<c:when test="${ member.easy eq 'N' }">
+												${ member.phone }
+											</c:when>
+											<c:otherwise>
+												(비공개)
+											</c:otherwise>
+										</c:choose>
+									</td>
 									<td>>은행명 : </td>
 									<td>
-										<c:if test="${ member.bank eq null }">
-											내용 없음
-										</c:if>
-										<c:if test="${ member.bank ne null }">
-											${ member.bank }
-										</c:if>
-										
+										<c:choose>
+											<c:when test="${ member.easy eq 'N' }">
+												<c:if test="${ member.bank eq null }">
+													내용 없음
+												</c:if>
+												<c:if test="${ member.bank ne null }">
+													${ member.bank }
+												</c:if>
+											</c:when>
+											<c:otherwise>
+												(비공개)
+											</c:otherwise>
+										</c:choose>
 									</td>
 									
 								</tr>
@@ -855,12 +903,19 @@
 									</td>
 									<td>>계좌번호 : </td>
 									<td>
-										<c:if test="${ member.account eq null }">
-											내용 없음
-										</c:if>
-										<c:if test="${ member.account ne null }">
-											${ member.account }
-										</c:if>
+										<c:choose>
+											<c:when test="${ member.easy eq 'N' }">
+												<c:if test="${ member.account eq null }">
+													내용 없음
+												</c:if>
+												<c:if test="${ member.account ne null }">
+													${ member.account }
+												</c:if>
+											</c:when>
+											<c:otherwise>
+												(비공개)
+											</c:otherwise>
+										</c:choose>
 									</td>
 								</tr>								
 							</table>
@@ -995,61 +1050,61 @@
 							<div class="myReqState">
 								<div id="myReqStateText">의뢰 현황</div>
 								<div class="recruit">
-									<span class="stepText">STEP 1. 지원자 모집 중</span>
+									<span class="stepText stepSpan">STEP 1. 지원자 모집 중</span>
 									<div class="innerArea" onclick="goToMyReqList(1);">
 										<div class="innerAreaText">${ rwCount[0] } </div>건
 									</div>
-									<span>캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 지원자를 모집하고 있는 글 개수를 나타냅니다.</span>
 								</div>
 								<div id="arrow_icon_area">
 									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
 								</div>
 								<div class="working1">
-									<span class="stepText">STEP 2. 작업 진행 중</span>
+									<span class="stepText stepSpan">STEP 2. 작업 진행 중</span>
 									<div class="innerArea" onclick="goToMyReqList(2);">
 										<div class="innerAreaText">${ rwCount[1] } </div>건
 									</div>
-									<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
 								</div>
 								<div id="arrow_icon_area">
 									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
 								</div>
 								<div class="complete1">
-									<span class="stepText">STEP 3. 거래 완료</span>
+									<span class="stepText stepSpan">STEP 3. 거래 완료</span>
 									<div class="innerArea" onclick="goToMyReqList(3);">
 										<div class="innerAreaText">${ rwCount[2] } </div>건
 									</div>
-									<span>캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
 								</div>						
 							</div>
 							<div class="myWorkState">
 								<div id="myWorkStateText">작업 현황</div>
 								<div class="participate">
-									<span class="stepText">STEP 1. 참가 지원 중</span>
+									<span class="stepText stepSpan">STEP 1. 참가 지원 중</span>
 									<div class="innerArea" onclick="goToMyWorkList(1)">
 										<div class="innerAreaText">${ rwCount[3] } </div>건
 									</div>
-									<span>캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 참여 신청한 글 개수를 나타냅니다.</span>
 								</div>
 								<div id="arrow_icon_area">
 									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
 								</div>
 								<div class="working2">
-									<span class="stepText">STEP 2. 작업 진행 중</span>
+									<span class="stepText stepSpan">STEP 2. 작업 진행 중</span>
 									<div class="innerArea" onclick="goToMyWorkList(2)">
 										<div class="innerAreaText">${ rwCount[4] } </div>건
 									</div>
-									<span>캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 매칭이 되어 작업이 진행 중인 글 개수를 나타냅니다.</span>
 								</div>
 								<div id="arrow_icon_area">
 									<img class="arrow" src="${ contextPath }/resources/images/arrow_icon3.png" width="100" height="100"/>
 								</div>
 								<div class="complete2">
-									<span class="stepText">STEP 3. 거래 완료</span>
+									<span class="stepText stepSpan">STEP 3. 거래 완료</span>
 									<div class="innerArea" onclick="goToMyWorkList(3)">
 										<div class="innerAreaText">${ rwCount[5] } </div>건
 									</div>
-									<span>캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 작업이 끝나 거래가 완료 된 글 개수를 나타냅니다.</span>
 								</div>
 								<div style="clear: both;"></div>					
 							</div>
@@ -1695,6 +1750,13 @@
     				});
                 }
              });
+		});
+		
+		// 포트폴리오 수정 기능 연결
+		$('.updateBtn').on('click', function(){
+			console.log($(this).prev());
+			$(this).prev().attr('action', 'uPortView.my');
+			$(this).prev().submit();
 		});
 		
 		$('#userPwd').blur(function(){
