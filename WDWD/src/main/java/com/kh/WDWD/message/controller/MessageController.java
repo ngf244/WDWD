@@ -277,7 +277,7 @@ public class MessageController {
 		}
     }
 	
-	@RequestMapping("messageListAlert.ms")
+/*	@RequestMapping("messageListAlert.ms")
 	public void messageListAlert(HttpServletRequest request){
 		Member m = (Member)(request.getSession().getAttribute("loginUser"));
 		String loginUser = m.getUserId();
@@ -285,6 +285,6 @@ public class MessageController {
 		int listCount = MessageService.getMessageListCount(loginUser);
 		
 		System.out.println("누구의 listCount인가요?" + listCount);
-	}
+	}*/
 	
 }

@@ -356,7 +356,7 @@
 	<update id="updateSecretToggle" parameterType="string">
 		update member
 		set me_easy = 'Y'
-		where me_id = ${userId}
+		where me_id = #{userId}
 	</update>  
 	
 	<select id="getMemberList" resultMap="memberResultSet">

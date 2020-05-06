@@ -47,7 +47,7 @@ public interface MemberService {
 	ArrayList<PointNCash> selectRecentlyCashChange(String userId);
 
 	// 회원가입시 유저 아이디 체크
-	int userIdCheck(String user_id);
+	Member userIdCheck(String user_id);
 	
 	int getMyPagePortCount(String userId);
 

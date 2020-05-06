@@ -60,6 +60,7 @@
 	line-height: 70px;
 	color: white;
 	font-weight: bold;
+	cursor: pointer;
 	
 }
 
@@ -73,6 +74,7 @@
 	color: white;
 	line-height: 70px;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 .consent {
@@ -108,13 +110,16 @@ label{
 	text-align: center;
 }
 
+#joinForm{
+	text-align: center;
+}
 
 </style>
 </head>
 <body>
 		<div class="signuptitle">
-			<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.jsp';" id="textlogo">
-		</div>	
+			<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.home';" id="textlogo">
+		</div>
 			<form action="signUp.me" method="post" id="joinForm">
 		
 		<!-- 아이디  -->
@@ -138,7 +143,7 @@ label{
 		<!-- 비밀번호 재확인 -->
 		<div class="form-group">
 			<label for="inform">비밀번호 재확인</label><br>
-			<input type="password" id="signpwd2" name="userPwd" class="form-control" placeholder="비밀번호 확인">
+			<input type="password" id="signpwd2" name="userPwd2" class="form-control" placeholder="비밀번호 확인">
 			<div class="check_font" id="pw2_check">
 			<br>
 			</div>
@@ -152,15 +157,6 @@ label{
 			<br>
 			</div>
 		</div>
-		
-		<div class="form-group">
-			<label for="inform">생년월일</label><br>
-			<input type="text" id="signbirth" name="userbirth" class="form-control">
-			<div class="check_font" id="birth_check">
-			<br>
-			</div>
-		</div>
-		
 		
 		<div class="form-group">
 			<label for="inform">닉네임</label><br>
@@ -211,16 +207,16 @@ label{
 		</div>
 	
 		<div class="form-groupBtn">
-			<div id="cancel" onclick="location.href='gomain.me';">취소</div>
+			<div id="cancel" onclick="location.href='index.home';">취소</div>
 			<div id="signbutton">가입하기</div>
 		</div>
 		</form>
 	
 	<script type="text/javascript">
 		window.onload = function(){
-			document.getElementById('signButton').onclick = function () {
-				document.getElementById('joinForm').submit();
-			};
+			$('#signbutton').on('click', function(){
+				$('#joinForm').submit();
+			});
 		};
 	</script>
 	<script>
@@ -231,8 +227,9 @@ label{
 		// id = "id_reg" / name = "userId"
 		var user_id = $('#user_id').val();
 		$.ajax({
-			url : "signUp.me"
+			url : "checkId.me",
 			type : 'get',
+			data : {"user_id": user_id},
 			success : function(data) {
 				// f12 콘솔창에 중복확인 
 				// 1 = 중복되는 값
@@ -243,25 +240,22 @@ label{
 						// 1 : 아이디가 중복되는 문구
 						$("#id_check").text("사용중인 아이디입니다 :p");
 						$("#id_check").css("color", "red");
-						$("#user_id").attr("disabled", true);
-					} else {
+				} else {
 						
 						if(idJ.test(user_id)){
 							// 0 : 아이디 길이 / 문자열 검사
-							$("#id_check").text("");
-							$("#user_id").attr("disabled", false);
+							$("#id_check").text("사용 가능한 아이디입니다 :D");
+							$("#id_check").css("color", "green");
 				
 						} else if(user_id == ""){
 							
 							$('#id_check').text('아이디를 입력해주세요 :)');
 							$('#id_check').css('color', 'red');
-							$("#user_id").attr("disabled", true);				
 							
 						} else {
 							
 							$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
 							$('#id_check').css('color', 'red');
-							$("#user_id").attr("disabled", true);
 						}
 						
 					}
@@ -270,6 +264,49 @@ label{
 				}
 			});
 		});
+		
+		var idJ2 = /^[ㄱ-힣a-z0-9]{2,12}$/;
+		$("#signnick").blur(function() {
+			// id = "id_reg" / name = "userId"
+			var signNick = $('#signnick').val();
+			$.ajax({
+				url : "checkNick.my",
+				type : 'get',
+				data : {"nickName": signNick},
+				success : function(data) {
+					// f12 콘솔창에 중복확인 
+					// 1 = 중복되는 값
+					// 0 = 중복되는 값이 아닐시
+					console.log("1 = 중복o / 0 = 중복x : "+ data);							
+					
+					if (data == 1) {
+							// 1 : 아이디가 중복되는 문구
+							$("#nick_check").text("사용중인 닉네임입니다 :p");
+							$("#nick_check").css("color", "red");
+					} else {
+							
+							if(idJ2.test(signNick)){
+								// 0 : 아이디 길이 / 문자열 검사
+								$("#nick_check").text("사용 가능한 닉네임입니다 :D");
+								$("#nick_check").css("color", "green");
+					
+							} else if(signNick == ""){
+								
+								$('#nick_check').text('닉네임을 입력해주세요 :)');
+								$('#nick_check').css('color', 'red');
+								
+							} else {
+								
+								$('#nick_check').text("닉네임을 소문자와 숫자 2~12자리만 가능합니다 :) :)");
+								$('#nick_check').css('color', 'red');
+							}
+							
+						}
+					}, error : function() {
+							console.log("실패");
+					}
+				});
+			});
 </script>
 	<script>
 	//CapsLock 스크립트	
