@@ -459,14 +459,21 @@ public class MemberController {
 	    System.out.println("login Controller : " + userInfo);
 	    
 	    Member m = new Member();
-	    m.setNickName((String)userInfo.get("nickName"));
+	    m.setNickName((String)userInfo.get("nickname"));
 	    m.setEmail((String)userInfo.get("email"));
 	    m.setProfileImg((String)userInfo.get("profileImg"));
 	    
 	    //    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
 	    if (userInfo.get("email") != null) {
-	        mv.addObject("member", m);
-	    	mv.setViewName("redirect:index.home");
+	    	Member member = mService.selectMemberByEmail((String)userInfo.get("email"));
+	    	if(member != null) {
+	    		session.setAttribute("loginUser", member);
+	    		mv.addObject("member", member)
+	    		  .setViewName("redirect:index.home");
+	    	} else {
+	    		mv.addObject("member", m);
+		    	mv.setViewName("signup");
+	    	}
 	    	session.setAttribute("userId", userInfo.get("email"));
 	        session.setAttribute("access_Token", access_Token);
 	    }

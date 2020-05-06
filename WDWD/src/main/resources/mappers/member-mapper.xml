@@ -352,6 +352,12 @@
 		update member
 		set me_easy = 'N'
 		where me_id = #{userId}
-	</update>  
+	</update>
+	
+	<select id="selectMemberByEmail" parameterType="string" resultMap="memberResultSet">
+		select *
+		from member
+		where me_email = #{email}
+	</select>  
 </mapper>
 

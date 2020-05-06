@@ -81,5 +81,7 @@ public interface MemberService {
 
 	int updateSecretToggle2(String userId);
 
+	Member selectMemberByEmail(String string);
+
 }
 

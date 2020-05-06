@@ -159,4 +159,8 @@ public class MemberDAO {
 		return sqlSession.update("memberMapper.updateSecretToggle2", userId);
 	}
 
+	public Member selectMemberByEmail(SqlSessionTemplate sqlSession, String email) {
+		return sqlSession.selectOne("memberMapper.selectMemberByEmail", email);
+	}
+
 }

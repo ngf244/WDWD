@@ -187,5 +187,10 @@ public class MemberServiceImpl implements MemberService {
 	public int updateSecretToggle2(String userId) {
 		return mDAO.updateSecretToggle2(sqlSession, userId);
 	}
+
+	@Override
+	public Member selectMemberByEmail(String email) {
+		return mDAO.selectMemberByEmail(sqlSession, email);
+	}
 }
 

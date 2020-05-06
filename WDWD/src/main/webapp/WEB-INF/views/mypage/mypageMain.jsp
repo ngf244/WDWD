@@ -1889,7 +1889,7 @@
 		
 		$('#reqGifBtn').on('click',function(){
 			swal({
-                title: "해당 에디터가 요청 거절 시 공개요청으로 전환됩니다.",
+                title: "에디터가 요청 거절 시 공개요청으로 전환됩니다.",
                 icon: "info",
                 buttons : {
                    cancle : {
@@ -1917,7 +1917,7 @@
 		
 		$('.secretReq').on('click',function(){
 			swal({
-                title: "해당 에디터가 요청 거절 시 공개요청으로 전환됩니다.",
+                title: "에디터가 요청 거절 시 공개요청으로 전환됩니다.",
                 icon: "info",
                 buttons : {
                    cancle : {
