@@ -177,4 +177,28 @@
 		</choose>
 		where di_num = #{diNum}
 	</update>
+	
+	<select id="getChangeRequestList" resultMap="ChangeRequestResultSet">
+		select *
+		from point_cash
+		    join member on (pc_id = me_id)
+		where pc_con like '환전요청'
+		order by pc_date
+	</select>
+	
+	<resultMap type="ChangeRequest" id="ChangeRequestResultSet">
+		<id property="pc_num" column="PC_NUM"/>
+		<result property="pc_use" column="PC_USE"/>
+		<result property="pc_date" column="PC_DATE"/>
+		<result property="me_id" column="ME_ID"/>
+		<result property="me_nick" column="ME_NICK"/>
+		<result property="me_account" column="ME_ACOUNT"/>
+	</resultMap>
+	
+	<update id="deleteChangeRequest">
+		update point_cash
+		set pc_con = '환전요청(지급완료)'
+		where pc_num = #{pc_num}
+	</update>
+	
 </mapper>

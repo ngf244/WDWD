@@ -113,7 +113,7 @@
 		position: fixed;
 	}
 
-	#cashChargeArea .comeon{
+	.comeon{
 		margin-top: 50px;
 		font-size: 50px; 
 		font-weight: 900;
@@ -230,7 +230,47 @@
 	}	
 	#reqGifBtn{width: 60%; margin-top: 80px;}
 
-	/* 충전 버튼 끝 */
+	/* 버튼 끝 */
+
+	#overWrite{
+        width : 16%;
+		min-height : 600px;
+		float: left;
+    }
+	#cashChangeArea{
+		width: 20%;
+		min-height: 100px;
+		/* background-color: rgba(135, 197, 238, 0.863); */
+		text-align: center;
+		font-size: large;
+		position: fixed;
+		right: 1%;
+	}
+
+	.inputCashtoChange{
+		margin-top: 50px;
+		font-size: larger; 
+		font-weight: 600;
+		text-shadow: 0px 0px 4px rgb(218, 223, 231), 0px -5px 4px #ff3, 2px -10px 6px rgb(104, 196, 202), -2px -15px 11px rgb(146, 118, 192), 2px -19px 18px rgb(79, 49, 161);
+	}
+
+	input[type=number]{
+		height: 50px;
+        font-size: x-large;
+        font-weight: bolder;
+        width: 80%;
+        text-align: center;
+		text-shadow: 0px 0px 4px rgb(143, 148, 80);
+	}
+
+	input[type=number]::-webkit-inner-spin-button {
+        width: 30px;
+        height: 50px;
+    }
+
+	
+
+
 </style>
 <title>Cash 내역</title>
 </head>
@@ -254,7 +294,7 @@
 						<label for="happymoney">해피머니 : </label><input type="radio" value="happymoney" id="happymoney" name="way">&nbsp;
 						<label for="booknlife">도서문상 : </label><input type="radio" value="booknlife" id="booknlife" name="way">
 				</fieldset>
-				<button id="reqGifBtn">
+				<button id="reqGifBtn" class="moveBtn charge">
 					<span class="shadow">
 					  <span class="vert">
 						<span class="floating">
@@ -271,7 +311,7 @@
 				IMP.init('imp66715145');
 			}
 
-			$('#reqGifBtn').click(function () {
+			$('.charge').click(function () {
 				var way = $(":input:radio[name=way]:checked").val();
 				if(typeof way == "undefined"){
 					swal("뭘로하게?", "충전 수단을 선택해 주세요", "error");
@@ -282,7 +322,8 @@
 
 			function chargeAmountInput(way) {
 				swal({
-					text: '결제할 금액을 쳐넣어라.',
+					title: "How much?",
+					text: '결제할 금액을 넣어주세요',
 					icon: "info",
 					content: "input",
 					buttons : {
@@ -445,8 +486,63 @@
 				</div>
 			</div>
 		</div>
-		<div id="right-side">
-				
+		<div id="overWrite">
+			<div id="cashChangeArea">
+				<span class="comeon">환전은 이쪽이다<br> 애송이!</span>
+				<span class="inputCashtoChange">환전할 금액을 입력해라!<br>수수료는 10%!!</span><br>
+				<input type="number" max="${loginUser.cash}" step="100">
+				<br>
+				<button id="reqGifBtn" class="moveBtn change">
+					<span class="shadow">
+					  <span class="vert">
+						<span class="floating">
+						  <span class="front">환전! 가즈아~</span>
+						  <span class="back">싼다~</span>
+						</span>
+					  </span>
+					</span>
+				</button>
+			</div>
+			<script>
+				$('.change').click(function () {
+					var cashToChange = $('input[type=number]').val();
+					var havingCash = $('#nowCashAmount').text();
+
+					console.log(cashToChange);
+					console.log(havingCash);
+
+					if(cashToChange > havingCash){
+						swal('너 그만큼 돈 없다 ㅎㅎ');
+						return false;
+					}
+
+					swal({
+							title: "Are you sure?",
+							text: "정말 환전하시겠습니까?",
+							icon: "warning",
+							buttons: true,
+							dangerMode: true,
+						})
+						.then((willDelete) => {
+							if (willDelete) {
+								var content = "환전요청";
+								insertCash(-cashToChange, content);
+								swalOk("환전 요청 완료했습니다. 처리까지 몇분의 시간이 소요될 수 있슴돠");
+							} else {
+								return false;
+							}
+							});
+				})
+
+				function swalOk(msg) {
+				swal("Result", msg, "info")
+				.then((okclick)=>{
+					if(okclick){
+						location.reload();
+					}
+				})
+				}
+			</script>
 		</div>
 	</section>
 	<jsp:include page="../common/footer.jsp"/>

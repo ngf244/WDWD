@@ -5,8 +5,10 @@ import java.util.HashMap;
 
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
+import com.kh.WDWD.author.model.vo.ChangeRequest;
 import com.kh.WDWD.author.model.vo.Declaration;
 import com.kh.WDWD.author.model.vo.Dispute;
+import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.member.model.vo.Member;
 
 public interface AuthorService {
@@ -34,5 +36,9 @@ public interface AuthorService {
 	ArrayList<Dispute> getDisputeList();
 
 	int updateDispute(HashMap map);
+
+	ArrayList<ChangeRequest> getChangeRequestList();
+
+	int deleteChangeRequest(int pc_num);
 
 }

@@ -27,6 +27,7 @@
 		<typeAlias type="com.kh.WDWD.pointShop.model.vo.PointShop" alias="PointShop"/>
 		<typeAlias type="com.kh.WDWD.board.model.vo.Scrap" alias="Scrap"/>
 		<typeAlias type="com.kh.WDWD.author.model.vo.Dispute" alias="Dispute"/>
+		<typeAlias type="com.kh.WDWD.author.model.vo.ChangeRequest" alias="ChangeRequest"/>
 	</typeAliases>
 	
 	<mappers>

@@ -118,8 +118,25 @@
 					}
 				}
 			})
-			
 		}
 
+		function insertCash(cash, Content) {
+			var userId = '${loginUser.userId}';
+			if(userId == ""){
+				return false;
+			}
+			$.ajax({
+				url : "insertCP.my",
+				data : {pcContent : Content, pcAmount : cash, pcDiv : 'C', pcId : userId},
+				type : "POST",
+				success : function (data) {
+					if(data == 1){
+						console.log("cash 변동 : ", cash);
+					} else {
+						console.log("ajax insertPoint 실패");
+					}
+				}
+			})
+		}
 	</script>
 </body>

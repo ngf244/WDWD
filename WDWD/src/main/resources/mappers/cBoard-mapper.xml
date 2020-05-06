@@ -10,6 +10,9 @@
 		where bo_del='N'and bo_group= 1
 		<if test='boCategory != "" and boCategory != null'>
 			<choose>
+				<when test='boCategory == "공통"'>
+					and bo_category like '%' || #{boCategory} || '%' 
+				</when>
 				<when test='boCategory == "짤방"'>
 					and bo_category like '%' || #{boCategory} || '%' 
 				</when>
