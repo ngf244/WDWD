@@ -90,7 +90,6 @@ public class MemberController {
 	public ModelAndView myPageView(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 		
 		Member member = mService.selectMember(userId);
-		System.out.println(member);
 		ArrayList<Reply> rList = mService.selectRecentlyReply(userId);		
 		ArrayList<Board> pList = mService.selectRecentlyPBoard(userId);
 		ArrayList<CBoard> cList = mService.selectRecentlyCBoard(userId);
@@ -113,8 +112,6 @@ public class MemberController {
 			ArrayList<PortpolioContents> portContents = mService.selectAttachFile(pc.getPoNum());
 			pc.setPortContents(portContents);
 		}
-		
-		System.out.println("pcList : " + pcList);
 		
 		ArrayList<PointNCash> ccList = mService.selectRecentlyCashChange(userId);		
 		
@@ -186,8 +183,6 @@ public class MemberController {
 		if(profileImgFile != null && !profileImgFile.isEmpty()) {
 			renameFileName = saveFile(profileImgFile, request);
 		}
-		
-		System.out.println("renameFileName : " + renameFileName);
 		
 		if(!renameFileName.equals("")&&!renameFileName.isEmpty()) {
 			int result = mService.updateProfileImg(m);
@@ -319,8 +314,6 @@ public class MemberController {
 		System.out.println("m : " + m);
 		
 		int result = mService.nickCheck(m);
-		
-		System.out.println("result : " + result);
 		
 		response.setCharacterEncoding("UTF-8");
 		
