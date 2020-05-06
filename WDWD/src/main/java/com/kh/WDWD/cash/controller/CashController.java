@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,12 +59,20 @@ public class CashController {
 	}
 	
 	@RequestMapping("insertCP.my")
-	public void insertCash(PointNCash pc, HttpServletResponse response) {
+	public void insertCash(PointNCash pc, HttpServletResponse response, HttpSession session) {
 		
 		int insertCashResult = cService.insertCP(pc);
 		
 		if(insertCashResult > 0) {
 			try {
+				Member mem = (Member)session.getAttribute("loginUser");
+				
+				if(pc.getPcDiv().equals("C")) {
+					mem.setCash(mem.getCash() + pc.getPcAmount());
+				} else {
+					mem.setPoint(mem.getPoint() + pc.getPcAmount());
+				}
+				
 				response.getWriter().println(insertCashResult);
 			} catch (IOException e) {
 				throw new CashException(e.getMessage());

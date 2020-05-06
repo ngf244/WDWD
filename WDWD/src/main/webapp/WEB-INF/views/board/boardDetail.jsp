@@ -386,7 +386,7 @@
 		margin-left: 2%;
 		padding-top: 5px;
 		padding-bottom: 10px;
-		width: 40%;
+		width: 60%;
 	}
 
 	.replies>div:nth-of-type(2){
@@ -489,7 +489,7 @@
 		margin-left: 2%;
 		padding-top: 5px;
 		padding-bottom: 10px;
-		width: 40%;
+		width: 60%;
 	}
 
 	.replies2>div:nth-of-type(2){
@@ -576,6 +576,14 @@
 		display: inline-block;
 		right: 3%;
 		top: 65%;
+	}
+	
+	.replyProfileImg{
+		width: 9%;
+		height: 60px;
+		border-radius: 50%;
+		vertical-align: middle;
+		margin-right: 2%;
 	}
 </style>
 </head>
@@ -753,7 +761,7 @@
 							<input type="hidden" value="${ reply.rpNum }">
 							<c:if test="${ reply.rpStatus == 'N' }">
 								<div>
-									<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
+									<img class="replyProfileImg" src="${contextPath}/resources/profile_Image/${reply.profileImg}"><span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
 									<c:if test="${ reply.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
 										<span class="deleteReply">[삭 제]</span>
 									</c:if>
@@ -789,7 +797,7 @@
 									<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
 									<c:if test="${reply2.rpStatus == 'N' }">
 										<div>
-											<span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
+											<img class="replyProfileImg" src="${contextPath}/resources/profile_Image/${reply.profileImg}"><span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
 											<c:if test="${ reply2.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
 												<span class="deleteReply">[삭 제]</span>
 											</c:if>

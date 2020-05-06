@@ -11,8 +11,10 @@ import com.kh.WDWD.author.model.dao.AuthorDAO;
 import com.kh.WDWD.author.model.service.AuthorService;
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
+import com.kh.WDWD.author.model.vo.ChangeRequest;
 import com.kh.WDWD.author.model.vo.Declaration;
 import com.kh.WDWD.author.model.vo.Dispute;
+import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.member.model.vo.Member;
 
 @Service("aService")
@@ -82,6 +84,16 @@ public class AuthorServiceImpl implements AuthorService{
 	@Override
 	public int updateDispute(HashMap map) {
 		return aDAO.updateDispute(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<ChangeRequest> getChangeRequestList() {
+		return aDAO.getChangeRequestList(sqlSession);
+	}
+
+	@Override
+	public int deleteChangeRequest(int pc_num) {
+		return aDAO.deleteChangeRequest(sqlSession, pc_num);
 	}
 	
 }
