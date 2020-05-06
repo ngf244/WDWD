@@ -71,13 +71,17 @@ public interface MemberService {
 
 	String selectUserId(Request r);
 
-	String selectSecretYn(String userId);
+	String selectSecretYn(Member m);
 
 	int updateSecretToggle(String userId);
 	
-  int recentlyBoard(Member m);
+    int recentlyBoard(Member m);
 
 	ArrayList<Board> recentlyBoardList(Member loginUser);
+
+	int updateSecretToggle2(String userId);
+
+	Member selectMemberByEmail(String string);
 
 }
 

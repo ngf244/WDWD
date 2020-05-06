@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>   
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  
 <!DOCTYPE html>
 <html>
 <head>
@@ -410,7 +410,7 @@
 				<div id="cashChangeListContent">
 					<div id="nowCash">
 						<div id="nowCashText">Cash</div>
-						<div id="nowCashAmount">${ member.cash }</div>
+						<div id="nowCashAmount"><fmt:formatNumber value="${ member.cash }"/></div>
 						<div style="clear: both;"></div>
 					</div>
 					<div class="cashChangeBoard">
