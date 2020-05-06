@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.kh.WDWD.board.model.exception.BoardException;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
@@ -378,7 +379,7 @@ public class MemberController {
 		}
 	}
 	
-  @RequestMapping("sessionUpdate.me")
+	@RequestMapping("sessionUpdate.me")
 	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
 		response.setContentType("application/json; charset=utf-8");
 		
@@ -431,8 +432,18 @@ public class MemberController {
 			e.printStackTrace();
 		}
 	}
-  
-  
+	
+	@RequestMapping("callTodayData.me")
+	public void callTodayData(HttpServletResponse response) {
+		int[] userId = mService.callTodayData();
+		
+		try {
+			response.setContentType("application/json; charset=UTF-8");
+			new Gson().toJson(userId, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
 	
 	

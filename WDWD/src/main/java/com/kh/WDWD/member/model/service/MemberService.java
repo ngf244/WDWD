@@ -81,5 +81,9 @@ public interface MemberService {
 
 	ArrayList<Board> recentlyScrapList(Member loginUser);
 
+	ArrayList<Member> getMemberList();
+
+	int[] callTodayData();
+
 }
 

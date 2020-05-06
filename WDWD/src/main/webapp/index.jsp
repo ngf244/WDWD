@@ -143,16 +143,16 @@
 	#rankNo1 div {
 		position: absolute;
 		height: 80px;
-		left: 240px;
+		left: 50%;
 		top: 40px;
 		font-size: 20pt;
 		line-height: 40px;
 	}
 	#rankNo2 {
 		position: absolute;
-		width: 25%;
+		width: 20%;
 		height: 200px;
-		left: 50%;
+		left: 52.5%;
 		bottom: 25px;
 		background-color: #D6ADDC;
 		color: white;
@@ -160,20 +160,20 @@
 	#rank2Profile {
 		position: absolute;
 		height: 100px;
-		width: 65%;
+		width: 50%;
 		top: 10px;
-		left: 17%;
+		left: 25%;
 	}
 	#number2 {
 		position: absolute;
 		height: 50px;
 		top: 130px;
-		left: 15px;
+		left: 20%;
 	}
 	#rankNo2 div {
 		position: absolute;
 		height: 50px;
-		left: 70px;
+		left: 45%;
 		top: 130px;
 		font-size: 14pt;
 		line-height: 25px;
@@ -216,10 +216,16 @@
 	#rankNo3 div, #rankNo4 div, #rankNo5 div {
 		position: absolute;
 		height: 50px;
-		left: 70px;
+		left: 55%;
 		top: 5px;
 		font-size: 12pt;
 		line-height: 25px;
+	}
+	#number3, #number4, #number5 {
+		position: absolute;
+		height: 40px;
+		top: 10px;
+		left: 30%;
 	}
 	#pointBoardView {
 		width: 78%;
@@ -470,44 +476,55 @@
 				
 				<div id="editorRank">
 					<div id="rankStart">에디터 랭킹</div>
-					<div id="rankNo1">
+					<div id="rankNo1" class="rankMove">
 						<img id="rank1Profile">
 						<img id="number1" src="${ contextPath }/resources/images/number-1.jpg">
-						<div>
-							운영자<br>
-							1,000 POINT
-						</div>
+						<div></div>
+						<input type="hidden" value="">
 					</div>
-					<div id="rankNo2">
+					<div id="rankNo2" class="rankMove">
 						<img id="rank2Profile">
 						<img id="number2" src="${ contextPath }/resources/images/number-2.jpg">
-						<div>
-							동동이<br>
-							500 POINT
-						</div>
+						<div></div>
+						<input type="hidden" value="">
 					</div>
-					<div id="rankNo3">
+					<div id="rankNo3" class="rankMove">
 						<img id="rank3Profile">
-						<div>
-							동동이<br>
-							300 POINT
-						</div>
+						<img id="number3" src="${ contextPath }/resources/images/number-3.png">
+						<div></div>
+						<input type="hidden" value="">
 					</div>
-					<div id="rankNo4">
+					<div id="rankNo4" class="rankMove">
 						<img id="rank4Profile">
-						<div>
-							동동이<br>
-							200 POINT
-						</div>
+						<img id="number4" src="${ contextPath }/resources/images/number-4.png">
+						<div></div>
+						<input type="hidden" value="">
 					</div>
-					<div id="rankNo5">
+					<div id="rankNo5" class="rankMove">
 						<img id="rank5Profile">
-						<div>
-							동동이<br>
-							100 POINT
-						</div>
+						<img id="number5" src="${ contextPath }/resources/images/number-5.png">
+						<div></div>
+						<input type="hidden" value="">
 					</div>
+					
+					<c:forEach var="member" items="${ memberList }" varStatus="status">
+						<script>
+							if('${member.profileImg}' == "") {
+								$('#rank${status.count}Profile').attr('src', '${ contextPath }/resources/images/default_profile.png');
+							} else {
+								$('#rank${status.count}Profile').attr('src', '${ contextPath }/resources/profile_Image/${member.profileImg}');
+							}
+							$('#rankNo${status.count} div').html('${member.nickName}<br>☆ ${member.grade}');
+							$('#rankNo${status.count} input').val('${member.userId}');
+						</script>
+					</c:forEach>
 				</div>
+				
+				<script>
+					$('.rankMove').click(function(){
+						location.href="main.my?userId=" + $(this).children('input').val();
+					});
+				</script>
 				
 				<div style="height:100px;"></div>
 				

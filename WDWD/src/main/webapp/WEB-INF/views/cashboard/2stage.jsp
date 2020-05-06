@@ -520,7 +520,7 @@
 								</c:forEach>
 							</c:if>
 							
-							<div id="chatCheck">상대방이 입력중입니다.</div>
+							<div id="chatCheck"></div>
 							
 							<div id="chatBottom">
 								<textarea id="inputText"></textarea>
@@ -528,13 +528,11 @@
 							</div>
 						</div>
 						
-						<script>
-						    $("#inputText").scroll(function(){
+				        <script>
+					        $("#inputText").scroll(function(){
 						    	$("#inputText").height($("#inputText").height() + 13 + 'px')
 						    });
-						</script>
-						
-				        <script>
+				        
 				        	if("${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}" && "${cBoard.reId}" != "${sessionScope.loginUser.nickName}" && "${sessionScope.loginUser.nickName}" == '운영자') {
 				        		$('#registChat').hide();
 				        	}
@@ -590,6 +588,42 @@
 				                        
 				                        $('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
 			                    	}
+			                    });
+			                    
+			                    // 입력중일 때
+			                    var oldTextCheck = 0;
+					        	var newTextCheck = 0;
+					        
+						        !function textCheck(){
+									setTimeout(function() {
+										if($("#inputText").is(":focus")) {
+											oldTextCheck = newTextCheck;
+											
+											if($('#inputText').val() == "") {
+												newTextCheck = 0;
+											} else {
+												newTextCheck = 1;
+											}
+											
+											if(oldTextCheck != newTextCheck) {
+												var data = {chatCon: newTextCheck, chatWriter: '${ loginUser.nickName }', chatRefNum: "${ cBoard.boNum }"}
+												socket.emit("chatCheck", data);
+											}
+										}
+										
+										textCheck();
+									}, 1000)
+								}()
+			                    
+			                    // 입력중입니다 받을 때
+								socket.on('chatCheck', function(data) {
+									if('${ loginUser.nickName }' != data.chatWriter) {
+										if(data.chatCon == 0) {
+											$('#chatCheck').text("");
+										} else {
+											$('#chatCheck').text(data.chatWriter + "님이 입력중입니다.");
+										}
+									}
 			                    });
 			                });
 				        </script>

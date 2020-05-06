@@ -396,12 +396,12 @@
 	
 							<div class="smallMenu yellow">
 								<img src="${ contextPath }/resources/images/point.png">
-								<br><b><span id="havePoint"></span> POINT</b>
+								<br><b><span id="havePoint"></span><br>POINT</b>
 							</div>
 	
 							<div class="smallMenu yellow">
 								<img src="${ contextPath }/resources/images/cash.png">
-								<br><b><span id="haveCash"></span> CASH</b>
+								<br><b><span id="haveCash"></span><br>CASH</b>
 							</div>
 	
 							<div class="smallMenu blue" onclick="goMyPage();">
@@ -443,7 +443,6 @@
 						data: {userId: '${ sessionScope.loginUser.userId }'},
 						type: 'post',
 						success: function(data) {
-							console.log(data);
 							var list = data.list;
 															
 							var point = Number(list[0].point);
@@ -490,6 +489,10 @@
 							}
 							
 							for(var i = 0; i < 3; i++) {
+								if(list[recentlyCheck + i] == null) {
+									break;
+								}
+								
 								$('.scrapBoard').eq(i).next().val(list[recentlyCheck + i].boNum);
 								$('.scrapBoard').eq(i).text(list[recentlyCheck + i].boTitle);
 							}
@@ -701,11 +704,22 @@
 				<div class="menubar">충전소</div>
 				
 				<div id="menuHeaderText">
-					<span id="menuTextBoard">등록된 게시물 123개</span>
-					<span id="menuTextReply">등록된 댓글 321개</span>
+					<span id="menuTextBoard"></span>
+					<span id="menuTextReply"></span>
 				</div>
 			
 				<script>
+					$.ajax({
+						url: 'callTodayData.me',
+						type: 'post',
+						success: function(data){
+							console.log(data);
+							$('#menuTextBoard').text('등록된 게시물 ' + data[0] + '개');
+							$('#menuTextReply').text('등록된 댓글 ' + data[1] + '개');
+							
+						}
+					});
+				
 					$('#menuTextReply').hide();
 					!function loop(){
 						setTimeout(function() {

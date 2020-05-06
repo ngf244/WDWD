@@ -21,6 +21,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.kh.WDWD.board.model.service.BoardService;
 import com.kh.WDWD.board.model.vo.Board;
+import com.kh.WDWD.member.model.service.MemberService;
+import com.kh.WDWD.member.model.vo.Member;
 
 /**
  * Handles requests for the application home page.
@@ -30,6 +32,9 @@ public class HomeController {
 	
 	@Autowired
 	private BoardService bService;
+	
+	@Autowired
+	private MemberService mService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -53,7 +58,10 @@ public class HomeController {
 	@RequestMapping(value = "index.home")
 	public String index(Model model) {
 		ArrayList<Board> boardList = bService.getTopBoard(0);
+		ArrayList<Member> memberList = mService.getMemberList();
+		
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("memberList", memberList);
 		
 		return "index";
 	}

@@ -159,4 +159,16 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("memberMapper.recentlyScrapList", loginUser);
 	}
 
+	public ArrayList<Member> getMemberList(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("memberMapper.getMemberList");
+	}
+
+	public int[] callTodayData(SqlSessionTemplate sqlSession) {
+		int[] arr = new int[2];
+		arr[0] = sqlSession.selectOne("memberMapper.callTodayBoard");
+		arr[1] = sqlSession.selectOne("memberMapper.callTodayReply");
+		
+		return arr;
+	}
+
 }

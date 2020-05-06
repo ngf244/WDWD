@@ -358,5 +358,26 @@
 		set me_easy = 'Y'
 		where me_id = ${userId}
 	</update>  
+	
+	<select id="getMemberList" resultMap="memberResultSet">
+		<![CDATA[
+		select *
+		from (select * from member
+			  left join contents on (me_con_num = con_num)
+			  where me_id != 'admin'
+			  order by me_grade desc)
+		where rownum <= 5
+		]]>	
+	</select>
+	
+	<select id="callTodayBoard" resultType="_int">
+		select count(*) from board
+		where bo_date = to_char(sysdate, 'yy/mm/dd')
+	</select>
+	
+	<select id="callTodayReply" resultType="_int">
+		select count(*) from reply
+		where rp_date like to_char(sysdate,'yyyy/mm/dd') || '%'
+	</select>
 </mapper>
 
