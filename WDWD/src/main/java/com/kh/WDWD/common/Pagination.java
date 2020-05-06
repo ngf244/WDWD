@@ -175,11 +175,11 @@ public class Pagination {
 		
 		PageInfo piCash = null;
 		
-		int pageLimit = 1; // 한 페이지에서 보일 페이징 수
+		int pageLimit = 8; // 한 페이지에서 보일 페이징 수
 		int maxPage;	// 전체 페이지 중 마지막 페이지
 		int startPage;	// 현재 페이지에서 보일 페이징 버튼의 시작 페이지
 		int endPage;	// 현재 페이지에서 보일 페이징 버튼의 마지막 페이지
-		int boardLimit = 5;	// 한 페이지에 보일 게시글 수
+		int boardLimit = 6;	// 한 페이지에 보일 게시글 수
 		
 		maxPage = (int)((double)listCount/boardLimit + 0.9);
 		startPage = (((int)((double)currentPage/pageLimit + 0.9)) - 1) * pageLimit + 1;

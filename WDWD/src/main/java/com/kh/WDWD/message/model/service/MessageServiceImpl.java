@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
+import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.message.model.dao.MessageDAO;
 import com.kh.WDWD.message.model.vo.Message;
 
@@ -63,6 +64,11 @@ public class MessageServiceImpl implements MessageService{
 	@Override
 	public ArrayList<Message> getMessageSendDetail(int msgNum) {
 		return MessageDAO.getMessageSendDetail(sqlSession, msgNum);
+	}
+
+	@Override
+	public int getMessageListCount(String loginUser) {
+		return MessageDAO.getMessageListCount(sqlSession, loginUser);
 	}
 
 

@@ -120,6 +120,13 @@
 	<insert id="insertSendMessages">
 			INSERT INTO MESSAGE VALUES (msg_seq.nextval, #{loginUser}, #{rsgId}, #{title}, SYSDATE, #{content}, 'N', 'N', NULL, NULL)
 	</insert>
+	
+	
+	<select id="getMessageListCount" resultType="_int">
+		select count(*)
+		FROM MESSAGE
+		where RSG_ID = #{ loginUser } and rsg_del = 'N'
+	</select>
 
 	<resultMap type="Message" id="MessageListSet">
 		<id property="msgNum" column="MSG_NUM"/>

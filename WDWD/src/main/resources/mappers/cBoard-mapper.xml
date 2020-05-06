@@ -7,20 +7,23 @@
 		from board b
 		    join member m on (bo_writer = me_id)
 		    left join contents c on (bo_num = con_ref)
-		where bo_del='N'and bo_group= 1
+		where bo_del='N' and bo_group= 1
 		<if test='boCategory != "" and boCategory != null'>
 			<choose>
+				<when test='boCategory == "공통"'>
+					and bo_category like #{boCategory}
+				</when>
 				<when test='boCategory == "짤방"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory}
 				</when>
 				<when test='boCategory == "아무말"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory} 
 				</when>
 				<when test='boCategory == "요청"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory}
 				</when>
 				<when test='boCategory == "질문"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory}
 				</when>
 			</choose>
 		
@@ -56,20 +59,23 @@
 		from board b
 		    join member m on (bo_writer = me_id)
 		    left join contents c on (bo_num = con_ref)
-		where bo_del='N'and bo_group= 1
+		where bo_del='N'
 		<if test='boCategory != "" and boCategory != null'>
 			<choose>
+				<when test='boCategory == "공통"'>
+					and bo_category like #{boCategory}
+				</when>
 				<when test='boCategory == "짤방"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory}
 				</when>
 				<when test='boCategory == "아무말"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory} 
 				</when>
 				<when test='boCategory == "요청"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory}
 				</when>
 				<when test='boCategory == "질문"'>
-					and bo_category like '%' || #{boCategory} || '%' 
+					and bo_category like #{boCategory}
 				</when>
 			</choose>
 		
@@ -98,6 +104,7 @@
 		group by b.bo_num, b.bo_group, b.bo_title, b.bo_con, b.bo_view, b.bo_date,
 		        b.bo_update, b.bo_del, b.bo_writer, b.bo_good, b.bo_category,
 		        b.bo_renum, m.me_nick
+	    having  bo_group= 1
 		order by bo_num desc
 		
 	</select>
@@ -655,7 +662,7 @@
 				<if test="cBoard.cbStep != 0">		
 					and cb_step = #{ cBoard.cbStep }
 				</if>
-					and bo_del = 'N'
+					and bo_del = 'N' and CB_SECRET = 'Y'
 				<if test='searchText != null and searchCate != null'>
 						<choose>
 							<when test='searchCate == "제목"'>
@@ -685,7 +692,7 @@
 		JOIN BOARD ON (BO_NUM = CB_NUM)
 		JOIN MEMBER ON(ME_ID = BO_WRITER)
 		<where>
-				bo_del = 'N'
+				bo_del = 'N' and CB_SECRET = 'Y'
 				<if test= "cBoard.boGroup != null">
 					and BO_GROUP = #{ cBoard.boGroup }
 				</if>
@@ -765,4 +772,13 @@
 		set bo_del = 'Y'
 		where bo_num = #{diRef} 
 	</update>
+
+  <select id="actionPremiumList" resultMap="CBoardResultSet">
+	SELECT *
+		FROM CASH_BOARD  
+			JOIN BOARD ON (BO_NUM = CB_NUM)
+			JOIN MEMBER ON(ME_ID = BO_WRITER)
+		where BO_GROUP = #{ boGroup } and bo_del = 'N' and CB_PRIMIUM = 'Y' and CB_SECRET = 'Y'
+		order by BO_DATE desc
+	</select>
 </mapper>

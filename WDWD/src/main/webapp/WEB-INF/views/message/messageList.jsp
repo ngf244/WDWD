@@ -9,6 +9,10 @@
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 	<style>
+		a:link { color: black; text-decoration: none;}
+		a:visited { color: black; text-decoration: none;}
+		a:hover{ color: black; text-decoration: none;}
+		div.tableRow:hover{background-color: antiquewhite}
 		div.tableTitle {
 			width: 100%;
 			border-top: solid 1px;
@@ -42,6 +46,9 @@
 		}
 		#receiveMs{
 			width:200px;
+		}
+		.currentP{
+			border: 1px solid aquamarine;
 		}
 	</style>
 
@@ -140,9 +147,9 @@
 				class="ui-button-text">선택쪽지 삭제</span></button>
 	</div>
 
-	<div id="bottom-side">
+	<!-- <div id="bottom-side">
 		광고<a href="#"></a>
-	</div>
+	</div> -->
 
 	<script>
 		function lfCheckAll(bl) {

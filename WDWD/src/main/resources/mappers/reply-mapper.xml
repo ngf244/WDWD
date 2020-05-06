@@ -2,17 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="replyMapper">
 	<select id="getReplyList" resultMap="replyResultSet">
-		select r.*, m.me_nick
+		select r.*, m.me_nick, c.con_cop
 		from reply r
     		join member m on(r.rp_writer = m.me_id)
+            join contents c on (m.me_con_num = c.con_num)
 		where rp_refnum = #{boNum} and rp_rp is null
 		order by rp_date
 	</select>
 	
 	<select id="getReplyList2" resultMap="replyResultSet">
-		select r.*, m.me_nick
+		select r.*, m.me_nick, c.con_cop
 		from reply r
-		    join member m on(r.rp_writer = m.me_id)
+    		join member m on(r.rp_writer = m.me_id)
+            join contents c on (m.me_con_num = c.con_num)
 		where rp_refnum = #{boNum} and rp_rp is not null
 		order by rp_date
 	</select>
@@ -27,6 +29,7 @@
 		<result property="rpConNum" column="RP_CON_NUM"/>
 		<result property="rpRp" column="RP_RP"/>
 		<result property="rpWriterNick" column="ME_NICK"/>
+		<result property="profileImg" column="CON_COP"/>
 	</resultMap>
 	
 	<insert id="insertReply">

@@ -7,12 +7,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://localhost:82/socket.io/socket.io.js"></script> 
+<script src="http://localhost:82/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 
@@ -382,6 +383,9 @@
 					<img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
 					
 					<div id="noticeArea" class="notice">
+						<c:if test="${ loginUser != null }">
+							<button class = "messageList">쪽지</button>
+						</c:if>
 					</div>
 					
 					<div id="smallInfo">
@@ -826,6 +830,33 @@
 						
 					}
 				</script>
+				
+				
+				<!-- 쪽지 알림 -->
+				<script>
+	            	$(document).ready(function(){
+	            		var listCount ="";
+	                    /* 즉시 쪽지 몇개인지 가져옴 */
+	                    $.ajax({
+	                    	url: "messageListAlert.ms",
+	                    	type: "get",
+	                    	data: {"listCount" : listCount},
+	                    	success: function(data){
+	                    		if(data > 0){
+	                    			console.log("data", data);
+	                    			$('#noticeArea').append(data);
+	                    		}
+	                    			//for(var i=0; i < data.length; i++){
+	                    			
+	                    			//$('#noticeArea').append('<span>new</span><span>' + data[i] + '</span>');
+	                    			//}
+	                    		
+                    		}
+	                    
+	                    	
+	                    })
+	                });
+		        </script>
 			</div>
 		</div>
 	</header>

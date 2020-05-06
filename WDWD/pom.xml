@@ -234,7 +234,20 @@
 		    <artifactId>socket.io-client</artifactId>
 		    <version>1.0.0</version>
 		</dependency>
-				
+		
+		<!-- javax mailSend 관련 라이브러리 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>5.2.4.RELEASE</version>
+			<!-- version에는 헌재 사용중인 springframework 버젼 입력 -->
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		
 				
 			
 	</dependencies>

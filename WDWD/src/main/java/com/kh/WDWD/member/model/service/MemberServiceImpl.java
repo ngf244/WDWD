@@ -164,8 +164,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public String selectSecretYn(String userId) {
-		return mDAO.selectSecretYn(sqlSession, userId);
+	public String selectSecretYn(Member m) {
+		return mDAO.selectSecretYn(sqlSession, m);
 	}
 
 	@Override
@@ -196,6 +196,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int[] callTodayData() {
 		return mDAO.callTodayData(sqlSession);
+  }
+  
+  @Override
+	public int updateSecretToggle2(String userId) {
+		return mDAO.updateSecretToggle2(sqlSession, userId);
+	}
+
+	@Override
+	public Member selectMemberByEmail(String email) {
+		return mDAO.selectMemberByEmail(sqlSession, email);
 	}
 }
 

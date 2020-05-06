@@ -18,12 +18,14 @@ public class Board {
 	private int boFileExist;
 	private String thumbnail;
 	private String thumbnailURL;
+	private String searchCate;
+	private String searchWord;
 
 	public Board() {}
 
 	public Board(int boNum, String boGroup, String boTitle, String boContent, int boView, String boDate,
 			String boUpdate, String boDel, String boWriter, int boGood, String boCategory, int boReNum,
-			String boWriterNick, int boFileExist, String thumbnail, String thumbnailURL) {
+			String boWriterNick, int boFileExist, String thumbnail, String thumbnailURL, String searchCate, String searchWord) {
 		super();
 		this.boNum = boNum;
 		this.boGroup = boGroup;
@@ -41,6 +43,8 @@ public class Board {
 		this.boFileExist = boFileExist;
 		this.thumbnail = thumbnail;
 		this.thumbnailURL = thumbnailURL;
+		this.searchCate = searchCate;
+		this.searchWord = searchWord;
 	}
 
 	public Board(String boGroup, String boCategory) {
@@ -176,6 +180,20 @@ public class Board {
 	public void setThumbnailURL(String thumbnailURL) {
 		this.thumbnailURL = thumbnailURL;
 	}
+	public String getSearchCate() {
+		return searchCate;
+	}
+	
+	public void setSearchCate(String searchCate) {
+		this.searchCate = searchCate;
+	}
+	public String getSearchWord() {
+		return searchWord;
+	}
+	
+	public void setsearchWordearchWord(String searchWord) {
+		this.searchWord = searchWord;
+	}
 
 	@Override
 	public String toString() {
@@ -183,6 +201,6 @@ public class Board {
 				+ ", boView=" + boView + ", boDate=" + boDate + ", boUpdate=" + boUpdate + ", boDel=" + boDel
 				+ ", boWriter=" + boWriter + ", boGood=" + boGood + ", boCategory=" + boCategory + ", boReNum="
 				+ boReNum + ", boWriterNick=" + boWriterNick + ", boFileExist=" + boFileExist + ", thumbnail="
-				+ thumbnail + "]";
+				+ thumbnail + ", searchCate =" + searchCate + ", searchWord" + "]";
 	}
 }

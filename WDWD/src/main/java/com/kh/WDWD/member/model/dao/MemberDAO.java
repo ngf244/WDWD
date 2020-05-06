@@ -137,10 +137,10 @@ public class MemberDAO {
 		return sqlSession.selectOne("memberMapper.selectUserId", r);
 	}
 
-	public String selectSecretYn(SqlSessionTemplate sqlSession, String userId) {
-		String result = sqlSession.selectOne("memberMapper.selectSecretYn", userId);
+	public String selectSecretYn(SqlSessionTemplate sqlSession, Member m) {
+		String result = sqlSession.selectOne("memberMapper.selectSecretYn", m);
 		System.out.println("result : " + result);
-		return sqlSession.selectOne("memberMapper.selectSecretYn", userId);
+		return sqlSession.selectOne("memberMapper.selectSecretYn", m);
 	}
 
 	public int updateSecretToggle(SqlSessionTemplate sqlSession, String userId) {
@@ -169,6 +169,14 @@ public class MemberDAO {
 		arr[1] = sqlSession.selectOne("memberMapper.callTodayReply");
 		
 		return arr;
+  }
+  
+  public int updateSecretToggle2(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.update("memberMapper.updateSecretToggle2", userId);
+	}
+
+	public Member selectMemberByEmail(SqlSessionTemplate sqlSession, String email) {
+		return sqlSession.selectOne("memberMapper.selectMemberByEmail", email);
 	}
 
 }

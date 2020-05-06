@@ -40,6 +40,7 @@ import com.kh.WDWD.cBoard.model.vo.CBoard;
 import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.contents.model.vo.Contents;
+import com.kh.WDWD.kakaoAPI.model.service.KakaoAPI;
 import com.kh.WDWD.member.model.exception.MemberException;
 import com.kh.WDWD.member.model.service.MemberService;
 import com.kh.WDWD.member.model.vo.Member;
@@ -54,6 +55,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mService;
+	
+	@Autowired
+	private KakaoAPI kakao;
 	
 	@RequestMapping(value="login.me",method=RequestMethod.POST)
 	public String memberLogin(@ModelAttribute Member m, Model model) {
@@ -362,21 +366,45 @@ public class MemberController {
 	}
 	
 	@RequestMapping("secretToggle.my")
-	public @ResponseBody void secretToggle(@RequestParam String userId, HttpServletResponse response) {
+	public @ResponseBody void secretToggle(@ModelAttribute Member m, HttpServletResponse response) {
+		
+		System.out.println("userId : " + m.getUserId());
+		
+		String userId = m.getUserId();
 		response.setCharacterEncoding("UTF-8");
-		String secretYn = mService.selectSecretYn(userId);
+		String secretYn = mService.selectSecretYn(m);
 		
 		PrintWriter out = null;
 		
-		if(secretYn.equals("N")) {
-			try {
+		try {
+			if(secretYn.equals("N")) {
+				
 				out  = response.getWriter();
 				int result1 = mService.updateSecretToggle(userId);
 				
-			} catch (IOException e) {
-				e.printStackTrace();
+				if(result1 > 0) {
+					out.println("updateY");
+				} else {
+					out.println("update 실패!");
+				}
+		
+			} else {
+				out = response.getWriter();
+				int result2 = mService.updateSecretToggle2(userId);
+				
+				if(result2 > 0) {
+					out.println("updateN");
+				} else {
+					out.println("update 실패!");
+				}
 			}
+		} catch (IOException e) {
+			throw new MemberException(e.getMessage());
+		} finally {
+			out.flush();
+			out.close();
 		}
+		
 	}
 	
 	@RequestMapping("sessionUpdate.me")
@@ -444,6 +472,45 @@ public class MemberController {
 			e.printStackTrace();
 		}
 	}
+  	
+  	@RequestMapping("kakaoLogin.my")
+  	public ModelAndView kakaoLogin(@RequestParam("code") String code, HttpSession session, ModelAndView mv) {
+  	    System.out.println("code : " + code);
+  	    
+		String access_Token = kakao.getAccessToken(code);
+		HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
+	    System.out.println("login Controller : " + userInfo);
+	    
+	    Member m = new Member();
+	    m.setNickName((String)userInfo.get("nickname"));
+	    m.setEmail((String)userInfo.get("email"));
+	    m.setProfileImg((String)userInfo.get("profileImg"));
+	    
+	    //    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
+	    if (userInfo.get("email") != null) {
+	    	Member member = mService.selectMemberByEmail((String)userInfo.get("email"));
+	    	if(member != null) {
+	    		session.setAttribute("loginUser", member);
+	    		mv.addObject("member", member)
+	    		  .setViewName("redirect:index.home");
+	    	} else {
+	    		mv.addObject("member", m);
+		    	mv.setViewName("signup");
+	    	}
+	    	session.setAttribute("userId", userInfo.get("email"));
+	        session.setAttribute("access_Token", access_Token);
+	    }
+  	    return mv;
+  	}
+  	
+  	@RequestMapping(value="kakaoLogout.my")
+  	public String kakaoLogout(HttpSession session) {
+  	    kakao.kakaoLogout((String)session.getAttribute("access_Token"));
+  	    session.removeAttribute("access_Token");
+  	    session.removeAttribute("userId");
+  	    return "redirect:index.home";
+  	}
+
 }
 	
 	

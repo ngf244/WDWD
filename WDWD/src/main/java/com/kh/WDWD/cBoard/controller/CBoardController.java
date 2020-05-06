@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -107,7 +108,7 @@ public class CBoardController {
 		searchMap.put("boCategory", boCategory);
 		searchMap.put("searchCate", searchCate);
 		searchMap.put("searchWord", searchWord);
-		
+			
 		// 자유게시판 페이징
 		int currentPage = 1;
 		if (page != null) {
@@ -131,12 +132,14 @@ public class CBoardController {
 		if (list != null) {
 
 			mv.addObject("list", list);
+			mv.addObject("boCategory", boCategory);
 			mv.addObject("searchCate", searchCate);
 			mv.addObject("searchWord", searchWord);
 			System.out.println("searchCate 이거 뭐니??" + searchCate);
 			System.out.println("searchWord 이거 뭐니??" + searchWord);
 			mv.addObject("list2", list2);
 			mv.addObject("pi", pi);
+			System.out.println("piCash : " + piCash);
 			mv.addObject("piCash", piCash);
 			mv.setViewName("board/boardlist");
 		} else {
@@ -207,15 +210,20 @@ public class CBoardController {
 		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(searchMap, piCash);
 		
 		System.out.println("list2 : " + list2);
+		System.out.println("piCash : " + piCash);
 
 		//int listCount2 = cBoardService.getCateListCount2(cBoard, searchCate, searchText);
 		//ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard, searchCate, searchText);
 
 		//System.out.println("list2" + list2);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list2", list2);
+		map.put("piCash", piCash);
 
 		response.setContentType("application/json; charset=UTF-8");
 		try {
-			new Gson().toJson(list2, response.getWriter());
+			new Gson().toJson(map, response.getWriter());
 
 		} catch (JsonIOException | IOException e) {
 			throw new BoardException("리스트 가져오기 실패");
@@ -774,6 +782,21 @@ public class CBoardController {
 		}
 
 		return mv;
+	}
+  
+  
+  @RequestMapping("actionPremiumList.ch")
+	public void actionPremiumList(HttpServletRequest request, HttpServletResponse response) {
+	  	String boGroup = request.getParameter("boGroup");
+	  	System.out.println("boGroup??" + boGroup);
+		ArrayList<CBoard> list = cBoardService.actionPremiumList(boGroup);
+		response.setContentType("application/json; charset=UTF-8");
+		System.out.println("list는?" + list);
+		try {
+			new Gson().toJson(list, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			throw new BoardException("리스트 가져오기 실패");
+		}
 	}
 
 }

@@ -406,8 +406,12 @@
 				
 				var reader = new FileReader();
 				
-				
-				$img2.attr("src", contextPath + "/" + pcPath + "/" + pcModify);
+				var extension = pcModify.slice(-3);
+				if(extension == "mp4" || extension == "avi" || extension == "mov"){
+					$img2.attr("src", "${ contextPath }/resources/images/pngwave.png");
+				} else {
+					$img2.attr("src", contextPath + "/" + pcPath + "/" + pcModify);
+				}
 				
 				$div.append($img1);
 				$div.append($img2);
@@ -460,7 +464,12 @@
 				var reader = new FileReader();
 				
 				reader.onload = function(e){
-					$img2.attr("src", e.target.result);
+					var extension = fileName.slice(-3);
+					if(extension == "mp4" || extension == "avi" || extension == "mov"){
+						$img2.attr("src", "${ contextPath }/resources/images/pngwave.png");
+					} else {
+						$img2.attr("src", e.target.result);
+					}
 				}
 				
 				reader.readAsDataURL(file.files[0]);

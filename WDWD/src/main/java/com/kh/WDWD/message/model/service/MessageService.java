@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
+import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.message.model.vo.Message;
 
 public interface MessageService {
@@ -25,6 +26,8 @@ public interface MessageService {
 	int insertSendMessages(HashMap sendMap);
 
 	ArrayList<Message> getMessageSendDetail(int msgNum);
+
+	int getMessageListCount(String loginUser);
 
 	
 }

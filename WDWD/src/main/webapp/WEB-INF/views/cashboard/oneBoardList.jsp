@@ -202,7 +202,20 @@
 
 					</div>
 				</c:forEach> -->
-
+            <script type="text/javascript" src="http://kenwheeler.github.io/slick/slick/slick.min.js"></script>
+				<script>
+					$('.premium_list').slick({
+						autoplay : true,
+						dots: true,
+						speed : 300,
+						infinite: true,
+						autoplaySpeed: 2000,
+						arrows: true,
+						slidesToShow: 3,
+						slidesToScroll: 2,
+						fade: false
+					});
+            </script>
 
 
       <div id="attachFromHere">
@@ -248,9 +261,71 @@
                </div>
             </div>
          </c:forEach>
-         
-
       </div>
+
+      <!-- 페이징 처리 -->
+      <div class="pagingCenter">
+        <div class="pagination">
+           
+              <!-- [이전] -->
+              <c:if test="${ piCash.currentPage <= 1 }">
+                 <c:if test="${ boCategory eq null || searchText eq null }">
+                     <!-- 카테고리나 검색값 없으면 기본 리스트 띄우기 -->
+                    <c:set var="loc" value="actionCateList.ch" scope="page"/>  
+                 </c:if>
+                 
+                 <c:if test="${ boCategory ne null || searchText ne null }">
+                    <c:set var="loc" value="actionCateList.ch" scope="page"/>  
+                 </c:if>
+              </c:if>
+              <c:if test="${ piCash.currentPage > 1 }">
+                 <c:url var="blistBack" value="${ loc }">
+                    <c:if test="${ boCategory ne null || searchText ne null }">
+                       <c:param name="boCategory" value="${ boCategory }"/>
+                       <c:param name="searchCate" value="${ searchCate }"/>
+                       <c:param name="searchText" value="${ searchText }"/>
+                    </c:if>
+
+                    <c:param name="page" value="${ piCash.currentPage - 1}"/>
+                 </c:url>
+                 <a href="${ blistBack }">&lt;</a> &nbsp;
+              </c:if>
+           <!-- 페이지 -->
+           <c:forEach var="p" begin="${ piCash.startPage }" end="${ piCash.endPage }">
+              <c:if test="${ p eq piCash.currentPage }">
+                 <a class="currentP">${ p }</a>
+              </c:if>
+              
+              <c:if test="${ p ne piCash.currentPage }">
+                 <c:url var="blistCheck" value="${ loc }">
+                    <c:if test="${ boCategory ne null || searchText ne null }">
+                       <c:param name="boCategory" value="${ boCategory }"/>
+                       <c:param name="searchCate" value="${ searchCate }"/>
+                       <c:param name="searchText" value="${ searchText }"/>
+                    </c:if>     
+                    <c:param name="page" value="${ p }"/>
+                 </c:url>
+                 <a href="${ blistCheck }">${ p }</a> &nbsp;
+                 </c:if>
+           </c:forEach>
+           <!-- [다음] -->
+           <c:if test="${ piCash.currentPage >= piCash.maxPage }">
+           </c:if>
+           <c:if test="${ piCash.currentPage < piCash.maxPage }">
+              <c:url var="blistEnd" value="${ loc }">
+                 <c:if test="${ boCategory ne null || searchText ne null }">
+                       <c:param name="boCategory" value="${ boCategory }"/>
+                       <c:param name="searchCate" value="${ searchCate }"/>
+                       <c:param name="searchText" value="${ searchText }"/>
+                 </c:if>    
+                 <c:param name="page" value="${ piCash.currentPage + 1 }" />
+              </c:url>
+              <a href="${ blistEnd }">&gt;</a>
+           </c:if>
+           <!-- 쪽 번호 끝 -->
+
+
+
 
 
       <!-- 쪽번호 부분 -->
@@ -485,8 +560,7 @@
          location.href = "detailView.ch?boNum=" + boNum;
       });
 
-
-
+     
 
 
       /*    * 무한 페이지 * */
@@ -502,7 +576,7 @@
 
 
 
-      function getList(num1, num2, num3) {
+      function getList(num1, num2, num3, num4) {
          console.log('getList실행');
          console.log("num1 : ", num1)
          console.log("num2 : ", num2)
@@ -510,15 +584,17 @@
          boCategory = num1;
          cbStep = num2;
          boGroup = num3;
+         page = num4;
 
          console.log("전역 카테1 :", boCategory);
          console.log("전역 진행1 :", cbStep);
-
-
          $.ajax({
             url: "actionCateList.ch",
-            type: "GET",
-            data: { "boCategory": boCategory, "cbStep": cbStep, "boGroup": boGroup },
+            type: "post",
+            data: { "boCategory": boCategory, 
+                    "cbStep": cbStep,
+                    "boGroup": boGroup,
+                    "page" : page},
             success: function (data) {
 
 
@@ -559,6 +635,9 @@
       }
 
    </script>
+
+
+   <!-- ajax 페이징 처리 -->
 </body>
 
 </html>

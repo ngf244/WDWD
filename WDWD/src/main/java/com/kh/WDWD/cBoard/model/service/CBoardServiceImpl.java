@@ -243,6 +243,11 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public int endDispute(Dispute d) {
 		return cBoardDAO.endDispute(sqlSession, d);
+  }
+  
+  @Override
+  public ArrayList<CBoard> actionPremiumList(String boGroup) {
+		return cBoardDAO.actionPremiumList(sqlSession, boGroup);
 	}
 
 	

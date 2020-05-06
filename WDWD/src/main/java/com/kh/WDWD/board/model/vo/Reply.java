@@ -10,11 +10,12 @@ public class Reply {
 	private int rpConNum;
 	private int rpRp;
 	private String rpWriterNick;
+	private String profileImg;
 	
 	public Reply() {}
 
 	public Reply(int rpNum, String rpContent, String rpDate, String rpStatus, int refNum, String rpWriter, int rpConNum,
-			int rpRp, String rpWriterNick) {
+			int rpRp, String rpWriterNick, String profileImg) {
 		super();
 		this.rpNum = rpNum;
 		this.rpContent = rpContent;
@@ -25,6 +26,7 @@ public class Reply {
 		this.rpConNum = rpConNum;
 		this.rpRp = rpRp;
 		this.rpWriterNick = rpWriterNick;
+		this.profileImg = profileImg;
 	}
 
 	public int getRpNum() {
@@ -98,12 +100,20 @@ public class Reply {
 	public void setRpWriterNick(String rpWriterNick) {
 		this.rpWriterNick = rpWriterNick;
 	}
+	
+	public String getProfileImg() {
+		return profileImg;
+	}
+
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
+	}
 
 	@Override
 	public String toString() {
 		return "Reply [rpNum=" + rpNum + ", rpContent=" + rpContent + ", rpDate=" + rpDate + ", rpStatus=" + rpStatus
 				+ ", refNum=" + refNum + ", rpWriter=" + rpWriter + ", rpConNum=" + rpConNum + ", rpRp=" + rpRp
-				+ ", rpWriterNick=" + rpWriterNick + "]";
+				+ ", rpWriterNick=" + rpWriterNick + ", profileImg=" + profileImg + "]";
 	}
 	
 }

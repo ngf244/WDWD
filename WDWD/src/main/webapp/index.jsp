@@ -300,11 +300,6 @@
 		</div>
 			<div id="main">
 				<button onclick="goToBoardList();">자유게시판&1:1</button>
-				
-				
-				<c:if test="${ loginUser != null }">
-					<button class = "messageList">쪽지</button>
-				</c:if>
 				<button class= "pointShop" onclick="javascript:location.href='pointShop.ps';">포인트샵</button>
         <button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
 				<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
@@ -319,7 +314,7 @@
 	  		<button onclick="javascript:location.href='atrade.au';">authorTrade</button>
 		  	<button onclick="javascript:location.href='aunban.au';">authorUnban</button>
 			
-			
+				 
 		
 				
 				
