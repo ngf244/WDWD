@@ -761,7 +761,13 @@
 							<input type="hidden" value="${ reply.rpNum }">
 							<c:if test="${ reply.rpStatus == 'N' }">
 								<div>
-									<img class="replyProfileImg" src="${contextPath}/resources/profile_Image/${reply.profileImg}"><span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
+								<c:if test="${ reply.profileImg ne null }">
+									<img class="replyProfileImg" src="${contextPath}/resources/profile_Image/${reply.profileImg}">
+								</c:if>
+								<c:if test="${ reply.profileImg eq null }">
+									<img class="replyProfileImg" src="${contextPath}/resources/images/default_profile.png">
+								</c:if>
+									<span class="smallOption">${ reply.rpWriterNick }</span><span class="writingDate">(${ reply.rpDate })</span>
 									<c:if test="${ reply.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
 										<span class="deleteReply">[삭 제]</span>
 									</c:if>
@@ -797,7 +803,13 @@
 									<img src="${ contextPath }/resources/images/대댓글화살표.PNG">
 									<c:if test="${reply2.rpStatus == 'N' }">
 										<div>
-											<img class="replyProfileImg" src="${contextPath}/resources/profile_Image/${reply.profileImg}"><span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
+										<c:if test="${ reply2.profileImg ne null }">
+											<img class="replyProfileImg" src="${contextPath}/resources/profile_Image/${reply2.profileImg}">
+										</c:if>
+										<c:if test="${ reply2.profileImg eq null }">
+											<img class="replyProfileImg" src="${contextPath}/resources/images/default_profile.png">
+										</c:if>
+											<span class="smallOption">${ reply2.rpWriterNick }</span><span class="writingDate">(${ reply2.rpDate })</span>
 											<c:if test="${ reply2.rpWriter == loginUser.userId or loginUser.userId == 'admin'}">
 												<span class="deleteReply">[삭 제]</span>
 											</c:if>

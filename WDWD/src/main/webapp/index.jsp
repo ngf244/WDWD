@@ -296,7 +296,7 @@
 <body>
 	<jsp:include page="WEB-INF/views/common/mainHeader.jsp"/>
 	<section>
-		<div id="left-side" style="background-color: yellow;">
+		<div id="left-side">
 		</div>
 			<div id="main">
 				<button onclick="goToBoardList();">자유게시판&1:1</button>
@@ -578,7 +578,7 @@
 				<div class="sectionafter"></div>
 				<div style="height:100px;"></div>
 			</div>
-        <div id="right-side" style="background: blue">
+        <div id="right-side">
             
 		</div>
 	</section>

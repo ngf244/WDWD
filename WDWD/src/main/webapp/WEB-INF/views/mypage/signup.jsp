@@ -7,7 +7,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <title>회원가입</title>
 <style>
 
@@ -61,6 +60,7 @@
 	line-height: 70px;
 	color: white;
 	font-weight: bold;
+	cursor: pointer;
 	
 }
 
@@ -74,6 +74,7 @@
 	color: white;
 	line-height: 70px;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 .consent {
@@ -105,20 +106,20 @@ label{
 	margin-left: 31.3%;
 }
 
+#textlogo{
+	text-align: center;
+}
+
+#joinForm{
+	text-align: center;
+}
 
 </style>
 </head>
 <body>
-	<script>
-		$(function(){
-			swal({
-			    title: "카카오 로그인",
-			    text: "서비스를 이용하기 위해서는 회원가입을 하셔야 합니다!",
-			    icon: "info" //"info,success,warning,error" 중 택1
-			});
-		});
-	</script>
 		<div class="signuptitle">
+			<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.home';" id="textlogo">
+		</div>
 			<form action="signUp.me" method="post" id="joinForm">
 		
 		<!-- 아이디  -->
@@ -142,7 +143,7 @@ label{
 		<!-- 비밀번호 재확인 -->
 		<div class="form-group">
 			<label for="inform">비밀번호 재확인</label><br>
-			<input type="password" id="signpwd2" name="userPwd" class="form-control" placeholder="비밀번호 확인">
+			<input type="password" id="signpwd2" name="userPwd2" class="form-control" placeholder="비밀번호 확인">
 			<div class="check_font" id="pw2_check">
 			<br>
 			</div>
@@ -158,21 +159,13 @@ label{
 		</div>
 		
 		<div class="form-group">
-			<label for="inform">생년월일</label><br>
-			<input type="text" id="signbirth" name="userbirth" class="form-control">
-			<div class="check_font" id="birth_check">
-			<br>
-			</div>
-		</div>
-		
-		
-		<div class="form-group">
 			<label for="inform">닉네임</label><br>
 			<input type="text" id="signnick" name="nickName" class="form-control" value="${ member.nickName }">
 			<div class="check_font" id="nick_check">
 			<br>
 			</div>
 		</div>
+		
 		
 		<div class="form-group">
 			 <label for="inform">이메일</label><br>
@@ -214,54 +207,55 @@ label{
 		</div>
 	
 		<div class="form-groupBtn">
-			<div id="cancel" onclick="location.href='gomain.me';">취소</div>
+			<div id="cancel" onclick="location.href='index.home';">취소</div>
 			<div id="signbutton">가입하기</div>
 		</div>
 		</form>
-	</div>
 	
 	<script type="text/javascript">
 		window.onload = function(){
-			document.getElementById('signButton').onclick = function () {
-				document.getElementById('joinForm').submit();
-			};
+			$('#signbutton').on('click', function(){
+				$('#joinForm').submit();
+			});
 		};
 	</script>
 	<script>
+	//아이디 정규식
+	var idJ = /^[a-z0-9]{4,12}$/;
 	//아이디 유효성 검사
-// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
 	$("#user_id").blur(function() {
 		// id = "id_reg" / name = "userId"
 		var user_id = $('#user_id').val();
 		$.ajax({
-			url : "idCheck.me?userId=" + user_id,
+			url : "checkId.me",
 			type : 'get',
+			data : {"user_id": user_id},
 			success : function(data) {
+				// f12 콘솔창에 중복확인 
+				// 1 = 중복되는 값
+				// 0 = 중복되는 값이 아닐시
 				console.log("1 = 중복o / 0 = 중복x : "+ data);							
 				
 				if (data == 1) {
 						// 1 : 아이디가 중복되는 문구
 						$("#id_check").text("사용중인 아이디입니다 :p");
 						$("#id_check").css("color", "red");
-						$("#reg_submit").attr("disabled", true);
-					} else {
+				} else {
 						
 						if(idJ.test(user_id)){
 							// 0 : 아이디 길이 / 문자열 검사
-							$("#id_check").text("");
-							$("#reg_submit").attr("disabled", false);
+							$("#id_check").text("사용 가능한 아이디입니다 :D");
+							$("#id_check").css("color", "green");
 				
 						} else if(user_id == ""){
 							
 							$('#id_check').text('아이디를 입력해주세요 :)');
 							$('#id_check').css('color', 'red');
-							$("#reg_submit").attr("disabled", true);				
 							
 						} else {
 							
 							$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
 							$('#id_check').css('color', 'red');
-							$("#reg_submit").attr("disabled", true);
 						}
 						
 					}
@@ -270,6 +264,49 @@ label{
 				}
 			});
 		});
+		
+		var idJ2 = /^[ㄱ-힣a-z0-9]{2,12}$/;
+		$("#signnick").blur(function() {
+			// id = "id_reg" / name = "userId"
+			var signNick = $('#signnick').val();
+			$.ajax({
+				url : "checkNick.my",
+				type : 'get',
+				data : {"nickName": signNick},
+				success : function(data) {
+					// f12 콘솔창에 중복확인 
+					// 1 = 중복되는 값
+					// 0 = 중복되는 값이 아닐시
+					console.log("1 = 중복o / 0 = 중복x : "+ data);							
+					
+					if (data == 1) {
+							// 1 : 아이디가 중복되는 문구
+							$("#nick_check").text("사용중인 닉네임입니다 :p");
+							$("#nick_check").css("color", "red");
+					} else {
+							
+							if(idJ2.test(signNick)){
+								// 0 : 아이디 길이 / 문자열 검사
+								$("#nick_check").text("사용 가능한 닉네임입니다 :D");
+								$("#nick_check").css("color", "green");
+					
+							} else if(signNick == ""){
+								
+								$('#nick_check').text('닉네임을 입력해주세요 :)');
+								$('#nick_check').css('color', 'red');
+								
+							} else {
+								
+								$('#nick_check').text("닉네임을 소문자와 숫자 2~12자리만 가능합니다 :) :)");
+								$('#nick_check').css('color', 'red');
+							}
+							
+						}
+					}, error : function() {
+							console.log("실패");
+					}
+				});
+			});
 </script>
 	<script>
 	//CapsLock 스크립트	
@@ -289,9 +326,6 @@ label{
 	// 모든 공백 체크 정규식
 	var empJ = /\s/g;
 	
-	// 아이디 정규식
-	var idJ = /^[a-z0-9]{4,12}$/;
-	
 	// 비밀번호 정규식
 	var pwJ = /^[A-Za-z0-9]{4,12}$/;
 	
@@ -305,7 +339,7 @@ label{
 	
 	
 	//이름에 특수문자가 안들어가게 설정
-	$("#userName").blur(function(){
+	$("#signname").blur(function(){
 		if (nameJ.test($(this).val()){
 			console.log(nameJ.test($(this).val()));
 			$("name_check").text('');
@@ -340,8 +374,8 @@ label{
 		if (dateStr.length <=8) {
 			 
 			if (1900 > year || year > yearNow){
-				$('#signbirth').text('생년월일을 확인해주세요 :)');
-				$('#signbirth').css('color', 'red');
+				$('#birth_check').text('생년월일을 확인해주세요 :)');
+				$('#birth_check').css('color', 'red');
 		} else if (month < 1 || month > 12){
 			
 			$('#birth_check').text('생년월일을 확인해주세요');

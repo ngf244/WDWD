@@ -5,7 +5,7 @@
 		select r.*, m.me_nick, c.con_cop
 		from reply r
     		join member m on(r.rp_writer = m.me_id)
-            join contents c on (m.me_con_num = c.con_num)
+            left join contents c on (m.me_con_num = c.con_num)
 		where rp_refnum = #{boNum} and rp_rp is null
 		order by rp_date
 	</select>
@@ -14,7 +14,7 @@
 		select r.*, m.me_nick, c.con_cop
 		from reply r
     		join member m on(r.rp_writer = m.me_id)
-            join contents c on (m.me_con_num = c.con_num)
+            left join contents c on (m.me_con_num = c.con_num)
 		where rp_refnum = #{boNum} and rp_rp is not null
 		order by rp_date
 	</select>

@@ -943,7 +943,7 @@
 									<td style="text-align: right; color: rgb(52, 152, 219);"><fmt:formatNumber value="${ member.point }"/></td>
 								</tr>
 							</table>
-							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 포인트샵으로 이동</a></span>
+							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="pointShop.ps">- 포인트샵으로 이동</a></span>
 							<div style="clear: both;"></div>
 						</div>
 						<div class="cash" style="float: right;">
@@ -953,7 +953,7 @@
 									<td style="text-align: right; color: rgb(231, 76, 60);"><fmt:formatNumber value="${ member.cash }"/></td>
 								</tr>
 							</table>
-							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="">- 캐쉬 충전 페이지로 이동</a></span>
+							<span id="pointShopMoveLink" style="float: right; margin-right: 40px;"><a href="cashChange.my?userId=${ member.userId }">- 캐쉬 충전 페이지로 이동</a></span>
 							<div style="clear: both;"></div>					
 						</div>
 						<div style="clear:both;"></div>
