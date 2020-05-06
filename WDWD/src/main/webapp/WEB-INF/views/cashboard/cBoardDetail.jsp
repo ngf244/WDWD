@@ -12,7 +12,7 @@
 		margin: 0 auto;
 	}
 	#boardDetail {
-		background-color: rgba(227, 242, 253, 0.8); 
+		background-color: #E1F5FE; 
 	}
 	#logoImg {
 		display: inline-table;
@@ -231,6 +231,17 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<script>
+		if('${cBoard.boDel}' == 'Y') {
+			swal({
+				title: "거래 취소된 게시글입니다.",
+				icon: "error",
+			}).then(() => {
+				location.href="actionList.ch";
+			})
+		}
+	</script>
+
 	<div id="boardDetail">
 		<div id="logoImg">
 			<img src='${ contextPath }/resources/images/listIcon.jpg'>1

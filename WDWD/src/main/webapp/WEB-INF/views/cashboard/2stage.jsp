@@ -101,6 +101,7 @@
 		right: 50px;
 		width: 300px;
 		background-color: white;
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 13px;
 	}
 	#chatTitle {
 		height: 40px;
@@ -114,7 +115,6 @@
 		height: 400px;
 		overflow: auto;
 		text-align: center;
-		
 	}
 	.chatDate {
 		font-size: 10pt;
@@ -154,6 +154,12 @@
 		font-size: 10pt;
 		margin-bottom: 5px;
 	}
+	#chatCheck {
+		height: 20px;
+		line-height: 20px;
+		font-size: 13px;
+		text-align: center;
+	}
 	#chatBottom {
 		border: 1px solid black;
 	}
@@ -179,6 +185,31 @@
 		cursor: pointer;
 		font-size: 10pt;
 	}
+	#disputeArea {
+		position: absolute;
+		left: 50px;
+		width: 300px;
+		background-color: white;
+		display: none;
+		background-color: #EEEEEE;
+		padding: 20px;
+		box-shadow: 2px 2px 2px;
+		font-size: 12pt;
+	}
+	#disputeTitle {
+		text-align: center;
+		font-size: 13pt;
+		font-weight: bold;
+	}
+	#disputeArea img {
+		width: 25px;
+		height: 25px;
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		cursor: pointer;
+	}
+	
 	#btnList {
 		text-align: center;
 		margin-top: 30px;
@@ -192,6 +223,19 @@
 		font-size: 14pt;
 		text-align: center;
 		background-color: rgba(161, 206, 244, 0.55);
+		border-radius: 5px;
+		cursor: pointer;
+		font-weight: bold;
+	}
+	.red-button {
+		display: inline-table;
+		width: 150px;
+		height: 50px;
+		margin: 10px;
+		line-height: 50px;
+		font-size: 14pt;
+		text-align: center;
+		background-color: #FFCCBC;
 		border-radius: 5px;
 		cursor: pointer;
 		font-weight: bold;
@@ -230,7 +274,7 @@
 						</div>
 						
 						<div id="registViewWrap">
-							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+							<c:if test="${ cBoard.reId ne sessionScope.loginUser.nickName }">
 								<c:if test="${ empty reqB }">
 									<div id="notRegist">
 										<img src='${ contextPath }/resources/images/drawing.jpg' style="width: 100%;"><br><br>
@@ -260,7 +304,7 @@
 								</c:if>
 							</c:if>
 							
-							<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
+							<c:if test="${ cBoard.reId eq sessionScope.loginUser.nickName }">
 								<c:if test="${ empty reqB }">
 									<form action="registWrite.ch" method="post" id="registWriteForm">
 										<div id="contentWrap">
@@ -380,21 +424,20 @@
 						<script>
 							$('.buyerInfoOption').click(function(){
 								var whatIndex = $(this).index();
+								var nickName = $(this).parent().find('span').text();
 								
 								$.ajax({
 									url: 'callmeId.ch',
-									data: {nickName: $(this).parent().find('span').text()},
+									data: {nickName: nickName},
 									type: 'post',
 									success: function(data){
 										console.log(whatIndex)
 										if(whatIndex == '1') {
 											location.href = "main.my?userId=" + data
 										} else if(whatIndex == '2') {
-											// 수정예정
-											location.href = "main.my?userId=" + data
+											location.href = "actionList.ch?searchWord=" + nickName
 										} else if(whatIndex == '3') {
-											// 수정예정
-											location.href = "main.my?userId=" + data
+											location.href = "myReplyList.my?userId=" + data
 										}
 									}
 								});
@@ -477,19 +520,23 @@
 								</c:forEach>
 							</c:if>
 							
+							<div id="chatCheck"></div>
+							
 							<div id="chatBottom">
 								<textarea id="inputText"></textarea>
 								<div id="sendText">전송</div>
 							</div>
 						</div>
 						
-						<script>
-						    $("#inputText").scroll(function(){
+				        <script>
+					        $("#inputText").scroll(function(){
 						    	$("#inputText").height($("#inputText").height() + 13 + 'px')
 						    });
-						</script>
-						
-				        <script>
+				        
+				        	if("${cBoard.boWriter}" != "${sessionScope.loginUser.nickName}" && "${cBoard.reId}" != "${sessionScope.loginUser.nickName}" && "${sessionScope.loginUser.nickName}" == '운영자') {
+				        		$('#registChat').hide();
+				        	}
+				        
 				        	$('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
 				        	
 			            	$(document).ready(function(){
@@ -542,6 +589,42 @@
 				                        $('#chatMain').scrollTop($('#chatMain')[0].scrollHeight);
 			                    	}
 			                    });
+			                    
+			                    // 입력중일 때
+			                    var oldTextCheck = 0;
+					        	var newTextCheck = 0;
+					        
+						        !function textCheck(){
+									setTimeout(function() {
+										if($("#inputText").is(":focus")) {
+											oldTextCheck = newTextCheck;
+											
+											if($('#inputText').val() == "") {
+												newTextCheck = 0;
+											} else {
+												newTextCheck = 1;
+											}
+											
+											if(oldTextCheck != newTextCheck) {
+												var data = {chatCon: newTextCheck, chatWriter: '${ loginUser.nickName }', chatRefNum: "${ cBoard.boNum }"}
+												socket.emit("chatCheck", data);
+											}
+										}
+										
+										textCheck();
+									}, 1000)
+								}()
+			                    
+			                    // 입력중입니다 받을 때
+								socket.on('chatCheck', function(data) {
+									if('${ loginUser.nickName }' != data.chatWriter) {
+										if(data.chatCon == 0) {
+											$('#chatCheck').text("");
+										} else {
+											$('#chatCheck').text(data.chatWriter + "님이 입력중입니다.");
+										}
+									}
+			                    });
 			                });
 				        </script>
 	
@@ -560,12 +643,78 @@
 						
 					</div> <br>
 					
+					<div id="disputeArea">
+						<div id="disputeTitle">거래 중재</div>
+						<img src="${ contextPath }/resources/images/x-button.png">
+						
+						<c:forEach var="dp" items="${ dpList }">
+							<div style="height:20px;"></div>
+							
+							<c:choose>
+								<c:when test="${ dp.diStatus eq 1 }">에디터의 취소요청 : </c:when>
+								<c:when test="${ dp.diStatus eq 2 }">의뢰인의 취소요청 : </c:when>
+								<c:when test="${ dp.diStatus eq 3 }">에디터의 문의 : </c:when>
+								<c:when test="${ dp.diStatus eq 4 }">의뢰인의 문의 : </c:when>
+							</c:choose>
+							
+							${ dp.diContent }
+						</c:forEach>
+					</div>
+					
+					<script>
+						if("${dpList}" == "[]") {
+							$('#disputeArea').remove();
+						}
+					
+						if("${sessionScope.loginUser.nickName}" == '운영자') {
+			        		$('#disputeArea').show();
+			        		scroll_follow("#disputeArea");
+			        	}
+						
+						$('#disputeArea img').click(function(){
+							$('#disputeArea').remove();
+						})
+					</script>
+					
 					<div id="btnList">
+						<c:set var="btnCheck1" value="0" />
+						<c:set var="btnCheck2" value="0" />
+					
+						<c:forEach var="dp" items="${ dpList }">
+							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName and dp.diStatus eq 4 }">
+								<div class="red-button" onclick="cancleDispute(4);">문의취소</div>
+								<c:set var="btnCheck1" value="1" />
+							</c:if>
+							
+							<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName and dp.diStatus eq 2 }">
+								<div class="red-button" onclick="cancleDispute(2);">취소요청</div>
+								<c:set var="btnCheck2" value="1" />
+							</c:if>
+							
+							<c:if test="${ cBoard.reId eq sessionScope.loginUser.nickName and dp.diStatus eq 3 }">
+								<div class="red-button" onclick="cancleDispute(3);">문의취소</div>
+								<c:set var="btnCheck1" value="1" />
+							</c:if>
+							
+							<c:if test="${ cBoard.reId eq sessionScope.loginUser.nickName and dp.diStatus eq 1 }">
+								<div class="red-button" onclick="cancleDispute(1);">취소요청</div>
+								<c:set var="btnCheck2" value="1" />
+							</c:if>
+						</c:forEach>
+						
+						<c:if test="${ btnCheck1 eq 0 }">
+							<div class="red-button" onclick="goDispute(0);">문의하기</div>
+						</c:if>
+						
+						<c:if test="${ btnCheck2 eq 0 }">
+							<div class="red-button" onclick="goDispute(1);">취소요청</div>
+						</c:if>
+						
 						<div id="submit" class="button">수락하기</div>
 						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
 					</div>
 					
-					<c:if test="${ cBoard.boWriter eq sessionScope.loginUser.nickName }">
+					<c:if test="${ cBoard.reId ne sessionScope.loginUser.nickName }">
 						<c:if test="${ empty reqB }">
 							<script>
 								$('#submit').hide();
@@ -573,7 +722,7 @@
 						</c:if>
 					</c:if>
 					
-					<c:if test="${ cBoard.boWriter ne sessionScope.loginUser.nickName }">
+					<c:if test="${ cBoard.reId eq sessionScope.loginUser.nickName }">
 						<c:if test="${ empty reqB }">
 							<script>
 								$('#submit').text('작성하기');
@@ -597,6 +746,67 @@
 						}, function(){
 							$(this).css({'background-color':'rgba(161, 206, 244, 0.55)', 'color':'black'})
 						});
+						
+						$('.red-button').hover(function(){
+							$(this).css({'background-color':'#FF8A65', 'color':'white'})
+						}, function(){
+							$(this).css({'background-color':'#FFCCBC', 'color':'black'})
+						});
+						
+						function goDispute(buttonFloat) {
+							var diStatus = 0;
+							
+							if("${cBoard.boWriter}" == "${sessionScope.loginUser.nickName}") {
+								if(buttonFloat == 0) {
+									diStatus = 4;
+								} else {
+									diStatus = 2;
+								}
+							} else {
+								if(buttonFloat == 0) {
+									diStatus = 3;
+								} else {
+									diStatus = 1;
+								}
+							}
+							
+							swal({
+								title: "사유를 입력해주세요.",
+								icon: "info",
+								content: {
+									element: "input",
+									attributes: {type: "text"},
+								}
+							}).then((input) => {
+								swal({
+									title: "처리되었습니다.",
+									icon: "success",
+								}).then(() => {
+									location.href='goDispute.ch?diRef=${cBoard.boNum}&diStatus=' + diStatus + '&diContent=' + input;
+								})
+							});
+						}
+						
+						function cancleDispute(diStatus) {
+							swal({
+								title: "진행중인 문의를 취소하시겠습니까?",
+								icon: "info",
+								buttons : {
+									cancle : {
+										text : '취소',
+										value : false,
+									},
+									confirm : {
+										text : '확인',
+										value : true
+									}
+								}
+							}).then((result) => {
+								if(result) {
+									location.href="cancleDispute.ch?diRef=${ cBoard.boNum }&diStatus=" + diStatus
+								}
+							});
+						}
 						
 						$('#submit').click(function(){
 							swal({

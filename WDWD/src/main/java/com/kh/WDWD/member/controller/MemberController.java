@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.kh.WDWD.board.model.exception.BoardException;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
@@ -69,7 +70,7 @@ public class MemberController {
 		if(loginUser != null) {
 			// 로그인 성공 시 세션에 정보를 담아야 하기 때문에 세션이 필요
 			model.addAttribute("loginUser", loginUser);
-			return "redirect:/";
+			return "redirect:/index.home";
 		}else {
 			model.addAttribute("msg","로그인 실패하셨습니다!");
 			return "common/errorPage";
@@ -406,7 +407,7 @@ public class MemberController {
 		
 	}
 	
-  @RequestMapping("sessionUpdate.me")
+	@RequestMapping("sessionUpdate.me")
 	public void sessionUpdate(@RequestParam("userId") String userId, Model model, HttpServletResponse response) {
 		response.setContentType("application/json; charset=utf-8");
 		
@@ -437,6 +438,16 @@ public class MemberController {
 			jArr.add(jBoard);
 		}
 		
+		ArrayList<Board> recentlyScrapList = mService.recentlyScrapList(loginUser);
+		
+		for(Board b: recentlyScrapList) {
+			JSONObject jBoard = new JSONObject();
+			jBoard.put("boNum", b.getBoNum());
+			jBoard.put("boTitle", b.getBoTitle());
+			
+			jArr.add(jBoard);
+		}
+		
 		JSONObject sendJson = new JSONObject();
 		sendJson.put("list", jArr);
 
@@ -446,6 +457,18 @@ public class MemberController {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("callTodayData.me")
+	public void callTodayData(HttpServletResponse response) {
+		int[] userId = mService.callTodayData();
+		
+		try {
+			response.setContentType("application/json; charset=UTF-8");
+			new Gson().toJson(userId, response.getWriter());
+		} catch (JsonIOException | IOException e) {
 			e.printStackTrace();
 		}
 	}

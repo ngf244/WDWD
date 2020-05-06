@@ -184,25 +184,25 @@
 		select * from request
 		where re_num = #{boNum}
 	</select>
-	
+	<!-- 
 	<update id="MinusCash" parameterType="CBoard">
 		update member
 		set me_cash = me_cash - #{cbCash}
 		<if test='cbPrimium.equals("Y")'>-10000</if>
 		where me_nick = #{boWriter}
 	</update>
-	
+	 -->
 	<insert id="MinusDetail" parameterType="CBoard">
 		insert into point_cash
 		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>+10000</if>, sysdate, 'C', (select me_id from member where me_nick = #{boWriter}))
 	</insert>
-	
+	<!-- 
 	<update id="PlusCash" parameterType="_int">
 		update member
 		set me_cash = me_cash + (select cb_cash from cash_board where cb_num = #{boNum})
 		where me_id = (select re_id from request where re_num = #{boNum} and re_plz = 'Y') 
 	</update>
-	
+	 -->
 	<insert id="PlusDetail" parameterType="_int">
 		insert into point_cash
 		values (pc_seq.nextval, '의뢰 수주', (select cb_cash from cash_board where cb_num = #{boNum}), sysdate, 'C', (select re_id from request where re_num = #{boNum} and re_plz = 'Y'))
@@ -737,7 +737,43 @@
 		where con_ref = #{boNum} and con_level = 0
 	</select>
 	
-	<select id="actionPremiumList" resultMap="CBoardResultSet">
+	<insert id="goDispute" parameterType="Dispute">
+		insert into dispute
+		values (di_seq.nextval, #{diRef}, default, #{diStatus}, #{diContent}, sysdate)
+	</insert>
+	
+	<select id="dpList" resultMap="DisputeResultSet">
+		select *
+		from dispute
+		where di_refnum = #{boNum}
+	</select>
+	
+	<resultMap type="Dispute" id="DisputeResultSet">
+		<id property="diNum" column="DI_NUM"/>
+		<result property="diRef" column="DI_REFNUM"/>
+		<result property="diRps" column="DI_PRS"/>
+		<result property="diStatus" column="DI_STATUS"/>
+		<result property="diContent" column="DI_CONTENT"/>
+		<result property="diDate" column="DI_DATE"/>
+	</resultMap>
+	
+	<delete id="cancleDispute" parameterType="Dispute">
+		delete from dispute
+		where DI_REFNUM = #{diRef} and DI_STATUS = #{diStatus}
+	</delete>
+	
+	<delete id="endDispute1" parameterType="Dispute">
+		delete from dispute
+		where DI_REFNUM = #{diRef}
+	</delete>
+	
+	<update id="endDispute2" parameterType="Dispute">
+		update board
+		set bo_del = 'Y'
+		where bo_num = #{diRef} 
+	</update>
+
+  <select id="actionPremiumList" resultMap="CBoardResultSet">
 	SELECT *
 		FROM CASH_BOARD  
 			JOIN BOARD ON (BO_NUM = CB_NUM)

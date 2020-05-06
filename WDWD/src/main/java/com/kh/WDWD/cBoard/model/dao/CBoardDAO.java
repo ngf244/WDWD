@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.vo.CBoard;
@@ -191,10 +192,10 @@ public class CBoardDAO {
 
 	public int go3stage(SqlSessionTemplate sqlSession, int boNum) {
 		int result1 = sqlSession.update("cBoardMapper.go3stage", boNum);
-		int result2 = sqlSession.update("cBoardMapper.PlusCash", boNum);
+		/* int result2 = sqlSession.update("cBoardMapper.PlusCash", boNum); */
 		int result3 = sqlSession.insert("cBoardMapper.PlusDetail", boNum);
 		
-		if(result1 > 0 && result2 > 0 && result3 > 0) {
+		if(result1 > 0 && result3 > 0) {
 			return 1;
 		} else {
 			return 0;
@@ -216,7 +217,8 @@ public class CBoardDAO {
 			if(b.getBoGroup().equals("3")) {
 				sqlSession.update("cBoardMapper.okCash2", r);
 				b = sqlSession.selectOne("cBoardMapper.cBoardDetail", boNum);
-				sqlSession.update("cBoardMapper.MinusCash", b);
+				/* sqlSession.update("cBoardMapper.MinusCash", b); */
+				b.setCbCash(b.getCbCash() * (-1));
 				sqlSession.insert("cBoardMapper.MinusDetail", b);
 			}
 		}
@@ -233,10 +235,10 @@ public class CBoardDAO {
 		int result2 = sqlSession.update("cBoardMapper.go3stageContest2", r);
 		
 		int boNum = r.getReNum();
-		int result3 = sqlSession.update("cBoardMapper.PlusCash", boNum);
+		/* int result3 = sqlSession.update("cBoardMapper.PlusCash", boNum); */
 		int result4 = sqlSession.insert("cBoardMapper.PlusDetail", boNum);
 		
-		if(result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0) {
+		if(result1 > 0 && result2 > 0 && result4 > 0) {
 			return 1;
 		} else {
 			return 0;
@@ -248,7 +250,8 @@ public class CBoardDAO {
 	}
 
 	public int minusCash(SqlSessionTemplate sqlSession, CBoard board) {
-		sqlSession.update("cBoardMapper.MinusCash", board);
+		/* sqlSession.update("cBoardMapper.MinusCash", board); */
+		board.setCbCash(board.getCbCash() * (-1));
 		sqlSession.insert("cBoardMapper.MinusDetail", board);
 		
 		return 0;
@@ -297,7 +300,31 @@ public class CBoardDAO {
 		return sqlSession.selectOne("cBoardMapper.selectThumbnail", boNum);
 	}
 
-	public ArrayList<CBoard> actionPremiumList(SqlSessionTemplate sqlSession, String boGroup) {
+	public int goDispute(SqlSessionTemplate sqlSession, Dispute d) {
+		return sqlSession.insert("cBoardMapper.goDispute", d);
+	}
+
+	public ArrayList<Dispute> dpList(SqlSessionTemplate sqlSession, int boNum) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.dpList", boNum);
+	}
+
+	public int cancleDispute(SqlSessionTemplate sqlSession, Dispute d) {
+		return sqlSession.delete("cBoardMapper.cancleDispute", d);
+	}
+
+	public int endDispute(SqlSessionTemplate sqlSession, Dispute d) {
+		int result1 = sqlSession.delete("cBoardMapper.endDispute1", d);
+		int result2 = sqlSession.update("cBoardMapper.endDispute2", d);
+		
+		if(result1 > 0 && result2 > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+  public ArrayList<CBoard> actionPremiumList(SqlSessionTemplate sqlSession, String boGroup) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.actionPremiumList", boGroup);
 	}
 }
+
+

@@ -79,7 +79,13 @@ public interface MemberService {
 
 	ArrayList<Board> recentlyBoardList(Member loginUser);
 
-	int updateSecretToggle2(String userId);
+	ArrayList<Board> recentlyScrapList(Member loginUser);
+
+	ArrayList<Member> getMemberList();
+
+	int[] callTodayData();
+
+  int updateSecretToggle2(String userId);
 
 	Member selectMemberByEmail(String string);
 

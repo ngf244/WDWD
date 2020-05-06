@@ -161,7 +161,7 @@
 		font-size: 16pt;
 	}
 	.smallMenu {
-		width: 100px;
+		width: 130px;
 		display: inline-table;
 		margin: 8px;
 		font-size: 13pt;
@@ -176,25 +176,25 @@
 		background-color: rgb(179, 229, 252);
 	}
 	.smallMenu img {
-		width: 80px;
-		height: 80px;
+		width: 60px;
+		height: 60px;
 		margin-bottom: 10px;
 	}
-	#recently {
+	.recently {
 		width: 200px;
 		display: inline-table;
 		font-size: 14pt;
 		font-weight: bold;
 		padding: 10px;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 		border-top: 2px solid gray;
 		border-bottom: 2px solid gray;
 	}
-	.recentlyBoard {
+	.recentlyBoard, .scrapBoard {
 		margin: 0 auto;
 		width: 300px;
-		padding: 10px;
-		font-size: 13pt;
+		padding: 8px;
+		font-size: 12pt;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -390,7 +390,7 @@
 					
 					<div id="smallInfo">
 						<div id="smallInfoContent">
-							<div style="height: 60px;"></div>
+							<div style="height: 30px;"></div>
 							<div id="profile_wrap">
 								<div id="profile_img"><img src=''></div>
 								<b>${ sessionScope.loginUser.nickName } 님</b>
@@ -400,12 +400,12 @@
 	
 							<div class="smallMenu yellow">
 								<img src="${ contextPath }/resources/images/point.png">
-								<br><b><span id="havePoint"></span> POINT</b>
+								<br><b><span id="havePoint"></span><br>POINT</b>
 							</div>
 	
 							<div class="smallMenu yellow">
 								<img src="${ contextPath }/resources/images/cash.png">
-								<br><b><span id="haveCash"></span> CASH</b>
+								<br><b><span id="haveCash"></span><br>CASH</b>
 							</div>
 	
 							<div class="smallMenu blue" onclick="goMyPage();">
@@ -418,15 +418,23 @@
 								<br><b>로그아웃</b>
 							</div>
 	
-							<div style="height: 60px;"></div>
+							<div style="height: 30px;"></div>
 							
-							<div id="recently">최근 본 글</div>
+							<div class="recently">최근 본 글</div>
 	                
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
 							<input type="hidden" value="0"><div class="recentlyBoard"></div><input type="hidden" value="0">
+							
+							<div style="height: 30px;"></div>
+							
+							<div class="recently">최근 스크랩 한 글</div>
+							
+							<div class="scrapBoard"></div><input type="hidden" value="0">
+							<div class="scrapBoard"></div><input type="hidden" value="0">
+							<div class="scrapBoard"></div><input type="hidden" value="0">
 						</div>				
 					</div>
 				</c:if>
@@ -449,33 +457,48 @@
 							$('#haveCash').text(cash.toLocaleString());
 							
 							if(list[0].profileImg == null) {
-								$('#profile_img').children().attr('src', '${ contextPath }/resources/images/people.png');
+								$('#profile_img').children().attr('src', '${ contextPath }/resources/images/default_profile.png');
 							} else {
 								$('#profile_img').children().attr('src', '${ contextPath }/resources/profile_Image/' + list[0].profileImg);
 							}
 							
-							for(var i = 1; i < list.length; i++) {
-								if(list[0].recent1 == list[i].boNum) {
-									$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(0).text(list[i].boTitle);
-									$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
-								} else if(list[0].recent2 == list[i].boNum) {
-									$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(1).text(list[i].boTitle);
-									$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
-								} else if(list[0].recent3 == list[i].boNum) {
-									$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(2).text(list[i].boTitle);
-									$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
-								} else if(list[0].recent4 == list[i].boNum) {
-									$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(3).text(list[i].boTitle);
-									$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
-								} else if(list[0].recent5 == list[i].boNum) {
-									$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
-									$('.recentlyBoard').eq(4).text(list[i].boTitle);
-									$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
+							var recentlyCheck = 1;
+							for(var i = 1; i < 6; i++) {
+								if(list[recentlyCheck].boGroup == null) {
+									break;
+								} else {
+									if(list[0].recent1 == list[i].boNum) {
+										$('.recentlyBoard').eq(0).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(0).text(list[i].boTitle);
+										$('.recentlyBoard').eq(0).next().val(list[i].boGroup);
+									} else if(list[0].recent2 == list[i].boNum) {
+										$('.recentlyBoard').eq(1).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(1).text(list[i].boTitle);
+										$('.recentlyBoard').eq(1).next().val(list[i].boGroup);
+									} else if(list[0].recent3 == list[i].boNum) {
+										$('.recentlyBoard').eq(2).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(2).text(list[i].boTitle);
+										$('.recentlyBoard').eq(2).next().val(list[i].boGroup);
+									} else if(list[0].recent4 == list[i].boNum) {
+										$('.recentlyBoard').eq(3).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(3).text(list[i].boTitle);
+										$('.recentlyBoard').eq(3).next().val(list[i].boGroup);
+									} else if(list[0].recent5 == list[i].boNum) {
+										$('.recentlyBoard').eq(4).prev().val(list[i].boNum);
+										$('.recentlyBoard').eq(4).text(list[i].boTitle);
+										$('.recentlyBoard').eq(4).next().val(list[i].boGroup);
+									}
+									recentlyCheck++;
 								}
+							}
+							
+							for(var i = 0; i < 3; i++) {
+								if(list[recentlyCheck + i] == null) {
+									break;
+								}
+								
+								$('.scrapBoard').eq(i).next().val(list[recentlyCheck + i].boNum);
+								$('.scrapBoard').eq(i).text(list[recentlyCheck + i].boTitle);
 							}
 							
 							setTimeout(function() {
@@ -483,10 +506,8 @@
 							}, 100);
 						}
 					})
-					.always(function() {
-						
-					});
 				});
+				
 				$('#smallInfo').click(function() {
 					if(!($('#smallInfoContent').is(":hover"))) {
 						$('#smallInfoContent').removeClass("open");
@@ -503,6 +524,10 @@
 						location.href= "detailView.ch?boNum=" + $(this).prev().val();
 					}
 				});
+				
+				$('.scrapBoard').click(function(){
+					location.href= "detail.bo?boNum=" + $(this).next().val();
+				})
 
 				$('#notice').click(function(e){
 					$('#noticeArea').slideToggle();
@@ -683,11 +708,22 @@
 				<div class="menubar">충전소</div>
 				
 				<div id="menuHeaderText">
-					<span id="menuTextBoard">등록된 게시물 123개</span>
-					<span id="menuTextReply">등록된 댓글 321개</span>
+					<span id="menuTextBoard"></span>
+					<span id="menuTextReply"></span>
 				</div>
 			
 				<script>
+					$.ajax({
+						url: 'callTodayData.me',
+						type: 'post',
+						success: function(data){
+							console.log(data);
+							$('#menuTextBoard').text('등록된 게시물 ' + data[0] + '개');
+							$('#menuTextReply').text('등록된 댓글 ' + data[1] + '개');
+							
+						}
+					});
+				
 					$('#menuTextReply').hide();
 					!function loop(){
 						setTimeout(function() {

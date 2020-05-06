@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
@@ -454,17 +455,19 @@ public class CBoardController {
 							userNick = m.getNickName();
 						}
 						
-						if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId())) {
+						if(userNick.equals(b.getBoWriter()) || userNick.equals(b.getReId()) || userNick.equals("운영자")) {
 							Board reqB = cBoardService.cBoardReqView(boNum);
 							ArrayList<Contents> reqFileList = new ArrayList<>();
 							if(reqB != null) {
 								reqFileList = cBoardService.fileList(reqB.getBoNum());
 							}
 							ArrayList<Chat> chatList = cBoardService.chatList(boNum);
+							ArrayList<Dispute> dpList = cBoardService.dpList(boNum);
 							
 							mv.addObject("reqB", reqB);
 							mv.addObject("reqFileList", reqFileList);
 							mv.addObject("chatList", chatList);
+							mv.addObject("dpList", dpList);
 							mv.setViewName("cashboard/2stage");
 						} else {
 							String url = (String)request.getHeader("REFERER");
@@ -704,6 +707,45 @@ public class CBoardController {
 			new Gson().toJson(userId, response.getWriter());
 		} catch (JsonIOException | IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("goDispute.ch")
+	public String goDispute(@ModelAttribute Dispute d) {
+		int check = 0;
+		int result = 0;
+		
+		if(d.getDiStatus() == 1 || d.getDiStatus() == 2) {
+			ArrayList<Dispute> dpList = cBoardService.dpList(d.getDiRef());
+			for(Dispute dp : dpList) {
+				if(dp.getDiStatus() == 1 || dp.getDiStatus() == 2) {
+					check = 1;
+					break;
+				}
+			}
+		}
+		
+		if(check == 0) {
+			result = cBoardService.goDispute(d);
+		} else {
+			result = cBoardService.endDispute(d);
+		}
+		
+		if(result > 0) {
+			return "redirect:detailView.ch?boNum=" + d.getDiRef();
+		} else {
+			throw new CBoardException("게시글 문의에 실패하였습니다.");
+		}
+	}
+	
+	@RequestMapping("cancleDispute.ch")
+	public String cancleDispute(@ModelAttribute Dispute d) {
+		int result = cBoardService.cancleDispute(d);
+		
+		if(result > 0) {
+			return "redirect:detailView.ch?boNum=" + d.getDiRef();
+		} else {
+			throw new CBoardException("게시글 문의취소에 실패하였습니다.");
 		}
 	}
 	

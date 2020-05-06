@@ -155,7 +155,7 @@
 										    		<div class="modal-right">
 										    			<div id="profile_wrap">
 										    				<c:if test="${ empty b.profileImg }">
-										    					<div id="profile_img"><img src='${ contextPath }/resources/images/people.png'></div>
+										    					<div id="profile_img"><img src='${ contextPath }/resources/images/default_profile.png'></div>
 										    				</c:if>
 										    				
 										    				<c:if test="${ !empty b.profileImg }">
@@ -210,21 +210,20 @@
 					<script>
 						$('.modalOption').click(function(){
 							var whatIndex = $(this).index();
+							var nickName = $(this).parent().find('b').text();
 							
 							$.ajax({
 								url: 'callmeId.ch',
-								data: {nickName: $(this).parent().find('b').text()},
+								data: {nickName: nickName},
 								type: 'post',
 								success: function(data){
 									console.log(whatIndex)
 									if(whatIndex == '3') {
 										location.href = "main.my?userId=" + data
 									} else if(whatIndex == '6') {
-										// 수정예정
-										location.href = "main.my?userId=" + data
+										location.href = "actionList.ch?searchWord=" + nickName
 									} else if(whatIndex == '9') {
-										// 수정예정
-										location.href = "main.my?userId=" + data
+										location.href = "myReplyList.my?userId=" + data
 									}
 								}
 							});

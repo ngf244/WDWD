@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.board.model.vo.Board;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.dao.CBoardDAO;
@@ -225,7 +226,27 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<CBoard> actionPremiumList(String boGroup) {
+	public int goDispute(Dispute d) {
+		return cBoardDAO.goDispute(sqlSession, d);
+	}
+
+	@Override
+	public ArrayList<Dispute> dpList(int boNum) {
+		return cBoardDAO.dpList(sqlSession, boNum);
+	}
+	
+	@Override
+	public int cancleDispute(Dispute d) {
+		return cBoardDAO.cancleDispute(sqlSession, d);
+	}
+	
+	@Override
+	public int endDispute(Dispute d) {
+		return cBoardDAO.endDispute(sqlSession, d);
+  }
+  
+  @Override
+  public ArrayList<CBoard> actionPremiumList(String boGroup) {
 		return cBoardDAO.actionPremiumList(sqlSession, boGroup);
 	}
 

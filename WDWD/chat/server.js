@@ -18,8 +18,15 @@ io.on('connection', function (socket) {
     
     socket.on('addCount', function (board) {
         io.emit('addCount', board);
-        console.log('success');
     });
+    
+    socket.on('chatCheck', function (data) {
+        io.emit('chatCheck', data);
+    });
+    
+    
+    
+    
 });
  
 http.listen(82, function () {
