@@ -93,6 +93,8 @@ public interface CBoardService {
 	
 	String callmeId(String nickName);
 	
+	ArrayList<CBoard> actionPremiumList(String boGroup);
+	
 
 	
 

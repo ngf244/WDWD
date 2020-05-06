@@ -223,6 +223,7 @@
 		function goWrite(){
 			var form = $("form")[0];        
 			var formData = new FormData(form);
+			var socket = io("http://localhost:82");
 
 			$.ajax({
 				cache : false,
@@ -232,6 +233,10 @@
 				type : 'POST', 
 				data : formData, 
 				success : function(data) {
+					
+					/* socket 실행. 알림 받을 내용. 누가 받은지, 알림창 표시 내용. title, 날짜*/
+					
+					
 					alert("쪽지를 보냈습니다!");
 						window.close();
 				}, // success 

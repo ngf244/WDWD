@@ -7,6 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>자유갤러리</title>
+<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
 <style>
    .freeBackground {
       background-color: rgba(224, 224, 224, 0.16);
@@ -478,6 +480,8 @@
          position: relative;
          display: inline-table;
          height: 50px;
+         display: block;
+         margin-top: 20px;
       }
 
       #buttonSelect {
@@ -492,9 +496,6 @@
          font-weight: bolder;
       }
 
-      #buttonSelectNSerch {
-         display: block;
-      }
 
       #dropCategory {
          position: relative;
@@ -695,6 +696,10 @@
 	 background: #f8585b;
 }
  
+ .premium_list{
+    width:100%;
+
+ }
 </style>
 </head>
 <body>
@@ -734,18 +739,20 @@
             </div>
          </div>
          <br>
+         <form>
          <div id="freeMenuBar">
             <div id="freeDropCategory">
 					<div id="freebuttonselect">&nbsp;전체 카테고리</div>
 					<div class="freedropdown-category">
-						<a href="actionList.ch?boGroup=1&boCategory=공통">공통</a> 
-						<a href="actionList.ch?boGroup=1&boCategory=짤방">짤방</a> 
-						<a href="actionList.ch?boGroup=1&boCategory=아무말">아무말</a> 
-						<a href="actionList.ch?boGroup=1&boCategory=요청">요청</a> 
-						<a href="actionList.ch?boGroup=1&boCategory=질문">질문</a>
+                  <a href="actionList.ch?boCategory=">전체</a> 
+                  <a href="actionList.ch?boCategory=공통">공통</a> 
+						<a href="actionList.ch?boCategory=짤방">짤방</a> 
+						<a href="actionList.ch?boCategory=아무말">아무말</a> 
+						<a href="actionList.ch?boCategory=요청">요청</a> 
+						<a href="actionList.ch?boCategory=질문">질문</a>
 					</div>
 				</div>
-            <form>
+            
                <div id="searchArea">
                   <select name="searchCate">
                      <option value="title">제목</option>
@@ -754,8 +761,8 @@
                      <option value="All">제목+내용</option>
                   </select>
                   <input name="searchWord" type="text" placeholder="검색어 입력">
-                  <div><img id="imgSearch" src="${ contextPath }/resources/images/imgSearch3.png" alt="go"></div>
-               </div>
+                  <div><button type="submit"><img id="imgSearch" src="${ contextPath }/resources/images/imgSearch3.png" alt="go"></div>
+                  </button></div>
                <script>
                   
                </script>
@@ -774,70 +781,93 @@
 
          
    		<c:forEach var="b" items="${ list }">
- 			<c:url var="bdetail" value="bdetail.bo">
-				<c:param name="bId" value="${ b.boNum }"/>
-				<c:param name="page" value="${ pi.currentPage }"/>
-			</c:url>
-         <div class="freeBoardList">
-         	<input type="hidden" value="${ b.boNum }">
+            <div class="freeBoardList">
+               <input type="hidden" value="${ b.boNum }">
+            
+               <div class="input box1">${ b.boCategory }</div><!-- 카테고리 -->
+               <div class="input box2">${ b.boTitle }<span class="boReNum">(${ b.boReNum })</span></div><!-- 제목 -->
+               <div class="input box3"><span class="smallOption"><c:set var="rsgId" value="${ b.boWriter }" scope="session"/><c:set var="rsgNick" value="${ b.boWriterNick }" scope="session"/> ${ b.boWriterNick } </span></div><!-- 작성자 -->
+               <div class="input box4"> ${ b.boFileExist } </div>  <!-- 파일 --> 
+               <div class="input box5"> ${ b.boView  }</div> <!-- 조회수 -->
+               <div class="input box6"> ${ b.boGood }</div> <!-- 추천수 -->
+            </div>
+         </c:forEach>
          
-            <div class="input box1">${ b.boCategory }</div><!-- 카테고리 -->
-            <div class="input box2">${ b.boTitle }<span class="boReNum">(${ b.boReNum })</span></div><!-- 제목 -->
-            <div class="input box3"><span class="smallOption"><c:set var="rsgId" value="${ b.boWriter }" scope="session"/><c:set var="rsgNick" value="${ b.boWriterNick }" scope="session"/> ${ b.boWriterNick } </span></div><!-- 작성자 -->
-            <div class="input box4"> ${ b.boFileExist } </div>  <!-- 파일 --> 
-            <div class="input box5"> ${ b.boView  }</div> <!-- 조회수 -->
-            <div class="input box6"> ${ b.boGood }</div> <!-- 추천수 -->
-         </div>
-        <!-- 쪽지 보내기 실행 -->
-        </c:forEach>
-
-				<script>
+         <script>
+                /* 쪽지 보내기 실행 */
                $('.smallOption').on('click', function(){
           	   	rsgId = '${ rsgId }';
                   rsgNick = '${ rsgNick }';
 						console.log("rsgId", rsgId);
 						console.log("rsgNick", rsgNick);
                });
-				</script>
+         </script>
          
 
 
          <div id="freeBoardEnd"></div>
          <br>
+         <!-- 페이징 처리 -->
          <div class="pagingCenter">
             <div class="pagination">
-               		<!-- 페이징 처리 -->
 					
 						<!-- [이전] -->
 						<c:if test="${ pi.currentPage <= 1 }">
-							<a>[이전]</a>
-						</c:if>
+                     <c:if test="${ boCategory eq null || searchWord eq null }">
+                         <!-- 카테고리나 검색값 없으면 기본 리스트 띄우기 -->
+      						<c:set var="loc" value="actionList.ch" scope="page"/>  
+                     </c:if>
+                     
+                     <c:if test="${ boCategory ne null || searchWord ne null }">
+                        <c:set var="loc" value="actionList.ch" scope="page"/>  
+                     </c:if>
+                  </c:if>
+                  <c:if test="${ pi.currentPage > 1 }">
+                     <c:url var="blistBack" value="${ loc }">
+                        <c:if test="${ boCategory ne null || searchWord ne null }">
+                           <c:param name="boCategory" value="${ boCategory }"/>
+                           <c:param name="searchCate" value="${ searchCate }"/>
+                           <c:param name="searchWord" value="${ searchWord }"/>
+                        </c:if>
 
+                        <c:param name="page" value="${ pi.currentPage - 1}"/>
+                     </c:url>
+                     <a href="${ blistBack }">&lt;</a> &nbsp;
+                  </c:if>
 					<!-- 페이지 -->
 					<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-						<c:if test="${ p eq pi.currentPage }">
-							<a class="currentP">${ p }</a>
+                  <c:if test="${ p eq pi.currentPage }">
+                     <a class="currentP">${ p }</a>
 						</c:if>
-
+                  
 						<c:if test="${ p ne pi.currentPage }">
-							<c:url var="pagination" value="actionList.ch">
-								<c:param name="page" value="${ p }" />
+							<c:url var="blistCheck" value="${ loc }">
+                        <c:if test="${ boCategory ne null || searchWord ne null }">
+                           <c:param name="boCategory" value="${ boCategory }"/>
+                           <c:param name="searchCate" value="${ searchCate }"/>
+                           <c:param name="searchWord" value="${ searchWord }"/>
+                        </c:if>     
+                        <c:param name="page" value="${ p }"/>
 							</c:url>
-							<a href="${ pagination }&searchCate=${ searchCate }&searchWord=${ searchWord }">${ p }</a> &nbsp;
+							<a href="${ blistCheck }">${ p }</a> &nbsp;
 							</c:if>
-					</c:forEach>
-
+               </c:forEach>
 					<!-- [다음] -->
 					<c:if test="${ pi.currentPage >= pi.maxPage }">
-						<a>[다음]</a>
 					</c:if>
 					<c:if test="${ pi.currentPage < pi.maxPage }">
-						<c:url var="after" value="actionList.ch">
+						<c:url var="blistEnd" value="${ loc }">
+                     <c:if test="${ boCategory ne null || searchWord ne null }">
+                           <c:param name="boCategory" value="${ boCategory }"/>
+                           <c:param name="searchCate" value="${ searchCate }"/>
+                           <c:param name="searchWord" value="${ searchWord }"/>
+                        </c:if>    
+                         
 							<c:param name="page" value="${ pi.currentPage + 1 }" />
 						</c:url>
-						<a href="${ after }">[다음]</a>
+						<a href="${ blistEnd }">&gt;</a>
 					</c:if>
-
+               <!-- 쪽 번호 끝 -->
 
 
 					<div class="sectionafter" style="display: inline-block"></div>
@@ -849,7 +879,7 @@
          
 
 
-         
+         <!-- 캐시게시판 시작 -->
 			<br> <br> <br> <br> <br> <br> <br>
 
 			<hr>
@@ -892,13 +922,32 @@
                   </div>
 					</div>
 				</div>
+            <!-- 프리미엄 게시판 -->
+            <div><h2>프리미엄 게시판</h2></div>
+            <div class="premium_list">
+            
+
+
+            </div>
+            <div class="listlist">                
+               <div>1</div>
+               <div>2</div>
+               <div>3</div>
+               <div>4</div>
+               <div>5</div>
+               <div>6</div>
+               <div>7</div>
+               <div>8</div>
+               <div>9</div>
+               <div>10</div>
+            </div>
+
+
          </div>
-         <c:forEach var="b" items="${ list }">
-				<div id="manyProjectForm">총 <input type="text" id="manyProject" name="manyContestProject"
-					value="000" readonly="readonly">개의 프로젝트가 선정되었습니다.
-				</div>	
-         </c:forEach>
-				<div id="buttonSelectNSerch">
+         <br>
+         <br>
+         <!-- 일반 게시판 -->   
+         <div id="buttonSelectNSerch">
 					<div id="dropCategory">
 						<div id="buttonSelect">&nbsp;전체 카테고리</div>
 						<div class="dropdown-category" >
@@ -943,7 +992,7 @@
 			
 			
 		</div>
-		<div id="right-side"></div>
+      <div id="right-side"></div>
 	</section>
    <jsp:include page="../common/footer.jsp" />
    
@@ -1006,8 +1055,7 @@
 		   
 		}); 
 		 */
-	</script>
-
+   </script>
 
 	<script>
 		$(function() {
@@ -1022,7 +1070,7 @@
 			var boCategory = "";
 
 			var cbStep = 0;
-
+         premiumList(boGroup);
 			/* $.ajax({
 				url : "actionOneList.ch",
 				type : "get",
@@ -1058,32 +1106,32 @@
 				$.ajax({
 
 					url : "actionCateList.ch",
-					type : "GET",
+					type : "get",
+               dataType : "json",
 					data : {
 						"boCategory" : boCategory,
 						"boGroup" : boGroup,
-						"cbStep" : cbStep
+						"cbStep" : cbStep                  
 					},
 					success : function(data) {
 
 						$('#attachFromHere').empty();
 						//console.log("3 : ",$boardList);
 						for ( var i in data) {
-							console.log("i가 몇개? ", data.length);
-
-							console.log("data?", data);
-
 							var $newboardList = boardList.clone();
 							$('#attachFromHere').append($newboardList);
-
 							$('.boardBoNum').eq(i).val(data[i].boNum);
 							$('.boardTitles').eq(i).html(data[i].boTitle);
 							$('.boardReqs').eq(i).html(data[i].boWriter);
 							$('.boardContents').eq(i).html(data[i].boContent);
 							$('.rightBtns').eq(i).html(data[i].boReNum);
 							$('.cbDate').eq(i).html(data[i].cbDate);
-							$('.cbCash').eq(i).html(data[i].cbCash);
-	
+                     $('.cbCash').eq(i).html(data[i].cbCash);
+                     
+                     console.log("test11", data.list2);
+                     console.log("test11", data.piCash);
+
+                     premiumList(boGroup);
 						}
 
 					},
@@ -1094,6 +1142,7 @@
 				
 			});
 		});
+
 
 		$(function() {
 			$('.categories:nth-of-type(3)').click(function() {
@@ -1139,7 +1188,7 @@
 							$('.rightBtns').eq(i).html(data[i].boReNum);
 							$('.cbDate').eq(i).html(data[i].cbDate);
 							$('.cbCash').eq(i).html(data[i].cbCash);
-
+                     premiumList(boGroup);
 						}
 
 					},
@@ -1192,7 +1241,7 @@
 							$('.rightBtns').eq(i).html(data[i].boReNum);
 							$('.cbDate').eq(i).html(data[i].cbDate);
 							$('.cbCash').eq(i).html(data[i].cbCash);
-
+                     premiumList(boGroup);
 						}
 
 					},
@@ -1233,8 +1282,8 @@
       });
 
       function searchGo(){
-         var searchText = $('.buttonSearch').val();
-         console.log(searchText);
+         searchText = $('.buttonSearch').val();
+         console.log("검색한 searchText :", searchText);
 
          var searchCate = $('#searchSelect').text();
          console.log("searchCate : ",searchCate); 
@@ -1249,24 +1298,16 @@
                      return false;
                   }
          }
-
-
-
          $.ajax({
             url : "actionCateList.ch",
 					type : "GET",
 					data : {
 						"boCategory" : boCategory,
 						"boGroup" : boGroup,
-						"cbStep" : cbStep,
-                  "searchCate" : searchCate,
-                  "searchText" : searchText
+						"cbStep" : cbStep
 					},
 					success : function(data) {
-
                   $('#searchSelect').text("검색 ▼");
-
-
                   if(data == 0){
                      swal("검색 결과가 없습니다.");
                      $('.buttonSearch').val("");
@@ -1376,8 +1417,9 @@
          console.log("selectCate 실행");
          console.log("num1 : ", num1)
          boCategory = num1;
+         page = 1;
 
-         getList(boCategory, cbStep, boGroup);
+         getList(boCategory, cbStep, boGroup, page);
 
          /* display none시 안돌아옴. */
          //$('.dropdown-category').css("display", "none");
@@ -1399,7 +1441,60 @@
 
       var boardList = $('.boardList').eq(0);
 
+   </script>
 
+
+   <script>
+      function premiumList(boGroup){
+         console.log("어떤 그룹?", boGroup);
+         $.ajax({
+            url : "actionPremiumList.ch",
+					type : "GET",
+					data : {
+						"boGroup" : boGroup,
+					},
+					success : function(data) {
+
+                  $tableBody = $('.premium_list');
+                  $tableBody.html('');
+
+                  for ( var i in data) {
+                     var $newboardList = boardList.clone();
+							$('.premium_list').append($newboardList);
+
+							$('.boardBoNum').eq(i).val(data[i].boNum);
+							$('.boardTitles').eq(i).html(data[i].boTitle);
+							$('.boardReqs').eq(i).html(data[i].boWriter);
+							$('.boardContents').eq(i).html(data[i].boContent);
+							$('.rightBtns').eq(i).html(data[i].boReNum);
+							$('.cbDate').eq(i).html(data[i].cbDate);
+							$('.cbCash').eq(i).html(data[i].cbCash);
+                  }
+                  console.log(data);
+               }, 
+               error : function() {
+                  console.log("리스트 조회 실패");
+               }
+         });   
+
+      }
+
+   </script>
+
+   <script type="text/javascript" src="http://kenwheeler.github.io/slick/slick/slick.min.js"></script>
+   <script>
+      $('.premium_list').slick({
+         slide: 'div',
+         autoplay : true,
+         dots: true,
+         speed : 300,
+         infinite: true,
+         autoplaySpeed: 2000,
+         arrows: true,
+         slidesToShow: 4,
+         slidesToScroll: 1,
+         fade: false
+      });
    </script>
 </body>
 </html>

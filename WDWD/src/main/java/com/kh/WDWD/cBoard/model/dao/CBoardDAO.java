@@ -296,4 +296,8 @@ public class CBoardDAO {
 	public String selectThumbnail(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.selectThumbnail", boNum);
 	}
+
+	public ArrayList<CBoard> actionPremiumList(SqlSessionTemplate sqlSession, String boGroup) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.actionPremiumList", boGroup);
+	}
 }

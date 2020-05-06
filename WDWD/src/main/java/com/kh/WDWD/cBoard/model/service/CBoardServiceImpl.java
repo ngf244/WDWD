@@ -224,5 +224,10 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.callmeId(sqlSession, nickName);
 	}
 
+	@Override
+	public ArrayList<CBoard> actionPremiumList(String boGroup) {
+		return cBoardDAO.actionPremiumList(sqlSession, boGroup);
+	}
+
 	
 }
