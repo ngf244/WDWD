@@ -3,26 +3,39 @@
 <mapper namespace="qnaboardMapper">
 	<select id="getListCount" resultType="_int">
 		select count(*)
-		from Qna
+		from board
 		where b_status = 'Y'
 	</select>
 
 	<select id="selectList" resultMap="QnaResultSet">
 		select *
-		from Qna
+		from board
 		where q_status = 'Y'
 		order by bno desc	
 	</select>
 
-	<resultMap type="Qna" id="QnaResultSet">
-		<id property="bno" column="BNO"/>
-		<result property="title" column="TITLE"/>
-		<result property="content" column="content"/>
-		<result property="writer" column="WRITER"/>
-		<result property="regDate" column="REGDATE"/>
-		<result property="viewCnt" column="VIEWCNT"/>	
+	<resultMap type="board" id="boardResultSet">
+		<id property="boNum" column="BO_NUM"/>
+		<result property="boTitle" column="BO_TITLE"/>
+		<result property="boContent" column="BO_CON"/>
+		<result property="boWriter" column="BO_WRITER"/>
+		<result property="boDate" column="BO_DATE"/>
+		<result property="boView" column="BO_VIEW"/>
+		<result property="boDel" column="BO_DEL"/>
 	</resultMap>
+	
+	
+	<update id="delectBoard">
+		update board
+		set bo_del 
+		
+	</update>	
 
 
-
+	<update id="boardUpdate">
+		update board
+		set bo_title = #{boTitle}, bo_con = #{boContent}
+		where bo_num= #{boNum}
+	</update>
+	
 </mapper> 

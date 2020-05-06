@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>가이드</title>
+<title>Guide</title>
 <style>
 
 	#menuHeaderWrap {
 		background-color: rgb(52, 152, 219);
-		height: 30px;
+		height: 40px;
 	}
 	#menuHeader {
 		width: 70%;
@@ -17,6 +17,7 @@
 		text-align: center;
 	}
 	.menubar {
+	
 		float: center;
 		color: white;
 		display: inline-block;
@@ -25,7 +26,7 @@
 		cursor: pointer;
 		text-align: center;
 		line-height: 10px;
-		margin-top: 5px;
+		margin-top: 13px;
 	}
 	
 	
@@ -50,6 +51,10 @@
    line-height: 70px;
    border-radius: 5px;
    }
+   
+   .mainimage{
+   	text-align : center;
+   }
 </style>
 </head>
 <body>
@@ -64,8 +69,9 @@
 				<div class="menubar">충전소</div>
 		</div>
 	</div>
-	
-	
-			<div id="guidelist" onclick="location.href='guidelist.guide';" >테스트 버튼</div>
-</body>
+		<div class="mainimage">
+		<img id="guideImage" src="${ contextPath }/resources/images/Guidemain.png" onclick="location.href='qnalist.guide';">
+		</div>
+</body>			
+
 </html>

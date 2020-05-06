@@ -4,90 +4,151 @@ import java.util.Date;
 
 public class Qna {
 	
-	private int bno; //번호
-	private String title; // 제목  
-	private String content; // 내용
-	private String writer; // 작성자
-	private Date regDate; // 작성일자
-	private int viewCnt; // 조회수
+	private int boNum; //번호
+	private String boTitle; // 제목  
+	private String boContent; // 내용
+	private String boWriter; // 작성자
+	private String boWriterNick;// 작성자 닉네임
+	private String boDate; // 작성일자
+	private int boView; // 조회수
+	private String boUpdate;
+	private String boDel;//  게시판 삭제 부분
 	
-
-	public Qna(int bno, String title, String content, String writer, Date regDate, int viewCnt) {
+	
+	
+	public Qna(int boNum, String boTitle, String boContent, String boWriter, String boWriterNick, String boDate, int boView, String boUpdate,
+			String boDel) {
 		super();
-		this.bno = bno;
-		this.title = title;
-		this.content = content;
-		this.writer = writer;
-		this.regDate = regDate;
-		this.viewCnt = viewCnt;
+		this.boNum = boNum;
+		this.boTitle = boTitle;
+		this.boContent = boContent;
+		this.boWriter = boWriter;
+		this.boWriterNick = boWriterNick;
+		this.boDate = boDate;
+		this.boView = boView;
+		this.boUpdate = boUpdate;
+		this.boDel = boDel;
 	}
 
 
-	public int getBno() {
-		return bno;
+
+	public int getBoNum() {
+		return boNum;
 	}
 
 
-	public void setBno(int bno) {
-		this.bno = bno;
+
+	public void setBoNum(int boNum) {
+		this.boNum = boNum;
 	}
 
 
-	public String getTitle() {
-		return title;
+
+	public String getBoTitle() {
+		return boTitle;
 	}
 
 
-	public void setTitle(String title) {
-		this.title = title;
+
+	public void setBoTitle(String boTitle) {
+		this.boTitle = boTitle;
 	}
 
 
-	public String getContent() {
-		return content;
+
+	public String getBoContent() {
+		return boContent;
 	}
 
 
-	public void setContent(String content) {
-		this.content = content;
+
+	public void setBoContent(String boContent) {
+		this.boContent = boContent;
 	}
 
 
-	public String getWriter() {
-		return writer;
+
+	public String getBoWriter() {
+		return boWriter;
 	}
 
 
-	public void setWriter(String writer) {
-		this.writer = writer;
+
+	public void setBoWriter(String boWriter) {
+		this.boWriter = boWriter;
 	}
 
 
-	public Date getRegDate() {
-		return regDate;
+
+	public String getBoWriterNick() {
+		return boWriterNick;
 	}
 
 
-	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
+
+	public void setBoWriterNick(String boWriterNick) {
+		this.boWriterNick = boWriterNick;
 	}
 
 
-	public int getViewCnt() {
-		return viewCnt;
+
+	public String getBoDate() {
+		return boDate;
 	}
 
 
-	public void setViewCnt(int viewCnt) {
-		this.viewCnt = viewCnt;
+
+	public void setBoDate(String boDate) {
+		this.boDate = boDate;
 	}
+
+
+
+	public int getBoView() {
+		return boView;
+	}
+
+
+
+	public void setBoView(int boView) {
+		this.boView = boView;
+	}
+
+
+
+	public String getBoUpdate() {
+		return boUpdate;
+	}
+
+
+
+	public void setBoUpdate(String boUpdate) {
+		this.boUpdate = boUpdate;
+	}
+
+
+
+	public String getBoDel() {
+		return boDel;
+	}
+
+
+
+	public void setBoDel(String boDel) {
+		this.boDel = boDel;
+	}
+
 
 
 	@Override
 	public String toString() {
-		return "Qna [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer + ", regDate="
-				+ regDate + ", viewCnt=" + viewCnt + "]";
+		return "Qna [boNum=" + boNum + ", boTitle=" + boTitle + ", boContent=" + boContent + ", boWriter=" + boWriter
+				+ ", boWriterNick=" + boWriterNick + ", boDate=" + boDate + ", boView=" + boView + ", boUpdate="
+				+ boUpdate + ", boDel=" + boDel + "]";
 	}
 }
 
+
+
+	
 	

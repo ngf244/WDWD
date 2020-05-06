@@ -163,7 +163,6 @@ public class MemberController {
 //		System.out.print(m);
 		
 		
-		
 		int result = mService.insertMember(m);
 		
 		if(result > 0) {

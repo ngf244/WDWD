@@ -82,13 +82,15 @@
 	.gotofind {
 		text-align: center;
 	}
-   
+	
+	#loginlogo{
+		text-aling: center;
+	}
 </style>
 </head>
 <body>
 	<div id="loginlogo">
-		<img src="${ contextPath }/resources/images/logo.png"
-			onclick="location.href='index.home'">
+		<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.jsp';">
 	</div>
 	<form id="loginaction" action="login.me" method="post">
 		<div class="loginform">
@@ -126,12 +128,7 @@
 		
 		var id = document.getElementById("id");
 		var pw = documnet.getElementById("pw");
-		
-		
-		
-		
 		</script>
-
 	<script>
 	 	//CapsLock 스크립트	
 	 			$('#loginId').bind('keypress', function(e) {

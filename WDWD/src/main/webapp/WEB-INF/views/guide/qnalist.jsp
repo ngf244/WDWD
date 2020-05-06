@@ -7,40 +7,43 @@
 <meta charset="UTF-8">
 <title>QnAlist</title>
 </head>
+<style>
+  
+
+</style>
 <body>
 
-	<h1 align="center">게시글 목록</h1>
+	<h1 align="center">QnA 리스트</h1>
 
-	<h3 align="center">총 게시글 갯수 : ${ pi.listCount }</h3>
 
-	<table border="1" id="tb">
-		<tr style="background: yellowgreen;">
-			<th>번호</th>
-			<th width="300">제목</th>
-			<th>작성자</th>
-			<th>날짜</th>
-			<th>조회수</th>
+	<table id="tb" align="center">
+		<tr style="background: skyblue">
+			<th width="100">No.</th>
+			<th width="500">제목</th>
+			<th width="100">작성자</th>
+			<th width="100">날짜</th>
+			<th width="100">조회수</th>
 		</tr>
-		<c:forEach var="g" items="${ list }">
+		<c:forEach var="b" items="${ list }">
 		<tr class="contentTR">
-			<td align="center">${ g.bId }</td>
+			<td align="center">${ b.bno }</td>
 
 			<td align="left">
 				<c:if test="${ !empty loginUser }">
 					<c:url var="bdetail" value="bdetail.bo">
-						<c:param name="bId" value="${ g.bId }"/>
+						<c:param name="bId" value="${ b.boNum }"/>
 						<c:param name="page" value="${ pi.currentPage }"/>
 					</c:url>
 					<a href="${ gdetail }">${ g.bTitle }</a>
 				</c:if>
 				<c:if test="${ empty loginUser }">
-					${ g.bTitle }		
+					${ q.bTitle }		
 				</c:if>
 			</td>
 
-			<td align="center">${ g.bWriter }</td>
-			<td align="center">${ g.bCreateDate }</td>
-			<td align="center">${ g.bCount }</td>
+			<td align="center">${ b.boWriter }</td>
+			<td align="center">${ b.bCreateDate }</td>
+			<td align="center">${ b.bView }</td>
 		</tr>
 		</c:forEach>
 
@@ -59,39 +62,36 @@
 
 				<!-- [이전] -->
 				<c:if test="${ pi.currentPage <= 1 }">
-					[이전] &nbsp;
+					<a>[이전]</a>
 				</c:if>
-				<c:if test="${ pi.currentPage > 1 }">
-					<c:url var="before" value="blist.bo">
-						<c:param name="page" value="${ pi.currentPage - 1 }"/>
-					</c:url>
-					<a href="${ before }">[이전]</a> &nbsp;
-				</c:if>
-
+				
 				<!-- 페이지 -->
-				<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+				<c:if forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
 					<c:if test="${ p eq pi.currentPage }">
-						<font color="red" size="4"><b>[${ p }]</b></font>
+						<a class="currentP">${ p }</a>
 					</c:if>
-
+					
 					<c:if test="${ p ne pi.currentPage }">
-						<c:url var="pagination" value="blist.bo">
-							<c:param name="page" value="${ p }"/>
-						</c:url>
-						<a href="${ pagination }">${ p }</a> &nbsp;
-					</c:if>
-				</c:forEach>
+					 	<c:url var="pageination" value=actionList.ch">
+					 		<c:param name="page" value="${ p  }"/>
+					 	</c:url>
+					 	</c:if>
+				</c:if>
 
 				<!-- [다음] -->
 				<c:if test="${ pi.currentPage >= pi.maxPage }">
-					[다음]
+					<a>[다음]</a>
 				</c:if>
 				<c:if test="${ pi.currentPage < pi.maxPage }">
-					<c:url var="after" value="blist.bo">
+					<c:url var="after" value="actionlist.bo">
 						<c:param name="page" value="${ pi.currentPage + 1 }"/>
 					</c:url> 
 					<a href="${ after }">[다음]</a>
 				</c:if>
+					<div class="writingBtnArea" style="background-color: skyblue;">
+					<button class="writingBtn">글쓰기</button>
+				</div>
+				
 			</td>
 		</tr>
 	</table>
