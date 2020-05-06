@@ -86,8 +86,9 @@
 		<![CDATA[
 			select *
 			from (select *
-				  from reply 
-				  where RP_WRITER = #{userId} and RP_DEL = 'N'
+				  from reply
+				       right join board on (bo_num = rp_refnum) 
+				  where RP_WRITER = #{userId} and RP_DEL = 'N' and BO_DEL = 'N'
 				  order by RP_NUM DESC) 
 			where ROWNUM <= 5
 		]]>

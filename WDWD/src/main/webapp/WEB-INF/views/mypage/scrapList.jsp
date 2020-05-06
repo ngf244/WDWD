@@ -29,6 +29,7 @@
 
 	#scrapListContent{
 		margin-top: 30px;
+		width: 100%;
 	}
 	
 	.cashBoardText{
@@ -38,17 +39,17 @@
 		height: 80px;
 	}
 	
-	.scrapBoard{
+	.mScrapBoard{
 /* 		height: 850px;
 		border: 1px solid black;
 		margin: 30px;
 		margin-top: 30px; */
 		min-height:50px; padding-bottom: 50px;
-		margin-left:auto; margin:auto; margin-top:10px;		 
+		margin-left:auto; margin:auto; margin-top:10px;
 	}
 	
 	/* 전체 스크랩 게시판 테이블 */
-	#boardTable{text-align:center; margin: auto;}
+	#boardTable{text-align:center; margin: auto; width: 80%;}
 	#boardTable th{border-bottom: 3px solid lightgray; background: #ececec; height: 50px; font-size: 13pt; border-bottom: 3px solid #036;}
 	#boardTable td{border-bottom: 1px solid lightgray; height: 40px; font-size: 11pt;}	
 	#boardTable tr:hover{background: rgba(161, 206, 244, 0.55);}
@@ -112,11 +113,11 @@
 					<div class="scrapListCount">
 						스크랩 수 : <b>${ pi.listCount }</b>
 					</div>
-					<div class="scrapBoard">
+					<div class="mScrapBoard">
 						<table id="boardTable">
 							<thead>
 								<tr>
-									<th style="width: 400px;">제목</th>
+									<th style="width: 50%;">제목</th>
 									<th style="width: 25%;">작성자</th>
 									<th style="width: 25%;">스크랩 시간</th>
 								</tr>

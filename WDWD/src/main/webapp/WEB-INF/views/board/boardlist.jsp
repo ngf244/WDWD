@@ -885,7 +885,7 @@
 
 			<hr>
 			<div id="cashCategorySelectArea">
-				<div class="categories" name="categories" value="2">
+				<div class="categories" id="cashBoardTop" name="categories" value="2">
                <span>1:1매칭</span>
 				</div>
 				<div class="forLine"></div>

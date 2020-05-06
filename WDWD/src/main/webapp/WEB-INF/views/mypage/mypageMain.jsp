@@ -743,6 +743,7 @@
 	.changeClass1{height: 65%; width: 11%; border: 1px solid red; margin: 8px; border-radius: 100px; line-height: 80px; color: red; float: left;}
 	.changeClass2{height: 65%; width: 11%; border: 1px solid green; margin: 8px; border-radius: 100px; line-height: 80px; color: green; float: left;}
 	.changeClass3{height: 65%; width: 11%; border: 1px solid rgb(41, 128, 185); margin: 8px; border-radius: 100px; line-height: 80px; color: rgb(41, 128, 185); float: left;}
+	.changeClass4{height: 65%; width: 11%; border: 1px solid orange; margin: 8px; border-radius: 100px; line-height: 80px; color: orange; float: left;}
 	.chageDesc{float: right; padding: 50px;}
 	
 	/* 공통 플러스 아이콘 */
@@ -971,6 +972,7 @@
 							<span style="display: inline-block;">자유 게시판</span>
 							<c:url var="fbl" value="actionList.ch">
 								<c:param name="searchWord" value="${ member.nickName }"/>
+								<c:param name="searchCate" value="writer"/>
 							</c:url>
 							<a href="${ fbl }"><img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/></a>
 							<div class="postList">
@@ -1191,7 +1193,12 @@
 										<div class="replyBoard">
 											<c:forEach var="ppr" items="${ port.portReply }">
 													<div class="repWriterImg">
-														<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+														<c:if test="${ ppr.conCop eq null }">
+															<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">
+														</c:if>
+														<c:if test="${ ppr.conCop ne null }">
+															<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+														</c:if>
 													</div>
 													<div class="repIdDateCon">
 														<div class="idDate">
@@ -1267,7 +1274,7 @@
 												<div class="changeList">
 												<div class="changeClass3">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 충전</div>
 												<div class="chageDesc">
-													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													<fmt:formatNumber value="${ cc.pcAmount }"/>충전
 												</div>
 											</div>
@@ -1276,7 +1283,7 @@
 												<div class="changeList">
 												<div class="changeClass1">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 비용</div>
 												<div class="chageDesc">
-													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													<fmt:formatNumber value="${ cc.pcAmount }"/>지출
 												</div>
 											</div>
@@ -1285,7 +1292,16 @@
 												<div class="changeList">
 												<div class="changeClass2">&nbsp;&nbsp;&nbsp;&nbsp;의뢰 수주</div>
 												<div class="chageDesc">
-													20${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+												</div>
+											</div>
+											</c:if>
+											<c:if test="${ cc.pcContent eq '포인트 전환(캐쉬입금)' }">
+												<div class="changeList">
+												<div class="changeClass4">&nbsp;&nbsp;&nbsp;&nbsp;Point 전환</div>
+												<div class="chageDesc">
+													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													<fmt:formatNumber value="${ cc.pcAmount }"/>입금
 												</div>
 											</div>

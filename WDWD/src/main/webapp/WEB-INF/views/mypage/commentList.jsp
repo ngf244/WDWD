@@ -48,7 +48,7 @@
 	}
 	
 	/* 전체 댓글 게시판 테이블 */
-	#boardTable{text-align:center; margin: auto;}
+	#boardTable{text-align:center; margin: auto; width: 80%;}
 	#boardTable th{border-bottom: 3px solid lightgray; background: #ececec; height: 50px; font-size: 13pt; border-bottom: 3px solid #036;}
 	#boardTable td{border-bottom: 1px solid lightgray; height: 40px; font-size: 11pt;}	
 	#boardTable tr:hover{background: rgba(161, 206, 244, 0.55);}

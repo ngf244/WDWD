@@ -217,6 +217,11 @@
 		margin: 15px;
 		cursor: pointer;
 	}
+	.adminPageBtn{
+		margin-left: 350px;
+		color: yellow;
+	}
+	
 	#menuHeaderText {
 		float: right;
 		color: white;
@@ -398,12 +403,12 @@
 	
 							<div style="height: 30px;"></div>
 	
-							<div class="smallMenu yellow">
+							<div class="smallMenu yellow" onclick="goPointShop();">
 								<img src="${ contextPath }/resources/images/point.png">
 								<br><b><span id="havePoint"></span><br>POINT</b>
 							</div>
 	
-							<div class="smallMenu yellow">
+							<div class="smallMenu yellow" onclick="goCharge();">
 								<img src="${ contextPath }/resources/images/cash.png">
 								<br><b><span id="haveCash"></span><br>CASH</b>
 							</div>
@@ -699,14 +704,14 @@
 		
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
-				<div class="menubar">공지사항</div>
-				<div class="menubar" onclick="location.href='qna.guide';">가이드</div>
-				<div class="menubar">사진</div>
-				<div class="menubar">미디어</div>
-				<div class="menubar">HIT 갤러리</div>
-				<div class="menubar">문의</div>
-				<div class="menubar">충전소</div>
-				
+				<div class="menubar" onclick="location.href='qna.guide';">가이드(Q&A)</div>
+				<div class="menubar" onclick="goToBoardList();">자유게시판</div>
+				<div class="menubar" onclick="javascript:location.href='actionList.ch#cashBoardTop'">캐쉬게시판</div>
+				<div class="menubar" onclick="javascript:location.href='pointShop.ps';">포인트샵</div>
+				<div class="menubar" onclick="goCharge();">충전소</div>
+				<c:if test="${ loginUser.userId eq 'admin'}">
+					<div class="menubar adminPageBtn" onclick="javascript:location.href='trade.au';">관리자 페이지</div>
+				</c:if>
 				<div id="menuHeaderText">
 					<span id="menuTextBoard"></span>
 					<span id="menuTextReply"></span>
@@ -747,9 +752,13 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
-					function goToCashPage() {
+					function goCharge() {
 						var userId = "${loginUser.userId}";
 						location.href="cashChange.my?userId="+userId;
+					}
+					
+					function goPointShop(){
+						location.href="pointShop.ps";
 					}
 					
 					function checkTime(board) {
@@ -856,6 +865,16 @@
 	                    	
 	                    })
 	                });
+	            	
+	            	function goToBoardList(){
+	        			/* var boGroup1 = 1;
+	        			var boGroup2 = 2;
+	        			var boGroup3 = 3;
+	        			var boGroup4 = 4; */
+	        			location.href="actionList.ch";
+	        			
+	        		}
+	            	
 		        </script>
 			</div>
 		</div>

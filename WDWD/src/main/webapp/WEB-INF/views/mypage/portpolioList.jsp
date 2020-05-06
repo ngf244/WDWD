@@ -475,7 +475,12 @@
 										<div class="replyBoard">
 											<c:forEach var="ppr" items="${ port.portReply }">
 													<div class="repWriterImg">
-														<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+														<c:if test="${ ppr.conCop eq null }">
+															<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">
+														</c:if>
+														<c:if test="${ ppr.conCop ne null }">
+															<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+														</c:if>
 													</div>
 													<div class="repIdDateCon">
 														<div class="idDate">

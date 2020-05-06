@@ -132,7 +132,7 @@
 		from portpolio p 
      	     left join po_reply pr on (po_num = por_ref)
     		 left join member rm on (por_writer = rm.me_id)
-     		 join contents pc on (me_con_num = con_num)
+     		 left join contents pc on (me_con_num = con_num)
 		where po_num = #{porRef}
 		order by por_num asc
 	</select>
@@ -142,7 +142,7 @@
 		from portpolio p 
      	     left join po_reply pr on (po_num = por_ref)
     		 left join member rm on (por_writer = rm.me_id)
-     		 join contents pc on (me_con_num = con_num)
+     		 left join contents pc on (me_con_num = con_num)
 		where po_num = #{poNum}
 		order by por_num asc
 	</select>
