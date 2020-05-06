@@ -509,7 +509,26 @@ public class MemberController {
   	    session.removeAttribute("userId");
   	    return "redirect:index.home";
   	}
+  	
+  	@RequestMapping("checkId.me")
+  	public void checkId(@RequestParam String user_id, HttpServletResponse response) throws IOException {
+  		Member m = mService.userIdCheck(user_id);
+  		
+  		if(m != null) {
+  			response.getWriter().println(1);
+  		} else {
+  			response.getWriter().println(0);
+  		}
+  	}
 
+  	@RequestMapping("checkNick.my")
+	public void checkNick(@ModelAttribute Member m, HttpServletResponse response) throws Exception {
+		
+		int result = mService.nickCheck(m);
+		
+		response.getWriter().println(result);
+	}
+  	
 }
 	
 	

@@ -104,7 +104,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int userIdCheck(String user_id) {
+	public Member userIdCheck(String user_id) {
 		return mDAO.selectuserIdcheck(sqlSession, user_id);
 	}
 

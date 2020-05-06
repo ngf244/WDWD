@@ -66,7 +66,7 @@
 				</c:if>
 				
 				<!-- 페이지 -->
-				<c:if forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+				<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
 					<c:if test="${ p eq pi.currentPage }">
 						<a class="currentP">${ p }</a>
 					</c:if>
@@ -76,7 +76,7 @@
 					 		<c:param name="page" value="${ p  }"/>
 					 	</c:url>
 					 	</c:if>
-				</c:if>
+				</c:forEach>
 
 				<!-- [다음] -->
 				<c:if test="${ pi.currentPage >= pi.maxPage }">

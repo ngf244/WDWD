@@ -74,7 +74,7 @@ public class MemberDAO {
 	}
 
 	// 회원가입시 유저 아이디 체크
-	public int selectuserIdcheck(SqlSessionTemplate sqlSession, String user_id) {
+	public Member selectuserIdcheck(SqlSessionTemplate sqlSession, String user_id) {
 		return sqlSession.selectOne("memberMapper.selectMember", user_id);
 	}
 

@@ -14,7 +14,7 @@
 		order by bno desc	
 	</select>
 
-	<resultMap type="board" id="boardResultSet">
+	<resultMap type="board" id="QnaResultSet">
 		<id property="boNum" column="BO_NUM"/>
 		<result property="boTitle" column="BO_TITLE"/>
 		<result property="boContent" column="BO_CON"/>
