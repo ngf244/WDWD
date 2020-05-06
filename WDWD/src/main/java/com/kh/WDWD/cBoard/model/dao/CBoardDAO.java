@@ -133,14 +133,8 @@ public class CBoardDAO {
 		return result;
 	}
   
-  public int getListCount2(SqlSessionTemplate sqlSession, CBoard cBoard) {
-		return sqlSession.selectOne("cBoardMapper.getListCount2", cBoard);
-	}
-
-	public ArrayList<CBoard> selectCashOneList(SqlSessionTemplate sqlSession,  CBoard cBoard, PageInfo piCash) {
-		int offset = (piCash.getCurrentPage() - 1) * piCash.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, piCash.getBoardLimit());
-		return (ArrayList)sqlSession.selectList("cBoardMapper.selectList2", cBoard, rowBounds);
+	public ArrayList<CBoard> selectCashList(SqlSessionTemplate sqlSession, CBoard cBoard) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashList", cBoard);
 	}
 	
 	

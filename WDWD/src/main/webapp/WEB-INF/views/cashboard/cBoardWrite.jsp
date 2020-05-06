@@ -439,7 +439,7 @@
 						
 						<c:if test="${ boardType ne 3 }">
 							<b>의뢰비</b><br>
-							<input class="inputText" type="number" value="" name="cbCash" id="cbCash"><br>
+							<input class="inputText" type="number" min="100" value="" name="cbCash" id="cbCash"><br>
 							<div class="br"></div>
 						</c:if>
 						
@@ -637,7 +637,7 @@
 									
 									<div id="detailPremiumText" class="miniInfo" hidden="">
 										프리미엄 글로 등록할 시<br>
-										10,000 캐시를 추가로 차감해<br>
+										2,000 캐시를 추가로 차감해<br>
 										게시판 상단에 노출시켜 드립니다.
 									</div>
 									
@@ -675,7 +675,7 @@
 					
 					<div id="btnList">
 						<div id="submit" class="button">작성완료</div>
-						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
+						<div id="cancle" class="button" onclick="location.href='actionList.ch'">목록으로</div>
 					</div>
 					
 					<script>
@@ -719,9 +719,14 @@
 									title: "보유 캐쉬가 부족합니다.",
 									icon: "error"
 								});
-							} else if(Number("${ sessionScope.loginUser.cash }") - 10000 < Number($('#cbCash').val()) && $('#cbPrimium').val() == 'Y') {
+							} else if(Number("${ sessionScope.loginUser.cash }") - 2000 < Number($('#cbCash').val()) && $('#cbPrimium').val() == 'Y') {
 								swal({
 									title: "보유 캐쉬가 부족합니다.",
+									icon: "error"
+								});
+							} else if(Number($('#cbCash').val()) < 100) {
+								swal({
+									title: "의뢰비는 최소 100 CASH 이상 입력해야 합니다.",
 									icon: "error"
 								});
 							} else {

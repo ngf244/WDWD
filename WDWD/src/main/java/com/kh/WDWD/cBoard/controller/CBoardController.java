@@ -98,12 +98,9 @@ public class CBoardController {
 	public ModelAndView actionList(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv,
 									@RequestParam(value = "searchCate", required = false) String searchCate,
 									@RequestParam(value = "searchWord", required = false) String searchWord,
-									@RequestParam(value = "boCategory", required = false) String boCategory,
-									@ModelAttribute CBoard cBoard) {
+									@RequestParam(value = "boCategory", required = false) String boCategory) {
 		
-		String boGroup1 = "1";
 		
-		System.out.println("boCate??? " + boCategory);
 		HashMap<String, String> searchMap = new HashMap<String, String>();
 		searchMap.put("boCategory", boCategory);
 		searchMap.put("searchCate", searchCate);
@@ -116,128 +113,44 @@ public class CBoardController {
 		}
 
 		int listCount = cBoardService.getListCount(searchMap);
-		int listCount2 = cBoardService.getListCount2(cBoard);
 
 		// 자유게시판 페이징
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount);
-		PageInfo piCash = Pagination.getCashBoardEternalPageInfo(currentPage, listCount2);
 
 		ArrayList<CBoard> list = cBoardService.selectBoardList(searchMap, pi);
-		//System.out.println("list에 searchCate, word담기니?" + list);
-		//System.out.println("list에 searchWord, word담기니?" + list);
-		CBoard CBoard = new CBoard();
-		CBoard.setBoGroup("2");
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(CBoard, piCash);
+		
+		CBoard cboard = new CBoard();
+		cboard.setBoGroup("2");
+		cboard.setBoCategory("");
+		ArrayList<CBoard> list2 = cBoardService.selectCashList(cboard);
 
 		if (list != null) {
-
 			mv.addObject("list", list);
 			mv.addObject("boCategory", boCategory);
 			mv.addObject("searchCate", searchCate);
 			mv.addObject("searchWord", searchWord);
-			System.out.println("searchCate 이거 뭐니??" + searchCate);
-			System.out.println("searchWord 이거 뭐니??" + searchWord);
 			mv.addObject("list2", list2);
+			mv.addObject("list2Size", list2.size());
 			mv.addObject("pi", pi);
-			System.out.println("piCash : " + piCash);
-			mv.addObject("piCash", piCash);
 			mv.setViewName("board/boardlist");
 		} else {
-
 			throw new BoardException("자유게시판 조회에 실패하였습니다.");
 		}
 
 		return mv;
 	}
 
-	// 1:1 조회 컨트롤러
-//	@RequestMapping("actionOneList.ch")
-//	public ModelAndView actionOneList(@ModelAttribute CBoard cBoard,  HttpServletResponse response, ModelAndView mv) {
-//
-//		System.out.println("boGroup2 : " + cBoard.getBoGroup()); //1:1게시판
-////		System.out.println("boCategory : " + boCategory); //1:1게시판
-//
-////		System.out.println("리스트 갯수 : " + listCount2);
-//		
-//		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(cBoard);
-//
-////		System.out.println("ArrayList size : " + list2.size());
-//		System.out.println("list2 print : " + list2);
-//		response.setContentType("application/json; charset=UTF-8");
-//			try {
-//				new Gson().toJson(list2, response.getWriter());
-//				mv.addObject("list2", list2);
-//				mv.setViewName("../cashboard/oneBoardList");
-//				return mv;
-//			} catch (JsonIOException | IOException e) {
-//				throw new BoardException("리스트 가져오기 실패");
-//			}
-//		}
-
-
-	// 1:1 조회 컨트롤러
-	@RequestMapping("actionCateList.ch")
-	public void actionCateList(@ModelAttribute CBoard cBoard, @RequestParam(value="searchText", required = false) String searchText,
-			@RequestParam(value="searchCate", required = false) String searchCate, @RequestParam(value = "page", required = false) Integer page, HttpServletResponse response) {
-
-		System.out.println("boGroup 넘어온값은? : " + cBoard.getBoGroup()); // 1:1게시판
-		System.out.println("cbStep 넘어온값은? : " + cBoard.getCbStep()); // 1:1게시판
-		System.out.println("boCategory 넘어온값은? : " + cBoard.getBoCategory()); // 1:1게시판
-		System.out.println("검색 기능은? " + searchText);
-		System.out.println("검색 기능은??? " + searchCate);
-		System.out.println();
+	// ajax로 불러오는 cBoard
+	@RequestMapping("ajaxCBoard.ch")
+	public void ajaxCBoard(@ModelAttribute CBoard cboard, HttpServletResponse response) {
+		ArrayList<CBoard> list = cBoardService.selectCashList(cboard);
 		
-		String boGroup = cBoard.getBoGroup();
-		int cbStep = cBoard.getCbStep();
-		String boCategory = cBoard.getBoCategory();
-		
-		HashMap searchMap = new HashMap();  
-		searchMap.put("cBoard", cBoard);
-		searchMap.put("searchCate", searchCate);
-		searchMap.put("searchText", searchText);
-		
-		
-		int listCount2 = cBoardService.getCateListCount2(searchMap);
-		System.out.println("listCount2 : " + listCount2);
-		//CashBoard 무한 페이징
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = page;
-		}
-		PageInfo piCash = Pagination.getCashBoardEternalPageInfo(currentPage, listCount2);
-
-		
-		ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(searchMap, piCash);
-		
-		System.out.println("list2 : " + list2);
-		System.out.println("piCash : " + piCash);
-
-		//int listCount2 = cBoardService.getCateListCount2(cBoard, searchCate, searchText);
-		//ArrayList<CBoard> list2 = cBoardService.selectCashOneCateList(cBoard, searchCate, searchText);
-
-		//System.out.println("list2" + list2);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list2", list2);
-		map.put("piCash", piCash);
-
-		response.setContentType("application/json; charset=UTF-8");
 		try {
-			new Gson().toJson(map, response.getWriter());
-
+			response.setContentType("application/json; charset=UTF-8");
+			new Gson().toJson(list, response.getWriter());
 		} catch (JsonIOException | IOException e) {
-			throw new BoardException("리스트 가져오기 실패");
+			e.printStackTrace();
 		}
-	}
-
-	@RequestMapping("oneView.ch")
-	public String oneView() {
-		return "cashboard/oneBoard/onBoardRequestView";
-	}
-
-	@RequestMapping("oneForm.ch")
-	public String oneForm() {
-		return "cashboard/oneBoard/onBoardRequestForm";
 	}
 
 	@RequestMapping("writeView.ch")
