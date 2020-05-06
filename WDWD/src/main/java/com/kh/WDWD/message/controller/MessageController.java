@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -276,6 +277,14 @@ public class MessageController {
 		}
     }
 	
-	
+	@RequestMapping("messageListAlert.ms")
+	public void messageListAlert(HttpServletRequest request){
+		Member m = (Member)(request.getSession().getAttribute("loginUser"));
+		String loginUser = m.getUserId();
+		System.out.println("누구의 id인가요?" + m);
+		int listCount = MessageService.getMessageListCount(loginUser);
+		
+		System.out.println("누구의 listCount인가요?" + listCount);
+	}
 	
 }

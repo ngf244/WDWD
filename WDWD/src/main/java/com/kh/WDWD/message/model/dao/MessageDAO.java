@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.WDWD.board.model.vo.PageInfo;
+import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.message.model.vo.Message;
 
 @Repository("MessageDAO")
@@ -53,6 +54,10 @@ public class MessageDAO {
 
 	public ArrayList<Message> getMessageSendDetail(SqlSessionTemplate sqlSession, int msgNum) {
 		return (ArrayList)sqlSession.selectList("messageMapper.getMessageSendDetail", msgNum);
+	}
+
+	public int getMessageListCount(SqlSessionTemplate sqlSession, String loginUser) {
+		return sqlSession.selectOne("messageMapper.getMessageListCount", loginUser);
 	}
 
 }
