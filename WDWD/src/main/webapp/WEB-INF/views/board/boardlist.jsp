@@ -41,6 +41,7 @@
    
    #freeDropCategory {
 	position: relative;
+	z-index : 99;
 	display: inline-block;
 	text-align: center;
 	

@@ -43,16 +43,16 @@
 		function scroll_follow(id){
   			$(window).scroll(function(){  //스크롤이 움직일때마다 이벤트 발생
       			var position = $(window).scrollTop(); // 현재 스크롤바의 위치값을 반환
-      			$(id).stop().animate({top:290+position+"px"}, 200); //해당 오브젝트 위치값 재설정
+      			$(id).stop().animate({top:310+position+"px"}, 200); //해당 오브젝트 위치값 재설정
    			});
 		}
  			scroll_follow("#scroll");
 	</script> 
-	<div id="scroll" style="position:absolute; top:290px; left: 30px;"> 
+	<div id="scroll" style="position:absolute; top:310px; left: 30px;"> 
 		<span>마이페이지 메뉴</span>
 		<c:if test="${ member.userId eq loginUser.userId }">
 			<table id="myPageSlideMenu" style="width: 100%;">
-				<tr><td style="border-bottom: 1px solid lightgray; border-top: 1px solid white;"><a href="#mypageArea">최상단으로</a></td></tr> 
+				<tr><td style="border-bottom: 1px solid lightgray; border-top: 1px solid white; height: 60px;"><a href="#mypageArea">최상단으로</a></td></tr> 
 				<tr><td style="border-bottom: 1px solid lightgray;"><a href="#mypostManagement">내 글 관리</a></td></tr>
 				<tr><td style="border-bottom: 1px solid lightgray;"><a href="#myReqWorkState">내 의뢰/작업 현황</a></td></tr>
 				<tr><td style="border-bottom: 1px solid lightgray;"><a href="#portpolio">포트폴리오</a></td></tr>
@@ -61,7 +61,7 @@
 		</c:if>
 		<c:if test="${ member.userId ne loginUser.userId }">
 			<table id="myPageSlideMenu" style="width: 100%;">
-				<tr><td style="border-bottom: 1px solid lightgray; border-top: 1px solid white; width: 100px;"><a href="#mypageArea">최상단으로</a></td></tr> 
+				<tr><td style="border-bottom: 1px solid lightgray; border-top: 1px solid white; width: 100px; height: 60px;"><a href="#mypageArea">최상단으로</a></td></tr> 
 				<tr><td style="border-bottom: 1px solid lightgray;"><a href="#mypostManagement">내 글 관리</a></td></tr>
 				<tr><td style="border-bottom: 1px solid lightgray;"><a href="#portpolio">포트폴리오</a></td></tr>
 			</table>

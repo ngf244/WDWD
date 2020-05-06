@@ -23,9 +23,11 @@ import com.kh.WDWD.author.model.exception.AuthorException;
 import com.kh.WDWD.author.model.service.AuthorService;
 import com.kh.WDWD.author.model.vo.Ban;
 import com.kh.WDWD.author.model.vo.BanList;
+import com.kh.WDWD.author.model.vo.ChangeRequest;
 import com.kh.WDWD.author.model.vo.Declaration;
 import com.kh.WDWD.author.model.vo.Dispute;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
+import com.kh.WDWD.cash.model.vo.PointNCash;
 import com.kh.WDWD.member.model.vo.Member;
 
 
@@ -79,13 +81,10 @@ public class AuthorController {
 	public String banPage(Model model) {
 		
 		ArrayList<BanList> banArr = aService.getBanUserList();
-		System.out.println(banArr);
 		
 		ArrayList<Declaration> deArr = aService.getReportList(banArr);
-		System.out.println(deArr);
 		
 		ArrayList<Member> memArr = aService.getBanPageUserList(banArr);
-		System.out.println(memArr);
 		
 		model.addAttribute("deArr", deArr);
 		model.addAttribute("memArr", memArr);
@@ -121,7 +120,6 @@ public class AuthorController {
 		b.setBanTerm(banTerm);
 		
 		int insertBanResult = aService.insertBan(b);
-		System.out.println("insertBanResult : " + insertBanResult);
 		
 		try {
 			response.getWriter().print(insertBanResult);
@@ -151,8 +149,6 @@ public class AuthorController {
 		ArrayList<Dispute> cancelArr = aService.getCancelList();
 		ArrayList<Dispute> disputeArr = aService.getDisputeList();
 		
-		System.out.println(cancelArr);
-		System.out.println(disputeArr);
 		
 		model.addAttribute("cancelArr", cancelArr);
 		model.addAttribute("disputeArr", disputeArr);
@@ -162,13 +158,10 @@ public class AuthorController {
 	
 	@RequestMapping("updateDispute.au")
 	public void updateDispute(int diNum, char type, HttpServletResponse response) throws IOException {
-		System.out.println(diNum);
-		System.out.println(type);
 		
 		HashMap map = new HashMap();
 		map.put("diNum", diNum);
 		map.put("type", type);
-		System.out.println(map);
 		
 		int result = aService.updateDispute(map);
 		if(result > 0) {
@@ -177,6 +170,22 @@ public class AuthorController {
 		} else {
 			throw new AuthorException("분쟁 status 업데이트 실패");
 		}
+	}
+	
+	@RequestMapping("changeRequest.au")
+	public String changeRequest(Model model) {
+		ArrayList<ChangeRequest> list = aService.getChangeRequestList();
+		
+		model.addAttribute("list", list);
+		
+		return "author/changeRequest";
+	}
+	
+	@RequestMapping("deleteChangeRequest.au")
+	public void deleteChangeRequest(int pc_num, HttpServletResponse response) throws IOException {
+		int result = aService.deleteChangeRequest(pc_num);
+		
+		response.getWriter().println(result);
 	}
 	
 }

@@ -336,16 +336,28 @@
 		where me_nick = #{reId}
 	</select>
 	
-	<select id="selectSecretYn" parameterType="string" resultType="string">
+	<select id="selectSecretYn" parameterType="Member" resultType="string">
 		select ME_EASY
 		from member
-		where me_id = ${userId}
+		where me_id = #{userId}
 	</select>
 	
 	<update id="updateSecretToggle" parameterType="string">
 		update member
 		set me_easy = 'Y'
-		where me_id = ${userId}
-	</update>  
+		where me_id = #{userId}
+	</update>
+	
+	<update id="updateSecretToggle2" parameterType="string">
+		update member
+		set me_easy = 'N'
+		where me_id = #{userId}
+	</update>
+	
+	<select id="selectMemberByEmail" parameterType="string" resultMap="memberResultSet">
+		select *
+		from member
+		where me_email = #{email}
+	</select>  
 </mapper>
 
