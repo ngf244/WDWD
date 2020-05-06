@@ -16,20 +16,22 @@ import com.kh.WDWD.guideboard.model.exception.QnaException;
 import com.kh.WDWD.guideboard.model.service.QnaService;
 import com.kh.WDWD.guideboard.model.vo.PageInfo;
 import com.kh.WDWD.guideboard.model.vo.Qna;
+import com.kh.WDWD.member.model.service.MemberService;
 
 @Controller
 public class QnaController {
 
 	@Autowired
 	private QnaService qService;
-
+	
 
 	//메인 홈페이지 가이드 클릭시 guidemain으로 이동
-	@RequestMapping("goguide.guide")
+	@RequestMapping("qna.guide")
 	public String goguideview() {
-		return null;
+		return "guide/guidemain";
 	}
-
+	
+	//리스트 불러오는것
 	@RequestMapping("qlist.guide")
 	public ModelAndView qnaList(@RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
 
@@ -48,7 +50,7 @@ public class QnaController {
 		if(list != null) {
 			mv.addObject("list", list);
 			mv.addObject("pi", pi);
-			mv.setViewName("qnalist");
+			mv.setViewName("qnalistView");
 		} else {
 			throw new QnaException("게시글 전체 조회에 실패하셨습니다.");
 		}
@@ -93,12 +95,12 @@ public class QnaController {
 	}
 
 	@RequestMapping("qupdate.guide")
-	public ModelAndView qnaUpdate(@ModelAttribute Qna q, @RequestParam("page")int page, HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView qnaUpdate(@ModelAttribute Qna b, @RequestParam("page")int page, HttpServletRequest request, ModelAndView mv) {
 
-		int result = qService.updateQna(q);
+		int result = qService.updateQna(b);
 		if(result > 0) {
 			mv.addObject("page", page)
-			.setViewName("redirect:qdetial.guide?bno=" + q.getBno());
+			.setViewName("redirect:qdetial.guide?bno=" + b.getBoNum());
 		}else {
 			throw new QnaException("게시글 수정에 실패하셨습니다");
 

@@ -104,11 +104,17 @@ label{
 	margin-left: 31.3%;
 }
 
+#textlogo{
+	text-align: center;
+}
+
 
 </style>
 </head>
 <body>
 		<div class="signuptitle">
+			<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.jsp';" id="textlogo">
+		</div>	
 			<form action="signUp.me" method="post" id="joinForm">
 		
 		<!-- 아이디  -->
@@ -209,7 +215,6 @@ label{
 			<div id="signbutton">가입하기</div>
 		</div>
 		</form>
-	</div>
 	
 	<script type="text/javascript">
 		window.onload = function(){
@@ -219,40 +224,44 @@ label{
 		};
 	</script>
 	<script>
+	//아이디 정규식
+	var idJ = /^[a-z0-9]{4,12}$/;
 	//아이디 유효성 검사
-// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
 	$("#user_id").blur(function() {
 		// id = "id_reg" / name = "userId"
 		var user_id = $('#user_id').val();
 		$.ajax({
-			url : "idCheck.me?userId=" + user_id,
+			url : "signUp.me"
 			type : 'get',
 			success : function(data) {
+				// f12 콘솔창에 중복확인 
+				// 1 = 중복되는 값
+				// 0 = 중복되는 값이 아닐시
 				console.log("1 = 중복o / 0 = 중복x : "+ data);							
 				
 				if (data == 1) {
 						// 1 : 아이디가 중복되는 문구
 						$("#id_check").text("사용중인 아이디입니다 :p");
 						$("#id_check").css("color", "red");
-						$("#reg_submit").attr("disabled", true);
+						$("#user_id").attr("disabled", true);
 					} else {
 						
 						if(idJ.test(user_id)){
 							// 0 : 아이디 길이 / 문자열 검사
 							$("#id_check").text("");
-							$("#reg_submit").attr("disabled", false);
+							$("#user_id").attr("disabled", false);
 				
 						} else if(user_id == ""){
 							
 							$('#id_check').text('아이디를 입력해주세요 :)');
 							$('#id_check').css('color', 'red');
-							$("#reg_submit").attr("disabled", true);				
+							$("#user_id").attr("disabled", true);				
 							
 						} else {
 							
 							$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
 							$('#id_check').css('color', 'red');
-							$("#reg_submit").attr("disabled", true);
+							$("#user_id").attr("disabled", true);
 						}
 						
 					}
@@ -280,9 +289,6 @@ label{
 	// 모든 공백 체크 정규식
 	var empJ = /\s/g;
 	
-	// 아이디 정규식
-	var idJ = /^[a-z0-9]{4,12}$/;
-	
 	// 비밀번호 정규식
 	var pwJ = /^[A-Za-z0-9]{4,12}$/;
 	
@@ -296,7 +302,7 @@ label{
 	
 	
 	//이름에 특수문자가 안들어가게 설정
-	$("#userName").blur(function(){
+	$("#signname").blur(function(){
 		if (nameJ.test($(this).val()){
 			console.log(nameJ.test($(this).val()));
 			$("name_check").text('');
@@ -331,8 +337,8 @@ label{
 		if (dateStr.length <=8) {
 			 
 			if (1900 > year || year > yearNow){
-				$('#signbirth').text('생년월일을 확인해주세요 :)');
-				$('#signbirth').css('color', 'red');
+				$('#birth_check').text('생년월일을 확인해주세요 :)');
+				$('#birth_check').css('color', 'red');
 		} else if (month < 1 || month > 12){
 			
 			$('#birth_check').text('생년월일을 확인해주세요');

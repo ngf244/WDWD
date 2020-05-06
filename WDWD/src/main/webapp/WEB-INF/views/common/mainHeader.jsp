@@ -700,7 +700,7 @@
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
 				<div class="menubar">공지사항</div>
-				<div class="menubar" onclick="location.href='guide.guide';">가이드</div>
+				<div class="menubar" onclick="location.href='qna.guide';">가이드</div>
 				<div class="menubar">사진</div>
 				<div class="menubar">미디어</div>
 				<div class="menubar">HIT 갤러리</div>
