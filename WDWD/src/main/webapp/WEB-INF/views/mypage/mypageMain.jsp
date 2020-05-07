@@ -1318,6 +1318,15 @@
 												</div>
 											</div>
 											</c:if>
+											<c:if test="${ cc.pcContent eq '환전요청' }">
+												<div class="changeList">
+												<div class="changeClass5">&nbsp;&nbsp;&nbsp;&nbsp;환전 대기</div>
+												<div class="chageDesc">
+													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>지출
+												</div>
+											</div>
+											</c:if>
 										</c:forEach>
 									</c:if>
 									<c:if test="${ empty ccList }">
@@ -1724,7 +1733,11 @@
 					
 					for(var i = 0; i < data.length; i++) {
 						var $repWriterImg = $('<div class="repWriterImg" style="width: 6%; border: 1px solid black; height: 65px; border-radius: 50px; float: left; overflow: hidden; margin: 10px;">');
-						var $writerImgTag = $('<img src="${ contextPath }/' + data[i].conUrl + "/" + data[i].conCop + '" width="100%" height="100%">');
+						if(data[i].conUrl == null){
+							var $writerImgTag = $('<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">');
+						} else {
+							var $writerImgTag = $('<img src="${ contextPath }/' + data[i].conUrl + "/" + data[i].conCop + '" width="100%" height="100%">');
+						}
 						var $repIdDateCon = $('<div class="repIdDateCon" style="float: left;">');
 						var $idDate = $('<div class="idDate" style="margin: 10px;">');
 						var $spanId = $('<span style="margin-right: 6px;">'+ data[i].porWriter + '</span>&nbsp;');

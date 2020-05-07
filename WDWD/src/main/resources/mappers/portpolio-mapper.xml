@@ -73,7 +73,7 @@
 	</resultMap>
 	
 	<select id="selectPortpolioList" parameterType="Portpolio" resultMap="pcResultSet">
-		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id, count(r.por_ref), SUBSTR(con.con_url,-23), con.con_cop
+		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id, count(r.por_ref)
 		from portpolio p
      		 left join po_contents c on (PO_NUM = POC_REF)
      		 left join member m on (po_writer = m.me_id)
@@ -92,8 +92,7 @@
 			</if>
 		</where>
 		group by p.po_num, p.po_title, p.po_writer, p.po_desc, p.po_category, p.po_enrolldate, p.po_modifydate, p.po_use_yn, p.po_fee, p.po_count, p.po_status, 
-         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id,
-         		 SUBSTR(con.con_url,-23), con.con_cop
+         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id
 		order by po_enrolldate desc, poc_modify desc
 	</select>
 	
@@ -104,11 +103,14 @@
 	</select>
 	
 	<select id="selectMyPagePortList" parameterType="string" resultMap="pcResultSet">
-		select p.*, c.*, m.*, SUBSTR(c.poc_path,-35)
+		select p.*, c.*, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id, count(r.por_ref)
 		from portpolio p
-			 left join po_contents c on (po_num = poc_ref)
-			 left join member m on (po_writer = me_id)
+		     left join po_contents c on (po_num = poc_ref)
+		     left join member m on (po_writer = me_id)
+		     left join po_reply r on (po_num = r.por_ref)
 		where po_writer = #{userId} and poc_level = 0 and po_status = 'Y'
+		group by p.po_num, p.po_title, p.po_writer, p.po_desc, p.po_category, p.po_enrolldate, p.po_modifydate, p.po_use_yn, p.po_fee, p.po_count, p.po_status, 
+		         		 c.poc_num, c.poc_ref, c.poc_orgin, c.poc_modify, c.poc_path, c.poc_status, c.poc_level, SUBSTR(c.poc_path,-35), m.me_nick, m.me_id
 		order by po_enrolldate desc, poc_modify desc
 	</select>
 	

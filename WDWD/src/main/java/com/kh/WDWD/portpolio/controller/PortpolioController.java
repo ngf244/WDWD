@@ -112,7 +112,6 @@ public class PortpolioController {
 		
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
 		p.setPoWriter(userId);
-		System.out.println("Portpolio : " + p);
 		
 		int result = pService.enrollPortpolio(p);
 		
