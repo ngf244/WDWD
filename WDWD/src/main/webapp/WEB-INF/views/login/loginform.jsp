@@ -42,7 +42,7 @@
 		font-weight: bold;
 		display: inline-block;
 		cursor: pointer;
-		width: 37.5%;
+		width: 26.2%;
 		height: 70px;
 		font-size: 20px;
 		line-height: 70px;
@@ -87,7 +87,7 @@
 		text-align: center;
 	}
 	
-	#loginmain{
+	body{
 		background-color: #E0F2F7;
 	}
 	
@@ -156,10 +156,7 @@
    });
 	 	</script>
 	<script src="http://developers.kakao.com/sdk/js/kakao.min.js"></script>
-	<div id="kakao_btn_changed">
-		<a id="custom-login-btn" href="javascript:loginWithKakao()"> <img
-			src="../images/sns/Kakao_login_btn.png" width="300" /></a>
-	</div>
+	
 	<script type='text/javascript'>
 	// 버튼 이미지 전환 
 		$(document).ready(function(){

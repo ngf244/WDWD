@@ -568,7 +568,8 @@
 		</div>
 		<div id="smallOptionBlock" class="smallOptionBlock">
 			<div>마이페이지</div>
-			<div>게시글 보기</div>
+			<div>자유게시글 보기</div>
+			<div>캐시게시글 보기</div>
 			<div>작성 댓글 보기</div>	
 			<div onclick="messageSend();">쪽지 보내기</div>	
 			<c:if test="${loginUser.userId == 'admin'}">
@@ -576,7 +577,22 @@
 			</c:if>
 			<input type="hidden" name="userId">
 		</div>
-
+		
+		<script>
+			$('#smallOptionBlock div:nth-of-type(1)').click(function () {
+				location.href = "main.my?userId=" + id;
+			})
+			$('#smallOptionBlock div:nth-of-type(2)').click(function () {
+				location.href = "freeBoardList.my?userId=" + id;
+			})
+			$('#smallOptionBlock div:nth-of-type(3)').click(function () {
+				location.href = "cashBoardList.my?userId=" + id;
+			})
+			$('#smallOptionBlock div:nth-of-type(4)').click(function () {
+				location.href = "myReplyList.my?userId=" + id;
+			})
+		</script>
+		
 		<div id="restrictForm">
 			<form method="POST" id="banForm">
 				닉네임 : <input type="text" name="banUserNick" readonly>
