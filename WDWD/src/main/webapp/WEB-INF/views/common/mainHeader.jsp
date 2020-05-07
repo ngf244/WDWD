@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://localhost:82/socket.io/socket.io.js"></script>
+<!-- <script src="http://localhost:82/socket.io/socket.io.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -38,7 +38,9 @@
 		width: auto;
 		height: 120px;
 		display: inline-block;
-		margin: 25px;
+		margin: 40px;
+		margin-left: 0px;
+		margin-right: 20px;
 		vertical-align: middle;
 		cursor: pointer;
 	}
@@ -60,7 +62,6 @@
 	#mainSearch {
 		display: inline-block;
 		vertical-align: middle;
-		margin-top: 75px;
 	}
 	#mainSearch input {
 		display: inline-table;
@@ -74,11 +75,12 @@
 		height: 42px;
 	}
 	#basicForm {
-		width: 250px;
+		width: 14%;
 		height: 150px;
 		display: inline-block;
 		vertical-align: middle;
-		margin-left: 30px;
+		text-align: center;
+		margin-left: 90px;
 	}
 	#signupBtn, #welcomeName{
 		padding: 10px;
@@ -87,9 +89,11 @@
 		border-radius: 5px;
 		margin: 10px;
 		/* line-height: 40px; */
-		font-weight: bold;
+		font-weight: bolder;
+		font-size: large;
+		height: 25px;
+		line-height: 25px;
 		cursor: pointer;
-		
 		
 	}
 	
@@ -107,11 +111,16 @@
 	}
 	
 	#notice, #modalMenu {
-		width: 40px;
-		height: 40px;
+		width: 20%;
 		margin: 10px;
+		height: 60px;
 		cursor: pointer;
 	}
+
+	#notice{
+		margin-right: 12%;
+	}
+
 	#smallInfo {
 		display: none;
 		position: fixed;
@@ -379,8 +388,8 @@
 				
 				<c:if test="${ !empty sessionScope.loginUser }">
 					<div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
-					<img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
-					<img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
+					<img id="notice" class="notice" src="${ contextPath }/resources/images/alarm.png">
+					<img id="modalMenu" src="${ contextPath }/resources/images/menu.png">
 					
 					<div id="noticeArea" class="notice">
 						<c:if test="${ loginUser != null }">

@@ -85,6 +85,8 @@
                             <th>유저 아이디<br>(닉네임)</th>
                             <th>환전 요청액</th>
                             <th>환전 미지급금</th>
+                            <th>은행명</th>
+                            <th>계좌번호</th>
                             <th>해제</th>
                         </tr>
                         <c:forEach var="list" items="${list}" varStatus="i">
@@ -93,6 +95,8 @@
                                 <input type="hidden" value="${list.pc_num}">
                         		<td>${-list.pc_use}</td>
                         		<td>${-list.pc_use * 0.9}</td>
+                        		<td>${list.me_bank}</td>
+                        		<td>${list.me_account}</td>
                         		<td><button class="sendComplete">지급</button></td>
                         	</tr>
                         </c:forEach>

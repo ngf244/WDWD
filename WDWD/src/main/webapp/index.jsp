@@ -9,8 +9,8 @@
 <link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
 <style>
 	#slide-img {
-		width: 70%;
-		height: 200px;
+		width: 100%;
+		height: 300px;
 		margin: 0 auto;
 		
 		border: 1px solid black;
@@ -534,30 +534,30 @@
 					</div>
 					<div id="pointBoardRight">
 						<div class="pointItem">
-							<img>
+							<img src="${ contextPath }/resources/images/pointShop/product1.png">
 							<div class="itemName">문화상품권 5천원권</div>
-							<div class="itemPrice">500 POINT</div>
+							<div class="itemPrice">5,000 POINT</div>
 						</div>
 						
 						<div class="pointItem">
-							<img>
-							<div class="itemName">문화상품권 5천원권</div>
-							<div class="itemPrice">500 POINT</div>
+							<img src="${ contextPath }/resources/images/pointShop/product2.png">
+							<div class="itemName">문화상품권 만원권</div>
+							<div class="itemPrice">9,500 POINT</div>
 						</div>
 						<div class="pointItem">
-							<img>
-							<div class="itemName">문화상품권 5천원권</div>
-							<div class="itemPrice">500 POINT</div>
+							<img src="${ contextPath }/resources/images/pointShop/product3.png">
+							<div class="itemName">문화상품권 5만원권</div>
+							<div class="itemPrice">45,000 POINT</div>
 						</div>
 						<div class="pointItem">
-							<img>
-							<div class="itemName">문화상품권 5천원권</div>
-							<div class="itemPrice">500 POINT</div>
+							<img src="${ contextPath }/resources/images/pointShop/product4.png">
+							<div class="itemName">CGV 영화관람권</div>
+							<div class="itemPrice">10,000 POINT</div>
 						</div>
 						<div class="pointItem">
-							<img>
-							<div class="itemName">문화상품권 5천원권</div>
-							<div class="itemPrice">500 POINT</div>
+							<img src="${ contextPath }/resources/images/pointShop/product5.png">
+							<div class="itemName">롯데시네마 영화관람권</div>
+							<div class="itemPrice">11,000 POINT</div>
 						</div>
 					</div>
 				</div>

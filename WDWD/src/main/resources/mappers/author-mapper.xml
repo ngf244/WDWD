@@ -193,6 +193,7 @@
 		<result property="me_id" column="ME_ID"/>
 		<result property="me_nick" column="ME_NICK"/>
 		<result property="me_account" column="ME_ACOUNT"/>
+		<result property="me_bank" column="ME_BANK"/>
 	</resultMap>
 	
 	<update id="deleteChangeRequest">

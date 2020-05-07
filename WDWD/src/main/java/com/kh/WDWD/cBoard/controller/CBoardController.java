@@ -130,7 +130,6 @@ public class CBoardController {
 		ArrayList<CBoard> list2 = cBoardService.selectCashOneList(CBoard, piCash);
 
 		if (list != null) {
-
 			mv.addObject("list", list);
 			mv.addObject("boCategory", boCategory);
 			mv.addObject("searchCate", searchCate);
