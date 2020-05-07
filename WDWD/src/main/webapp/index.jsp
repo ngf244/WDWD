@@ -9,8 +9,8 @@
 <link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
 <style>
 	#slide-img {
-		width: 100%;
-		height: 300px;
+		width: 90%;
+		height: 200px;
 		margin: 0 auto;
 		
 		border: 1px solid black;
@@ -299,33 +299,13 @@
 		<div id="left-side">
 		</div>
 			<div id="main">
-				<button onclick="goToBoardList();">자유게시판&1:1</button>
-				<button class= "pointShop" onclick="javascript:location.href='pointShop.ps';">포인트샵</button>
-        <button onclick="javascript:location.href='writeView.ch?boardType=2';">1:1 글쓰기</button>
-				<button onclick="javascript:location.href='writeView.ch?boardType=3';">경매 글쓰기</button>
-				<button onclick="javascript:location.href='writeView.ch?boardType=4';">콘테스트 글쓰기</button>
 				
-				
-				<button onclick="javascript:location.href='list.bo';">boardlist</button>
-				<button onclick="javascript:location.href='freeDetail.bo';">boardDetail</button>
-				<button onclick="javascript:location.href='writing.bo';">boardwriting</button>
-				<button onclick="javascript:location.href='revis.bo';">boardrevis</button>
-  			<button onclick="javascript:location.href='aban.au';">authorBan</button>
-	  		<button onclick="javascript:location.href='atrade.au';">authorTrade</button>
-		  	<button onclick="javascript:location.href='aunban.au';">authorUnban</button>
-			
-				 
-		
-				
-				
-				
-				
-				<div style="height:100px;"></div>
+				<!-- <div style="height:100px;"></div> -->
 				
 				<div id="slide-img">
-					<div>111</div>
-					<div>222</div>
-					<div>333</div>
+					<div><img src="${ contextPath }/resources/images/KakaoTalk_20200506_173720183.png"></div>
+					<div><img src="${ contextPath }/resources/images/KakaoTalk_20200506_173725449.png"></div>
+					<div><img src="${ contextPath }/resources/images/KakaoTalk_20200506_173729009.png"></div>
 				</div>
 				
 				<script type="text/javascript" src="http://kenwheeler.github.io/slick/slick/slick.min.js"></script>

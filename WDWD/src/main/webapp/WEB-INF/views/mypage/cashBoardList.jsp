@@ -6,28 +6,28 @@
 <head>
 <meta charset="UTF-8">
 <style>
-	.commentList{
+	.cashBoardList{
 		width: 80%;
 		border: 1px solid lightgray;
 		margin: auto;
 	}
 
-	.commentListTopArea{height: 60px; background: #4374D9; color: white; font-size: 18pt; box-shadow: 2px 2px 5px black;}
+	.cashBoardListTopArea{height: 60px; background: #4374D9; color: white; font-size: 18pt; box-shadow: 2px 2px 5px black;}
 	
-	#commentListText{font-weight: bolder; padding-left: 40px; margin-top: 12px; padding-right: 30px; display:inline-block;}
+	#cashBoardListText{font-weight: bolder; padding-left: 40px; margin-top: 12px; padding-right: 30px; display:inline-block;}
 
-	.commentListCount{
+	.cashBoardListCount{
 		width: 88%;
 		text-align: right;
 	}
 
-	.commentListCount>b{
+	.cashBoardListCount>b{
 		color: #050099;
 		font-size: 15pt;
 	}
 
 
-	#commentListContent{
+	#cashBoardListContent{
 		margin-top: 30px;
 	}
 	
@@ -88,9 +88,13 @@
 	  border: 1px solid rgb(52, 152, 219);
 	}
 	
-	.pagination a:hover:not(.active) {background-color: #ddd;}	
+	.pagination a:hover:not(.active) {background-color: #ddd;}
+	
+	.listBody{
+		cursor: pointer;
+	}	
 </style>
-<title>전체 댓글</title>
+<title>캐쉬 게시판</title>
 </head>
 <body>
 	<jsp:include page="../common/mainHeader.jsp"/>
@@ -99,33 +103,48 @@
 			
 		</div>
 		<div id="main">
-			<div class="commentList">
-				<div class="commentListTopArea">
-					<div id="commentListText">전체 댓글 보기</div>	
+			<div class="cashBoardList">
+				<div class="cashBoardListTopArea">
+					<div id="cashBoardListText">캐쉬게시판 보기</div>	
 				</div>
-				<div id="commentListContent">
-					<div class="commentListCount">
-						작성 댓글 수 : <b>${ pi.listCount }</b>
+				<div id="cashBoardListContent">
+					<div class="cashBoardListCount">
+						작성 게시글 수 : <b>${ pi.listCount }</b>
 					</div>
 					<div class="commentBoard">
 						<table id="boardTable">
 							<thead>
 								<tr>
-									<th style="width: 60%;">댓글</th>
-									<th style="width: 15%;">원문보기</th>
-									<th style="width: 20%;">작성일</th>
+									<th style="width: 15%;">의뢰 유형</th>
+									<th style="width: 45%;">제목</th>
+									<th style="width: 10%;">단계</th>
+									<th style="width: 15%;">작성일</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:if test="${ empty rList }">
-									<tr><td colspan="3">※ 댓글 목록이 없습니다.</td></tr>
+								<c:if test="${ empty cbList }">
+									<tr><td colspan="4">※ 게시글 목록이 없습니다.</td></tr>
 								</c:if>
-								<c:if test="${ !empty rList }">
-									<c:forEach var="r" items="${ rList }">
-										<tr>
-											<td>${ r.rpContent }</td>
-											<td><button class="orgBtn" onclick="goToOrgBoard(${ r.refNum });">원문보기</button></td>
-											<td>${ r.rpDate }</td>							
+								<c:if test="${ !empty cbList }">
+									<c:forEach var="cb" items="${ cbList }">
+										<tr class="listBody" onclick="goToOrgBoard(${ cb.boNum });">
+											<td>
+												<c:if test="${ cb.boGroup eq '2'}">
+													1:1 공개 의뢰
+												</c:if>
+												<c:if test="${ cb.boGroup eq '3'}">
+													경매
+												</c:if>
+												<c:if test="${ cb.boGroup eq '4'}">
+													콘테스트
+												</c:if>
+												<c:if test="${ cb.boGroup eq '7'}">
+													비공개 의뢰
+												</c:if>	
+											</td>
+											<td>${ cb.boTitle }</td>
+											<td>${ cb.cbStep }단계</td>
+											<td>20${ cb.boDate }</td>							
 										</tr>									
 									</c:forEach>
 								</c:if>
@@ -144,7 +163,7 @@
 							<a href=""> &laquo; </a>
 						</c:if>
 						<c:if test="${ pi.currentPage > 1 }">
-							<c:url var="before" value="myReplyList.my">
+							<c:url var="before" value="cashBoardList.my">
 								<c:param name="page" value="${ pi.currentPage - 1 }"/>
 								<c:param name="userId" value="${ userId }"/>
 							</c:url>
@@ -158,7 +177,7 @@
 						</c:if>
 						
 						<c:if test="${ p ne pi.currentPage }">
-							<c:url var="pagination" value="myReplyList.my">
+							<c:url var="pagination" value="cashBoardList.my">
 								<c:param name="page" value="${ p }"/>
 								<c:param name="userId" value="${ userId }"/>
 							</c:url>
@@ -171,7 +190,7 @@
 						<a href=""> &raquo; </a>
 					</c:if>
 					<c:if test="${ pi.currentPage < pi.maxPage }">
-						<c:url var="after" value="myReplyList.my">
+						<c:url var="after" value="cashBoardList.my">
 							<c:param name="page" value="${ pi.currentPage + 1 }"/>
 							<c:param name="userId" value="${ userId }"/>
 						</c:url> 
@@ -190,10 +209,8 @@
 	</section>
 	<jsp:include page="../common/footer.jsp"/>
 	<script>
-		function goToOrgBoard(refNum){
-			var refNum = refNum;
-			console.log(refNum);
-			location.href="detail.bo?boNum=" + refNum;
+		function goToOrgBoard(boNum){
+			location.href="detailView.ch?boNum=" + boNum;
 		}
 	</script>
 </body>

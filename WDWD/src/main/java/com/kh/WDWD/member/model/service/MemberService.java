@@ -89,5 +89,13 @@ public interface MemberService {
 
 	Member selectMemberByEmail(String string);
 
+	int getMyFreeBoardListCount(String userId);
+
+	ArrayList<Board> selectMyFreeBoardList(String userId, PageInfo pi);
+
+	int getMyCashBoardListCount(String userId);
+
+	ArrayList<CBoard> selectMyCashBoardList(String userId, PageInfo pi);
+
 }
 

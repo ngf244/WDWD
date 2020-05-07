@@ -266,6 +266,8 @@ public class PortpolioController {
 			pc.setPortContents(portContents);
 		}
 		
+		System.out.println("list : " + list.size());
+		
 		if(list != null) {
 			mv.addObject("list", list)
 			  .addObject("pi", pi)
