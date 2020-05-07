@@ -14,7 +14,6 @@
 
 .signuptitle {
 	text-align: center;
-	background : #E0F2F7;
 }
 
 .selfintrotext {
@@ -114,11 +113,18 @@ label{
 	text-align: center;
 }
 
+	.signupback{
+	 background-color: #E0F2F7;
+	
+	}
+
 </style>
 </head>
 <body>
+
+	<div class="signupback">
 		<div class="signuptitle">
-			<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.home';" id="textlogo">
+			<img src="${ contextPath }/resources/images/logotext.png" onclick="location.href='index.home';" id="textlogo">
 		</div>
 			<form action="signUp.me" method="post" id="joinForm">
 		
@@ -185,7 +191,7 @@ label{
 		
 		<div class="form-group">
 			<h4>포인트 충전/디자인 의뢰시 필요한 계좌명을 적어주세요</h4>		
-			<label for="inform">은행명</label><br>
+			<label for="inform">은행명(필수!)</label><br>
 			<input type="text" id="signbank" name="bank" class="form-control" placeholder="은행명">
 			<div class="check_font" id="bank_check">
 			<br>
@@ -211,6 +217,7 @@ label{
 			<div id="signbutton">가입하기</div>
 		</div>
 		</form>
+	</div>	
 	
 	<script type="text/javascript">
 		window.onload = function(){
