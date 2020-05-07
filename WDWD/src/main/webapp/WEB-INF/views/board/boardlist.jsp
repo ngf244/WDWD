@@ -743,14 +743,21 @@
          <form>
          <div id="freeMenuBar">
             <div id="freeDropCategory">
-					<div id="freebuttonselect">&nbsp;전체 카테고리</div>
+					<div id="freebuttonselect">
+						<c:if test="${boCategory == null or boCategory == ''}">
+							전체
+						</c:if>
+						<c:if test="${boCategory != null}">
+							${boCategory}
+						</c:if>
+					</div>
 					<div class="freedropdown-category">
-                  <a href="actionList.ch?boCategory=">전체</a> 
-                  <a href="actionList.ch?boCategory=공통">공통</a> 
-						<a href="actionList.ch?boCategory=짤방">짤방</a> 
-						<a href="actionList.ch?boCategory=아무말">아무말</a> 
-						<a href="actionList.ch?boCategory=요청">요청</a> 
-						<a href="actionList.ch?boCategory=질문">질문</a>
+	                <a href="actionList.ch?boCategory=">전체</a> 
+	                <a href="actionList.ch?boCategory=공통">공통</a> 
+					<a href="actionList.ch?boCategory=짤방">짤방</a> 
+					<a href="actionList.ch?boCategory=아무말">아무말</a> 
+					<a href="actionList.ch?boCategory=요청">요청</a> 
+					<a href="actionList.ch?boCategory=질문">질문</a>
 					</div>
 				</div>
             

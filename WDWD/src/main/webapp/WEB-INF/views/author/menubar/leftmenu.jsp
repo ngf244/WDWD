@@ -35,7 +35,7 @@
         <button class="authorMenuBtn" style="margin-top: 10px;" id="authorTrade">분쟁 처리<br>요청 목록</button>
         <button class="authorMenuBtn" id="ban">신고, 제재<br>유저리스트</button>
         <button class="authorMenuBtn" id="unban">정지 해제</button>
-        <button class="authorMenuBtn" id="changeRequest">정지 해제</button>
+        <button class="authorMenuBtn" id="changeRequest">환전 요청</button>
     </div>
 </body>
 <script>

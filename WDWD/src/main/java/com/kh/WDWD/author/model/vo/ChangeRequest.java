@@ -7,10 +7,11 @@ public class ChangeRequest {
 	private String me_id;
 	private String me_nick;
 	private String me_account;
+	private String me_bank;
 	
 	public ChangeRequest() {}
 
-	public ChangeRequest(int pc_num, int pc_use, String pc_date, String me_id, String me_nick, String me_account) {
+	public ChangeRequest(int pc_num, int pc_use, String pc_date, String me_id, String me_nick, String me_account, String me_bank) {
 		super();
 		this.pc_num = pc_num;
 		this.pc_use = pc_use;
@@ -18,6 +19,7 @@ public class ChangeRequest {
 		this.me_id = me_id;
 		this.me_nick = me_nick;
 		this.me_account = me_account;
+		this.me_bank = me_bank;
 	}
 
 	public int getPc_num() {
@@ -67,11 +69,19 @@ public class ChangeRequest {
 	public void setMe_account(String me_account) {
 		this.me_account = me_account;
 	}
+	
+	public String getMe_bank() {
+		return me_bank;
+	}
+
+	public void setMe_bank(String me_bank) {
+		this.me_bank = me_bank;
+	}
 
 	@Override
 	public String toString() {
 		return "ChangeRequest [pc_num=" + pc_num + ", pc_use=" + pc_use + ", pc_date=" + pc_date + ", me_id=" + me_id
-				+ ", me_nick=" + me_nick + ", me_account=" + me_account + "]";
+				+ ", me_nick=" + me_nick + ", me_account=" + me_account + ", me_bank=" + me_bank + "]";
 	}
 	
 }
