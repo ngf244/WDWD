@@ -1,25 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	footer{
-		width: 100%;
-		height: 50px;
-		background-color: rgb(52, 152, 219);
-		bottom: 0px;
-	}
+footer {
+	width: 100%;
+	height: 50px;
+	background-color: rgb(52, 152, 219);
+	bottom: 0px;
+}
 </style>
 </head>
 <body>
-    <footer>
-		<div>
-            footer 채울 영역
-
-        </div>
+	<footer>
+		<div>footer 채울 영역</div>
 	</footer>
 	<script>
 		function adchoice() {
@@ -49,9 +46,12 @@
 			if(e.target.className == "smallOption"){
 			// if($('.smallOption').is(":hover")) {
 			// if($('smallOption:hover')) {
-				var id = e.target.innerHTML;
+				id = e.target.innerHTML;
 				var pointerX = e.clientX;
 				var pointerY = e.clientY;
+				console.log("rsgNick 갖고옴?", id);
+
+				//var rsgNick = $(this).parent().children('.smallOption').text();
 				
 				$('#smallOptionBlock').css({
 					"top" : pointerY+10,
@@ -132,6 +132,8 @@
 				success : function (data) {
 					if(data == 1){
 						console.log("cash 변동 : ", cash);
+						console.log("콘텐트내용 변동 : ", Content);
+						addCashAlert(cash, Content);
 					} else {
 						console.log("ajax insertPoint 실패");
 					}
@@ -139,4 +141,25 @@
 			})
 		}
 	</script>
+	
+	<!-- 캐시 변동시 쪽지 전송  -->
+	<script>
+		function addCashAlert(cash, Content){
+			$.ajax({
+				url: 'addAlert.ms',
+				type : "POST",
+				data : {aaCash : cash, aaContent : Content},
+				success : function (data) {
+					if(data == 1){
+						console.log("캐시 ", cash);
+					} else {
+						console.log("ajax 실패");
+					}
+				}
+		
+			})
+			}
+	
+	</script>
+	
 </body>

@@ -596,22 +596,5 @@
 		}
 	
 	</script>
-	
-	
-	<script>
-		$('.messageList').on('click', function(){
-			window.screen.width
-			window.screen.height
-			
-			var popupWidth = 500;
-			var popupHeight = 600;
-			
-			var popupX = (window.screen.width / 2) - (popupWidth / 2);
-			var popupY= (window.screen.height / 2) - (popupHeight / 2);
-			
-			window.open("messageList.ms", "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
-		});
-	
-	</script>
 </body>
 </html>

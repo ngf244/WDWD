@@ -23,7 +23,7 @@
 	</select>
 	
 	<select id="selectMessageList" resultMap="MessageListSet">
-	    SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSTATUS, SSTATUS
+	    SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSG_STATUS, RSG_STATUS
 		FROM MSGLIST M
 	    JOIN "MEMBER" ON (ME_ID = M.RSG_ID)
 		WHERE RSG_ID = #{ loginUser } and rsg_del = 'N'
@@ -64,7 +64,7 @@
 	</select>
 	
 	<select id="selectSendMessageList" resultMap="MessageListSet">
-	    SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSTATUS, SSTATUS
+	    SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSG_STATUS, RSG_STATUS
 		FROM MSGLIST M
 	    JOIN "MEMBER" ON (ME_ID = M.RSG_ID)
 		WHERE SSG_ID = #{ loginUser } and ssg_del = 'N'		
@@ -85,14 +85,14 @@
 	</select>
 
 	<select id="getMessageDetail" resultMap="MessageListSet">
-		SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSTATUS, SSTATUS
+		SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSG_STATUS, RSG_STATUS
 		FROM MSGLIST M
 	    JOIN "MEMBER" ON (ME_ID = M.RSG_ID)
 	    where MSG_NUM = #{ msgNum }
 	</select>
 	
 	<select id="getMessageSendDetail" resultMap="MessageListSet">
-		SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSTATUS, SSTATUS
+		SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSG_STATUS, RSG_STATUS
 		FROM MSGLIST M
 	    JOIN "MEMBER" ON (ME_ID = M.RSG_ID)
 	    where MSG_NUM = #{ msgNum }
@@ -118,14 +118,26 @@
 	
 	
 	<insert id="insertSendMessages">
-			INSERT INTO MESSAGE VALUES (msg_seq.nextval, #{loginUser}, #{rsgId}, #{title}, SYSDATE, #{content}, 'N', 'N', NULL, NULL)
+			insert into message values(msg_seq.nextval, #{loginUser}, (SELECT m.rsg_id FROM MSGLIST m where rnick = #{ rsgNick } and rownum = 1), #{title}, SYSDATE, #{content}, 'N', 'N', 'N', 'N')
 	</insert>
 	
 	
+
+	<insert id="addAlert">
+			insert into message values(msg_seq.nextval, 'admin', #{loginUser}, #{aaContent} || ' 알림', to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),  #{aaCash} || ' 이 ' || #{aaContent} || ' 됐습니다.', 'N', 'N', 'N', 'N')
+	</insert>
+
 	<select id="getMessageListCount" resultType="_int">
 		select count(*)
 		FROM MESSAGE
-		where RSG_ID = #{ loginUser } and rsg_del = 'N'
+		WHERE RSG_ID = #{ loginUser } and rsg_del = 'N' and RSG_STATUS = 'N'
+	</select>
+
+	<select id="getMessageList" resultMap="MessageListSet">
+	    SELECT RNUM, MSG_NUM, MSG_TITLE, MSG_DATE, MSG_CON, SSG_ID, RNICK, RSG_ID, SNICK, RSG_DEL, SSG_DEL, RSG_STATUS, SSG_STATUS
+		FROM MSGLIST M
+	    JOIN "MEMBER" ON (ME_ID = M.RSG_ID)
+		WHERE RSG_ID = #{ loginUser } and RSG_DEL = 'N' and RSG_STATUS = 'N'
 	</select>
 
 	<resultMap type="Message" id="MessageListSet">

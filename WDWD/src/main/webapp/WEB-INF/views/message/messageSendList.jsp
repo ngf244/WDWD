@@ -9,6 +9,10 @@
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 	<style>
+		a:link { color: black; text-decoration: none;}
+		a:visited { color: black; text-decoration: none;}
+		a:hover{ color: black; text-decoration: none;}
+		div.tableRow:hover{background-color: antiquewhite}
 		div.tableTitle {
 			width: 100%;
 			border-top: solid 1px;
@@ -40,9 +44,11 @@
 		#bottom-side {
 			width: 100%;
 		}
-
 		#sendMs{
 			width:200px;
+		}
+		.currentP{
+			border: 1px solid aquamarine;
 		}
 	</style>
 
@@ -62,7 +68,7 @@
 				<option value="sender">작성자</option>
 			</select>
 			<input type="text" class="searchText" size="20" name="keyword" value="">
-			<span id="searchButton" class="button" value="검색">검색</span>
+			<span id="searchButton" class="button" value="검색"><button onclick="searchBtn();">검색</button></span>
 			<input type="button" value="받은쪽지 목록" id="receiveMsgButton" class="receiveMsgButton" role="button"
 				aria-disabled="false">
 		</div>
@@ -139,7 +145,7 @@
 	</div>
 
 	<div id="bottom-side">
-		광고<a href="#"></a>
+		<a href="#"></a>
 	</div>
 
 	<script>
@@ -322,28 +328,24 @@
 	<script>
 		var result = ${ list };
 		console.log("result", result);
-
-		var emptyCheck = {
-			isNotEmpty: function (_str) {
-				obj = String(_str);
-				if (obj == null || obj == '' || obj == 'null' || obj == 'undefined' || obj == undefined)
-					return false;
-				else return true;
-			},
-			isEmpty: function (_str) {
-				return !emptyCheck.isNotEmpty(_str);
+		function searchBtn(){
+			var emptyCheck = {
+				isNotEmpty: function (_str) {
+					obj = String(_str);
+					if (obj == null || obj == '' || obj == 'null' || obj == 'undefined' || obj == undefined)
+						return false;
+					else return true;
+				},
+				isEmpty: function (_str) {
+					return !emptyCheck.isNotEmpty(_str);
+				}
+			}
+			if (emptyCheck.isEmpty(result)) {
+				alert("검색 결과가 없습니다.");
+				$('.searchText').val("");
+				window.history.back();
 			}
 		}
-
-		if (emptyCheck.isEmpty(result)) {
-			alert("검색 결과가 없습니다.");
-			$('.searchText').val("");
-			window.history.back();
-
-		}
-
-
-
 	</script>
 </body>
 
