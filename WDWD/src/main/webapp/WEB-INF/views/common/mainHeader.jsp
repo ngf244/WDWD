@@ -575,21 +575,22 @@
 			<c:if test="${loginUser.userId == 'admin'}">
 				<div id="restrictBtn">제재</div>
 			</c:if>
-			<input type="hidden" name="userId">
+			<input type="hidden" name="userId" id="smallOptionUserId">
 		</div>
 		
 		<script>
 			$('#smallOptionBlock div:nth-of-type(1)').click(function () {
-				location.href = "main.my?userId=" + id;
+
+				location.href = "main.my?userId=" + $('#smallOptionUserId').val();
 			})
 			$('#smallOptionBlock div:nth-of-type(2)').click(function () {
-				location.href = "freeBoardList.my?userId=" + id;
+				location.href = "freeBoardList.my?userId=" + $('#smallOptionUserId').val();
 			})
 			$('#smallOptionBlock div:nth-of-type(3)').click(function () {
-				location.href = "cashBoardList.my?userId=" + id;
+				location.href = "cashBoardList.my?userId=" + $('#smallOptionUserId').val();
 			})
 			$('#smallOptionBlock div:nth-of-type(4)').click(function () {
-				location.href = "myReplyList.my?userId=" + id;
+				location.href = "myReplyList.my?userId=" + $('#smallOptionUserId').val();
 			})
 		</script>
 		

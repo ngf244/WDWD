@@ -59,7 +59,18 @@ footer {
 					"display" : "block"
 				})
 
-				$('#smallOptionBlock input').val(id);
+				$.ajax({
+					url : "selectUserIdByNick.my",
+					type : "GET",
+					data : {nick : id.trim()},
+					success : function (data) {
+						var trimId = data.trim().replace(/\"/g,'');
+
+						$('#smallOptionUserId').val(trimId);
+					}
+				})
+
+				e.stopPropagation();
 			} else {
 				$('#smallOptionBlock').css({
 					"display" : "none"
