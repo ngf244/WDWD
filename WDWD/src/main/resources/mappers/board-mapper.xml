@@ -4,7 +4,8 @@
 	<select id="getMyReplyCount" parameterType="string" resultType="_int">
 		select count(*)
 		from reply
-		where RP_WRITER = #{userId} and RP_DEL = 'N'
+			 right join board on (bo_num = rp_refnum)
+		where RP_WRITER = #{userId} and RP_DEL = 'N' and BO_DEL = 'N'
 	</select>
 	
 	<resultMap type="Reply" id="replyResultSet">
@@ -20,9 +21,10 @@
 	
 	<select id="selectMyReplyList" parameterType="string" resultMap="replyResultSet">
 		select *
-		from reply
-     		 join member on(ME_ID = RP_WRITER)
-		where RP_WRITER = #{userId} AND RP_DEL = 'N'
+		from board
+     		 left join reply on (bo_num = rp_refnum)
+             join member on(ME_ID = RP_WRITER)
+		where RP_WRITER = #{userId} AND RP_DEL = 'N' AND BO_DEL = 'N'
 		order by RP_DATE DESC
 	</select>
 	
@@ -134,7 +136,7 @@
 		      from (select *
 		            from board
 		            left join contents on (contents.con_ref = board.bo_num)
-		            where bo_group = 1)
+		            where bo_group = 1 and bo_del = 'N')
 		      group by bo_num, bo_title, bo_renum, bo_view, bo_good, bo_renum, bo_date, con_url
 		      order by
 		      <if test="number == 0">bo_view desc,</if>

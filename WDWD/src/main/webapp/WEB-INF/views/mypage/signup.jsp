@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <title>회원가입</title>
 <style>
@@ -117,6 +118,15 @@ label{
 </style>
 </head>
 <body>
+	<script>
+		$(function(){
+			swal({
+			    title: "카카오 간편 로그인",
+			    text: "사이트를 이용하기 위해서는 회원가입이 필요합니다.",
+			    icon: "info" //"info,success,warning,error" 중 택1
+			});
+		});
+	</script>
 		<div class="signuptitle">
 			<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.home';" id="textlogo">
 		</div>
@@ -417,6 +427,8 @@ label{
 				$('#birth_check').css('color', 'red');  
 			}
 		});
+		
+		
 	</script>
 	
 </body>

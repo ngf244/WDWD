@@ -194,7 +194,7 @@
 	 -->
 	<insert id="MinusDetail" parameterType="CBoard">
 		insert into point_cash
-		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>+10000</if>, sysdate, 'C', (select me_id from member where me_nick = #{boWriter}))
+		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>-2000</if>, sysdate, 'C', (select me_id from member where me_nick = #{boWriter}))
 	</insert>
 	<!-- 
 	<update id="PlusCash" parameterType="_int">
@@ -620,27 +620,20 @@
 		</where>
 		order by bo_date desc, bo_num desc	 
 	</select>
-	   	
-  
-  
-   	<select id="getListCount2" resultType="_int">
-		select count(*)
-		from board
-			join cash_board on (bo_num = cb_num)
-		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
-		order by BO_DATE desc
 		
-	</select>
-	
-	
-		
-	<select id="selectList2" parameterType="CBoard" resultMap="CBoardResultSet">
-		
+	<select id="selectCashList" parameterType="CBoard" resultMap="CBoardResultSet">
 		SELECT *
 		FROM CASH_BOARD  
 			JOIN BOARD ON (BO_NUM = CB_NUM)
 			JOIN MEMBER ON(ME_ID = BO_WRITER)
-		where BO_GROUP = #{ boGroup } and bo_del = 'N' 
+			left join contents on (contents.con_ref = board.bo_num)
+		where BO_GROUP = #{ boGroup } and bo_del = 'N'  and (con_level is null or con_level = 0)
+		<if test="boCategory != ''">
+			and BO_CATEGORY = #{boCategory}
+		</if>
+		<if test="cbStep != 0">
+			and cb_step = #{cbStep}
+		</if>
 		order by BO_DATE desc
 	</select>
 	
@@ -772,13 +765,14 @@
 		set bo_del = 'Y'
 		where bo_num = #{diRef} 
 	</update>
-
-  <select id="actionPremiumList" resultMap="CBoardResultSet">
-	SELECT *
+	
+	<select id="selectPrimiumList" resultMap="CBoardResultSet">
+		SELECT *
 		FROM CASH_BOARD  
 			JOIN BOARD ON (BO_NUM = CB_NUM)
 			JOIN MEMBER ON(ME_ID = BO_WRITER)
-		where BO_GROUP = #{ boGroup } and bo_del = 'N' and CB_PRIMIUM = 'Y' and CB_SECRET = 'Y'
-		order by BO_DATE desc
+			left join contents on (contents.con_ref = board.bo_num)
+		where bo_del = 'N' and (con_level is null or con_level = 0) and CB_PRIMIUM = 'Y'
+		order by dbms_random.value
 	</select>
 </mapper>

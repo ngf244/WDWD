@@ -207,5 +207,25 @@ public class MemberServiceImpl implements MemberService {
 	public Member selectMemberByEmail(String email) {
 		return mDAO.selectMemberByEmail(sqlSession, email);
 	}
+
+	@Override
+	public int getMyFreeBoardListCount(String userId) {
+		return mDAO.getMyFreeBoardListCount(sqlSession, userId);
+	}
+
+	@Override
+	public ArrayList<Board> selectMyFreeBoardList(String userId, PageInfo pi) {
+		return mDAO.selectMyFreeBoardList(sqlSession, userId, pi);
+	}
+
+	@Override
+	public int getMyCashBoardListCount(String userId) {
+		return mDAO.getMyCashBoardListCount(sqlSession, userId);
+	}
+
+	@Override
+	public ArrayList<CBoard> selectMyCashBoardList(String userId, PageInfo pi) {
+		return mDAO.selectMyCashBoardList(sqlSession, userId, pi);
+	}
 }
 

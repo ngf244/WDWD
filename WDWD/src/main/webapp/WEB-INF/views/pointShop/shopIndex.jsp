@@ -56,6 +56,7 @@
     .card_pro{
         width: 330px;
         height: 425px;
+        margin-bottom: 20px;
     }
     
     .cards_Title{
@@ -172,6 +173,31 @@
                         <div font-size="16" class="cards_Title">문화상품권 50,000권</div>
                         <div font-size="22" class="cards_Price">45,000point</div>
                         <div class="reviewsButton"><button class="upReviewsButton" onclick="buyWithPoint(45000);">구매하기</button></div>
+                    </div>
+                </li>
+                <br><br><br><br><br><br>
+                <li class="card_pro">
+                    <span class="cards_wrap_images"><img src="${ contextPath }/resources/images/pointShop/product4.png" alt="제품명_1" width="330" height="330" class="cards_wrap_images"></span>
+                    <div class="cards_conWrap">
+                        <span font-size="16" class="cards_Title">CGV 영화관람권</span>
+                        <div font-size="22" class="cards_Price">10,000point</div>
+                        <div class="reviewsButton"><button class="upReviewsButton" onclick="buyWithPoint(10000);">구매하기</button></div>
+                    </div>
+                </li>
+                <li class="card_pro">
+                    <span class="cards_wrap_images"><img src="${ contextPath }/resources/images/pointShop/product5.png" alt="제품명_2"width="330" height="330" class="cards_wrap_images"></span>
+                    <div class="cards_conWrap">
+                        <div font-size="16" class="cards_Title">롯데시네마 영화관람권</div>
+                        <div font-size="22" class="cards_Price">11,000point</div>
+                        <div class="reviewsButton"><button class="upReviewsButton" onclick="buyWithPoint(11000);">구매하기</button></div>
+                    </div>
+                </li>
+                <li class="card_pro">
+                    <span class="cards_wrap_images"><img src="${ contextPath }/resources/images/pointShop/product6.png" alt="제품명_3" width="330" height="330" class="cards_wrap_images"></span>
+                    <div class="cards_conWrap">
+                        <div font-size="16" class="cards_Title">지각 2분 면제권</div>
+                        <div font-size="22" class="cards_Price">30,000point</div>
+                        <div class="reviewsButton"><button class="upReviewsButton" onclick="buyWithPoint(30000);">구매하기</button></div>
                     </div>
                 </li>
             </ul>

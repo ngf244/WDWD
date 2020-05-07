@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://localhost:82/socket.io/socket.io.js"></script>
+<!-- <script src="http://localhost:82/socket.io/socket.io.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -38,7 +38,9 @@
 		width: auto;
 		height: 120px;
 		display: inline-block;
-		margin: 25px;
+		margin: 40px;
+		margin-left: 0px;
+		margin-right: 20px;
 		vertical-align: middle;
 		cursor: pointer;
 	}
@@ -60,7 +62,6 @@
 	#mainSearch {
 		display: inline-block;
 		vertical-align: middle;
-		margin-top: 75px;
 	}
 	#mainSearch input {
 		display: inline-table;
@@ -74,11 +75,12 @@
 		height: 42px;
 	}
 	#basicForm {
-		width: 250px;
+		width: 14%;
 		height: 150px;
 		display: inline-block;
 		vertical-align: middle;
-		margin-left: 30px;
+		text-align: center;
+		margin-left: 90px;
 	}
 	#signupBtn, #welcomeName{
 		padding: 10px;
@@ -87,9 +89,11 @@
 		border-radius: 5px;
 		margin: 10px;
 		/* line-height: 40px; */
-		font-weight: bold;
+		font-weight: bolder;
+		font-size: large;
+		height: 25px;
+		line-height: 25px;
 		cursor: pointer;
-		
 		
 	}
 	
@@ -107,11 +111,16 @@
 	}
 	
 	#notice, #modalMenu {
-		width: 40px;
-		height: 40px;
+		width: 20%;
 		margin: 10px;
+		height: 60px;
 		cursor: pointer;
 	}
+
+	#notice{
+		margin-right: 12%;
+	}
+
 	#smallInfo {
 		display: none;
 		position: fixed;
@@ -217,6 +226,11 @@
 		margin: 15px;
 		cursor: pointer;
 	}
+	.adminPageBtn{
+		margin-left: 350px;
+		color: yellow;
+	}
+	
 	#menuHeaderText {
 		float: right;
 		color: white;
@@ -389,8 +403,8 @@
 				
 				<c:if test="${ !empty sessionScope.loginUser }">
 					<div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
-					<img id="notice" class="notice" src="${ contextPath }/resources/images/알림.PNG">
-					<img id="modalMenu" src="${ contextPath }/resources/images/메뉴.PNG">
+					<img id="notice" class="notice" src="${ contextPath }/resources/images/alarm.png">
+					<img id="modalMenu" src="${ contextPath }/resources/images/menu.png">
 					
 					<div id="noticeArea" class="notice">
 						<div><button class = "messageList">쪽지</button></div>
@@ -410,12 +424,12 @@
 	
 							<div style="height: 30px;"></div>
 	
-							<div class="smallMenu yellow">
+							<div class="smallMenu yellow" onclick="goPointShop();">
 								<img src="${ contextPath }/resources/images/point.png">
 								<br><b><span id="havePoint"></span><br>POINT</b>
 							</div>
 	
-							<div class="smallMenu yellow">
+							<div class="smallMenu yellow" onclick="goCharge();">
 								<img src="${ contextPath }/resources/images/cash.png">
 								<br><b><span id="haveCash"></span><br>CASH</b>
 							</div>
@@ -476,7 +490,7 @@
 							
 							var recentlyCheck = 1;
 							for(var i = 1; i < 6; i++) {
-								if(list[recentlyCheck].boGroup == null) {
+								if(list[recentlyCheck] == null) {
 									break;
 								} else {
 									if(list[0].recent1 == list[i].boNum) {
@@ -711,14 +725,14 @@
 		
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
-				<div class="menubar">공지사항</div>
-				<div class="menubar" onclick="location.href='qna.guide';">가이드</div>
-				<div class="menubar">사진</div>
-				<div class="menubar">미디어</div>
-				<div class="menubar">HIT 갤러리</div>
-				<div class="menubar">문의</div>
-				<div class="menubar">충전소</div>
-				
+				<div class="menubar" onclick="location.href='qna.guide';">가이드(Q&A)</div>
+				<div class="menubar" onclick="goToBoardList();">자유게시판</div>
+				<div class="menubar" onclick="javascript:location.href='actionList.ch#cashBoardTop'">캐쉬게시판</div>
+				<div class="menubar" onclick="javascript:location.href='pointShop.ps';">포인트샵</div>
+				<div class="menubar" onclick="goCharge();">충전소</div>
+				<c:if test="${ loginUser.userId eq 'admin'}">
+					<div class="menubar adminPageBtn" onclick="javascript:location.href='trade.au';">관리자 페이지</div>
+				</c:if>
 				<div id="menuHeaderText">
 					<span id="menuTextBoard"></span>
 					<span id="menuTextReply"></span>
@@ -729,10 +743,8 @@
 						url: 'callTodayData.me',
 						type: 'post',
 						success: function(data){
-							console.log(data);
 							$('#menuTextBoard').text('등록된 게시물 ' + data[0] + '개');
 							$('#menuTextReply').text('등록된 댓글 ' + data[1] + '개');
-							
 						}
 					});
 				
@@ -759,9 +771,13 @@
 						location.href="main.my?userId=" + userId;
 					}
 					
-					function goToCashPage() {
+					function goCharge() {
 						var userId = "${loginUser.userId}";
 						location.href="cashChange.my?userId="+userId;
+					}
+					
+					function goPointShop(){
+						location.href="pointShop.ps";
 					}
 					
 					function checkTime(board) {
@@ -904,6 +920,17 @@
 	                    })
 			        }, 5000);
 		        
+	           
+	            	
+	            function goToBoardList(){
+	        			/* var boGroup1 = 1;
+	        			var boGroup2 = 2;
+	        			var boGroup3 = 3;
+	        			var boGroup4 = 4; */
+	        			location.href="actionList.ch";
+	        			
+	        		}
+	            	
 		        </script>
 			</div>
 		</div>
