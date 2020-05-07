@@ -14,6 +14,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="http://localhost:82/socket.io/socket.io.js"></script>
+	
 	<meta charset="UTF-8">
 	<title>쪽지 보내기</title>
 	<style>
@@ -80,7 +82,7 @@
 		<div class="messageTitle">
 			<input type="text" class="titleHere" name="msTitle" placeholder="제목 입력" style="border:none;">
 		</div>
-		<div class="messageReceiver">수신자 : <input type="hidden" name="msRsgId" value="${rsgId}"><input type="hidden" name="msRsgNick" value="${rsgNick}"> <span class="messageReceiver">${rsgNick}</span></div>
+		<div class="messageReceiver">수신자 : <input type="hidden" name="rsgNick" value="${rsgNick}"> <span class="messageReceiver">${rsgNick}</span></div>
 		<div class="messageDetailBoard">
 			<textarea id="summernote" name="msContent"></textarea>
 		</div>
@@ -91,19 +93,6 @@
 	</form>
 
 
-
-	<!-- <div style="width: 60%; margin: auto;">
-		<form method="post" action="/write">
-			<input type="text" name="writer" style="width: 20%;" placeholder="작성자"/><br>
-			<input type="text" name="title" style="width: 40%;" placeholder="제목"/>
-			<br><br> 
-			<textarea id="summernote" name="content"></textarea>
-			<input id="subBtn" type="button" value="글 작성" style="float: right;" onclick="goWrite1(this.form)"/>
-		</form>
-	</div> -->
-
-
-
 	<div>
 		<div style="width:99%; display: inline-table; text-align:center;">
 			<span style="width:100% ; clear:both ; padding:10px 0 0 0 ;">
@@ -111,23 +100,6 @@
 			</span>
 		</div>
 	</div>
-
-	<!-- 썸머노트 -->
-	<!-- $('#summernote').summernote({
-		height : 350,
-		toolbar: [
-		    ['style', ['style']],
-		    ['font', ['bold', 'italic', 'underline', 'clear']],
-		    ['fontname', ['fontname']],
-		    ['color', ['color']],
-		    ['para', ['ul', 'ol', 'paragraph']],
-		    ['height', ['height']],
-		    ['table', ['table']],
-		    ['insert', ['link', 'picture', 'hr']],
-		    ['view', ['fullscreen', 'codeview']],
-		    ['help', ['help']]
-		  ]
-	}); -->
 
 	<script>
 		$(document).ready(function () {
@@ -140,7 +112,7 @@
 				lang : 'ko-KR',
 				popover: {         //팝오버 설정
 
-				image: [], //이미지 삭제
+				image: [true], //이미지 삭제
 
 				link: [],  //링크 삭제
 
@@ -182,48 +154,11 @@
 		}
 	</script>
 
-
-	<!-- <script>
-		function goWrite(frm) {
-			var title = frm.msTitle.value;
-			var msRsgId = frm.msRsgId.value;
-			var msRsgNick = frm.msRsgNick.value;
-			var content = frm.msContent.value;
-			
-			console.log("title",title);
-			console.log("content",content);
-
-			if (title.trim() == ''){
-				alert("제목을 입력해주세요");
-				return false;
-			}
-			if (content.trim() == ''){
-				alert("내용을 입력해주세요");
-				return false;
-			}
-
-			var userId = "${loginUser.userId}";
-			if(userId==""){
-				swal("You need Login", "로그인 후 사용 가능합니다.", "error");
-				return false;
-			}
-			frm.submit();
-			}
-	</script>	 -->
-
-	
-
-<!-- // <form id="form2" name="form2" method="post" enctype="multipart/form-data">
-//     <input type="file" id="files" name="files" multiple/>
-//     <input type="button" value="확인" onclick="test2(); return false;">
-// </form> -->
-
-
 	<script>
 		function goWrite(){
 			var form = $("form")[0];        
 			var formData = new FormData(form);
-			var socket = io("http://localhost:82");
+			//var socket = io("http://localhost:82");
 
 			$.ajax({
 				cache : false,
@@ -233,7 +168,6 @@
 				type : 'POST', 
 				data : formData, 
 				success : function(data) {
-					
 					/* socket 실행. 알림 받을 내용. 누가 받은지, 알림창 표시 내용. title, 날짜*/
 					
 					

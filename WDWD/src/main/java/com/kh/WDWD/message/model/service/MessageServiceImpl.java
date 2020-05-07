@@ -71,5 +71,15 @@ public class MessageServiceImpl implements MessageService{
 		return MessageDAO.getMessageListCount(sqlSession, loginUser);
 	}
 
+	@Override
+	public int addAlert(HashMap sendMap) {
+		return MessageDAO.addAlert(sqlSession, sendMap);
+	}
+
+	@Override
+	public ArrayList<Message> getMessageList(String loginUser) {
+		return MessageDAO.getMessageList(sqlSession, loginUser);
+	}
+
 
 }

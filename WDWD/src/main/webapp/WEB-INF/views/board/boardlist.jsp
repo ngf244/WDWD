@@ -383,17 +383,6 @@
             </div>
          </c:forEach>
          
-         <script>
-                /* 쪽지 보내기 실행 */
-               $('.smallOption').on('click', function(){
-          	   	rsgId = '${ rsgId }';
-                  rsgNick = '${ rsgNick }';
-						console.log("rsgId", rsgId);
-						console.log("rsgNick", rsgNick);
-               });
-         </script>
-         
-
 
          <div id="freeBoardEnd"></div>
          <br>

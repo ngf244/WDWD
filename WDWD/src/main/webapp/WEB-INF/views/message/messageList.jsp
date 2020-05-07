@@ -68,7 +68,7 @@
 				<option value="sender">작성자</option>
 			</select>
 			<input type="text" class="searchText" size="20" name="keyword" value="">
-			<span id="searchButton" class="button" value="검색">검색</span>
+			<span id="searchButton" class="button" value="검색"><button onclick="searchBtn();">검색</button></span>
 			<input type="button" value="보낸쪽지 목록" id="sendMsgButton" class="sendMsgButton" role="button"
 				aria-disabled="false">
 		</div>
@@ -331,27 +331,24 @@
 	<script>
 		var result = ${ list };
 		console.log("result", result);
-
-		var emptyCheck = {
-			isNotEmpty: function (_str) {
-				obj = String(_str);
-				if (obj == null || obj == '' || obj == 'null' || obj == 'undefined' || obj == undefined)
-					return false;
-				else return true;
-			},
-			isEmpty: function (_str) {
-				return !emptyCheck.isNotEmpty(_str);
+		function searchBtn(){
+			var emptyCheck = {
+				isNotEmpty: function (_str) {
+					obj = String(_str);
+					if (obj == null || obj == '' || obj == 'null' || obj == 'undefined' || obj == undefined)
+						return false;
+					else return true;
+				},
+				isEmpty: function (_str) {
+					return !emptyCheck.isNotEmpty(_str);
+				}
+			}
+			if (emptyCheck.isEmpty(result)) {
+				alert("검색 결과가 없습니다.");
+				$('.searchText').val("");
+				window.history.back();
 			}
 		}
-
-		if (emptyCheck.isEmpty(result)) {
-			alert("검색 결과가 없습니다.");
-			$('.searchText').val("");
-			window.history.back();
-
-		}
-
-
 
 	</script>
 </body>

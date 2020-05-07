@@ -56,8 +56,17 @@ public class MessageDAO {
 		return (ArrayList)sqlSession.selectList("messageMapper.getMessageSendDetail", msgNum);
 	}
 
+
+	public int addAlert(SqlSessionTemplate sqlSession, HashMap sendMap) {
+		return sqlSession.insert("messageMapper.addAlert", sendMap);
+	}
+
 	public int getMessageListCount(SqlSessionTemplate sqlSession, String loginUser) {
 		return sqlSession.selectOne("messageMapper.getMessageListCount", loginUser);
+	}
+
+	public ArrayList<Message> getMessageList(SqlSessionTemplate sqlSession, String loginUser) {
+		return (ArrayList)sqlSession.selectList("messageMapper.getMessageList", loginUser);
 	}
 
 }

@@ -243,12 +243,22 @@
 	#noticeArea{
 		display: none;
 		border-style: outset;
-		background-color: lightgrey;
-		opacity: 0.5;
+		background-color: rgba(233, 233, 233, 0.5);
 		width: 350px;
 		height: 200px;
+		overflow: auto;
+		text-align: left;
 	}
-
+	#noticeArea div{
+		text-align: right;
+	}
+	.ul_list{
+		list-style: none;
+		-webkit-padding-start:10px;
+	}
+	.ul_list li{
+		margin-bottom: 10px;
+	}
 	#left-side{
 		width: 14%;
 		min-height: 600px;
@@ -397,9 +407,11 @@
 					<img id="modalMenu" src="${ contextPath }/resources/images/menu.png">
 					
 					<div id="noticeArea" class="notice">
-						<c:if test="${ loginUser != null }">
-							<button class = "messageList">쪽지</button>
-						</c:if>
+						<div><button class = "messageList">쪽지</button></div>
+						<ul class="ul_list">
+							<li></li>
+						</ul>
+						<div class="row_grid"></div>
 					</div>
 					
 					<div id="smallInfo">
@@ -829,9 +841,28 @@
 					}
 				</script>
 				
+				<!-- 쪽지 리스트  -->
+				<script>
+					$('.messageList').on('click', function(){
+						window.screen.width
+						window.screen.height
+						
+						var popupWidth = 500;
+						var popupHeight = 600;
+						
+						var popupX = (window.screen.width / 2) - (popupWidth / 2);
+						var popupY= (window.screen.height / 2) - (popupHeight / 2);
+						
+						window.open("messageList.ms", "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
+					});
+				</script>
+				
 				<!-- 쪽지 보내기 실행 -->
 				<script>
 					function messageSend(){
+						var rsgNick = $.trim(id);
+						
+						console.log("id 뭐임?", id);
 						window.screen.width
 						window.screen.height
 						
@@ -842,7 +873,7 @@
 						var popupY= (window.screen.height / 2) - (popupHeight / 2);
 						
 						//받는 사람 id와 nick을 보낸다. 
-						window.open("messageSendView.ms?rsgId=${rsgId}&rsgNick=${rsgNick}", "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
+						window.open("messageSendView.ms?rsgNick="+rsgNick, "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
 						
 					}
 				</script>
@@ -853,27 +884,45 @@
 	            	$(document).ready(function(){
 	            		var listCount ="";
 	                    /* 즉시 쪽지 몇개인지 가져옴 */
-	                    $.ajax({
+	                });
+		        </script>
+		        
+		        <script>
+		        	/* 3초마다 알림 값 가져옴. */
+			        setInterval(function(){
+			        	var listCount = 0; //받을 쪽지 개수
+			        	var alertTitle = ""; // 쪽지 제목
+			        	var alertTime = ""; //받은 시각
+			        	var arrList = new Array();
+			        	$.ajax({ 
 	                    	url: "messageListAlert.ms",
 	                    	type: "get",
-	                    	data: {"listCount" : listCount},
+	                    	dataType : "json",
 	                    	success: function(data){
-	                    		if(data > 0){
-	                    			console.log("data", data);
-	                    			$('#noticeArea').append(data);
-	                    		}
-	                    			//for(var i=0; i < data.length; i++){
-	                    			
-	                    			//$('#noticeArea').append('<span>new</span><span>' + data[i] + '</span>');
-	                    			//}
+	                    		if(data.length > 0){
+                    				var ul_list = $('.ul_list');
+	                    			ul_list.empty();
+	                    			for(var i=0; i < data.length; i++){
+	                    				var title_add = data[i].msgTitle;
+	                    				var date_add = data[i].msgDate;
+	                    				var amount = data[i].msgCon;
+	                    				//console.log("data 뭐", data[i].msgTitle);
+	                    				//console.log("data 뭐", data[i].msgDate);
+	                    				ul_list.append("<li>"+ title_add +  ", 금액 : " + amount + "\n" + date_add +"</li>");
+	                    			}
+	                    		} 
+	                    		//console.log(typeof data);
+	                    		//console.log(data[1]);
 	                    		
                     		}
 	                    
 	                    	
 	                    })
-	                });
+			        }, 5000);
+		        
+	           
 	            	
-	            	function goToBoardList(){
+	            function goToBoardList(){
 	        			/* var boGroup1 = 1;
 	        			var boGroup2 = 2;
 	        			var boGroup3 = 3;

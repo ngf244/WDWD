@@ -29,5 +29,9 @@ public interface MessageService {
 
 	int getMessageListCount(String loginUser);
 
+	int addAlert(HashMap sendMap);
+
+	ArrayList<Message> getMessageList(String loginUser);
+
 	
 }
