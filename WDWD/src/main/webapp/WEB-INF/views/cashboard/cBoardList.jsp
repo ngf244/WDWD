@@ -461,6 +461,7 @@
 </style>
 </head>
 <body>
+	<div id="cashBoardTop"></div>
 	<div id="removeImg" style="display: none;"></div>
 	<div id="primiumZone"></div>
 	

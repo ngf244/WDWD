@@ -81,7 +81,7 @@
      		 left join member rm on (por_writer = rm.me_id)
      		 left join contents con on (rm.me_con_num = con_num)
 		<where>
-			po_writer = #{poWriter} and poc_level = 0 and po_status = 'Y' and SUBSTR(con.con_url,-23) IS NOT NULL
+			po_writer = #{poWriter} and poc_level = 0 and po_status = 'Y'
 			<if test="poCategory != null">
 				<if test="poCategory.equals('image')">
 					and po_category in ('이미지 편집', '이미지 제작')

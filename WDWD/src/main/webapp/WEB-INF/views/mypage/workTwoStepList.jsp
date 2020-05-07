@@ -233,7 +233,7 @@
 											기한 제한 없음
 										</div>
 										<div class="rightBtn">
-											의뢰비 : ${ wtl.cbCash }
+											의뢰비 : ${ wtl.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ wtl.boGroup == '3' }">
@@ -244,7 +244,7 @@
 											경매 마감
 										</div>
 										<div class="rightBtn">
-											낙찰가 : ${ wtl.cbCash }
+											낙찰가 : ${ wtl.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ wtl.boGroup == '4' }">
@@ -255,7 +255,7 @@
 											콘테스트 마감
 										</div>
 										<div class="rightBtn">
-											상금 : ${ wtl.cbCash }
+											상금 : ${ wtl.cbCash } CASH
 										</div>
 									</c:if>																		
 								</div>

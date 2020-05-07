@@ -234,7 +234,7 @@
 											의뢰인 : <span class="smallOption" style="color: black;">${ wthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											의뢰비 : ${ wthl.cbCash }
+											의뢰비 : ${ wthl.cbCash } CASH
 										</div>
 										<div class="rightBtn">
 											<c:choose>
@@ -264,7 +264,7 @@
 											의뢰인 : <span class="smallOption" style="color: black;">${ wthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											낙찰가 : ${ wthl.cbCash }
+											낙찰가 : ${ wthl.cbCash } CASH
 										</div>
 										<div class="rightBtn">
 											<c:choose>
@@ -294,7 +294,7 @@
 											의뢰인 : <span class="smallOption" style="color: black;">${ wthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											상금 : ${ wthl.cbCash }
+											상금 : ${ wthl.cbCash } CASH
 										</div>
 										<div class="rightBtn">
 											<c:choose>
