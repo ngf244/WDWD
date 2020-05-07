@@ -576,6 +576,19 @@ public class MemberController {
 		return mv;
 	}
   	
+	@RequestMapping("selectUserIdByNick.my")
+	public void selectUserId(String nick, HttpServletResponse response) throws JsonIOException, IOException {
+		Request r = new Request();
+		r.setReId(nick);
+		
+		String id = mService.selectUserId(r);
+		
+		response.setCharacterEncoding("UTF-8");
+		
+		new Gson().toJson(id, response.getWriter());
+		
+		
+	}
 }
 	
 	

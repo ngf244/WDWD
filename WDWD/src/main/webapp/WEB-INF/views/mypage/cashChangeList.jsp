@@ -508,8 +508,8 @@
 					var cashToChange = Number($('input[type=number]').val());
 					var havingCash = Number($('#nowCashAmount').text());
 
-					console.log(cashToChange);
-					console.log(havingCash);
+					console.log(typeof cashToChange);
+					console.log(typeof havingCash);
 
 					if(cashToChange > havingCash){
 						swal('너 그만큼 돈 없다 ㅎㅎ');
