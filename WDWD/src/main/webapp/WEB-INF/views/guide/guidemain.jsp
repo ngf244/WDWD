@@ -55,23 +55,38 @@
    .mainimage{
    	text-align : center;
    }
+   
+   .mainimage2{
+   	text-align : center;
+   }
+   
+   .mainimage3{
+   	text-align : center;
+   }
+	
+	
+   
 </style>
 </head>
 <body>
+	<jsp:include page="../common/mainHeader.jsp"/>
 
-	<div id="menuHeaderWrap">
-		<div id="menuHeader">
-				<div class="menubar">공지사항</div>
-				<div class="menubar">사진</div>
-				<div class="menubar">미디어</div>
-				<div class="menubar">HIT 갤러리</div>
-				<div class="menubar">문의</div>
-				<div class="menubar">충전소</div>
-		</div>
-	</div>
-		<div class="mainimage">
-		<img id="guideImage" src="${ contextPath }/resources/images/Guidemain.png" onclick="location.href='qnalist.guide';">
-		</div>
+	
+				
+			<div class="mainimage3">
+				<img id="qnaimage" src="${ contextPath }/resources/images/qnaimage.png" onclick="location.href='qnalist.guide';">
+					</div>
+			   			<div class="mainimage2">
+							<img id="guideImage" src="${ contextPath }/resources/images/guidemain2.png">
+	   							</div>
+	   								<div class="mainimage">
+										<img id="guideImage" src="${ contextPath }/resources/images/Guidemain.png">
+											</div>
+	
+	
+	
+	
+		<jsp:include page="../common/footer.jsp" />
+	   
 </body>			
-
 </html>

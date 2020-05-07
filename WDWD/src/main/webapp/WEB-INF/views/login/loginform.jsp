@@ -84,13 +84,25 @@
 	}
 	
 	#loginlogo{
-		text-aling: center;
+		text-align: center;
 	}
+	
+	#loginmain{
+		background-color: #E0F2F7;
+	}
+	
+	#loginaction{
+		margin-top: 10px;
+		
+	
+	}
+	
 </style>
 </head>
 <body>
+	<div id="loginmain">
 	<div id="loginlogo">
-		<img src="${ contextPath }/resources/images/textlogo.png" onclick="location.href='index.home';">
+		<img src="${ contextPath }/resources/images/logotext.png" onclick="location.href='index.home';" id="textlogo">
 	</div>
 	<form id="loginaction" action="login.me" method="post">
 		<div class="loginform">
@@ -117,14 +129,11 @@
 			<br>
 			<br>
 			<a href="https://kauth.kakao.com/oauth/authorize?client_id=067a0a1cc70b12adcd5b92104e2ceb55&redirect_uri=http://localhost:9380/WDWD/kakaoLogin.my&response_type=code">
-            	<img src="${ contextPath }/resources/images/kakao_login_btn_large_wide.png" width="540" height="81">
+            	<img src="${ contextPath }/resources/images/kakao_login_btn_large_wide.png" width="500" height="70">
         	</a>
-        	<br>
-			<button type="button" id="kakaoBtn">카카오아이디 로그인</button>
-			<br>
-			<button type="button" id="googleBtn">구글아이디 로그인</button>
 		</div>
 	</form>
+	</div>
 	<script>
 		function validate(){
 			var re = /^[a-zA-Z0-9]{4,12}$/
