@@ -316,8 +316,9 @@ public class CBoardDAO {
 			return 0;
 		}
 	}
-  public ArrayList<CBoard> actionPremiumList(SqlSessionTemplate sqlSession, String boGroup) {
-		return (ArrayList)sqlSession.selectList("cBoardMapper.actionPremiumList", boGroup);
+
+	public ArrayList<CBoard> selectPrimiumList(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectPrimiumList");
 	}
 }
 

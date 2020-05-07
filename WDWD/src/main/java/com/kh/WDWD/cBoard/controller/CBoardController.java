@@ -123,6 +123,7 @@ public class CBoardController {
 		cboard.setBoGroup("2");
 		cboard.setBoCategory("");
 		ArrayList<CBoard> list2 = cBoardService.selectCashList(cboard);
+		ArrayList<CBoard> list3 = cBoardService.selectPrimiumList();
 
 		if (list != null) {
 			mv.addObject("list", list);
@@ -131,6 +132,7 @@ public class CBoardController {
 			mv.addObject("searchWord", searchWord);
 			mv.addObject("list2", list2);
 			mv.addObject("list2Size", list2.size());
+			mv.addObject("list3", list3);
 			mv.addObject("pi", pi);
 			mv.setViewName("board/boardlist");
 		} else {
@@ -695,21 +697,6 @@ public class CBoardController {
 		}
 
 		return mv;
-	}
-  
-  
-  @RequestMapping("actionPremiumList.ch")
-	public void actionPremiumList(HttpServletRequest request, HttpServletResponse response) {
-	  	String boGroup = request.getParameter("boGroup");
-	  	System.out.println("boGroup??" + boGroup);
-		ArrayList<CBoard> list = cBoardService.actionPremiumList(boGroup);
-		response.setContentType("application/json; charset=UTF-8");
-		System.out.println("list는?" + list);
-		try {
-			new Gson().toJson(list, response.getWriter());
-		} catch (JsonIOException | IOException e) {
-			throw new BoardException("리스트 가져오기 실패");
-		}
 	}
 
 }

@@ -461,7 +461,7 @@
          </div>
          
          <!-- 캐시게시판 시작 -->
-			<div style="height: 200px;"></div>
+			<div style="height: 100px;"></div>
 			
 			<jsp:include page="../cashboard/cBoardList.jsp" />
 		</div>

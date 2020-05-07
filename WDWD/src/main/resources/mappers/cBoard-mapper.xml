@@ -765,13 +765,14 @@
 		set bo_del = 'Y'
 		where bo_num = #{diRef} 
 	</update>
-
-  <select id="actionPremiumList" resultMap="CBoardResultSet">
-	SELECT *
+	
+	<select id="selectPrimiumList" resultMap="CBoardResultSet">
+		SELECT *
 		FROM CASH_BOARD  
 			JOIN BOARD ON (BO_NUM = CB_NUM)
 			JOIN MEMBER ON(ME_ID = BO_WRITER)
-		where BO_GROUP = #{ boGroup } and bo_del = 'N' and CB_PRIMIUM = 'Y' and CB_SECRET = 'Y'
-		order by BO_DATE desc
+			left join contents on (contents.con_ref = board.bo_num)
+		where bo_del = 'N' and (con_level is null or con_level = 0) and CB_PRIMIUM = 'Y'
+		order by dbms_random.value
 	</select>
 </mapper>

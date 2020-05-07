@@ -99,6 +99,6 @@ public interface CBoardService {
 	int cancleDispute(Dispute d);
 	
 	int endDispute(Dispute d);
-
-  ArrayList<CBoard> actionPremiumList(String boGroup);
+	
+	ArrayList<CBoard> selectPrimiumList();
 }
