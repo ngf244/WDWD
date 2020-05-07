@@ -422,7 +422,7 @@
 		margin-bottom: 13px;
 		border-bottom: 1px solid black;
 	}
-	.boardContents {
+	.boardContents, .pBoardContents {
 		height: 60px;
 		padding: 5px;
 		line-height: 22px;
@@ -489,7 +489,7 @@
 			var $div5 = $('<div class="boardCate">');
 			var $div6 = $('<div class="boardTitle">');
 			var $div7 = $('<div class="boardReq">');
-			var $div8 = $('<div class="boardContents">');
+			var $div8 = $('<div class="pBoardContents">');
 			
 			var $div9 = $('<div class="rightBtn">');
 			var $div10 = $('<div class="rightBtn">');
@@ -511,6 +511,7 @@
 			$div6.text('${cBoard.boTitle}');
 			$div7.html('의뢰인 : <span class="smallOption">' + '${cBoard.boWriter}' + '</span>');
 			
+			$('#removeImg').empty();
 			$('#removeImg').html('${cBoard.boContent}');
 			$('#removeImg').find('img').remove();
 			$div8.html($('#removeImg').html());
@@ -747,6 +748,7 @@
 				</div>
 				
 				<script>
+					$('#removeImg').empty();
 					$('#removeImg').html('${cBoard.boContent}');
 					$('#removeImg').find('img').remove();
 					$('.boardContents').eq('${status.index}').html($('#removeImg').html());
