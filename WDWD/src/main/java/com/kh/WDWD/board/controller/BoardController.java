@@ -339,6 +339,9 @@ public class BoardController {
 		ArrayList<Reply> ReplyArr = bService.getReplyList(boNum);
 		ArrayList<Reply> ReplyArr2 = bService.getReplyList2(boNum);
 		
+		System.out.println(ReplyArr);
+		System.out.println(ReplyArr2);
+		
 		ArrayList<Contents> ReplyContents = bService.getReplyContents(ReplyArr);
 		ArrayList<Contents> Reply2Contents = bService.getReply2Contents(ReplyArr2);
 		

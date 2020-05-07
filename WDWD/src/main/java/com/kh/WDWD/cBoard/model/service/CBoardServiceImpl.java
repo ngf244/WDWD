@@ -112,13 +112,8 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 	
 	@Override
-	public int getListCount2(CBoard cBoard) {
-		return cBoardDAO.getListCount2(sqlSession,  cBoard);
-	}
-
-	@Override
-	public ArrayList<CBoard> selectCashOneList(CBoard cBoard, PageInfo piCash) {
-		return cBoardDAO.selectCashOneList(sqlSession,  cBoard, piCash);
+	public ArrayList<CBoard> selectCashList(CBoard cBoard) {
+		return cBoardDAO.selectCashList(sqlSession, cBoard);
 	}
 
 	@Override
@@ -243,12 +238,11 @@ public class CBoardServiceImpl implements CBoardService {
 	@Override
 	public int endDispute(Dispute d) {
 		return cBoardDAO.endDispute(sqlSession, d);
-  }
-  
-  @Override
-  public ArrayList<CBoard> actionPremiumList(String boGroup) {
-		return cBoardDAO.actionPremiumList(sqlSession, boGroup);
 	}
-
+	
+	@Override
+	public ArrayList<CBoard> selectPrimiumList() {
+		return cBoardDAO.selectPrimiumList(sqlSession);
+	}
 	
 }

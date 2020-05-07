@@ -612,7 +612,7 @@
 										}
 										
 										textCheck();
-									}, 1000)
+									}, 500)
 								}()
 			                    
 			                    // 입력중입니다 받을 때
@@ -711,7 +711,7 @@
 						</c:if>
 						
 						<div id="submit" class="button">수락하기</div>
-						<div id="cancle" class="button" onclick="window.history.back();">돌아가기</div>
+						<div id="cancle" class="button" onclick="location.href='actionList.ch'">목록으로</div>
 					</div>
 					
 					<c:if test="${ cBoard.reId ne sessionScope.loginUser.nickName }">

@@ -364,7 +364,12 @@
                 var location = "";
                 switch (boGruop) {
                     case '1': location = "detail.bo?boNum="+boNum; break;
-                    case '2': location = "detail.bo?boNum="+boNum; break;
+                    case '2': location = "detailView.ch?boNum="+boNum; break;
+                    case '3': location = "detailView.ch?boNum="+boNum; break;
+                    case '4': location = "detailView.ch?boNum="+boNum; break;
+                    case '5': location = "detailView.ch?boNum="+boNum; break;
+                    case '6': location = "detailView.ch?boNum="+boNum; break;
+                    case '7': location = "detailView.ch?boNum="+boNum; break;
                 
                     default: break;
                 }
