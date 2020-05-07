@@ -760,7 +760,7 @@
 	/* a태그 관련 css 초기화*/
 	a:link { color: black; text-decoration: none;}
 	a:visited { color: black; text-decoration: none;}
- 	a:hover { color: black; text-decoration: underline;}
+ 	a:hover { color: rgb(52, 152, 219); text-decoration: underline;}
 	
 </style>
 <title>마이 페이지</title>
@@ -882,7 +882,7 @@
 								</tr>
 								<tr>
 									<td>>평점 : </td>
-									<td style="color: gold; font-weight: bolder;">
+									<td style="color: gold; font-weight: bolder; font-size: 15pt;">
 									<c:if test="${ member.grade eq 0 }">
 										☆☆☆☆☆
 									</c:if>									
@@ -970,9 +970,8 @@
 					<div class="mypostArea">
 						<div class="pointArea">
 							<span style="display: inline-block;">자유 게시판</span>
-							<c:url var="fbl" value="actionList.ch">
-								<c:param name="searchWord" value="${ member.nickName }"/>
-								<c:param name="searchCate" value="writer"/>
+							<c:url var="fbl" value="freeBoardList.my">
+								<c:param name="userId" value="${ member.userId }"/>
 							</c:url>
 							<a href="${ fbl }"><img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/></a>
 							<div class="postList">
@@ -991,11 +990,14 @@
 						</div>
 						<div class="cashArea">
 							<span style="display: inline-block;">캐쉬 게시판</span>
-							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;"/>
+							<img class="plusIcon" width="40" height="40" src="${ contextPath }/resources/images/plus_icon3.png" style="display: inline-block;" onclick="goToMyCashBoard();"/>
 							<div class="postList">
 								<c:if test="${ !empty cList}">
 									<c:forEach var="cList" items="${ cList }">
-										<div class="cList">- ${ cList.boTitle }</div>
+										<c:url var="dtv" value="detailView.ch">
+											<c:param name="boNum" value="${ cList.boNum }"/>
+										</c:url>
+										<div class="cList"><a href="${ dtv }"> - ${ cList.boTitle }</a></div>
 									</c:forEach>
 								</c:if>
 								<c:if test="${ empty cList }">
@@ -1533,6 +1535,10 @@
 		
 		function goToMyScrap(){
 			location.href="scrapList.my?userId=" + userId;
+		}
+		
+		function goToMyCashBoard(){
+			location.href="cashBoardList.my?userId=" + userId;
 		}
 		
 		function goToMyCashChangeList(){

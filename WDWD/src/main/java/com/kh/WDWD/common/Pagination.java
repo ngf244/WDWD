@@ -36,7 +36,7 @@ public class Pagination {
 		int endPage;	// 현재 페이지에서 보일 페이징 버튼의 마지막 페이지
 		int boardLimit = 15;	// 한 페이지에 보일 게시글 수
 		
-		maxPage = (int)((double)listCount/boardLimit + 0.9);
+		maxPage = (int)((double)listCount/boardLimit + 0.934);
 		startPage = (((int)((double)currentPage/pageLimit + 0.9)) - 1) * pageLimit + 1;
 		endPage = startPage + pageLimit - 1;
 		

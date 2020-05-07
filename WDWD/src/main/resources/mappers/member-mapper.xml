@@ -391,6 +391,33 @@
 		select *
 		from member
 		where me_email = #{email}
+	</select>
+	
+	<select id="getMyFreeBoardListCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+		where bo_writer = #{userId} and bo_group = '1' and bo_del = 'N'
+	</select>
+	
+	<select id="selectMyFreeBoardList" parameterType="string" resultMap="boardResultSet">
+		select *
+		from board
+		where bo_writer = #{userId} and bo_del = 'N' and bo_group = '1'
+		order by bo_num desc
+	</select>
+	
+	<select id="getMyCashBoardListCount" parameterType="string" resultType="_int">
+		select count(*)
+		from board
+		     left join cash_board on (bo_num = cb_num)
+		where bo_writer = #{userId} and bo_del = 'N' and bo_group in (2, 3, 4, 7)  
+	</select>
+	
+	<select id="selectMyCashBoardList" parameterType="string" resultMap="CBoardResultSet">
+		select *
+		from board
+		     left join cash_board on (bo_num = cb_num)
+		where bo_writer = #{userId} and bo_del = 'N' and bo_group in (2, 3, 4, 7)
 	</select>  
 </mapper>
 

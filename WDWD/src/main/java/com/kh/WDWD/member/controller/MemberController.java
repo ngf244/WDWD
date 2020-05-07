@@ -521,6 +521,60 @@ public class MemberController {
 		
 		response.getWriter().println(result);
 	}
+ 
+	@RequestMapping("freeBoardList.my")
+	public ModelAndView freeBoardList(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = mService.getMyFreeBoardListCount(userId);
+		
+		PageInfo pi = Pagination.getMyReplyPageInfo(currentPage, listCount);		
+		ArrayList<Board> fList = mService.selectMyFreeBoardList(userId, pi);
+		
+		System.out.println("pi : " + pi);
+		
+		if(fList != null) {
+			mv.addObject("fList", fList)
+			  .addObject("pi", pi)
+			  .addObject("userId", userId)
+			  .setViewName("freeBoardList");
+		} else {
+			throw new BoardException("내 자유게시판 리스트 조회에 실패하였습니다.");
+		}
+		
+		return mv;
+	}
+	
+	@RequestMapping("cashBoardList.my")
+	public ModelAndView cashBoardList(@RequestParam("userId") String userId, @RequestParam(value="page", required=false) Integer page, ModelAndView mv) {
+		
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = page;
+		}
+		
+		int listCount = mService.getMyCashBoardListCount(userId);
+		
+		PageInfo pi = Pagination.getMyReplyPageInfo(currentPage, listCount);		
+		ArrayList<CBoard> cbList = mService.selectMyCashBoardList(userId, pi);
+		
+		System.out.println("pi : " + pi);
+		
+		if(cbList != null) {
+			mv.addObject("cbList", cbList)
+			  .addObject("pi", pi)
+			  .addObject("userId", userId)
+			  .setViewName("cashBoardList");
+		} else {
+			throw new BoardException("내 캐쉬게시판 리스트 조회에 실패하였습니다.");
+		}
+		
+		return mv;
+	}
   	
 }
 	

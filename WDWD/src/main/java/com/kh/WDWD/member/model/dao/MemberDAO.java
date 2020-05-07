@@ -179,4 +179,26 @@ public class MemberDAO {
 		return sqlSession.selectOne("memberMapper.selectMemberByEmail", email);
 	}
 
+	public int getMyFreeBoardListCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("memberMapper.getMyFreeBoardListCount", userId);
+	}
+
+	public ArrayList<Board> selectMyFreeBoardList(SqlSessionTemplate sqlSession, String userId, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMyFreeBoardList", userId, rowBounds);
+	}
+
+	public int getMyCashBoardListCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("memberMapper.getMyCashBoardListCount", userId);
+	}
+
+	public ArrayList<CBoard> selectMyCashBoardList(SqlSessionTemplate sqlSession, String userId, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMyCashBoardList", userId, rowBounds);
+	}
+
 }
