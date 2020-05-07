@@ -118,7 +118,7 @@
 	
 	
 	<insert id="insertSendMessages">
-			insert into message values(msg_seq.nextval, #{loginUser}, (SELECT m.rsg_id FROM MSGLIST m where rnick = #{ rsgNick } and rownum = 1), #{title}, SYSDATE, #{content}, 'N', 'N', 'N', 'N')
+			insert into message values(msg_seq.nextval, #{loginUser}, (SELECT me_id FROM member m where me_nick = #{rsgNick} and rownum = 1), #{title}, SYSDATE, #{content}, 'N', 'N', 'N', 'N')
 	</insert>
 	
 	
