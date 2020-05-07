@@ -134,7 +134,7 @@
 		      from (select *
 		            from board
 		            left join contents on (contents.con_ref = board.bo_num)
-		            where bo_group = 1)
+		            where bo_group = 1 and bo_del = 'N')
 		      group by bo_num, bo_title, bo_renum, bo_view, bo_good, bo_renum, bo_date, con_url
 		      order by
 		      <if test="number == 0">bo_view desc,</if>

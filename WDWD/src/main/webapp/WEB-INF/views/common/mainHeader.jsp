@@ -473,7 +473,7 @@
 							
 							var recentlyCheck = 1;
 							for(var i = 1; i < 6; i++) {
-								if(list[recentlyCheck].boGroup == null) {
+								if(list[recentlyCheck] == null) {
 									break;
 								} else {
 									if(list[0].recent1 == list[i].boNum) {
@@ -726,10 +726,8 @@
 						url: 'callTodayData.me',
 						type: 'post',
 						success: function(data){
-							console.log(data);
 							$('#menuTextBoard').text('등록된 게시물 ' + data[0] + '개');
 							$('#menuTextReply').text('등록된 댓글 ' + data[1] + '개');
-							
 						}
 					});
 				

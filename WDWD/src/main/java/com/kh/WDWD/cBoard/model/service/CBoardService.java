@@ -48,9 +48,7 @@ public interface CBoardService {
 
 	int registWrite(Board b, Request r);
 
-	int getListCount2(CBoard cBoard);
-
-	ArrayList<CBoard> selectCashOneList(CBoard cBoard, PageInfo piCash);
+	ArrayList<CBoard> selectCashList(CBoard cBoard);
 	
 	int getCateListCount2(HashMap searchMap);
 	
@@ -101,6 +99,6 @@ public interface CBoardService {
 	int cancleDispute(Dispute d);
 	
 	int endDispute(Dispute d);
-
-  ArrayList<CBoard> actionPremiumList(String boGroup);
+	
+	ArrayList<CBoard> selectPrimiumList();
 }
