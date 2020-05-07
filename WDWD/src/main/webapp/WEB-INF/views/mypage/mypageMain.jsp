@@ -30,7 +30,7 @@
 	} */
 	
 	/* 의뢰 요청 버튼 */
-	button {
+	.buttonR {
 	  position: relative;
 	  background: none;
 	  cursor: pointer;
@@ -744,6 +744,7 @@
 	.changeClass2{height: 65%; width: 11%; border: 1px solid green; margin: 8px; border-radius: 100px; line-height: 80px; color: green; float: left;}
 	.changeClass3{height: 65%; width: 11%; border: 1px solid rgb(41, 128, 185); margin: 8px; border-radius: 100px; line-height: 80px; color: rgb(41, 128, 185); float: left;}
 	.changeClass4{height: 65%; width: 11%; border: 1px solid orange; margin: 8px; border-radius: 100px; line-height: 80px; color: orange; float: left;}
+	.changeClass5{height: 65%; width: 11%; border: 1px solid purple; margin: 8px; border-radius: 100px; line-height: 80px; color: purple; float: left;}
 	.chageDesc{float: right; padding: 50px;}
 	
 	/* 공통 플러스 아이콘 */
@@ -776,7 +777,7 @@
 				<div class="mypageTopArea">
 					<div id="mypageText">마이페이지</div>
 					<!-- <div class="requestBtn"><b>의뢰 요청</b></div> -->
-					<button id="reqGifBtn">
+					<button class="buttonR" id="reqGifBtn">
 					  <span class="shadow span1">
 					    <span class="vert span1">
 					      <span class="floating span1">
@@ -1305,6 +1306,15 @@
 												<div class="chageDesc">
 													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													<fmt:formatNumber value="${ cc.pcAmount }"/>입금
+												</div>
+											</div>
+											</c:if>
+											<c:if test="${ cc.pcContent eq '환전요청(지급완료)' }">
+												<div class="changeList">
+												<div class="changeClass5">&nbsp;&nbsp;&nbsp;&nbsp;캐쉬 환전</div>
+												<div class="chageDesc">
+													${ cc.pcDate }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<fmt:formatNumber value="${ cc.pcAmount }"/>지출
 												</div>
 											</div>
 											</c:if>

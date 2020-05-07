@@ -241,7 +241,7 @@
 											기한 제한 없음
 										</div>
 										<div class="rightBtn">
-											의뢰비 : ${ rol.cbCash }
+											의뢰비 : ${ rol.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ rol.boGroup == '7' }">
@@ -252,7 +252,7 @@
 											기한 제한 없음
 										</div>
 										<div class="rightBtn">
-											의뢰비 : ${ rol.cbCash }
+											의뢰비 : ${ rol.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ rol.boGroup == '3' }">
@@ -261,7 +261,7 @@
 										</div>
 										<div class="rightBtn cbDate">${ rol.cbDate }</div>
 										<div class="rightBtn">
-											최소 입찰가 : ${ rol.cbCash }
+											최소 입찰가 : ${ rol.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ rol.boGroup == '4' }">
@@ -270,7 +270,7 @@
 										</div>
 										<div class="rightBtn cbDate">${ rol.cbDate }</div>
 										<div class="rightBtn">
-											상금 : ${ rol.cbCash }
+											상금 : ${ rol.cbCash } CASH
 										</div>
 									</c:if>																		
 								</div>

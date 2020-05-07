@@ -308,9 +308,6 @@ public class MessageController {
 			} catch (JsonIOException | IOException e) {
 				throw new BoardException("리스트 가져오기 실패");
 			} 
-		} else {
-			throw new CashException("알림 실패");
-
 		}
 	}
 }

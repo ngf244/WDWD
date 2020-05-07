@@ -507,7 +507,6 @@
 				$('.change').click(function () {
 					var cashToChange = Number($('input[type=number]').val());
 					var havingCash = Number($('#nowCashAmount').text());
-					
 
 					console.log(typeof cashToChange);
 					console.log(typeof havingCash);

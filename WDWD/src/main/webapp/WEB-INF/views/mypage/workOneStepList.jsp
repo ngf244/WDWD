@@ -233,7 +233,7 @@
 											기한 제한 없음
 										</div>
 										<div class="rightBtn">
-											의뢰비 : ${ wol.cbCash }
+											의뢰비 : ${ wol.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ wol.boGroup == '3' }">
@@ -244,7 +244,7 @@
 											~ 20${ wol.cbDate }
 										</div>
 										<div class="rightBtn">
-											최소 입찰가 : ${ wol.cbCash }
+											최소 입찰가 : ${ wol.cbCash } CASH
 										</div>
 									</c:if>
 									<c:if test="${ wol.boGroup == '4' }">
@@ -255,7 +255,7 @@
 											~ 20${ wol.cbDate }
 										</div>
 										<div class="rightBtn">
-											상금 : ${ wol.cbCash }
+											상금 : ${ wol.cbCash } CASH
 										</div>
 									</c:if>																		
 								</div>

@@ -273,7 +273,7 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											의뢰비 : ${ rthl.cbCash }
+											의뢰비 : ${ rthl.cbCash } CASH
 										</div>
 										<div class="rightBtn gradeBtn">
 											<input type="hidden" value="${ rthl.reId }">
@@ -305,7 +305,7 @@
 											에디터 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											낙찰가 : ${ rthl.cbCash }
+											낙찰가 : ${ rthl.cbCash } CASH
 										</div>
 										<div class="rightBtn gradeBtn">
 											<input type="hidden" value="${ rthl.reId }">
@@ -337,7 +337,7 @@
 											우승자 : <span class="smallOption" style="color: black;">${ rthl.reId }</span>
 										</div>
 										<div class="rightBtn">
-											상금 : ${ rthl.cbCash }
+											상금 : ${ rthl.cbCash } CASH
 										</div>
 										<div class="rightBtn gradeBtn">
 											<input type="hidden" value="${ rthl.reId }">
