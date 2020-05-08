@@ -325,11 +325,12 @@
                     document.getElementById("banUserToday").valueAsDate = new Date();
                     $('input[name=banUserNick]').val(targetTd.children('td:nth-of-type(2)').text());
                     $('.banWrite').show();
+                    $('.userList').scrollTop($('.userList')[0].scrollHeight);
                     var offset = targetTd.offset();
-                    $('.userList').scroll();
                     $('.userList').stop().animate({
                         scrollTop : offset.top
-                    }, 300);
+                    }, 100);
+                    console.log(offset.top);
                 }
             })
 
