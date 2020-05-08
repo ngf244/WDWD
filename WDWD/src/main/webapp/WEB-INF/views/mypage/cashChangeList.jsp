@@ -132,7 +132,10 @@
 	  font-family: 'Chewy', cursive;
 	  color: crimson;
 	}
-	span {
+	#reqGifBtn span {
+	  display: block;
+	}
+	#cashChargeArea span, #cashChangeArea span {
 	  display: block;
 	}
 	.shadow:before,

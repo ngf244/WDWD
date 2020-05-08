@@ -124,7 +124,7 @@ label{
 
 	<div class="signupback">
 		<div class="signuptitle">
-			<img src="${ contextPath }/resources/images/logotext.png" onclick="location.href='index.home';" id="textlogo">
+			<img style="cursor: pointer;" src="${ contextPath }/resources/images/logotext.png" onclick="location.href='index.home';" id="textlogo">
 		</div>
 			<form action="signUp.me" method="post" id="joinForm">
 		

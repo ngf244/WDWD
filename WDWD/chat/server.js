@@ -40,7 +40,6 @@ io.on('connection', function (socket) {
     
     
     
-    
 });
  
 http.listen(82, function () {

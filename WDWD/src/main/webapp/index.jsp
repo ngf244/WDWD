@@ -221,6 +221,9 @@
 		font-size: 12pt;
 		line-height: 25px;
 	}
+	.rankMove{
+		cursor: pointer;
+	}
 	#number3, #number4, #number5 {
 		position: absolute;
 		height: 40px;

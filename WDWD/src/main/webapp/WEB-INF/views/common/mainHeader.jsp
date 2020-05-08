@@ -426,6 +426,10 @@ span.smallOption {
 	height: 25px;
 	border-radius: 50%;
 }
+	
+.cursorPointer{
+	cursor: pointer;
+}
 
 .messageListBtn {
 	text-align: center;
@@ -453,8 +457,8 @@ span.smallOption {
 			<img id="mainIcon" src="${ contextPath }/resources/images/logo.png"
 				onclick="location.href='index.home'">
 			<div id="mainSearch">
-				<input type="text"> <img
-					src="${ contextPath }/resources/images/search.png">
+				<input type="text">
+				<img class="cursorPointer" src="${ contextPath }/resources/images/search.png">
 			</div>
 			<div id="basicForm">
 				<c:if test="${ empty sessionScope.loginUser }">
