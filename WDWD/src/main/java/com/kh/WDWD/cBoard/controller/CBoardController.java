@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,6 +194,13 @@ public class CBoardController {
 
 				for (int i = 0; i < conUrl.length; i++) {
 					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
+					
+					if(c.getConOri().length() > 30) {
+						String fileName = FilenameUtils.getBaseName(c.getConOri()); // 파일명
+						String extension = FilenameUtils.getExtension(c.getConOri()); // 확장자
+						
+						c.setConOri(fileName.substring(0, 25) + "." + extension);
+					}
 
 					copyFile(c, request);
 					int result = cBoardService.contentsInsert(c);
