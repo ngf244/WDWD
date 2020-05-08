@@ -253,6 +253,7 @@
 								}
 							}).then((result) => {
 								if(result) {
+									autoSendMsg(5, $(e).prev().val(), '작업한 콘테스트에서 우승하여 캐시가 지급되었습니다.<br><br><p class="moveBoard"><input type="hidden" value="${cBoard.boNum}">[게시글 이동]</p>', '');
 									$(e).parent().submit();
 								}
 							});
@@ -312,7 +313,7 @@
 							</c:if>
 						</c:if>
 						
-						<div id="cancle" class="button" onclick="location.href='actionList.ch'">목록으로</div>
+						<div id="cancle" class="button" onclick="location.href='actionList.ch#cashBoardTop'">목록으로</div>
 					</div>
 					
 					<script>

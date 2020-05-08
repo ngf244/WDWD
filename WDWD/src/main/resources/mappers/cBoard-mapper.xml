@@ -754,4 +754,22 @@
 		where bo_del = 'N' and (con_level is null or con_level = 0) and CB_PRIMIUM = 'Y'
 		order by dbms_random.value
 	</select>
+	
+	<select id="getWinnerId" parameterType="_int" resultType="string">
+		select re_id
+		from request
+		where re_num = #{boNum} and re_plz = 'Y'
+	</select>
+	
+	<select id="whoId" parameterType="_int" resultType="string">
+		select bo_writer
+		from board
+		where bo_num = #{boNum}
+	</select>
+	
+	<select id="whatBoGroup" parameterType="_int" resultType="_int">
+		select bo_group
+		from board
+		where bo_num = #{boNum}
+	</select>
 </mapper>

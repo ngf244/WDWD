@@ -37,5 +37,7 @@ public interface MessageService {
 
 	int getMessageDetailUpdate(int msgNum);
 
+	String autoSendMsg(Message msg);
+
 	
 }

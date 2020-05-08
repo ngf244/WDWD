@@ -143,7 +143,7 @@
 	<update id="getMessageDetailUpdate">
 	    update message
 		set RSG_STATUS = 'Y'
-		where MSG_NUM = ${ msgNum } 
+		where MSG_NUM = #{ msgNum } 
 	</update>
 
 	<resultMap type="Message" id="MessageListSet">
@@ -160,4 +160,16 @@
 		<result property="ssgStatus" column="SSG_STATUS"/>
 		<result property="rsgStatus" column="RSG_STATUS"/>
 	</resultMap>
+	
+	<insert id="autoSendMsg" parameterType="Message">
+		insert into message
+		values (msg_seq.nextval, 'admin', #{rsgId}, '알림', to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'), #{msgCon}, 'N', 'N', 'N', 'N')
+	</insert>
+	
+	<select id="callmeNick" resultType="string">
+		select me_nick
+		from member
+		join message on (me_id = rsg_id)
+		where msg_num = (select max(msg_num) from message)
+	</select>
 </mapper>

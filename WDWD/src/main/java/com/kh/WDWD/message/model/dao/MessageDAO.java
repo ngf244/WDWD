@@ -73,4 +73,10 @@ public class MessageDAO {
 		return sqlSession.update("messageMapper.getMessageDetailUpdate", msgNum);
 	}
 
+	public String autoSendMsg(SqlSessionTemplate sqlSession, Message msg) {
+		sqlSession.insert("messageMapper.autoSendMsg", msg);
+		
+		return sqlSession.selectOne("messageMapper.callmeNick");
+	}
+
 }

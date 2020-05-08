@@ -320,6 +320,22 @@ public class CBoardDAO {
 	public ArrayList<CBoard> selectPrimiumList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectPrimiumList");
 	}
+
+	public String getWinnerId(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.getWinnerId", boNum);
+	}
+
+	public String whoId(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.whoId", boNum);
+	}
+
+	public int whatBoGroup(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.whatBoGroup", boNum);
+	}
+
+	public Request whoMatch(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
+	}
 }
 
 

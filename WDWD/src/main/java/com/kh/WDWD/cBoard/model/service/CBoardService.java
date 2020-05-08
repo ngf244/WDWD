@@ -101,4 +101,12 @@ public interface CBoardService {
 	int endDispute(Dispute d);
 	
 	ArrayList<CBoard> selectPrimiumList();
+	
+	String getWinnerId(int boNum);
+	
+	String whoId(int boNum);
+	
+	int whatBoGroup(int boNum);
+	
+	Request whoMatch(int boNum);
 }

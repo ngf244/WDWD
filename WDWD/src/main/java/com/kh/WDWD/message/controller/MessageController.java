@@ -13,24 +13,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.kh.WDWD.board.model.vo.PageInfo;
 import com.kh.WDWD.cBoard.model.exception.BoardException;
+import com.kh.WDWD.cBoard.model.service.CBoardService;
 import com.kh.WDWD.cash.model.exception.CashException;
 import com.kh.WDWD.common.Pagination;
 import com.kh.WDWD.member.model.vo.Member;
 import com.kh.WDWD.message.model.exception.MessageException;
 import com.kh.WDWD.message.model.service.MessageService;
 import com.kh.WDWD.message.model.vo.Message;
+import com.kh.WDWD.request.model.vo.Request;
 
 @Controller
 public class MessageController {
 	@Autowired
 	private MessageService MessageService;
+	
+	@Autowired
+	private CBoardService cBoardService;
 
 	@RequestMapping("messageList.ms")
 	public ModelAndView messageSend(@RequestParam(value = "page", required = false) Integer page, ModelAndView mv,
@@ -310,6 +314,61 @@ public class MessageController {
 			} catch (JsonIOException | IOException e) {
 				throw new BoardException("리스트 가져오기 실패");
 			} 
+		}
+	}
+	
+	@RequestMapping("autoSendMsg.ms")
+	public void autoSendMsg(HttpServletResponse response, HttpServletRequest request) {
+		boolean check = true;
+		
+		int type = Integer.parseInt(request.getParameter("type"));
+		int boNum = Integer.parseInt(request.getParameter("boNum"));
+		String msgCon = request.getParameter("msgCon");
+		String reId = request.getParameter("reId");
+		
+		Message msg = new Message();
+		msg.setMsgCon(msgCon);
+		
+		switch(type) {
+			case 1 :
+				msg.setRsgId(((Member)(request.getSession().getAttribute("loginUser"))).getUserId());
+				break;
+			case 2 : 
+				int boGroup = cBoardService.whatBoGroup(boNum);
+				
+				if(boGroup == 3) {
+					Request r = cBoardService.whoMatch(boNum);
+					
+					if(r == null) {
+						check = false;
+					} else {
+						msg.setMsgCon("지원한 게시글이 의뢰 성사되었습니다.<br><br><p class='moveBoard'><input type='hidden' value='" + boNum + "'>[게시글 이동]</p>");;
+						msg.setRsgId(r.getReId());
+					}
+				} else if(boGroup == 4) {
+					msg.setMsgCon("등록한 콘테스트 의뢰글이 마감되었습니다. 우승자를 선택해주세요.<br><br><p class='moveBoard'><input type='hidden' value='" + boNum + "'>[게시글 이동]</p>");
+					msg.setRsgId(cBoardService.whoId(boNum));
+				}
+				break;
+			
+			case 4 : 
+				msg.setRsgId(cBoardService.getWinnerId(boNum));
+				break;
+				
+			case 5 : 
+				msg.setRsgId(cBoardService.whoId(boNum));
+				break;
+		}
+		
+		if(check) {
+			String nick = MessageService.autoSendMsg(msg);
+			
+			try {
+				response.setContentType("application/json; charset=UTF-8");
+				new Gson().toJson(nick, response.getWriter());
+			} catch (JsonIOException | IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
