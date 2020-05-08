@@ -461,14 +461,16 @@
 											<span>${ port.poDesc }<!-- 인테리어 디자인 및 용품 판매 업체인 "끄끄흐"만의 재미있고 독창성을 보여주며, 이용하는 고객들이 직관적으로 이해할 수 있는 텍스트형 로고로 제작하였습니다. 색상변경 가능합니다. 감사합니다:) --></span>
 										</div>						
 									</div>
-									<div class="BtnArea">
-										<form action="deletePort.my" name="deletePortForm" method="post">
-											<input type="hidden" name="poNum" value="${ port.poNum }">
-											<input type="hidden" name="poWriter" value="${ port.poStatus }">
-										</form>
-										<div class="updateBtn">수정</div>
-										<div class="deleteBtn">삭제</div>
-									</div>					
+									<c:if test="${ portpolio.poWriter eq loginUser.userId }">
+										<div class="BtnArea">
+											<form action="deletePort.my" name="deletePortForm" method="post">
+												<input type="hidden" name="poNum" value="${ port.poNum }">
+												<input type="hidden" name="poWriter" value="${ port.poStatus }">
+											</form>
+											<div class="updateBtn">수정</div>
+											<div class="deleteBtn">삭제</div>
+										</div>
+									</c:if>					
 									<div style="clear: both;"></div>
 									<div class="replyArea">
 										<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
@@ -571,7 +573,9 @@
 						
 						</div>
 					</div>
-					<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
+					<c:if test="${ portpolio.poWriter eq loginUser.userId }">
+						<div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div>
+					</c:if>
 				</div>
 			</div>
 			

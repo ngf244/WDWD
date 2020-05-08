@@ -304,6 +304,12 @@
 
                 $('#inputPoint').on('input', function() {
                     point = $(this).val();
+                    if(point < 0){
+                    	swal("정수를 입력해 주세요");
+                    	$(this).val("");
+                    	$('#inputCash').val(0);
+                    	return false;
+                    }
                     havingPoint = $('.havingPoint').text();
                     cash = Math.floor((Math.floor(point * 0.9))/100)*100;
                     $('#inputCash').val(cash);

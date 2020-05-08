@@ -91,6 +91,7 @@ header {
 	vertical-align: middle;
 	text-align: center;
 	margin-left: 90px;
+	position: relative;
 }
 
 #signupBtn, #welcomeName {
@@ -324,6 +325,7 @@ section:after {
 span.smallOption {
 	color: gray;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 #smallOptionBlock {
@@ -333,6 +335,7 @@ span.smallOption {
 	color: black;
 	display: none;
 	z-index: 99;
+	text-align: center;
 }
 
 #smallOptionBlock div {
@@ -420,11 +423,19 @@ span.smallOption {
 }
 
 .list_count {
+	position: absolute;
 	display: inline-block;
 	border: 1px solid black;
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
+	top: 65px;
+	left: 33%;
+	color: white;
+	background-color: black;
+	opacity : 0.5;
+	font-size: large;
+	font-weight: bolder;
 }
 	
 .cursorPointer{
@@ -685,7 +696,7 @@ span.smallOption {
 
 		<div id="restrictForm">
 			<form method="POST" id="banForm">
-				닉네임 : <input type="text" name="banUserNick" readonly> <br>
+				아이디 : <input type="text" name="banUserId" readonly> <br>
 				<br> 제재 사유 : <br>
 				<textarea name="banContentBefore" class="banContentBefore1"></textarea>
 				<input type="hidden" name="banContent" class="banContent1">
@@ -701,8 +712,8 @@ span.smallOption {
 
 		<div id="reportForm">
 			<form method="POST" id="reportingForm">
-				글 번호 : <input type="text" name="boNum" readonly> <input
-					type="hidden" name="deCate" readonly> <br> <br>
+				글 번호 : <input type="text" name="boNum" readonly> 
+				<input type="hidden" name="deCate" readonly> <br> <br>
 				신고 대상 : <input type="text" name="deReportedNick" readonly> <br>
 				<br> 신고자 : <input type="text" name="deReporterNick" readonly>
 				<input type="hidden" name="deReporterId" readonly> <br>
@@ -721,7 +732,7 @@ span.smallOption {
 			$('#restrictBtn').click(function () {
 				$('#restrictForm').css('display','block');
 				var targetId = $(this).parent().children('input[name=userId]').val();
-				$('#restrictForm input[name=banUserNick]').val(targetId.trim());
+				$('#restrictForm input[name=banUserId]').val(targetId.trim());
 				// var now = new Date();
 				// var date = now.getDate();
 				// var month = now.getMonth()+1;
@@ -830,7 +841,9 @@ span.smallOption {
 					onclick="javascript:location.href='actionList.ch#cashBoardTop'">캐쉬게시판</div>
 				<div class="menubar"
 					onclick="javascript:location.href='pointShop.ps';">포인트샵</div>
-				<div class="menubar" onclick="goCharge();">충전소</div>
+				<c:if test="${ !empty loginUser }">
+					<div class="menubar" onclick="goCharge();">충전소</div>
+				</c:if>
 				<c:if test="${ loginUser.userId eq 'admin'}">
 					<div class="menubar adminPageBtn"
 						onclick="javascript:location.href='trade.au';">관리자 페이지</div>
@@ -1047,7 +1060,7 @@ span.smallOption {
 
 				<script>
 			        $(function(){	
-				        $('li').click(function(){
+				        $('.getMessage').click(function(){
 				        	alert("눌렸다");
 				        	var msgNum =$('.msgNum').val();
 				        	console.log("msgNum", msgNum);

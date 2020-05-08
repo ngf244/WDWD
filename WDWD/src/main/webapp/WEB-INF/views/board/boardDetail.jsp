@@ -992,7 +992,7 @@
 					}
 
 					var boardNo = $('input[name=boardNum]').val();
-					var reported = $(this).parent().prev().children()[0].innerText;
+					var reported = $(this).parent().prev().children()[1].innerText;
 					var category = 9;
 
 					reportForm(boardNo, reported, 2);

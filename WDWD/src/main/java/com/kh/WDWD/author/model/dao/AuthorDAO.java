@@ -42,6 +42,7 @@ public class AuthorDAO {
 	}
 
 	public int insertBan(SqlSession sqlSession, Ban b) {
+		System.out.println(b);
 		return sqlSession.insert("authorMapper.insertBan", b);
 	}
 
