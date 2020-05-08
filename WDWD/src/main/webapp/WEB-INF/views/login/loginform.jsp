@@ -102,7 +102,7 @@
 <body>
 	<div id="loginmain">
 	<div id="loginlogo">
-		<img src="${ contextPath }/resources/images/logotext.png" onclick="location.href='index.home';" id="textlogo">
+		<img style="cursor: pointer;" src="${ contextPath }/resources/images/logotext.png" onclick="location.href='index.home';" id="textlogo">
 	</div>
 	<form id="loginaction" action="login.me" method="post">
 		<div class="loginform">

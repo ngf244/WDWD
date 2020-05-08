@@ -194,7 +194,7 @@
 	 -->
 	<insert id="MinusDetail" parameterType="CBoard">
 		insert into point_cash
-		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>-2000</if>, sysdate, 'C', (select me_id from member where me_nick = #{boWriter}))
+		values (pc_seq.nextval, '의뢰 비용', #{cbCash} <if test='cbPrimium.equals("Y")'>-2000</if>, to_char(sysdate, 'yyyy/mm/dd hh24:mi:ss'), 'C', (select me_id from member where me_nick = #{boWriter}))
 	</insert>
 	<!-- 
 	<update id="PlusCash" parameterType="_int">
@@ -205,7 +205,7 @@
 	 -->
 	<insert id="PlusDetail" parameterType="_int">
 		insert into point_cash
-		values (pc_seq.nextval, '의뢰 수주', (select cb_cash from cash_board where cb_num = #{boNum}), sysdate, 'C', (select re_id from request where re_num = #{boNum} and re_plz = 'Y'))
+		values (pc_seq.nextval, '의뢰 수주', (select cb_cash from cash_board where cb_num = #{boNum}), to_char(sysdate, 'yyyy/mm/dd hh24:mi:ss'), 'C', (select re_id from request where re_num = #{boNum} and re_plz = 'Y'))
 	</insert>
 	
 	<select id="cBoardSelect" resultMap="CBoardResultSet">

@@ -139,7 +139,13 @@
         width: 60%;
         height: 50px;
     }
-
+	.upReviewsButton{
+		cursor: pointer;
+	}
+	#goChange{
+		cursor: pointer;
+	}
+	
 </style>
 
 <body>
