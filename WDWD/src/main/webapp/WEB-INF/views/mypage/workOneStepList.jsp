@@ -174,23 +174,27 @@
 						<div class="dropdown-content">
 							<a href="#"><span onclick="myWorkOneStepList();">전체 보기</span></a>
 						    <a href="#"><span onclick="myWorkCateList(2);">1:1 의뢰</span></a>
+						    <a href="#"><span onclick="myWorkCateList(7);">비공개 의뢰</span></a>
 						    <a href="#"><span onclick="myWorkCateList(3);">역경매</span></a>
 						    <a href="#"><span onclick="myWorkCateList(4);">콘테스트</span></a>
 						</div>						
 					</div>
-					<c:if test="${ cboard.boGroup eq null}">
+					<c:if test="${ request.boGroup eq null}">
 						<div id="CategoryInfo">전체 보기</div>
 					</c:if>
-					<c:if test="${ cboard.boGroup == '2'}">
+					<c:if test="${ request.boGroup == '2'}">
 						<div id="CategoryInfo">1:1 의뢰</div>
 					</c:if>
-					<c:if test="${ cboard.boGroup == '3'}">
+					<c:if test="${ request.boGroup == '3'}">
 						<div id="CategoryInfo">역경매</div>
 					</c:if>
-					<c:if test="${ cboard.boGroup == '4'}">
+					<c:if test="${ request.boGroup == '4'}">
 						<div id="CategoryInfo">콘테스트</div>
 					</c:if>
-				
+					<c:if test="${ request.boGroup == '7'}">
+						<div id="CategoryInfo">비공개 의뢰</div>
+					</c:if>
+					
 					<!-- 리스트 시작 -->
 					<c:if test="${ empty list }">
 						<div class="boardList">※ 목록이 없습니다.</div>
@@ -216,6 +220,9 @@
 									<c:if test="${ wol.boGroup == '2' }" >
 										<b>의뢰유형</b> : 1:1 의뢰<br>
 									</c:if>
+									<c:if test="${ wol.boGroup == '7' }" >
+										<b>의뢰유형</b> : 비공개 의뢰<br>
+									</c:if>
 									<c:if test="${ wol.boGroup == '3' }" >
 									 	<b>의뢰유형</b> : 역경매<br>
 									</c:if>			
@@ -236,23 +243,34 @@
 											의뢰비 : ${ wol.cbCash } CASH
 										</div>
 									</c:if>
+									<c:if test="${ wol.boGroup == '7' }">
+										<div class="rightBtn">
+											의뢰인 : ${ wol.boWriterNick }
+										</div>
+										<div class="rightBtn">
+											기한 제한 없음
+										</div>
+										<div class="rightBtn">
+											의뢰비 : ${ wol.cbCash } CASH
+										</div>
+									</c:if>
 									<c:if test="${ wol.boGroup == '3' }">
 										<div class="rightBtn">
 											참여자 : ${ wol.boReNum }명
 										</div>
-										<div class="rightBtn">
-											~ 20${ wol.cbDate }
+										<div class="rightBtn cbDate">
+											${ wol.cbDate }
 										</div>
 										<div class="rightBtn">
-											최소 입찰가 : ${ wol.cbCash } CASH
+											경매가 진행중입니다.
 										</div>
 									</c:if>
 									<c:if test="${ wol.boGroup == '4' }">
 										<div class="rightBtn">
 											참여자 : ${ wol.boReNum }명
 										</div>
-										<div class="rightBtn">
-											~ 20${ wol.cbDate }
+										<div class="rightBtn cbDate">
+											${ wol.cbDate }
 										</div>
 										<div class="rightBtn">
 											상금 : ${ wol.cbCash } CASH

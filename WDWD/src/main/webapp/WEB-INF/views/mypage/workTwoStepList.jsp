@@ -178,16 +178,16 @@
 						    <a href="#"><span onclick="myWorkCateList(4);">콘테스트</span></a>
 						</div>						
 					</div>
-					<c:if test="${ cboard.boGroup eq null}">
+					<c:if test="${ request.boGroup eq null}">
 						<div id="CategoryInfo">전체 보기</div>
 					</c:if>
-					<c:if test="${ cboard.boGroup == '2'}">
+					<c:if test="${ request.boGroup == '2'}">
 						<div id="CategoryInfo">1:1 의뢰</div>
 					</c:if>
-					<c:if test="${ cboard.boGroup == '3'}">
+					<c:if test="${ request.boGroup == '3'}">
 						<div id="CategoryInfo">역경매</div>
 					</c:if>
-					<c:if test="${ cboard.boGroup == '4'}">
+					<c:if test="${ request.boGroup == '4'}">
 						<div id="CategoryInfo">콘테스트</div>
 					</c:if>
 					
@@ -198,11 +198,11 @@
 					<c:forEach var="wtl" items="${ list }">
 						<div class="boardList">
 							<div class="boardImg" onclick="goCBD(${ wtl.boNum });">
-								<c:if test="${ rol.thumbnail eq null }">
+								<c:if test="${ wtl.thumbnail eq null }">
 									<img src="${ contextPath }/resources/images/emptyImage.png" width= "100%" height= "100%">
 								</c:if>
-								<c:if test="${ rol.thumbnail ne null }">
-									<img src="${ contextPath }/resources/real_photo/${ rol.thumbnail }" width= "100%" height= "100%">
+								<c:if test="${ wtl.thumbnail ne null }">
+									<img src="${ contextPath }/resources/real_photo/${ wtl.thumbnail }" width= "100%" height= "100%">
 								</c:if>																
 							</div>
 							<div class="boardCon">

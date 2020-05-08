@@ -32,7 +32,7 @@ public interface CBoardService {
 
 	int getMyReqListCount(CBoard cboard);
 
-	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
+	ArrayList<Request> selectMyReqList(PageInfo pi, CBoard cboard);
 
 	int getMyWorkListCount(Request request);
 
