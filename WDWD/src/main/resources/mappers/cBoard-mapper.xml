@@ -634,7 +634,7 @@
 		<if test="cbStep != 0">
 			and cb_step = #{cbStep}
 		</if>
-		order by BO_DATE desc
+		order by BO_num desc
 	</select>
 	
 		

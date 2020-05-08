@@ -140,6 +140,12 @@
 		WHERE RSG_ID = #{ loginUser } and RSG_DEL = 'N' and RSG_STATUS = 'N'
 	</select>
 
+	<update id="getMessageDetailUpdate">
+	    update message
+		set RSG_STATUS = 'Y'
+		where MSG_NUM = ${ msgNum } 
+	</update>
+
 	<resultMap type="Message" id="MessageListSet">
 		<id property="msgNum" column="MSG_NUM"/>
 		<result property="ssgId" column="SSG_ID"/>

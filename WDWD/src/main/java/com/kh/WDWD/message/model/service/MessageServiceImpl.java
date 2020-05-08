@@ -81,5 +81,16 @@ public class MessageServiceImpl implements MessageService{
 		return MessageDAO.getMessageList(sqlSession, loginUser);
 	}
 
+	@Override
+	public ArrayList<Message> getMessageDetailY(int msgNum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getMessageDetailUpdate(int msgNum) {
+		return MessageDAO.getMessageDetailUpdate(sqlSession, msgNum);
+	}
+
 
 }

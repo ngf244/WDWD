@@ -23,6 +23,20 @@ io.on('connection', function (socket) {
     socket.on('chatCheck', function (data) {
         io.emit('chatCheck', data);
     });
+
+    //로그인 체크
+    socket.on('loginCheck', function (loginCheck) {
+    	console.log("로그인 성공", loginCheck);
+		io.emit('loginCheck', loginCheck);
+    });
+    //쪽지 알림	
+    socket.on('alertArr', function (alertArr) {
+    	io.emit('alertArr', alertArr);
+    });
+    
+    socket.on('receiveMsg', function (data) {
+    	io.emit('receiveMsg', data);
+    });
     
     
     
