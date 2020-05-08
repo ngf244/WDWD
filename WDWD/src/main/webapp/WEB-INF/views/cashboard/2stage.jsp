@@ -123,6 +123,7 @@
 		float: left;
 		max-width: 70%;
 		background-color: rgb(224, 224, 224);
+		text-align: left;
 		padding: 10px;
 		margin: 10px 10px 0px 10px;
 		border-radius: 20px;
