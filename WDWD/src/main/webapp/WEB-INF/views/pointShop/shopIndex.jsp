@@ -8,7 +8,7 @@
 </head>
 <style>
     @import url(https://fonts.googleapis.com/css?family=Open+Sans:400);
-    body {
+    article {
          font-family: "Noto Sans KR", sans-serif;
       }
     a:link{text-decoration: none; }
