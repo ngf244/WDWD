@@ -326,6 +326,7 @@
                     $('input[name=banUserNick]').val(targetTd.children('td:nth-of-type(2)').text());
                     $('.banWrite').show();
                     var offset = targetTd.offset();
+                    $('.userList').scroll();
                     $('.userList').stop().animate({
                         scrollTop : offset.top
                     }, 300);

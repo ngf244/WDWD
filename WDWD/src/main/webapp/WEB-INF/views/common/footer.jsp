@@ -9,14 +9,44 @@
 footer {
 	width: 100%;
 	height: 50px;
-	background-color: rgb(52, 152, 219);
 	bottom: 0px;
+}
+
+footer div{
+	position: relative;
+	width: 100%;
+	height: 70px;
+	bottom: 0px;
+	text-align: center;
+	line-height: 70px;
+	font-size: x-large;
+	color: black;
+	font-weight: bolder;
+}
+
+footer img{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	border-radius: 5%;
+}
+
+footer span{
+	z-index: 10;
+	position: relative;
+	color: aliceblue;
+	opacity: 0.6;
 }
 </style>
 </head>
 <body>
 	<footer>
-		<div>footer 채울 영역</div>
+		<div>
+			<span>WDWD co. 대표이사 박신우 tel) 010-9468-8140</span>
+			<img src="${contextPath}/resources/images/footerImg.png">
+		</div>
 	</footer>
 	<script>
 		function adchoice() {
