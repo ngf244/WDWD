@@ -12,8 +12,17 @@
 		width: 90%;
 		height: 200px;
 		margin: 0 auto;
-		
+		z-index: 1;
 		border: 1px solid black;
+	}
+	.slick-list draggable{
+		z-index: 1;
+	}
+	.slick-list draggable img{
+		z-index: 1;
+	}
+	.slick-slide{
+		z-index: 1;
 	}
 	#boardTopView {
 		width: 78%;

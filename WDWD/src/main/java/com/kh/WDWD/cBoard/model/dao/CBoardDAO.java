@@ -321,6 +321,10 @@ public class CBoardDAO {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectPrimiumList");
 	}
 
+	public ArrayList<CBoard> selectCashListSearch(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashListSearch", searchMap);
+  }
+  
 	public String getWinnerId(SqlSessionTemplate sqlSession, int boNum) {
 		return sqlSession.selectOne("cBoardMapper.getWinnerId", boNum);
 	}

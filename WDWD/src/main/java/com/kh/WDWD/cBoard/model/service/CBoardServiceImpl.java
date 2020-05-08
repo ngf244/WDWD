@@ -244,6 +244,11 @@ public class CBoardServiceImpl implements CBoardService {
 	public ArrayList<CBoard> selectPrimiumList() {
 		return cBoardDAO.selectPrimiumList(sqlSession);
 	}
+
+	@Override
+	public ArrayList<CBoard> selectCashListSearch(HashMap<String, String> searchMap) {
+		return cBoardDAO.selectCashListSearch(sqlSession, searchMap);
+	}
 	
 	@Override
 	public String getWinnerId(int boNum) {

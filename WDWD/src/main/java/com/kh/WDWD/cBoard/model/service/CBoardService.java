@@ -102,6 +102,8 @@ public interface CBoardService {
 	
 	ArrayList<CBoard> selectPrimiumList();
 	
+	ArrayList<CBoard> selectCashListSearch(HashMap<String, String> searchMap);
+  
 	String getWinnerId(int boNum);
 	
 	String whoId(int boNum);

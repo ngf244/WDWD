@@ -7,6 +7,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+	body {
+	font-family: "Noto Sans KR", sans-serif;
+	}
 	#cashCategorySelectArea {
 		width: 100%;
 		height: 50px;
@@ -106,6 +110,7 @@
 		min-width: 120%;
 		padding: 8px;
 		text-align: center;
+		z-index: 100;
 	}
 	
 	.dropdown-category span {
@@ -351,7 +356,7 @@
 	
 	#primiumZone {
 		box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 13px;
-		padding-top: 10px;
+		padding-top: 30px;
 		padding-bottom: 10px;
 		background-color: #fff6d1;
 	}
@@ -387,7 +392,7 @@
 	.boardCon {
 		/* width 값은 script로 별도 지정 */
 		display: inline-table;
-		width: 80%;
+		width: 87%;
 		height: 140px;
 		margin: 5px;
 		line-height: 100%;
@@ -454,20 +459,58 @@
 	}
 	
 	#loadingArea {
-		height: 50px;
+		height: 200px;
 		text-align: center;
 		display: none;
 	}
 	#loadingArea img {
 		height: 100%;
 	}
+	.preZone{
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 13px;
+		width: 100%;
+		height: 100px;
+		display: inline-block;
+		margin-bottom: 20px;
+		background-color: #fff6d1;
+	}
+	.preZoneText{
+		margin-left: 20px;
+		display: inline-block;
+	}
 </style>
 </head>
 <body>
 	<div id="cashBoardTop"></div>
 	<div id="removeImg" style="display: none;"></div>
-	<div id="primiumZone"></div>
+	<div class="preZone"><h1>&nbsp;&nbsp;PREMIUM ZONE</h1>
+		<div class="preZoneText">
+			<span class="preZoneTextBody">
+				PREMIUM ZONE을 통해 당신의 재능을 뽐내보세요.
+			</span>
+			<span class="preZoneTextReple">
+				PREMIUM ZONE에서 높은 상금을 획득하세요!
+			</span>
+		</div>
+	</div>
 	
+	<script>
+		$('.preZoneTextReple').hide();
+			!function loop(){
+				setTimeout(function() {
+					if($(".preZoneTextReple").css("display") == "none"){
+						$('.preZoneTextBody').hide();
+						$('.preZoneTextReple').slideDown();	
+					} else {
+						$('.preZoneTextReple').hide();
+						$('.preZoneTextBody').slideDown();	
+					}
+					loop();
+			}, 2000)
+		}()
+	</script>
+
+	<div id="primiumZone"></div>
 	<c:forEach var="cBoard" items="${ list3 }" varStatus="status">
 		<script>
 			var result1 = parseInt('${status.index}' / 3);
@@ -767,7 +810,7 @@
 		</div>
 		
 		<div id="loadingArea">
-			<img src="${ contextPath }/resources/images/loading.png">
+			<img src="${ contextPath }/resources/images/loading.gif">
 		</div>
 
 		<script>
@@ -863,6 +906,7 @@
 				if(data.cbStep == 1) {
 					$div9.text('참여인원 : ' + data.boReNum + ' 명');
 				} else {
+					//$('.boardList').css("opacity", "0.4");
 					$div9.text('참여인원 : 마감');
 				}
 				
@@ -894,7 +938,7 @@
 				
 				$div2.append($div3);
 				$div2.append($div4);
-				
+
 				$div.append($input);
 				$div.append($div1);
 				$div.append($div2);
@@ -969,8 +1013,69 @@
 					}
 				}
 			});
+
+			function searchGo(){
+			var searchText = $('.buttonSearch').val();
+			console.log("검색한 searchText :", searchText);
+			
+			var searchCate = $('#searchSelect').text();
+			console.log("searchCate : ",searchCate); 
+			console.log("searchCate : ",searchCate.length); 
+			
+			if(searchCate == '검색 ▼') {
+				swal("내용 확인", "검색 카테고리를 선택하세요.", "error");
+							return false;
+				if(searchText.length < 2 || searchCate.length < 2){
+						swal("내용 확인", "검색은 두 글자 이상 입력해주세요.", "error");
+						$('.buttonSearch').reset();
+						return false;
+					}
+			}
+			$.ajax({
+				url : "ajaxCBoardSearch.ch",
+				type : "post",
+				data: {boGroup: boGroup, boCategory: boCategory, cbStep: cbStep, searchCate:searchCate, searchText:searchText },
+	
+				success : function(list) {
+					$('#searchSelect').text("검색 ▼");
+					if(list == 0){
+						swal("검색 결과가 없습니다.");
+						$('.buttonSearch').val("");
+							return false;
+					}
+					/* 검색성공 */
+					$('.buttonSearch').val("");
+					$('#attachFromHere').empty();
+						listSize = list.length;
+						viewNum = 5;
+						
+						for(var i in list) {
+							var $div = makeAppend(list[i]);
+							$('#attachFromHere').append($div);
+							
+							if(i >= 5) {
+								$('.boardList').eq(i).hide();
+							}
+						}
+				}, error : function(){
+					console.log("boGroup", boGroup);
+				}			
+			});  
+			}
 		</script>
 
+		<!-- 검색 -->
+		<script>
+
+		</script>
+		<!-- <script>
+			$(function(){
+				var closeBoard = '${ cBoard.cbStep != 1 }';
+				if(closeBoard) {
+					$('.boardList').css("opacity", "0.1");
+				} 
+			})
+		</script> -->
 	</div>
 
 </body>
