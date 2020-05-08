@@ -551,7 +551,9 @@
 	<select id="getMyWorkListCount" parameterType="Request" resultType="_int">
 		select count(*)
 		from board
-		     left join cash_board on (bo_num = cb_num)     
+		     left join cash_board on (bo_num = cb_num)
+		     left join request on (bo_num = re_num)
+		     left join member on (bo_writer = me_id)    
 		<where>
 			<if test="reId != null">
 				re_id = #{reId}
@@ -571,6 +573,10 @@
 		select *
 		from board
 			 left join cash_board on (bo_num = cb_num)
+		<if test="cbStep == 1">
+			 left join request on (bo_num = re_num)
+			 left join member on (bo_writer = me_id)
+		</if>	 
 		<if test="cbStep == 2">
 			 left join request on (bo_num = re_num)
 			 left join member on (bo_writer = me_id)
