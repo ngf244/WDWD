@@ -154,6 +154,35 @@ public class CBoardController {
 			e.printStackTrace();
 		}
 	}
+	
+	// ajax로 불러오는 검색 cBoard
+	@RequestMapping("ajaxCBoardSearch.ch")
+	public void ajaxCBoardSearch(HttpServletResponse response,
+								@RequestParam(value = "boGroup", required = false) String boGroup,
+								@RequestParam(value = "searchCate", required = false) String searchCate,
+								@RequestParam(value = "searchText", required = false) String searchText,
+								@RequestParam(value = "boCategory", required = false) String boCategory) {
+		
+		//검색값
+		HashMap<String, String> searchMap = new HashMap<String, String>();
+		searchMap.put("boGroup", boGroup);
+		searchMap.put("boCategory", boCategory);
+		searchMap.put("searchCate", searchCate);
+		searchMap.put("searchText", searchText);
+		
+		ArrayList<CBoard> list = cBoardService.selectCashListSearch(searchMap);
+		System.out.println("list" + boGroup);
+		System.out.println("list" + boCategory);
+		System.out.println("list" + searchCate);
+		System.out.println("list" + searchText);
+		System.out.println("list" + list);
+		try {
+			response.setContentType("application/json; charset=UTF-8");
+			new Gson().toJson(list, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@RequestMapping("writeView.ch")
 	public String cBoardInsertView(@RequestParam("boardType") int boardType, @RequestParam(value = "reqId", required = false) String reqId, Model model) {

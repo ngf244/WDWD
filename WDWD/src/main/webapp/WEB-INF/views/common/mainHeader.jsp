@@ -21,9 +21,8 @@
 <style>
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
-<
-link href ="https: //fonts.googleapis.com /css?family=Noto+Sans+KR
-	 &display =swap "rel ="stylesheet "> body {
+<link href ="https: //fonts.googleapis.com /css?family=Noto+Sans+KR&display =swap "rel ="stylesheet "> 
+body {
 	font-family: "Noto Sans KR", sans-serif;
 }
 
@@ -274,7 +273,7 @@ header {
 	height: 200px;
 	overflow: auto;
 	text-align: left;
-	z-index: 10;
+	z-index: 100;
 }
 
 .ul_list {
@@ -417,9 +416,14 @@ span.smallOption {
 .getMessage:hover {
 	background-color: yellow;
 }
+.getMessage div{
+	z-index: 100;
+}
 
-#slide-img {
-	z-index: 1;
+.getMessage div p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+	
 }
 
 .list_count {

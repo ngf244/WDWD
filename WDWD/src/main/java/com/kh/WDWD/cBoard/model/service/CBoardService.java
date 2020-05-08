@@ -101,4 +101,6 @@ public interface CBoardService {
 	int endDispute(Dispute d);
 	
 	ArrayList<CBoard> selectPrimiumList();
+	
+	ArrayList<CBoard> selectCashListSearch(HashMap<String, String> searchMap);
 }

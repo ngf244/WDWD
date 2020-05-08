@@ -530,7 +530,7 @@
          searchGo(); 
       });
 
-      function searchGo(){
+      /* function searchGo(){
          searchText = $('.buttonSearch').val();
          console.log("검색한 searchText :", searchText);
 
@@ -592,7 +592,7 @@
                   $('.buttonSearch').val("");
                }
          });   
-      }
+      } */
 
 
    </script>

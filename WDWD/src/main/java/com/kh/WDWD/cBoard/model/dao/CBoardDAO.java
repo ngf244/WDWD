@@ -320,6 +320,10 @@ public class CBoardDAO {
 	public ArrayList<CBoard> selectPrimiumList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectPrimiumList");
 	}
+
+	public ArrayList<CBoard> selectCashListSearch(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap) {
+		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashListSearch", searchMap);
+	}
 }
 
 
