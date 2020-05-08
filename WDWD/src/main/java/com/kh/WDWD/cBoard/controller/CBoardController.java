@@ -259,6 +259,13 @@ public class CBoardController {
 			if(conUrl != null) {
 				for(int i = 0; i < conUrl.length; i++) {
 					Contents c = new Contents(conOri[i], conCop[i], conUrl[i], i);
+					
+					if(c.getConOri().length() > 30) {
+						String fileName = FilenameUtils.getBaseName(c.getConOri()); // 파일명
+						String extension = FilenameUtils.getExtension(c.getConOri()); // 확장자
+						
+						c.setConOri(fileName.substring(0, 25) + "." + extension);
+					}
 
 					copyFile(c, request);
 					result = cBoardService.contentsInsert(c);
