@@ -696,7 +696,7 @@ span.smallOption {
 
 		<div id="restrictForm">
 			<form method="POST" id="banForm">
-				닉네임 : <input type="text" name="banUserNick" readonly> <br>
+				아이디 : <input type="text" name="banUserId" readonly> <br>
 				<br> 제재 사유 : <br>
 				<textarea name="banContentBefore" class="banContentBefore1"></textarea>
 				<input type="hidden" name="banContent" class="banContent1">
@@ -712,8 +712,8 @@ span.smallOption {
 
 		<div id="reportForm">
 			<form method="POST" id="reportingForm">
-				글 번호 : <input type="text" name="boNum" readonly> <input
-					type="hidden" name="deCate" readonly> <br> <br>
+				글 번호 : <input type="text" name="boNum" readonly> 
+				<input type="hidden" name="deCate" readonly> <br> <br>
 				신고 대상 : <input type="text" name="deReportedNick" readonly> <br>
 				<br> 신고자 : <input type="text" name="deReporterNick" readonly>
 				<input type="hidden" name="deReporterId" readonly> <br>
@@ -732,7 +732,7 @@ span.smallOption {
 			$('#restrictBtn').click(function () {
 				$('#restrictForm').css('display','block');
 				var targetId = $(this).parent().children('input[name=userId]').val();
-				$('#restrictForm input[name=banUserNick]').val(targetId.trim());
+				$('#restrictForm input[name=banUserId]').val(targetId.trim());
 				// var now = new Date();
 				// var date = now.getDate();
 				// var month = now.getMonth()+1;

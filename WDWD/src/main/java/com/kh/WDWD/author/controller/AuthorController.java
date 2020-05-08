@@ -115,9 +115,11 @@ public class AuthorController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
 		String banTerm = sdf.format(Term);
 		
-		String BanUserId = aService.getId(b.getBanUserNick());
-		b.setBanUserId(BanUserId);
+//		String BanUserId = aService.getId(b.getBanUserNick());
+//		b.setBanUserId(BanUserId);
 		b.setBanTerm(banTerm);
+		
+		System.out.println(b);
 		
 		int insertBanResult = aService.insertBan(b);
 		

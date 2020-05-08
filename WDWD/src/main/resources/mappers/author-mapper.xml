@@ -56,9 +56,9 @@
 	
 	
 	<select id="getBanPageUserList" parameterType="arraylist" resultMap="MemberResultSet">
-		select m.me_id, m.me_nick, count(*)
+		select m.me_id, m.me_nick, count(*)-1 COUNT
 		from member m
-		    join declaration d on(me_id = de_id2)
+		    left join declaration d on(me_id = de_id2)
 		<where>
 			<if test="collection.size() > 0">
 				and me_id not in
@@ -68,7 +68,7 @@
 			</if>
 		</where>
 		group by m.me_id, m.me_nick
-		order by me_id
+		order by count desc
 	</select>
 	
 	<resultMap type="Member" id="MemberResultSet">
@@ -86,7 +86,7 @@
 		<result property="point" column="ME_POINT"/>
 		<result property="cash" column="ME_CASH"/>
 		<result property="uStatus" column="ME_STATUS"/>
-		<result property="grade" column="COUNT(*)"/>
+		<result property="grade" column="COUNT"/>
 		<result property="recent1" column="ME_RECENT1"/>
 		<result property="recent2" column="ME_RECENT2"/>
 		<result property="recent3" column="ME_RECENT3"/>

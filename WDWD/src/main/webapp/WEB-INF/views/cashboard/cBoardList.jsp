@@ -781,6 +781,7 @@
 				
 				boGroup = $(this).index() / 2 + 2;
 				boCategory = null;
+				basicSetting(0);
 				cbStep = 0;
 				callAjax(boGroup, boCategory, cbStep);
 			});
