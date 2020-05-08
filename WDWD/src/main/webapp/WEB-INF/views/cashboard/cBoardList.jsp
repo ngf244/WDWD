@@ -425,8 +425,11 @@
 	.boardContents, .pBoardContents {
 		height: 60px;
 		padding: 5px;
-		line-height: 22px;
 		overflow: hidden;
+	}
+	.boardContents p, .pBoardContents p { 
+		margin: 8px 0px 8px 0px;
+		line-height: 120%;
 	}
 	.rightCon {
 		margin-left: 2%;
@@ -515,6 +518,7 @@
 			$('#removeImg').empty();
 			$('#removeImg').html('${cBoard.boContent}');
 			$('#removeImg').find('img').remove();
+			$('#removeImg').find('br').remove();
 			$div8.html($('#removeImg').html());
 			
 			if('${cBoard.cbStep}' == 1) {
@@ -752,6 +756,7 @@
 					$('#removeImg').empty();
 					$('#removeImg').html('${cBoard.boContent}');
 					$('#removeImg').find('img').remove();
+					$('#removeImg').find('br').remove();
 					$('.boardContents').eq('${status.index}').html($('#removeImg').html());
 					
 					if('${status.index}' >= 5) {
@@ -852,6 +857,7 @@
 				
 				$('#removeImg').html(data.boContent);
 				$('#removeImg').find('img').remove();
+				$('#removeImg').find('br').remove();
 				$div8.html($('#removeImg').html());
 				
 				if(data.cbStep == 1) {

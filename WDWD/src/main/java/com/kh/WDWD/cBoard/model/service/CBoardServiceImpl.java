@@ -245,4 +245,23 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.selectPrimiumList(sqlSession);
 	}
 	
+	@Override
+	public String getWinnerId(int boNum) {
+		return cBoardDAO.getWinnerId(sqlSession, boNum);
+	}
+	
+	@Override
+	public String whoId(int boNum) {
+		return cBoardDAO.whoId(sqlSession, boNum);
+	}
+	
+	@Override
+	public int whatBoGroup(int boNum) {
+		return cBoardDAO.whatBoGroup(sqlSession, boNum);
+	}
+	
+	@Override
+	public Request whoMatch(int boNum) {
+		return cBoardDAO.whoMatch(sqlSession, boNum);
+	}
 }

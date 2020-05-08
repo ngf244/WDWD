@@ -105,7 +105,7 @@
 					</div> <br>
 					
 					<div id="btnList">
-						<div id="cancle" class="button" onclick="location.href='actionList.ch'">목록으로</div>
+						<div id="cancle" class="button" onclick="location.href='actionList.ch#cashBoardTop'">목록으로</div>
 					</div>
 					
 					<script>

@@ -477,14 +477,11 @@ span.smallOption {
 				</c:if>
 
 				<c:if test="${ !empty sessionScope.loginUser }">
-					<div id="welcomeName">${ sessionScope.loginUser.nickName }님
-						환영합니다</div>
-					<img id="notice" class="notice"
-						src="${ contextPath }/resources/images/alarm.png">
+					<div id="welcomeName">${ sessionScope.loginUser.nickName }님 환영합니다</div>
+					<img id="notice" class="notice" src="${ contextPath }/resources/images/alarm.png">
 					<div class="list_count"></div>
 					<!-- 알림 카운트 -->
-					<img id="modalMenu"
-						src="${ contextPath }/resources/images/menu.png">
+					<img id="modalMenu" src="${ contextPath }/resources/images/menu.png">
 
 					<div id="noticeArea" class="notice">
 						<div class="messageListBtn">
@@ -526,9 +523,9 @@ span.smallOption {
 								<b>마이페이지</b>
 							</div>
 
-							<div class="smallMenu blue">
-								<img src="${ contextPath }/resources/images/logout.png"
-									onclick="location.href='logout.me'"> <br> <b>로그아웃</b>
+							<div class="smallMenu blue" onclick="location.href='logout.me'">
+								<img src="${ contextPath }/resources/images/logout.png"> <br>
+								<b>로그아웃</b>
 							</div>
 
 							<div style="height: 30px;"></div>
@@ -537,17 +534,17 @@ span.smallOption {
 
 							<input type="hidden" value="0">
 							<div class="recentlyBoard"></div>
-							<input type="hidden" value="0"> <input type="hidden"
-								value="0">
+							<input type="hidden" value="0">
+							<input type="hidden" value="0">
 							<div class="recentlyBoard"></div>
-							<input type="hidden" value="0"> <input type="hidden"
-								value="0">
+							<input type="hidden" value="0">
+							<input type="hidden" value="0">
 							<div class="recentlyBoard"></div>
-							<input type="hidden" value="0"> <input type="hidden"
-								value="0">
+							<input type="hidden" value="0">
+							<input type="hidden" value="0">
 							<div class="recentlyBoard"></div>
-							<input type="hidden" value="0"> <input type="hidden"
-								value="0">
+							<input type="hidden" value="0">
+							<input type="hidden" value="0">
 							<div class="recentlyBoard"></div>
 							<input type="hidden" value="0">
 
@@ -836,7 +833,7 @@ span.smallOption {
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
 				<div class="menubar" onclick="location.href='qnalist.guide';">가이드(Q&A)</div>
-				<div class="menubar" onclick="goToBoardList();">자유게시판</div>
+				<div class="menubar" onclick="location.href='actionList.ch'">자유게시판</div>
 				<div class="menubar"
 					onclick="javascript:location.href='actionList.ch#cashBoardTop'">캐쉬게시판</div>
 				<div class="menubar"
@@ -894,9 +891,39 @@ span.smallOption {
 						location.href="pointShop.ps";
 					}
 					
+					function autoSendMsg(type, boNum, msgCon, reId){
+						$.ajax({
+							url: 'autoSendMsg.ms',
+							type : "POST",
+							data : {type : type, boNum : boNum, msgCon : msgCon, reId : reId},
+							success : function (data) {
+								/* 쪽지 전송 조건
+								
+								type 1. 캐시게시판 글 작성으로 캐시 차감시
+								text : 의뢰 요청으로 인해 캐시가 차감되었습니다. [게시글 이동]
+
+								type 2. 경매 캐시게시판 글 매칭시
+								text : 지원한 게시글이 의뢰 성사되었습니다. [게시글 이동]
+
+								type 3. 콘테스트 게시판 마감시
+								text : 등록한 콘테스트 의뢰글이 마감되었습니다. 우승자를 선택해주세요. [게시글 이동]
+
+								type 4. 게시글 3단계로 넘어갈 때
+								text : 거래가 성공적으로 진행되어 캐시가 지급되었습니다. [게시글 이동]
+
+								type 5. 콘테 3단계로 넘어갈 때
+								text : 작업한 콘테스트에서 우승하여 캐시가 지급되었습니다. [게시글 이동] */
+								
+								socket.emit("receiveMsg", data);
+							}
+						})
+					}
+					
 					function checkTime(board) {
 						var timer = setInterval(function() {
 							if(new Date().getTime() >= new Date(board.cbDate).getTime()) {
+								autoSendMsg(2, board.boNum, '', '');
+								
 								$.ajax({
 									url: 'timeOut.ch',
 									data: {boNum: board.boNum},
@@ -969,10 +996,7 @@ span.smallOption {
 						
 						window.open("messageList.ms", "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
 					});
-				</script>
-
-				<!-- 쪽지 보내기 실행 -->
-				<script>
+					
 					function messageSend(){
 						var rsgNick = $.trim(id);
 						
@@ -990,10 +1014,7 @@ span.smallOption {
 						window.open("messageSendView.ms?rsgNick="+rsgNick, "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);	
 						
 					}
-				</script>
-				
-				<!-- 캐시 변동시 쪽지 전송  -->
-				<script>
+					
 					var socket = io("http://localhost:82");
 				
 					function addCashAlert(cash, Content){
@@ -1003,10 +1024,7 @@ span.smallOption {
 							data : {aaCash : cash, aaContent : Content},
 							success : function (data) {
 								if(data == 1){
-									console.log("캐시 ", cash);
 									socket.emit("receiveMsg", '${ sessionScope.loginUser.nickName }');
-								} else {
-									console.log("ajax 실패");
 								}
 							}
 						})
@@ -1015,67 +1033,87 @@ span.smallOption {
 					socket.on('receiveMsg', function(data) {
 						console.log("data : " + data);
 						if(data == '${ sessionScope.loginUser.nickName }') {
-							alert("쪽지도착!");
+							$('#notice').attr('src', '${ contextPath }/resources/images/moveBell.gif');
+							swal("쪽지 도착!", "쪽지함을 확인해주세요.", "success");
+							
+							var count = $('.list_count').text();
+							if(count == "") {
+								$('.list_count').text(1);
+							} else {
+								$('.list_count').text(Number(count) + 1);
+							}
 						}
                     });
 				
-				</script>
+					var msgData;
 				
-				<script>
+					if('${ sessionScope.loginUser }' != "") {
+						$.ajax({ 
+	                    	url: "messageListAlert.ms",
+	                    	type: "get",
+	                    	dataType : "json",
+	                    	success: function(data){
+	                    		msgData = data;
+	                    		if(data.length > 0){
+	                    			$('#notice').attr('src', '${ contextPath }/resources/images/moveBell.gif');
+	                    			$('.list_count').text(data.length);
+	                    		}
+                    		}
+	                    });
+					}
+				
 					$('.notice').on('click', function(){
-						var listCount = 0; //받을 쪽지 개수
-			        	var alertTitle = ""; // 쪽지 제목
-			        	var alertTime = ""; //받은 시각
-			        	var arrList = new Array();
-			        	$.ajax({ 
+						var ul_list = $('.ul_list');
+            			ul_list.empty();
+						
+						$.ajax({ 
 	                    	url: "messageListAlert.ms",
 	                    	type: "get",
 	                    	dataType : "json",
 	                    	success: function(data){
 	                    		if(data.length > 0){
-                    				var ul_list = $('.ul_list');
-	                    			ul_list.empty();
 	                    			for(var i=0; i < data.length; i++){
 	                    				var title_add = $.trim(data[i].msgTitle);
 	                    				var date_add = data[i].msgDate.substring(12,19);
 	                    				var amount = $.trim(data[i].msgCon);
-	                    				//var msgNum = data[i].msgNum;
 	                    				var $input = $('<input type="hidden" class="msgNum" value="' + data[i].msgNum +'">');
 	                    				if(data[i].rsgStatus == 'N'){
-		                    				var $li = $('<li class="getMessage" style="font-weight: bold; cursor:pointer;">' + "[" + title_add + "]" +  "<div>내용 : " + amount +  date_add + "<div></li>");
+	                        				var $li = $('<li class="getMessage" style="font-weight: bold; cursor:pointer;">' + "[" + title_add + "]" +  "<div>내용 : " + amount +  date_add + "<div></li>");
 	                    				} 
-	                    				//console.log("input", $input);
-	                    				//console.log("data 뭐", data[i].msgTitle);
-	                    				//console.log("data 뭐", data[i].msgDate);
 	                    				$li.append($input);
 	                    				ul_list.append($li);
 	                    				
-	                    				$('.list_count').text($('li').length);
+	                    				$('#notice').attr('src', '${ contextPath }/resources/images/alarm.png');
 	                    			}
-	                    		} 
+	                    		}
+                    		}, error: function() {
+                    			ul_list.html('<p style="text-align:center;">받은 쪽지가 없습니다.</p>');
                     		}
-	                    });	
+	                    });
+					})
+					
+					$(document).on('click', '.getMessage', function(){
+						window.screen.width
+						window.screen.height
+						
+						var popupWidth = 500;
+						var popupHeight = 600;
+						
+						var popupX = (window.screen.width / 2) - (popupWidth / 2);
+						var popupY= (window.screen.height / 2) - (popupHeight / 2);
+						
+						window.open('messageDetail.ms?msgNum=' + $(this).children('input').val(), "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
+						
+						var count = $('.list_count').text();
+						if(count == 1) {
+							$('.list_count').text("");
+							$('.ul_list').html('<p style="text-align:center;">받은 쪽지가 없습니다.</p>');
+						} else {
+							$('.list_count').text(Number(count) - 1);
+						}
+						$(this).remove();
 					})
 				</script>
-
-				<script>
-			        $(function(){	
-				        $('.getMessage').click(function(){
-				        	alert("눌렸다");
-				        	var msgNum =$('.msgNum').val();
-				        	console.log("msgNum", msgNum);
-				        	location.href="messageDetail.ms?msgNum=" + msgNum;
-				        });
-			        });	
-            	
-	            	function goToBoardList(){
-	        			/* var boGroup1 = 1;
-	        			var boGroup2 = 2;
-	        			var boGroup3 = 3;
-	        			var boGroup4 = 4; */
-	        			location.href="actionList.ch";
-	        		}
-		        </script>
 			</div>
 		</div>
 	</header>

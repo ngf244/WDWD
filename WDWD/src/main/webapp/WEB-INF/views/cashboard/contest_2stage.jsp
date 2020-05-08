@@ -255,7 +255,7 @@
 					
 					<div id="btnList">
 						<div id="submit" class="button" onclick="registWrite();">작성하기</div>
-						<div id="cancle" class="button" onclick="location.href='actionList.ch'">목록으로</div>
+						<div id="cancle" class="button" onclick="location.href='actionList.ch#cashBoardTop'">목록으로</div>
 					</div>
 					
 					<c:if test="${ !empty reqB }">
