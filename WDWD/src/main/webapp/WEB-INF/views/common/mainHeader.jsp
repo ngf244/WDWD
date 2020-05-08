@@ -325,6 +325,7 @@ section:after {
 span.smallOption {
 	color: gray;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 #smallOptionBlock {
@@ -1059,7 +1060,7 @@ span.smallOption {
 
 				<script>
 			        $(function(){	
-				        $('li').click(function(){
+				        $('.getMessage').click(function(){
 				        	alert("눌렸다");
 				        	var msgNum =$('.msgNum').val();
 				        	console.log("msgNum", msgNum);

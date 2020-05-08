@@ -1194,27 +1194,28 @@
 									<div class="replyArea">
 										<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
 										<div class="replyBoard">
-											<c:forEach var="ppr" items="${ port.portReply }">
-													<div class="repWriterImg">
-														<c:if test="${ ppr.conCop eq null }">
-															<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">
-														</c:if>
-														<c:if test="${ ppr.conCop ne null }">
-															<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
-														</c:if>
-													</div>
-													<div class="repIdDateCon">
-														<div class="idDate">
-															<span class="smallOption">${ ppr.porWriter }</span>
-															<span>20${ ppr.porEnrollDate }</span>
+											<c:if test="${ port.portReply ne '[null]'}">
+												<c:forEach var="ppr" items="${ port.portReply }">
+														<div class="repWriterImg">
+															<c:if test="${ ppr.conCop eq null }">
+																<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">
+															</c:if>
+															<c:if test="${ ppr.conCop ne null }">
+																<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+															</c:if>
 														</div>
-														<div class="repContents">
-															${ ppr.porContent } 
+														<div class="repIdDateCon">
+															<div class="idDate">
+																<span class="smallOption">${ ppr.porWriter }</span>
+																<span>20${ ppr.porEnrollDate }</span>
+															</div>
+															<div class="repContents">
+																${ ppr.porContent } 
+															</div>
 														</div>
-													</div>
-													<div style="clear: both;"></div>
-											</c:forEach>
-											
+														<div style="clear: both;"></div>
+												</c:forEach>
+											</c:if>
 										</div>
 										
 										<div class="repEnrollArea">
