@@ -167,7 +167,8 @@ public class MessageController {
 			HttpServletRequest request) {
 
 //		System.out.println("넘어온 쪽지 번호 : " + msgNum);
-
+		
+		int upMs = MessageService.getMessageDetailUpdate(msgNum);
 		ArrayList<Message> ms = MessageService.getMessageDetail(msgNum);
 
 		Message message = new Message();
@@ -184,6 +185,7 @@ public class MessageController {
 			throw new MessageException("쪽지 조회에 실패하였습니다.");
 		}
 	}
+	
 
 	@RequestMapping("messageSendDetail.ms")
 	public ModelAndView messageSendDetail(@RequestParam(value = "msgNum", required = false) int msgNum, ModelAndView mv,

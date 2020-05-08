@@ -100,8 +100,12 @@
 				<div class="tableCol checkBox" style="padding-left:0; padding-right:0; width:5%; text-align:center;">
 					<input type=checkbox name="msgkeys[]" value="${ ms.msgNum }" class=letterCheckBox></div>
 				<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%;"> ${ ms.ssgNick }</div>
-				<div class="tableCol subject" style="padding-left:0; padding-right:0; width:45%;">&nbsp;<a
-						href="messageDetail.ms?msgNum=${ ms.msgNum }"> ${ ms.msgTitle }</a></div>
+				<c:if test="${ ms.rsgStatus == 'N'}">
+					<a href="messageDetail.ms?msgNum=${ ms.msgNum }"><div class="tableCol subject" style="font-weight: bold; padding-left:0; padding-right:0; width:45%;">&nbsp; ${ ms.msgTitle }</div></a>
+				</c:if>
+				<c:if test="${ ms.rsgStatus == 'Y'}">
+					<a href="messageDetail.ms?msgNum=${ ms.msgNum }"><div class="tableCol subject" style="padding-left:0; padding-right:0; width:45%;">&nbsp; ${ ms.msgTitle }</div></a>
+				</c:if>
 				<div class="tableCol sendDate" style="padding-left:0; padding-right:0; width:25%; text-align:center;">${
 					ms.msgDate }</div>
 			</div>

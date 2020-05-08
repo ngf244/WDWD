@@ -69,4 +69,8 @@ public class MessageDAO {
 		return (ArrayList)sqlSession.selectList("messageMapper.getMessageList", loginUser);
 	}
 
+	public int getMessageDetailUpdate(SqlSessionTemplate sqlSession, int msgNum) {
+		return sqlSession.update("messageMapper.getMessageDetailUpdate", msgNum);
+	}
+
 }

@@ -33,5 +33,9 @@ public interface MessageService {
 
 	ArrayList<Message> getMessageList(String loginUser);
 
+	ArrayList<Message> getMessageDetailY(int msgNum);
+
+	int getMessageDetailUpdate(int msgNum);
+
 	
 }

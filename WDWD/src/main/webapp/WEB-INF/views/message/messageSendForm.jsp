@@ -9,6 +9,7 @@
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="http://localhost:82/socket.io/socket.io.js"></script>
 
 	<!-- include summernote css/js -->
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
@@ -169,7 +170,8 @@
 				data : formData, 
 				success : function(data) {
 					/* socket 실행. 알림 받을 내용. 누가 받은지, 알림창 표시 내용. title, 날짜*/
-					
+					var socket = io("http://localhost:82");
+					socket.emit("receiveMsg", "${rsgNick}");
 					
 					alert("쪽지를 보냈습니다!");
 						window.close();

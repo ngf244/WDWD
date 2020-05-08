@@ -153,24 +153,6 @@ footer {
 		}
 	</script>
 	
-	<!-- 캐시 변동시 쪽지 전송  -->
-	<script>
-		function addCashAlert(cash, Content){
-			$.ajax({
-				url: 'addAlert.ms',
-				type : "POST",
-				data : {aaCash : cash, aaContent : Content},
-				success : function (data) {
-					if(data == 1){
-						console.log("캐시 ", cash);
-					} else {
-						console.log("ajax 실패");
-					}
-				}
-		
-			})
-			}
 	
-	</script>
 	
 </body>
