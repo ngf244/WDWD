@@ -91,6 +91,7 @@ header {
 	vertical-align: middle;
 	text-align: center;
 	margin-left: 90px;
+	position: relative;
 }
 
 #signupBtn, #welcomeName {
@@ -333,6 +334,7 @@ span.smallOption {
 	color: black;
 	display: none;
 	z-index: 99;
+	text-align: center;
 }
 
 #smallOptionBlock div {
@@ -420,11 +422,19 @@ span.smallOption {
 }
 
 .list_count {
+	position: absolute;
 	display: inline-block;
 	border: 1px solid black;
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
+	top: 65px;
+	left: 33%;
+	color: white;
+	background-color: black;
+	opacity : 0.5;
+	font-size: large;
+	font-weight: bolder;
 }
 	
 .cursorPointer{
@@ -830,7 +840,9 @@ span.smallOption {
 					onclick="javascript:location.href='actionList.ch#cashBoardTop'">캐쉬게시판</div>
 				<div class="menubar"
 					onclick="javascript:location.href='pointShop.ps';">포인트샵</div>
-				<div class="menubar" onclick="goCharge();">충전소</div>
+				<c:if test="${ !empty loginUser }">
+					<div class="menubar" onclick="goCharge();">충전소</div>
+				</c:if>
 				<c:if test="${ loginUser.userId eq 'admin'}">
 					<div class="menubar adminPageBtn"
 						onclick="javascript:location.href='trade.au';">관리자 페이지</div>
