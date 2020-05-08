@@ -249,7 +249,7 @@
 									</c:if>
 									<c:if test="${ rol.boGroup == '7' }">
 										<div class="rightBtn">
-											요청한 에디터 : ${ rol.reId }
+											비공개 요청중...
 										</div>
 										<div class="rightBtn">
 											기한 제한 없음
@@ -264,7 +264,7 @@
 										</div>
 										<div class="rightBtn cbDate">${ rol.cbDate }</div>
 										<div class="rightBtn">
-											최소 입찰가 : ${ rol.cbCash } CASH
+											경매가 진행 중입니다.
 										</div>
 									</c:if>
 									<c:if test="${ rol.boGroup == '4' }">

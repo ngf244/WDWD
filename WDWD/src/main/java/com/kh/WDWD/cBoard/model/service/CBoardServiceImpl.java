@@ -72,7 +72,7 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard) {
+	public ArrayList<Request> selectMyReqList(PageInfo pi, CBoard cboard) {
 		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
 	}
 

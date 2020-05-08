@@ -88,7 +88,7 @@ public class CBoardDAO {
 	}
 
 
-	public ArrayList<CBoard> selectMyReqList(SqlSessionTemplate sqlSession, PageInfo pi, CBoard cboard) {
+	public ArrayList<Request> selectMyReqList(SqlSessionTemplate sqlSession, PageInfo pi, CBoard cboard) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		

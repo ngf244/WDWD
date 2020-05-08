@@ -192,7 +192,7 @@
 					<c:if test="${ cboard.boGroup == '4'}">
 						<div id="CategoryInfo">콘테스트</div>
 					</c:if>
-				
+					
 					<!-- 리스트 시작 -->
 					<c:if test="${ empty list }">
 						<div class="boardList">※ 목록이 없습니다.</div>

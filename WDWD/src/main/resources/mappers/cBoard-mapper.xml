@@ -500,6 +500,10 @@
 		select *
 		from board
 			 left join cash_board on (bo_num = cb_num)
+			 <if test="cbStep == 2 or cbStep == 3 or boGroup == 7">
+			 	left join request on (bo_num = re_num)
+		     	left join member on (re_id = me_id)
+			 </if>
 		<where>
 			<if test="boWriter != null">
 				bo_writer = #{boWriter}
@@ -511,6 +515,12 @@
 				and cb_step = #{cbStep}
 			</if>
 				and bo_del = 'N'
+			<if test="cbStep == 2">	
+				and re_plz = 'Y'
+			</if>
+			<if test="cbStep == 3">	
+				and re_plz = 'Y'
+			</if>	
 		</where>
 		order by bo_date desc, bo_num desc
 	</select>
@@ -541,19 +551,19 @@
 		<result property="cbPrimium" column="CB_PRIMIUM"/>
 		<result property="reNum" column="RE_NUM"/>
 		<result property="reId" column="ME_NICK"/>
-		<result property="reCash" column="RE_CASH"/>
+		<result property="reCash" column="min(re_cash)"/>
 		<result property="rePlz" column="RE_PLZ"/>
 		<result property="reRefNum" column="RE_REFNUM"/>
 		<result property="reDate" column="RE_DATE"/>
-		<result property="reGrade" column="RE_GRADE"/>		      
+		<result property="reGrade" column="RE_GRADE"/>
+		<result property="boWriterNick" column="ME_NICK"/>		      
 	</resultMap>	
 	
 	<select id="getMyWorkListCount" parameterType="Request" resultType="_int">
 		select count(*)
 		from board
 		     left join cash_board on (bo_num = cb_num)
-		     left join request on (bo_num = re_num)
-		     left join member on (bo_writer = me_id)    
+		     left join request on (bo_num = re_num)    
 		<where>
 			<if test="reId != null">
 				re_id = #{reId}

@@ -61,13 +61,11 @@ public class CBoardController {
 		int listCount = cBoardService.getMyReqListCount(cboard);
 		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);
 
-		ArrayList<CBoard> list = cBoardService.selectMyReqList(pi, cboard);
-		for(CBoard cb : list) {
+		ArrayList<Request> list = cBoardService.selectMyReqList(pi, cboard);
+		for(Request cb : list) {
 			String thumbnail = cBoardService.selectThumbnail(cb.getBoNum());
 			cb.setThumbnail(thumbnail);
 		}
-		
-		System.out.println("reqList : " + list);
 		
 		if (list != null) {
 			mv.addObject("list", list)
@@ -690,7 +688,11 @@ public class CBoardController {
 		PageInfo pi = Pagination.getReqWorkListPageInfo(currentPage, listCount);
 
 		ArrayList<Request> list = cBoardService.selectMyWorkList(pi, request);
-
+		for(Request cb : list) {
+			String thumbnail = cBoardService.selectThumbnail(cb.getBoNum());
+			cb.setThumbnail(thumbnail);
+		}
+		
 		if (list != null) {
 			mv.addObject("list", list).addObject("pi", pi).addObject("request", request);
 
