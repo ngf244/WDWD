@@ -38,9 +38,4 @@ public class QnaDAO {
 	public Qna detailQna(SqlSessionTemplate sqlSession, int bno) {
 		return sqlSession.selectOne("qnaboardMapper.detail", bno);
 	}
-
-	public Qna detailQna(SqlSessionTemplate sqlSession) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

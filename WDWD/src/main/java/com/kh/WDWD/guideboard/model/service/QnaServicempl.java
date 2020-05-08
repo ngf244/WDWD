@@ -36,7 +36,7 @@ public class QnaServicempl implements QnaService{
 
 	@Override
 	public Qna detailQna(int bno) {
-		return qDAO.detailQna(sqlSession);
+		return qDAO.detailQna(sqlSession, bno);
 	}
 
 	@Override
