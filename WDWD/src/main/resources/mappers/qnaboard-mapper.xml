@@ -10,11 +10,11 @@
 	<select id="selectList" resultMap="QnaResultSet">
 		select *
 		from board
-		where q_status = 'Y'
+		where b_status = 'Y'
 		order by bno desc	
 	</select>
 
-	<resultMap type="board" id="QnaResultSet">
+	<resultMap type="Board" id="QnaResultSet">
 		<id property="boNum" column="BO_NUM"/>
 		<result property="boTitle" column="BO_TITLE"/>
 		<result property="boContent" column="BO_CON"/>

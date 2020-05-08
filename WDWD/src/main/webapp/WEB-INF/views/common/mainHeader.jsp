@@ -741,7 +741,7 @@
 		
 		<div id="menuHeaderWrap">
 			<div id="menuHeader">
-				<div class="menubar" onclick="location.href='qna.guide';">가이드(Q&A)</div>
+				<div class="menubar" onclick="location.href='qnalist.guide';">가이드(Q&A)</div>
 				<div class="menubar" onclick="goToBoardList();">자유게시판</div>
 				<div class="menubar" onclick="javascript:location.href='actionList.ch#cashBoardTop'">캐쉬게시판</div>
 				<div class="menubar" onclick="javascript:location.href='pointShop.ps';">포인트샵</div>

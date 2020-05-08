@@ -64,6 +64,9 @@
    	text-align : center;
    }
 	
+	#qnaimage{
+	cursor:pointer;
+	}
 	
    
 </style>
@@ -74,7 +77,7 @@
 	
 				
 			<div class="mainimage3">
-				<img id="qnaimage" src="${ contextPath }/resources/images/qnaimage.png" onclick="location.href='qnalist.guide';">
+				<img id="qnaimage" src="${ contextPath }/resources/images/qnaimage.png" onclick="location.href='qlist.guide';">
 					</div>
 			   			<div class="mainimage2">
 							<img id="guideImage" src="${ contextPath }/resources/images/guidemain2.png">

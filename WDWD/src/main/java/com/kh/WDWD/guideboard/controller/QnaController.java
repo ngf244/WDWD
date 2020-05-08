@@ -26,7 +26,7 @@ public class QnaController {
 	
 
 	//메인 홈페이지 가이드 클릭시 guidemain으로 이동
-	@RequestMapping("qna.guide")
+	@RequestMapping("qnalist.guide")
 	public String goguideview() {
 		return "guide/guidemain";
 	}
