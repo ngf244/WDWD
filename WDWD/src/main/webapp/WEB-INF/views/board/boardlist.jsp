@@ -494,7 +494,7 @@
 		})
 		$('#sideBottom').click(
 				function() {
-					var cashCategorySelectAreaPosition = $('#cashCategorySelectArea').offset();
+					var cashCategorySelectAreaPosition = $('#cashBoardTop').offset();
 					$('html').stop().animate({
 						scrollTop : cashCategorySelectAreaPosition.top
 					}, 300);

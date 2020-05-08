@@ -72,7 +72,7 @@ public class CBoardServiceImpl implements CBoardService {
 	}
 
 	@Override
-	public ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard) {
+	public ArrayList<Request> selectMyReqList(PageInfo pi, CBoard cboard) {
 		return cBoardDAO.selectMyReqList(sqlSession, pi, cboard);
 	}
 
@@ -250,4 +250,23 @@ public class CBoardServiceImpl implements CBoardService {
 		return cBoardDAO.selectCashListSearch(sqlSession, searchMap);
 	}
 	
+	@Override
+	public String getWinnerId(int boNum) {
+		return cBoardDAO.getWinnerId(sqlSession, boNum);
+	}
+	
+	@Override
+	public String whoId(int boNum) {
+		return cBoardDAO.whoId(sqlSession, boNum);
+	}
+	
+	@Override
+	public int whatBoGroup(int boNum) {
+		return cBoardDAO.whatBoGroup(sqlSession, boNum);
+	}
+	
+	@Override
+	public Request whoMatch(int boNum) {
+		return cBoardDAO.whoMatch(sqlSession, boNum);
+	}
 }

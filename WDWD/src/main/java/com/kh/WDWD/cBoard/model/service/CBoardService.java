@@ -32,7 +32,7 @@ public interface CBoardService {
 
 	int getMyReqListCount(CBoard cboard);
 
-	ArrayList<CBoard> selectMyReqList(PageInfo pi, CBoard cboard);
+	ArrayList<Request> selectMyReqList(PageInfo pi, CBoard cboard);
 
 	int getMyWorkListCount(Request request);
 
@@ -103,4 +103,12 @@ public interface CBoardService {
 	ArrayList<CBoard> selectPrimiumList();
 	
 	ArrayList<CBoard> selectCashListSearch(HashMap<String, String> searchMap);
+  
+	String getWinnerId(int boNum);
+	
+	String whoId(int boNum);
+	
+	int whatBoGroup(int boNum);
+	
+	Request whoMatch(int boNum);
 }

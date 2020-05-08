@@ -173,8 +173,18 @@
 					var socket = io("http://localhost:82");
 					socket.emit("receiveMsg", "${rsgNick}");
 					
-					alert("쪽지를 보냈습니다!");
+					swal({
+						title: "쪽지를 보냈습니다!",
+						icon: "success",
+						buttons : {
+							confirm : {
+								text : '확인',
+								value : true
+							}
+						}
+					}).then((result) => {
 						window.close();
+					});
 				}, // success 
 		
 				error : function(error) {

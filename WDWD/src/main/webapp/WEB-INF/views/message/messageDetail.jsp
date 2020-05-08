@@ -108,6 +108,17 @@
 	</div>
 
 	<script>
+		/* $('#reportButton').click(function(){
+			window.opener.location.href="index.home";
+		}) */
+		$(document).on('click', '.moveBoard', function(){
+			console.log('test');
+			
+			window.opener.location.href="detailView.ch?boNum=" + $(this).children('input').val();
+			window.close();
+		})
+	
+	
 		/* 받은 쪽지 목록 */
 		var checkBox = true;
 		var msgNum = $('input[name=msgNum]').val();

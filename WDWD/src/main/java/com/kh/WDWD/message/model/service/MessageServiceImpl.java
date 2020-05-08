@@ -92,5 +92,9 @@ public class MessageServiceImpl implements MessageService{
 		return MessageDAO.getMessageDetailUpdate(sqlSession, msgNum);
 	}
 
+	@Override
+	public String autoSendMsg(Message msg) {
+		return MessageDAO.autoSendMsg(sqlSession, msg);
+	}
 
 }

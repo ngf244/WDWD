@@ -450,6 +450,10 @@
 			var data = {"boNum":"${cBoard.boNum}", "cbDate":"${cBoard.cbDate}"};
 			socket.emit("addCount", data);
 		}
+		
+		if('${param.sysMsg}' == "3" && "${sessionScope.loginUser.nickName}" == "${ cBoard.boWriter }" && "${ cBoard.boGroup }" != 3) {
+			autoSendMsg(1, 0, '의뢰 요청으로 인해 캐시가 차감되었습니다.<br><br><p class="moveBoard"><input type="hidden" value="${cBoard.boNum}">[게시글 이동]</p>', '');
+		}
 	
 		$(document).on("contextmenu dragstart selectstart", '#boardcontent img', function(e){
             swal({

@@ -712,7 +712,7 @@
 						</c:if>
 						
 						<div id="submit" class="button">수락하기</div>
-						<div id="cancle" class="button" onclick="location.href='actionList.ch'">목록으로</div>
+						<div id="cancle" class="button" onclick="location.href='actionList.ch#cashBoardTop'">목록으로</div>
 					</div>
 					
 					<c:if test="${ cBoard.reId ne sessionScope.loginUser.nickName }">
@@ -819,12 +819,13 @@
 										value : false,
 									},
 									confirm : {
-										text : '작성하기',
+										text : '채택하기',
 										value : true
 									}
 								}
 							}).then((result) => {
 								if(result) {
+									autoSendMsg(4, "${cBoard.boNum}", '거래가 성공적으로 진행되어 캐시가 지급되었습니다.<br><br><p class="moveBoard"><input type="hidden" value="${cBoard.boNum}">[게시글 이동]</p>', '');
 									location.href="go3stage.ch?boNum=${ cBoard.boNum }"
 								}
 							});

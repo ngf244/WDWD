@@ -1079,7 +1079,7 @@
 									<div class="innerArea" onclick="goToMyReqList(3);">
 										<div class="innerAreaText">${ rwCount[2] } </div>건
 									</div>
-									<span class="stepSpan">캐쉬 게시판에 올린 글 중 거래가 완료 된글 개수를 나타냅니다.</span>
+									<span class="stepSpan">캐쉬 게시판에 올린 글 중 거래가 완료 된 글 개수를 나타냅니다.</span>
 								</div>						
 							</div>
 							<div class="myWorkState">

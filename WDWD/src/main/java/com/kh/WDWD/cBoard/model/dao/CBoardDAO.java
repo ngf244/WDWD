@@ -88,7 +88,7 @@ public class CBoardDAO {
 	}
 
 
-	public ArrayList<CBoard> selectMyReqList(SqlSessionTemplate sqlSession, PageInfo pi, CBoard cboard) {
+	public ArrayList<Request> selectMyReqList(SqlSessionTemplate sqlSession, PageInfo pi, CBoard cboard) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
@@ -323,6 +323,22 @@ public class CBoardDAO {
 
 	public ArrayList<CBoard> selectCashListSearch(SqlSessionTemplate sqlSession, HashMap<String, String> searchMap) {
 		return (ArrayList)sqlSession.selectList("cBoardMapper.selectCashListSearch", searchMap);
+  }
+  
+	public String getWinnerId(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.getWinnerId", boNum);
+	}
+
+	public String whoId(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.whoId", boNum);
+	}
+
+	public int whatBoGroup(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.whatBoGroup", boNum);
+	}
+
+	public Request whoMatch(SqlSessionTemplate sqlSession, int boNum) {
+		return sqlSession.selectOne("cBoardMapper.getCbCash", boNum);
 	}
 }
 
