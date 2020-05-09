@@ -365,7 +365,7 @@
 		select *
 		from (select * from member
 			  left join contents on (me_con_num = con_num)
-			  where me_id != 'admin'
+			  where me_id != 'admin' and me_grade is not null
 			  order by me_grade desc)
 		where rownum <= 5
 		]]>	

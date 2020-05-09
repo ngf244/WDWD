@@ -672,9 +672,9 @@
 				<div id="buttonSelect">&nbsp;전체 카테고리</div>
 				<div class="dropdown-category">
 					<span onclick="selectCate('');">전체 보기</span>
-					<span onclick="selectCate(1);">제작 디자인</span>
-					<span onclick="selectCate(2);">편집 디자인</span>
-					<span onclick="selectCate(3);">기타 디자인</span>
+					<span onclick="selectCate(1);">컨텐츠 제작</span>
+					<span onclick="selectCate(2);">컨텐츠 수정</span>
+					<span onclick="selectCate(3);">기타</span>
 				</div>
 			</div>
 			<div id="dropProgress">
