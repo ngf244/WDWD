@@ -158,6 +158,11 @@
 	
 	.pagination a:hover:not(.active) {background-color: #ddd;}	
 	
+	
+	.contents p {
+		margin: 8px 0px 8px 0px;
+		line-height: 120%;
+	}
 </style>
 <title>거래 완료</title>
 </head>

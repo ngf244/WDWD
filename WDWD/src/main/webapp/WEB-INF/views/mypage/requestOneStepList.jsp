@@ -158,6 +158,10 @@
 	
 	.pagination a:hover:not(.active) {background-color: #ddd;}	
 	
+	.contents p {
+		margin: 8px 0px 8px 0px;
+		line-height: 120%;
+	}
 </style>
 <title>지원자 모집 중</title>
 </head>

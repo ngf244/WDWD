@@ -154,6 +154,10 @@
 	
 	.pagination a:hover:not(.active) {background-color: #ddd;}	
 	
+	.contents p {
+		margin: 8px 0px 8px 0px;
+		line-height: 120%;
+	}
 </style>
 <title>참가 신청 중</title>
 </head>
