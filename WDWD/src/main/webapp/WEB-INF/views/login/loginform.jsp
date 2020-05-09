@@ -6,6 +6,7 @@
 <meta charset="UTF-8"/>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <title>로그인</title>
 <style>
@@ -107,7 +108,7 @@
 	<form id="loginaction" action="login.me" method="post">
 		<div class="loginform">
 			<input type="text" id="loginId" name="userId" class="inputForm"
-				placeholder="&nbsp;아이디" onkeypress="javascript:capsLock(this);">
+				placeholder="&nbsp;아이디">
 			<br>
 			<br>
 			<div class="check_font" id="id_check"></div>
@@ -128,7 +129,7 @@
 			<div id="loginbtn" onclick="loginbtn();">로그인</div>
 			<br>
 			<br>
-			<a href="https://kauth.kakao.com/oauth/authorize?client_id=067a0a1cc70b12adcd5b92104e2ceb55&redirect_uri=http://localhost:9380/WDWD/kakaoLogin.my&response_type=code">
+			<a href="https://kauth.kakao.com/oauth/authorize?client_id=067a0a1cc70b12adcd5b92104e2ceb55&redirect_uri=http://192.168.220.33:9880/WDWD/kakaoLogin.my&response_type=code">
             	<img src="${ contextPath }/resources/images/kakao_login_btn_large_wide.png" width="500" height="70">
         	</a>
 		</div>
@@ -290,6 +291,15 @@
           loginbtn(); 
     	}
     });
+
+	$(function () {
+		var msg = '${msg}';
+		console.log(msg);
+		if(msg != ""){
+			swal(msg);
+		}
+	})
+    
  
   //]]>
 </script>

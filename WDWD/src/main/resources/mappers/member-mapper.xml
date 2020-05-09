@@ -418,6 +418,7 @@
 		from board
 		     left join cash_board on (bo_num = cb_num)
 		where bo_writer = #{userId} and bo_del = 'N' and bo_group in (2, 3, 4, 7)
+		order by bo_num desc
 	</select>  
 </mapper>
 
