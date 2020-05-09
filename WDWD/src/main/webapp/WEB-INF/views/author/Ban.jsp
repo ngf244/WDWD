@@ -330,7 +330,6 @@
                     $('.userList').stop().animate({
                         scrollTop : offset.top
                     }, 100);
-                    console.log(offset.top);
                 }
             })
 
