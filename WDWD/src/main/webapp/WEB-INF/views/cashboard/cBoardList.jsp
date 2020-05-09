@@ -567,6 +567,7 @@
 			if('${cBoard.cbStep}' == 1) {
 				$div9.text('참여인원 : ${cBoard.boReNum} 명');
 			} else {
+				$('.boardList').hide();
 				$div9.text('참여인원 : 마감');
 			}
 			
