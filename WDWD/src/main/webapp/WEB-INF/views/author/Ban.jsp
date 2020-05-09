@@ -287,6 +287,7 @@
 
                             <span>닉네임 : </span>
                             <input type="text" name="banUserNick" readonly>
+                            <input type="hidden" id="banUserId" name="banUserId" readonly>
                             <br><br>
                             <span>제재 기간 : </span>
                             <br><br>
@@ -330,6 +331,7 @@
                     $('.userList').stop().animate({
                         scrollTop : offset.top
                     }, 100);
+                    console.log(offset.top);
                 }
             })
 
@@ -481,6 +483,7 @@
                     dangerMode: true,
                 }).then((YES) => {
                     if (YES) {
+                        $('#banUserId').val($('#searchWord').val());
                         var banContentAfter = banContentBefore.replace(/(?:\r\n|\r|\n)/g, '<br />');
                         $('.banContent2').val(banContentAfter);
                         var formData = $('#banForm2').serialize();
