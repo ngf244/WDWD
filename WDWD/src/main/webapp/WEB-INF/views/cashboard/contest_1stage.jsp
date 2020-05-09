@@ -9,7 +9,7 @@
 	#editorDetail {
 		background-color: rgba(255, 245, 230, 0.8); 
 	}
-	.editorView {
+	.editorView, .editorWait {
 		width: 20%;
 		height: 200px;
 		display: inline-table;
@@ -196,7 +196,7 @@
 									</c:if>
 								</c:forEach>
 								<c:if test="${ bCheck eq false }">
-									<div class="editorView" onclick="waitAlert();">
+									<div class="editorWait" onclick="waitAlert();">
 										<img class="editorPhoto" src="${ contextPath }/resources/images/drawing.jpg">
 										<div class="editorId">
 											${ r.reId }
@@ -260,7 +260,8 @@
 						}
 					
 				    	function createModal(e) {
-				    		$('.editorView').attr('onclick', '')
+				    		$('.editorView').attr('onclick', '');
+				    		$('.editorWait').attr('onclick', '');
 				    		$(e).children().eq(2).show();
 				    		$(e).children().eq(2).scrollTop(0);
 				    		
@@ -292,6 +293,7 @@
 									$('.modal').hide();
 									$('.watermark_contest').remove();
 									$('.editorView').attr('onclick', 'createModal(this);')
+									$('.editorWait').attr('onclick', 'waitAlert();');
 								}
 				    		}
 						}
