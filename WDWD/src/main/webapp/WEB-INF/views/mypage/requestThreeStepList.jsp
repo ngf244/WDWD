@@ -196,6 +196,10 @@
 		line-height: 1.5; padding: 4px 10px; margin: 7px; width: auto;    
     }
 	
+	.contents p {
+		margin: 8px 0px 8px 0px;
+		line-height: 120%;
+	}
 </style>
 <title>거래 완료</title>
 </head>
