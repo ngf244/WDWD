@@ -451,7 +451,9 @@
 	#portpolio{margin-top: 30px;}
 	.portpolioText{text-indent: 10px; height: 70px; font-size: 18pt; font-weight: bolder; line-height: 65px; background: lightgray;}
 	.portpolioArea{border: 1px solid lightgray; margin-top: 30px; border-radius: 10px; height: 650px;}
-	
+	#portListArea{
+		height: 470px;	
+	}
 	.portArea{
 		width: 18%;
 		height: 180px;
@@ -1125,143 +1127,150 @@
 						<div id="smallReqBtn" class="secretReq">의뢰 요청</div>
 					</div>
 					<div class="portpolioArea">
-						<c:if test="${ empty pcList }">
-							<div style="color: red; text-align: center; text-weight: bold; margin: 50px;">※ 등록한 포트폴리오가 없습니다.</div>
-						</c:if>
-						<c:if test="${ !empty pcList }">
-							<c:forEach var="port" items="${ pcList }">
-							<div class="portArea">
-								<div class="portpolioThumb" onclick="detailView(this);"><img class="portImgTag" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }" width="100%" height="100%"></div>
-								<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
-								<div class="portCount">조회수 : ${ port.poCount }</div>
-								<div style="display: none;">${ port.poNum }</div>
-							</div>
-							
-							<!-- 모달 디테일 영역 -->
-							<div class="portDetailModalArea">
-								<div class="portDetailModalContent">
-									<div class="modalCloseBtn" onclick="closeDetail(this);"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
-									<div style="clear: both;"></div>
-									
-									<div class="portpolioNameContents">
-										<div class="portpolioName" style="text-indent: 20px;">
-											${ port.poTitle }
-										</div>
-										<div class="portpolioContents">
-											<img style="width: 100%;" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
-										</div>
+						
+						<div id="portListArea">
+							<c:if test="${ empty pcList }">
+								<div style="color: red; text-align: center; text-weight: bold; margin: 50px;">※ 등록한 포트폴리오가 없습니다.</div>
+							</c:if>
+							<c:if test="${ !empty pcList }">
+								<c:forEach var="port" items="${ pcList }">
+								<div class="portArea">
+									<div class="portpolioThumb" onclick="detailView(this);"><img class="portImgTag" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }" width="100%" height="100%"></div>
+									<div class="portDate">등록일 : ${ port.poEnrollDate }</div>
+									<div class="portCount">조회수 : ${ port.poCount }</div>
+									<div style="display: none;">${ port.poNum }</div>
+								</div>
+								
+								<!-- 모달 디테일 영역 -->
+								<div class="portDetailModalArea">
+									<div class="portDetailModalContent">
+										<div class="modalCloseBtn" onclick="closeDetail(this);"><img src="${ contextPath }/resources/images/x_icon.png" width="30" height="30"></div>
+										<div style="clear: both;"></div>
 										
-										<c:if test="${ port.poCategory eq '이미지 제작' or port.poCategory eq '이미지 편집' }">
-											<c:forEach var="attach" items="${ port.portContents }">
-												<div class="portpolioContents">
-													<img style="width: 100%;" name="portImage" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }">
-												</div>										
-											</c:forEach>											
-										</c:if>
-										
-										<c:if test="${ port.poCategory eq '동영상 제작' or port.poCategory eq '동영상 편집' }">
-											<c:forEach var="attach" items="${ port.portContents }">
-												<div class="portpolioContents">
-													<video class="portVideo" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }" controls width="100%" height="100%"></video>
-												</div>										
-											</c:forEach>											
-										</c:if>
-										
-									</div>
-									<div class="portpolioDesc">
-										<div class="userId">${ port.poWriter }</div>
-										<div class="portClass">${ port.poCategory }</div>
-										<c:if test="${ port.poUseYn eq 'Y' }">
-											<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인입니다.</div>
-										</c:if>
-										<c:if test="${ port.poUseYn ne 'Y' }">
-											<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인은 아닙니다.</div>
-										</c:if>
-										<div class="portDescription">
-											<span style="font-weight: bold;">디자인 설명</span><br>
-											<span>${ port.poDesc }<!-- 인테리어 디자인 및 용품 판매 업체인 "끄끄흐"만의 재미있고 독창성을 보여주며, 이용하는 고객들이 직관적으로 이해할 수 있는 텍스트형 로고로 제작하였습니다. 색상변경 가능합니다. 감사합니다:) --></span>
-										</div>						
-									</div>
-									<c:if test="${ member.userId eq loginUser.userId }">
-										<div class="BtnArea">
-											<form action="deletePort.my" name="deletePortForm" method="post">
-												<input type="hidden" name="poNum" value="${ port.poNum }">
-												<input type="hidden" name="poWriter" value="${ port.poStatus }">
-											</form>
-											<div class="updateBtn">수정</div>
-											<div class="deleteBtn">삭제</div>
-										</div>
-									</c:if>					
-									<div style="clear: both;"></div>
-									<div class="replyArea">
-										<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
-										<div class="replyBoard">
-											<c:if test="${ port.portReply ne '[null]'}">
-												<c:forEach var="ppr" items="${ port.portReply }">
-														<div class="repWriterImg">
-															<c:if test="${ ppr.conCop eq null }">
-																<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">
-															</c:if>
-															<c:if test="${ ppr.conCop ne null }">
-																<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
-															</c:if>
-														</div>
-														<div class="repIdDateCon">
-															<div class="idDate">
-																<span class="smallOption">${ ppr.porWriter }</span>
-																<span>20${ ppr.porEnrollDate }</span>
-															</div>
-															<div class="repContents">
-																${ ppr.porContent } 
-															</div>
-														</div>
-														<div style="clear: both;"></div>
-												</c:forEach>
+										<div class="portpolioNameContents">
+											<div class="portpolioName" style="text-indent: 20px;">
+												${ port.poTitle }
+											</div>
+											<div class="portpolioContents">
+												<img style="width: 100%;" src="${ contextPath }/${ port.pocPath }/${ port.pocModify }">
+											</div>
+											
+											<c:if test="${ port.poCategory eq '이미지 제작' or port.poCategory eq '이미지 편집' }">
+												<c:forEach var="attach" items="${ port.portContents }">
+													<div class="portpolioContents">
+														<img style="width: 100%;" name="portImage" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }">
+													</div>										
+												</c:forEach>											
 											</c:if>
+											
+											<c:if test="${ port.poCategory eq '동영상 제작' or port.poCategory eq '동영상 편집' }">
+												<c:forEach var="attach" items="${ port.portContents }">
+													<div class="portpolioContents">
+														<video class="portVideo" src="${ contextPath }/${ attach.pocPath }/${ attach.pocModify }" controls width="100%" height="100%"></video>
+													</div>										
+												</c:forEach>											
+											</c:if>
+											
 										</div>
-										
-										<div class="repEnrollArea">
-											<form name="repEnrollForm" method="post" action="enrollPoReply.my" class="repEnrollForm">
-												<input type="hidden" name="porRef" value="${ port.poNum }">
-												<input type="hidden" name="porWriter" value="${ loginUser.userId }">
-												<textarea class="porContent" name="porContent" rows="5" cols="97" style="resize: none; margin: 1%;"></textarea><br>
-												<div class="repEnrollBtn" style="float: right;">등록</div>
-												<div style="clear: both;"></div>								
-											</form>
+										<div class="portpolioDesc">
+											<div class="userId">${ port.poWriter }</div>
+											<div class="portClass">${ port.poCategory }</div>
+											<c:if test="${ port.poUseYn eq 'Y' }">
+												<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인입니다.</div>
+											</c:if>
+											<c:if test="${ port.poUseYn ne 'Y' }">
+												<div class="usingSite" style="font-size: 10pt; line-height: 30px;">※ 본 사이트에서 의뢰를 받아<br>&nbsp;&nbsp;&nbsp;작업한 디자인은 아닙니다.</div>
+											</c:if>
+											<div class="portDescription">
+												<span style="font-weight: bold;">디자인 설명</span><br>
+												<span>${ port.poDesc }<!-- 인테리어 디자인 및 용품 판매 업체인 "끄끄흐"만의 재미있고 독창성을 보여주며, 이용하는 고객들이 직관적으로 이해할 수 있는 텍스트형 로고로 제작하였습니다. 색상변경 가능합니다. 감사합니다:) --></span>
+											</div>						
+										</div>
+										<c:if test="${ member.userId eq loginUser.userId }">
+											<div class="BtnArea">
+												<form action="deletePort.my" name="deletePortForm" method="post">
+													<input type="hidden" name="poNum" value="${ port.poNum }">
+													<input type="hidden" name="poWriter" value="${ port.poStatus }">
+												</form>
+												<div class="updateBtn">수정</div>
+												<div class="deleteBtn">삭제</div>
+											</div>
+										</c:if>					
+										<div style="clear: both;"></div>
+										<div class="replyArea">
+											<div class="replayText">댓글(<span style="color: rgb(52, 152, 219)" class="replyCount">${ port.poFee }</span>건)</div>
+											<div class="replyBoard">
+												<c:if test="${ port.portReply ne '[null]'}">
+													<c:forEach var="ppr" items="${ port.portReply }">
+															<div class="repWriterImg">
+																<c:if test="${ ppr.conCop eq null }">
+																	<img src="${ contextPath }/resources/images/default_profile.png" width="100%" height="100%">
+																</c:if>
+																<c:if test="${ ppr.conCop ne null }">
+																	<img src="${ contextPath }/${ ppr.conUrl }/${ ppr.conCop }" width="100%" height="100%">
+																</c:if>
+															</div>
+															<div class="repIdDateCon">
+																<div class="idDate">
+																	<span class="smallOption">${ ppr.porWriter }</span>
+																	<span>20${ ppr.porEnrollDate }</span>
+																</div>
+																<div class="repContents">
+																	${ ppr.porContent } 
+																</div>
+															</div>
+															<div style="clear: both;"></div>
+													</c:forEach>
+												</c:if>
+											</div>
+											
+											<div class="repEnrollArea">
+												<form name="repEnrollForm" method="post" action="enrollPoReply.my" class="repEnrollForm">
+													<input type="hidden" name="porRef" value="${ port.poNum }">
+													<input type="hidden" name="porWriter" value="${ loginUser.userId }">
+													<textarea class="porContent" name="porContent" rows="5" cols="97" style="resize: none; margin: 1%;"></textarea><br>
+													<div class="repEnrollBtn" style="float: right;">등록</div>
+													<div style="clear: both;"></div>								
+												</form>
+											</div>
 										</div>
 									</div>
-								</div>
-				
-								<div class="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
-									<img class="backToTop" onclick="backToTop(this);" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%">								
-								</div>
-							</div>							
+					
+									<div class="portScroll" style="position:absolute; top: 1100px; left: 1200px;"> 
+										<img class="backToTop" onclick="backToTop(this);" src="${ contextPath }/resources/images/btn_backtotop.png" width="15%" height="15%">								
+									</div>
+								</div>							
+								
+								</c:forEach>
+							</c:if>
+							<div style="clear: both;"></div>
+						</div>
+					
+					
+					<div id="pgen">
+						<!-- 페이징 처리 -->
+					
+						<div class="pagingCenter">
+							<div class="pagination">
+						<!-- 페이지 -->	
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+							<c:if test="${ p eq pi.currentPage }">
+								<a href='javascript:void(0);' onclick="pageMove(this,${ p });"> ${ p } </a>
+							</c:if>
 							
-							</c:forEach>
-						</c:if>
-						<div style="clear: both;"></div>
-					
-					<!-- 페이징 처리 -->
-					
-					<div class="pagingCenter">
-						<div class="pagination">
-					<!-- 페이지 -->	
-					<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-						<c:if test="${ p eq pi.currentPage }">
-							<a href='javascript:void(0);' onclick="pageMove(this,${ p });"> ${ p } </a>
-						</c:if>
+							<c:if test="${ p ne pi.currentPage }">
+								<a href='javascript:void(0);' onclick="pageMove(this,${ p });"> ${ p } </a> &nbsp;
+							</c:if>
+						</c:forEach>	
 						
-						<c:if test="${ p ne pi.currentPage }">
-							<a href='javascript:void(0);' onclick="pageMove(this,${ p });"> ${ p } </a> &nbsp;
-						</c:if>
-					</c:forEach>	
-					
-						
+							
+							</div>
+						</div>
+							<c:if test="${ member.userId eq loginUser.userId }"><div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div></c:if>
+							<div style="clear: both;"></div>						
 						</div>
 					</div>
-						<c:if test="${ member.userId eq loginUser.userId }"><div id="portpolioEnrollBtn" onclick="location.href='portEnrollView.my'">등록하기</div></c:if>
-						<div style="clear: both;"></div>						
-					</div>
+					
 				</div>
 				
 				<c:if test="${ member.userId eq loginUser.userId }">
