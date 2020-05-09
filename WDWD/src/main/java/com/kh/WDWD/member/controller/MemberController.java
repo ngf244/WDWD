@@ -72,8 +72,8 @@ public class MemberController {
 			model.addAttribute("loginUser", loginUser);
 			return "redirect:/index.home";
 		}else {
-			model.addAttribute("msg","로그인 실패하셨습니다!");
-			return "common/errorPage";
+			model.addAttribute("msg","해당하는 유저 정보가 없습니다.");
+			return "login/loginform";
 		}
 	}
 
