@@ -744,9 +744,24 @@
 										}
 									}
 								}).then((result) => {
-									if(result) {
-										$('#insertForm').submit();
-									}
+									swal({
+										title: "정말로 작성하시겠습니까? 수정 및 삭제가 불가능합니다.",
+										icon: "info",
+										buttons : {
+											cancle : {
+												text : '취소',
+												value : false,
+											},
+											confirm : {
+												text : '작성하기',
+												value : true
+											}
+										}
+									}).then((result) => {
+										if(result) {
+											$('#insertForm').submit();
+										}
+									});
 								});
 							}
 						})
