@@ -140,7 +140,6 @@
 		}
 		
 		var id = document.getElementById("id");
-		var pw = documnet.getElementById("pw");
 		</script>
 	<script>
 	 	//CapsLock 스크립트	
@@ -268,7 +267,6 @@
  	var login_btn = "<a id='custom-login-btn' href='javascript:loginWithKakao()'>"+
                 "<img src='../images/sns/Kakao_login_btn.png' width='250'/>"+
                 "</a>";
- 	document.getElementById('kakao_btn_changed').innerHTML  = login_btn;
 	}
  
  
@@ -284,9 +282,13 @@
 	function loginbtn(){
         $('#loginaction').submit();
      };
-     
-    $("#loginPw").keyup(function(e){if(e.keyCode == 13)  
+    
+    $("#loginPw").keyup(function(e){
+    	console.log('asdf');
+    	if(e.keyCode == 13){
+    	console.log('dd');
           loginbtn(); 
+    	}
     });
  
   //]]>
