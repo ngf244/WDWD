@@ -176,8 +176,7 @@
 	  width: 60px;
 	  height: 34px;
 	  vertical-align:middle;
-	  margin-left: 55%;
-	  
+	  margin-left: 50%;
 	}
 	
 	/* Hide default HTML checkbox */
@@ -885,8 +884,8 @@
 								</tr>
 								<tr>
 									<td>>평점 : </td>
-									<td style="color: gold; font-weight: bolder; font-size: 15pt;">
-									<c:if test="${ member.grade eq 0 }">
+									<td>
+									<%-- <c:if test="${ member.grade eq 0 }">
 										☆☆☆☆☆
 									</c:if>									
 									<c:if test="${ member.grade eq 1 }">
@@ -903,7 +902,9 @@
 									</c:if>
 									<c:if test="${ member.grade eq 5 }">
 										★★★★★
-									</c:if>																																				
+									</c:if>	 --%>
+									<b style="color: gold; font-weight: bolder; font-size: 18pt;">★</b> ${ member.grade }개
+																																												
 									</td>
 									<td>>계좌번호 : </td>
 									<td>
