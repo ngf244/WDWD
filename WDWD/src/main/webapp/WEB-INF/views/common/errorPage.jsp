@@ -24,7 +24,20 @@
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+<style>
+	body {
+		background-image : url("${contextPath}/resources/images/관짝춤.gif");
+		
+		background-repeat : no-repeat;
 
+		background-size : cover;
+	}
+	
+	h2{
+		display: none;
+	}
+	
+</style>
 </head>
 
 <body>

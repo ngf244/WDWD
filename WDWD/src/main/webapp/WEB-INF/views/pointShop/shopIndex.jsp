@@ -153,7 +153,7 @@
 <jsp:include page="../common/mainHeader.jsp"/>
 
 <section>
-    <div id="left-side" style="background-color: yellow;"></div>
+    <div id="left-side"></div>
     <div id="shopContent" class="con_main" style="background: white">
         <article class="con_main_wrap">
             <ul class="card_products">
@@ -303,14 +303,14 @@
                 }
 
                 $('#inputPoint').on('input', function() {
-                    point = $(this).val();
+                    point = Number($(this).val());
                     if(point < 0){
                     	swal("정수를 입력해 주세요");
                     	$(this).val("");
                     	$('#inputCash').val(0);
                     	return false;
                     }
-                    havingPoint = $('.havingPoint').text();
+                    havingPoint = Number($('.havingPoint').text());
                     cash = Math.floor((Math.floor(point * 0.9))/100)*100;
                     $('#inputCash').val(cash);
                 })
