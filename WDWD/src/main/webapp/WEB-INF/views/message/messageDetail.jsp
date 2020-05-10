@@ -20,6 +20,7 @@
 		body{
 			margin-left: 5px !important;
 			margin-right: 5px !important;
+		    background-color: rgba(161, 206, 244, 0.55) !important;
 		}	
 
 		#messageHeader {
@@ -37,7 +38,7 @@
 			border-bottom: solid 1px;
 			height: 30px;
 			clear: both;
-			background-color: #EDEDED;
+			background-color: rgb(52, 152, 219);
 			font-weight: bold;
 			text-align: center;
 			padding-top: 5px;
@@ -46,13 +47,53 @@
 
 		.messageDetailBoard {
 			border: solid 1px;
-			height: 380px;
+			height: 360px;
 			margin-top: 10px;
 			margin-bottom: 10px;
 			padding: 10px;
 		}
 		#receiveMs{
 			width:200px;
+		}
+		
+		#messageHeader{
+			padding : 20px;
+			margin-bottom : 20px;
+		}
+		
+		.receiveMsgButton{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		.sendMsgButton{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		.deleteButton{
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		#receiveButton{
+			background-color: rgb(255, 112, 67);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		#reportButton{
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
 		}
 	</style>
 
@@ -75,6 +116,7 @@
 		<!-- 쪽지 상세보기 -->
 		<input type="hidden" name="msgNum" value="${ ms.msgNum }">
 		<input type="hidden" name="ssgId" value="${ ms.ssgId }"> <!-- 답장 보낼 때 받을 id -->
+		<input type="hidden" name="ssgNick" value="${ ms.ssgNick }"> <!-- 답장 보낼 때 받을 id -->
 		<div class="messageTable">
 			${ms.msgTitle}
 		</div>
@@ -90,21 +132,21 @@
 		</div>
 	</c:forEach>
 	<div>
-		<div style="width:30%; display: inline-table;">
-			<span style="width:100% ; clear:both ; padding:10px 0 0 0 ; text-align:left;">
+		<div style="width:100%; display: inline-table;">
+			<span style="width:30% ; clear:both ; padding:10px 0 0 0 ; text-align:left;">
 				<button id="reportButton" role="button" aria-disabled="false"><span
 						class="ui-button-text">신고</span></button>
 			</span>
-			<span style="width:100% ; clear:both ; padding:10px 0 0 0 ; text-align:right;">
+			<span style="width:30%; clear:both ; padding:10px 0 0 0 ; display: inline-table;">
+				<button id="deleteButton" class="deleteButton" role="button" aria-disabled="false"><span
+						class="ui-button-text">선택쪽지 삭제</span></button>
+			</span>
+			<span style="width:30% ; clear:both ; padding:10px 0 0 0 ; float: right; text-align:right;">
 				<button id="receiveButton" role="button" aria-disabled="false" onclick="reSendMessage();"><span class="ui-button-text">답장
 						보내기</span></button>
 			</span>
 		</div>
 
-		<div style="width:65%; clear:both ; padding:10px 0 0 0 ; text-align:right; display: inline-table;">
-			<button id="deleteButton" class="deleteButton" role="button" aria-disabled="false"><span
-					class="ui-button-text">선택쪽지 삭제</span></button>
-		</div>
 	</div>
 
 	<script>

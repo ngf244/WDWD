@@ -14,13 +14,14 @@
 		a:hover{ color: black; text-decoration: none;}
 		div.tableRow:hover{background-color: antiquewhite}
 		div.tableTitle {
+		    background-color: rgb(52, 152, 219);
 			width: 100%;
 			border-top: solid 1px;
 			border-bottom: solid 1px;
 			height: 30px;
 			clear: both;
-			background-color: #EDEDED;
 			font-weight: bold;
+			color:white;
 		}
 
 
@@ -40,6 +41,14 @@
 			height: 20px;
 		}
 
+		body{
+		    background-color: rgba(161, 206, 244, 0.55);
+		}
+		
+		#messageHeader{
+			padding : 20px;
+			margin-bottom : 20px;
+		}
 
 		#bottom-side {
 			width: 100%;
@@ -49,6 +58,53 @@
 		}
 		.currentP{
 			border: 1px solid aquamarine;
+		}
+		
+		.messageCate{
+			height: 24px;
+		}
+		.searchText{
+			height: 19px;
+		}
+		
+		/* 체크박스 디자인 변경 */
+		input[type="checkbox"] {
+		    display:none;
+		}
+		
+		input[type="checkbox"] {
+		    color:#f2f2f2;
+		}
+		
+		input[type="checkbox"] {
+		    display:inline-block;
+		    width:19px;
+		    height:19px;
+		    margin:-2px 10px 0 10px;
+		    vertical-align:middle;
+		    cursor:pointer;
+		}
+		
+		
+		.receiveMsgButton{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		.deleteSendButton{
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		#searchButton button{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
 		}
 	</style>
 
@@ -62,7 +118,7 @@
 	</div>
 	<form method="get">
 		<div style="width:100% ; text-align:right ; padding:0 0 10px 0">
-			<select name="messageCate">
+			<select name="messageCate" class="messageCate">
 				<option value="title">제목</option>
 				<option value="con">내용</option>
 				<option value="sender">작성자</option>
@@ -80,7 +136,7 @@
 
 		<!-- 리스트 출력 -->
 		<div class="tableTitle">
-			<div class="tableCol checkBox" style="padding-left:0; padding-right:0; width:5%; text-align:center;"><input
+			<div class="tableCol checkBox" style="padding-left:0; padding-right:5px; width:5%; text-align:center;"><input
 					type="checkbox" onclick="lfCheckAll(this.checked);"></div>
 			<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%; text-align:center;">
 				발신자</div>
@@ -97,7 +153,7 @@
 
 			<!-- 보낸 리스트 -->
 			<div class=tableRow>
-				<div class="tableCol checkBox" style="padding-left:0; padding-right:0; width:5%; text-align:center;">
+				<div class="tableCol checkBox" style="padding-left:0; padding-right:5px; width:5%; text-align:center;">
 					<input type=checkbox name="msgkeys[]" value="${ ms.msgNum }" class=letterCheckBox></div>
 				<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%;"> ${ ms.rsgNick }</div>
 				<div class="tableCol subject" style="padding-left:0; padding-right:0; width:45%;">&nbsp;<a

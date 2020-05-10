@@ -7,6 +7,10 @@
 <head>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	
 	<meta charset="UTF-8">
 	<title>쪽지 상세보기</title>
 	<style>
@@ -16,6 +20,7 @@
 		body{
 			margin-left: 5px !important;
 			margin-right: 5px !important;
+		    background-color: rgba(161, 206, 244, 0.55) !important;
 		}	
 
 		.messageTable {
@@ -24,21 +29,56 @@
 			border-bottom: solid 1px;
 			height: 30px;
 			clear: both;
-			background-color: #EDEDED;
+			background-color: rgb(52, 152, 219);
 			font-weight: bold;
 			text-align: center;
 			padding-top: 5px;
+			color: white;
 		}
 
 		.messageDetailBoard {
 			border: solid 1px;
-			height: 380px;
+			height: 360px;
 			margin-top: 10px;
 			margin-bottom: 10px;
 			padding: 10px;
 		}
+		
 		#sendMs{
 			width:200px;
+		}
+		
+		#messageHeader{
+			padding : 20px;
+			margin-bottom : 20px;
+		}
+		
+		.receiveMsgButton{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		.sendMsgButton{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		.deleteButton{
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		#reportButton{
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
 		}
 	</style>
 	<!-- include libraries(jQuery, bootstrap) -->

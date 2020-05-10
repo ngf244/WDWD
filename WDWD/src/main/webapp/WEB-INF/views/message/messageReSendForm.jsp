@@ -23,65 +23,109 @@
 <meta charset="UTF-8">
 <title>답장 보내기</title>
 <style>
-body {
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-textarea:focus {
-	outline: none;
-}
-
-.messageTitle {
-	width: 99.5%;
-	border-top: solid 1px;
-	border-bottom: solid 1px;
-	height: 30px;
-	background-color: #fff;
-	font-weight: bold;
-	text-align: left;
-	padding-left: 5px;
-}
-
-.titleHere {
-	width: 99.5%;
-	height: 28px;
-}
-
-.messageDetailBoard {
-	height: 350px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-.messageReceiver {
-	margin-top: 10px;
-}
-
-.footer {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	padding: 15px 0;
-}
-
-#sendButton {
-	margin-right: 10px;
-}
-
-#closeMessage {
-	margin-left: 10px;
-}
+	body {
+		margin-left: 5px;
+		margin-right: 5px;		    
+		background-color: rgba(161, 206, 244, 0.55) !important;
+	}
+	
+	textarea:focus {
+		outline: none;
+	}
+	
+	#sendMs{
+			width:200px;
+	}
+	
+	.messageTitle {
+		width: 99.5%;
+		border-top: solid 1px;
+		border-bottom: solid 1px;
+		height: 30px;
+		background-color: rgb(52, 152, 219);
+		font-weight: bold;
+		text-align: left;
+		padding-left: 5px;
+	}
+	
+	.titleHere {
+		width: 99.5%;
+		height: 28px;
+	}
+	
+	.messageDetailBoard {
+		height: 350px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	
+	.messageReceiver {
+		margin-top: 10px;
+	}
+	
+	#messageHeader{
+			padding : 20px;
+			padding-bottom: 10px;
+	}
+	
+	.footer {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		padding: 15px 0;
+	}
+	
+	#sendButton {
+		margin-right: 10px;
+	}
+	
+	#closeMessage {
+		background-color: #f8585b;
+	    border-radius: 5px;
+	    color:white;
+		font-weight: bold;
+		margin-left: 10px;
+	}
+	
+	
+	#sendButton{
+		background-color: rgb(52, 152, 219);
+	    border-radius: 5px;
+	    color:white;
+		font-weight: bold;
+	}
+	
+	#backBtn{
+		maring-left: 20px;
+		background-color: #f8585b;
+	    border-radius: 5px;
+	    color:white;
+		font-weight: bold;
+	}
+	
+	#receiveMsgButton{
+		background-color: rgb(52, 152, 219);
+		   border-radius: 5px;
+		   color:white;
+		font-weight: bold;
+	}
 </style>
 
 </head>
 
 <body>
 	<div id="messageHeader">
-		<h1>쪽지 보내기</h1>
+		<img id="sendMs" src="${ contextPath }/resources/images/sendMessage.png" alt="">
 	</div>
-
+	
+	<form method="get">
+		<div style="width:100% ; text-align:right ; padding:0 0 0 0">
+			<input type="button" value="받은쪽지 목록" id="receiveMsgButton" class="receiveMsgButton" role="button"
+				aria-disabled="false">
+		</div>
+	</form>	
+	
 	<br>
 	<!-- 쪽지 상세보기 -->
 
@@ -92,8 +136,7 @@ textarea:focus {
 					placeholder="제목 입력" style="border: none;">
 			</div>
 			<div class="messageReceiver">
-				수신자 : <input type="hidden" name="rsgId" value="${ms.ssgId}"><input
-					type="hidden" name="rsgNick" value="${msSsgNick}"> <span
+				수신자 : <input type="hidden" name="rsgId" value="${ms.ssgId}"><input	type="hidden" name="rsgNick" value="${msSsgNick}"> <span
 					class="messageReceiver">${ms.ssgNick}</span>
 			</div>
 			<div class="messageDetailBoard">
@@ -241,16 +284,23 @@ textarea:focus {
 
 
 	<script>
+	
+		/* 받은 쪽지 목록 */
+		var checkBox = true;
+		var msgNum = $('input[name=msgNum]').val();
+		$('.receiveMsgButton').click(function () {
+			location.href = 'messageList.ms';
+		});
+		
 		function goWrite() {
 			var form = $("form")[0];
 			var formData = new FormData(form);
-
 			$.ajax({
 				cache : false,
 				url : "messageSend.ms",
 				processData : false,
 				contentType : false,
-				type : 'POST',
+				type : 'post',
 				data : formData,
 				success : function(data) {
 					alert("쪽지를 보냈습니다!");
@@ -262,8 +312,11 @@ textarea:focus {
 				}
 			}); // $.ajax */    }
 		}
+
 	</script>
 
+
+	
 </body>
 
 </html>
