@@ -1008,7 +1008,7 @@ span.smallOption {
 						window.screen.width
 						window.screen.height
 						
-						var popupWidth = 600;
+						var popupWidth = 500;
 						var popupHeight = 600;
 						
 						var popupX = (window.screen.width / 2) - (popupWidth / 2);

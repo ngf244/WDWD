@@ -23,6 +23,8 @@
 		body{
 			margin-left: 5px;
 			margin-right: 5px;
+			background-color: rgba(161, 206, 244, 0.55) !important;
+			
 		}	
 		textarea:focus {
 			outline: none;
@@ -33,17 +35,26 @@
 			border-top: solid 1px;
 			border-bottom: solid 1px;
 			height: 30px;
-			background-color: #fff;
+			background-color: rgb(52, 152, 219);
 			font-weight: bold;
 			text-align: left;
 			padding-left: 5px;
 		}
-
+		
+		#sendMs{
+			width:200px;
+		}
+		
 		.titleHere{
 			width: 99.5%;
 			height: 28px;
 		}
-
+		
+		#messageHeader{
+			padding : 20px;
+			padding-bottom: 10px;
+		}
+		
 		.messageDetailBoard {
 			height: 350px;
 			margin-top: 10px;
@@ -63,18 +74,28 @@
 		}
 
 		#sendButton{
-			margin-right: 10px;
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+			margin-rigth: 20px;
 		}
-		#closeMessage{
+		
+		#closeMessage {
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
 			margin-left: 10px;
-		}
+	}
+	
 	</style>
 
 </head>
 
 <body>
 	<div id="messageHeader">
-		<h1>쪽지 보내기</h1>
+		<img id="sendMs" src="${ contextPath }/resources/images/sendMessage.png" alt="">
 	</div>
 
 	<br>
@@ -88,7 +109,7 @@
 			<textarea id="summernote" name="msContent"></textarea>
 		</div>
 		<div class="footer">
-			<input id="sendButton" type="button" value="쪽지 보내기" style="float: right;" onclick="goWrite(this.form)"/>
+			<input id="sendButton" type="button" value="쪽지 보내기" style="float: right; margin-right: 10px;" onclick="goWrite(this.form)"/>
 			<button id="closeMessage" role="button" aria-disabled="false" onclick="window.close();"><span class="ui-button-text">닫기</span></button>
 		</div>
 	</form>
@@ -160,7 +181,6 @@
 			var form = $("form")[0];        
 			var formData = new FormData(form);
 			//var socket = io("http://localhost:82");
-
 			$.ajax({
 				cache : false,
 				url : "messageSend.ms", 

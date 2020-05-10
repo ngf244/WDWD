@@ -3,7 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-
+<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css" />
 <head>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -14,15 +15,16 @@
 		a:hover{ color: black; text-decoration: none;}
 		div.tableRow:hover{background-color: antiquewhite}
 		div.tableTitle {
+		    background-color: rgb(52, 152, 219);
+		    color : white;
 			width: 100%;
 			border-top: solid 1px;
 			border-bottom: solid 1px;
 			height: 30px;
 			clear: both;
-			background-color: #EDEDED;
 			font-weight: bold;
 		}
-
+	
 
 		div.tableRow {
 			border-bottom: solid 1px #eaeaea;
@@ -34,21 +36,80 @@
 		div.tableCol {
 			text-align: center;
 			float: left;
-			padding: 5px 3px 0 3px;
+			padding: 5px 5px 0 5px;
 			overflow-x: hidden;
 			overflow-y: hidden;
 			height: 20px;
 		}
 
+		body{
+		    background-color: rgba(161, 206, 244, 0.55);
+		}
+		
+		#messageHeader{
+			padding : 20px;
+			margin-bottom : 20px;
+		}
+		
 
 		#bottom-side {
+			position: fixed;
 			width: 100%;
+			bottom: 0;
+			
 		}
 		#receiveMs{
 			width:200px;
 		}
 		.currentP{
 			border: 1px solid aquamarine;
+		}
+		
+		.messageCate{
+			height: 24px;
+		}
+		.searchText{
+			height: 19px;
+		}
+		
+		/* 체크박스 디자인 변경 */
+		input[type="checkbox"] {
+		    display:none;
+		}
+		
+		input[type="checkbox"] {
+		    color:#f2f2f2;
+		}
+		
+		input[type="checkbox"] {
+		    display:inline-block;
+		    width:19px;
+		    height:19px;
+		    margin:-2px 10px 0 10px;
+		    vertical-align:middle;
+		    cursor:pointer;
+		}
+		
+		
+		.sendMsgButton{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		.deleteButton{
+			background-color: #f8585b;
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
+		}
+		
+		#searchButton button{
+			background-color: rgb(52, 152, 219);
+		    border-radius: 5px;
+		    color:white;
+			font-weight: bold;
 		}
 	</style>
 
@@ -62,7 +123,7 @@
 	</div>
 	<form method="get">
 		<div style="width:100% ; text-align:right ; padding:0 0 10px 0">
-			<select name="messageCate">
+			<select name="messageCate" class="messageCate">
 				<option value="title">제목</option>
 				<option value="con">내용</option>
 				<option value="sender">작성자</option>
@@ -80,7 +141,7 @@
 
 		<!-- 리스트 출력 -->
 		<div class="tableTitle">
-			<div class="tableCol checkBox" style="padding-left:0; padding-right:0; width:5%; text-align:center;"><input
+			<div class="tableCol checkBox" style="padding-left:0; padding-right:5px; width:5%; text-align:center;"><input
 					type="checkbox" onclick="lfCheckAll(this.checked);"></div>
 			<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%; text-align:center;">
 				발신자</div>
@@ -97,7 +158,7 @@
 
 			<!-- 받은 리스트 -->
 			<div class=tableRow>
-				<div class="tableCol checkBox" style="padding-left:0; padding-right:0; width:5%; text-align:center;">
+				<div class="tableCol checkBox" style="padding-left:0; padding-right:5; width:5%; text-align:center;">
 					<input type=checkbox name="msgkeys[]" value="${ ms.msgNum }" class=letterCheckBox></div>
 				<div class="tableCol sender" style="padding-left:0; padding-right:0; width:20%;"> ${ ms.ssgNick }</div>
 				<c:if test="${ ms.rsgStatus == 'N'}">
@@ -150,10 +211,11 @@
 		<button id="deleteButton" class="deleteButton" role="button" aria-disabled="false"><span
 				class="ui-button-text">선택쪽지 삭제</span></button>
 	</div>
-
-	<!-- <div id="bottom-side">
-		광고<a href="#"></a>
-	</div> -->
+	
+	
+	<div id="bottom-side">
+		<a href="#"></a>
+	</div>
 
 	<script>
 		function lfCheckAll(bl) {
