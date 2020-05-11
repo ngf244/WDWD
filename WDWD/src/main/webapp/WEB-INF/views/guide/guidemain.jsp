@@ -72,24 +72,43 @@
 </style>
 </head>
 <body>
-	<jsp:include page="../common/mainHeader.jsp"/>
+   <jsp:include page="../common/mainHeader.jsp" />
 
-	
-				
-			<div class="mainimage3">
-				<img id="qnaimage" src="${ contextPath }/resources/images/qnaimage.png" onclick="location.href='qlist.guide';">
-					</div>
-			   			<div class="mainimage2">
-							<img id="guideImage" src="${ contextPath }/resources/images/guidemain2.png">
-	   							</div>
-	   								<div class="mainimage">
-										<img id="guideImage" src="${ contextPath }/resources/images/Guidemain.png">
-											</div>
-	
-	
-	
-	
-		<jsp:include page="../common/footer.jsp" />
-	   
-</body>			
+
+
+   <div class="mainimage3">
+      <img id="qnaimage"
+         src="${ contextPath }/resources/images/qnaimage.png">
+   </div>
+  		 <div class="mainimage2">
+    		  <img id="guideImage"
+        		 src="${ contextPath }/resources/images/guidemain2.png">
+   		</div>
+  			 <div class="mainimage">
+    			  <img id="guideImage"
+      				   src="${ contextPath }/resources/images/Guidemain.png">
+ 			  </div>
+
+
+   <jsp:include page="../common/footer.jsp" />
+
+   <script>
+      $('#qnaimage').on('click', function(){
+         var rsgNick = '운영자';
+         window.screen.width
+         window.screen.height
+         
+         var popupWidth = 600;
+         var popupHeight = 600;
+         
+         var popupX = (window.screen.width / 2) - (popupWidth / 2);
+         var popupY= (window.screen.height / 2) - (popupHeight / 2);
+         
+         //받는 사람 id와 nick을 보낸다. 
+         window.open("messageSendView.ms?rsgNick="+ rsgNick, "_blank", 'toolbar=no, menubar=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);   
+         
+      })
+   </script>
+
+</body>
 </html>
