@@ -20,6 +20,8 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="http://localhost:82/socket.io/socket.io.js"></script>
+
 <meta charset="UTF-8">
 <title>답장 보내기</title>
 <style>
@@ -128,7 +130,6 @@
 	
 	<br>
 	<!-- 쪽지 상세보기 -->
-
 	<form method="post" action="messageSend.ms">
 		<c:forEach var="ms" items="${ ms }">
 			<div class="messageTitle">
@@ -136,7 +137,7 @@
 					placeholder="제목 입력" style="border: none;">
 			</div>
 			<div class="messageReceiver">
-				수신자 : <input type="hidden" name="rsgId" value="${ms.ssgId}"><input	type="hidden" name="rsgNick" value="${msSsgNick}"> <span
+				수신자 : <input type="hidden" name="rsgId" value="${ms.ssgId}"><input	type="hidden" name="rsgNick" value="${ms.ssgNick}"> <span
 					class="messageReceiver">${ms.ssgNick}</span>
 			</div>
 			<div class="messageDetailBoard">
@@ -293,8 +294,9 @@
 		});
 		
 		function goWrite() {
-			var form = $("form")[0];
+			var form = $("form")[1];
 			var formData = new FormData(form);
+			console.log(formData);
 			$.ajax({
 				cache : false,
 				url : "messageSend.ms",

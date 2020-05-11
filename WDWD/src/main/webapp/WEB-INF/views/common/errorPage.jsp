@@ -50,8 +50,8 @@
 			<h2>We are sorry, Page not found!</h2>
 			<p>The page you are looking for might have been removed had its name changed or is temporarily unavailable.</p>
 			<h1>Error</h1>
-			<h2 style="color: red;">${ message }</h2>
-			<h2 style="color: red;">${ requestScope['javax.servlet.error.message'] }</h2>
+			<%-- <h2 style="color: red;">${ message }</h2>
+			<h2 style="color: red;">${ requestScope['javax.servlet.error.message'] }</h2> --%>
 			<a href="index.home">Back To Homepage</a>
 		</div>
 	</div>

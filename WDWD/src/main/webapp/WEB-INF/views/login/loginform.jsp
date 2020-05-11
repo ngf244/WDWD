@@ -129,7 +129,7 @@
 			<div id="loginbtn" onclick="loginbtn();">로그인</div>
 			<br>
 			<br>
-			<a href="https://kauth.kakao.com/oauth/authorize?client_id=067a0a1cc70b12adcd5b92104e2ceb55&redirect_uri=http://192.168.220.33:9880/WDWD/kakaoLogin.my&response_type=code">
+			<a href="https://kauth.kakao.com/oauth/authorize?client_id=067a0a1cc70b12adcd5b92104e2ceb55&redirect_uri=http://192.168.10.239:9380/WDWD/kakaoLogin.my&response_type=code">
             	<img src="${ contextPath }/resources/images/kakao_login_btn_large_wide.png" width="500" height="70">
         	</a>
 		</div>
